@@ -20,20 +20,21 @@ Check out the LF AI & Data Press Release: https://lfaidata.foundation/blog/2024/
 Check out the open.intel.com blog post: https://www.intel.com/content/www/us/en/developer/articles/news/introducing-the-open-platform-for-enterprise-ai.html
 
 Partner List at launch 
-Intel 
-MinIO 
-Anyscale 
+AnyScale 
+Cloudera 
+DataStax 
 Domino Data Lab 
 HuggingFace 
-Yellowbrick Data 
-Datastax 
-Zilliz 
-Cloudera 
+Intel 
 KX 
-SAS 
-Red Hat 
 MariaDB Foundation 
-qdrant 
+MinIO 
+Qdrant 
+Red Hat 
+SAS 
+VMware by Broadcom 
+Yellowbrick Data 
+Zilliz  
 
  
 
