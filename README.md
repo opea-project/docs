@@ -23,18 +23,14 @@ Member companies at launch:
 * Cloudera
 * Datastax
 * Domino Data Lab
-* HuggingFace
+* Hugging Face
 * Intel
 * KX
 * MariaDB Foundation
 * MinIO
-* qdrant
+* Qdrant
 * Red Hat
 * SAS
+* VMware by Broadcom
 * Yellowbrick Data
 * Zilliz
-
- 
-
- 
-
