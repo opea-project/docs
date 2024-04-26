@@ -1,5 +1,4 @@
-Open Platform for Enterprise AI (OPEA) Framework Draft 
-Proposal 
+# Open Platform for Enterprise AI (OPEA) Framework Draft Proposal 
 
 Rev 0.5     April 15, 2024
 
@@ -7,7 +6,8 @@ Initial draft by Intel. Contacts for content – Ke Ding (ke.ding@intel.com ), G
 (gadi.singer@intel.com)
 
 Feedback welcome at info@opea.dev
-1. Summary
+
+## 1. Summary
 
 OPEA (Open Platform for Enterprise AI) is a framework that enables the creation and evaluation of 
 open, multi-provider, robust and composable GenAI solutions that harness the best innovation across 
@@ -30,10 +30,10 @@ and demos that can be easily reproduced and adopted.
  
 Figure 1-1: OPEA’s Core Values
 
-* Disclaimer – The term ‘specification’ is used throughout this draft whitepaper and appendix as a broad 
+_Disclaimer – The term ‘specification’ is used throughout this draft whitepaper and appendix as a broad 
 working term, referring generally to a detailed description of systems and their components. However, it 
 is important to note that this term might be replaced or updated based on more precise characterization 
-and applying the Linux Foundation licensing considerations.
+and applying the Linux Foundation licensing considerations._
 
  
 Figure 1-2 OPEA – proposed Construction and Evaluation Framework for AI Solutions
@@ -44,7 +44,7 @@ enterprise deployment. This transition provides an opportunity for partners to l
 insights into enterprise-scale computing, security, trustworthiness, and datacenter integration, among 
 other areas, to accelerate AI adoption and unlock its potential value.
 
-2. Introduction
+## 2. Introduction
 
 Recently, the practices for developing AI solutions have undergone significant transformation. Instead of 
 considering AI model (e.g., a GenAI LLM) as the complete solution, these models are now being 
@@ -61,7 +61,7 @@ ScaleAI). Additionally, some are offered by cloud service providers (e.g. AWS) o
 providers (e.g., NVIDIA). However, as of Q2 2024 these represent individual perspectives and offerings 
 for the intricate task of building an end-to-end AI solution. 
 
-2.1 Key capabilities
+### 2.1 Key capabilities
 
 OPEA will offer key capabilities in both the Construction and Evaluation of end-to-end composite GenAI 
 solutions, that are built with retrieval augmentation. As a construction platform, OPEA will enable 
@@ -70,7 +70,7 @@ LangChain and Haystack. As an evaluation framework, OPEA will provide the means 
 end-to-end composite GenAI solutions on aspects derived from four domains – performance, features, 
 trustworthiness and Enterprise-readiness.
 
-2.1.1 Construction of GenAI solutions, including retrieval augmentation
+#### 2.1.1 Construction of GenAI solutions, including retrieval augmentation
 
 Composing an end-to-end AI solution (including retrieval augmentation) can be done by combining 
 models and modules from multiple providers.
@@ -80,11 +80,8 @@ achieve an AI task or service. The models and modules can be part of OPEA reposi
 stable open repository (e.g., Hugging Face), or proprietary / closed source and cleared for use by an 
 OPEA assessment.
 
-*	GenAI models – Large Language Models (LLMs), Large Vision Models (LVMs), multimodal 
-models, etc.  
-*	Other modules - AI system components (other than LLM/LVM models) including Ingest/Data 
-Processing module, Embedding Models/Services, Vector Databases (aka Indexing or Graph data 
-stores), Prompt Engines, Memory systems, etc.
+*	GenAI models – Large Language Models (LLMs), Large Vision Models (LVMs), multimodal models, etc.  
+*	Other modules - AI system components (other than LLM/LVM models) including Ingest/Data Processing module, Embedding Models/Services, Vector Databases (aka Indexing or Graph data stores), Prompt Engines, Memory systems, etc.
 
 Each module for the system will be characterized with its expected functionality and attributes. Those 
 will be evaluated for every particular implementation choice (see following evaluation section). There 
@@ -109,7 +106,7 @@ adviser, which are sometimes called microservices.
 There is a common visualizing language that is used to depict the component of each reference flow 
 being provided.
 
-2.1.2 Evaluation of GenAI solutions, including retrieval augmentation:
+#### 2.1.2 Evaluation of GenAI solutions, including retrieval augmentation:
 
 OPEA will provide means and services to fully evaluate and grade components and end-to-end GenAI 
 solutions across four domains – performance, functionality, trustworthiness and enterprise-readiness. 
@@ -123,6 +120,7 @@ OPEA will offer tests for self-evaluation that can be done by the users. Further
 engineering setup and staffing to provide evaluations per request.
 
 The OPEA evaluations can be viewed at the following levels:
+
 *	Assessment – Detailed tests or benchmarks done for particular modules or attributes of the 
 end-to-end flow. Assessments will be elaborate and specific, checking for the functionality and 
 characteristics specified for that module or flow. 
@@ -138,16 +136,14 @@ Figure 2-1 Key capabilities provided by OPEA
 
 Appendix A of this document is an early draft of the proposed specification and sample reference flows.
 
-
-
-
-3.	Framework Components, Architecture and Flow
+## 3.	Framework Components, Architecture and Flow
 
 The OPEA definition (see Appendix A) includes characterization of components of State-of-the-Art (SotA) 
 composite systems including retrieval-augmentation and their architecture as a flow and SW stack. 
 
 There are six sections in the Appendix A which will provide a starting point for a more detailed and 
-elaborate joint OPEA definition effort: 
+elaborate joint OPEA definition effort:
+
 *	A1: System Components - List of ingredients that comprise a composed system, along with their 
 key characteristics. Some systems that will be evaluated may only include a subset of these 
 components. 
@@ -161,16 +157,17 @@ trustworthiness and enterprise-grade readiness.
 downloading and replication for a faster path to create an instantiation of the flow. 
 
 Assumptions for the development of OPEA sections include:
-•	OPEA is a blueprint for composition frameworks and is not set to compete with the popular 
+
+*	OPEA is a blueprint for composition frameworks and is not set to compete with the popular 
 frameworks. It is set to help assess the pros and cons of various solutions and allow for 
 improved interoperability of components. 
-•	In production, it is likely that many customers will deploy their own proprietary pipelines. 
-•	This framework blueprint is complementary and is intended to encourage interoperability of 
+*	In production, it is likely that many customers will deploy their own proprietary pipelines. 
+*	This framework blueprint is complementary and is intended to encourage interoperability of 
 system components as well as addition of specialized value such as HW-aware optimizations, 
 access to innovative features, and a variety of assistants and microservices.
-•	Flexible and allows easy pluggable and replaceable models and other components. Ability to 
+*	Flexible and allows easy pluggable and replaceable models and other components. Ability to 
 exchange components is an important factor in the fast progression of the field.
-•	Providing an environment to experiment with solution variations - e.g. What is the impact (E2E 
+*	Providing an environment to experiment with solution variations - e.g. What is the impact (E2E 
 system performance) when replacing a generic re-ranking component with a particular 
 provider’s re-ranking component.
 
@@ -179,7 +176,7 @@ jointly defined by a technical committee as the full OPEA definition and governa
 established. It is also expected that there will be a regular cadence of updates to the spec to reflect the 
 rapidly shifting State-of-the-Art in the space.
 
-4.	Assessing GenAI components and flows
+## 4.	Assessing GenAI components and flows
  
 One of the important benefits to the ecosystem from the development and broad use of OPEA is a 
 structured set of evaluation that can provide trusted feedback on GenAI flows – whether composed 
@@ -217,17 +214,17 @@ assessing trustworthiness and enterprise-readiness.
 
 The development of assessments should use learnings from similar evaluations when available. For 
 example, referring to RAG evaluation as reported by Cohere’s Nils Reimers.  See more details here :
-•	Human preference 
-•	Average accuracy of an E2E
-•	Multi-lingual 
-•	Long-context “Needles in Haystack” 
-•	Domain specific 
+*	Human preference 
+*	Average accuracy of an E2E
+*	Multi-lingual 
+*	Long-context “Needles in Haystack” 
+*	Domain specific 
 
 The assessments development will be starting with focus on primary use-cases for RAG flow, such as 
 Open Q&A. It will allow for comparison with common industrial evaluations (see Cohere, GPT-4)
 
 
-5.	Grading Structure 
+## 5.	Grading Structure 
  
 OPEA evaluation structure refers to specific tests and benchmarks as ‘assessments’ – see previous 
 section for details. ‘Grading’ is the part of OPEA evaluation that aggregates multiple individual 
@@ -313,7 +310,7 @@ The next level and the highest level of assessments are indicated by text with n
 
 Figure 5-2 Capabilities and Testing Phases
 
-6.	Reference flows 
+## 6.	Reference flows 
 
 Reference flows are end-to-end instantiations of use cases within the OPEA framework. They represent 
 a specific selection of interoperable components to create an effective implementation of a GenAI 
@@ -367,10 +364,9 @@ construction.
 
 
 
-?
-Appendix A – Draft OPEA Specifications
+## Appendix A – Draft OPEA Specifications
 
-Rev 0.1     April 15, 2024
+**Rev 0.1     April 15, 2024**
 
 The draft specifications are intended for illustration and discussion purposes. The appendix has six 
 sections:
@@ -389,119 +385,31 @@ downloading and replication for a faster path to create an instantiation of the 
 This is an early draft of OPEA framework specification. It provides an initial view of the content and is 
 expected to be substantially expanded in future revisions.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- * Disclaimer – The term ‘specification’ is used throughout this draft whitepaper and appendix as a broad 
+_Disclaimer – The term ‘specification’ is used throughout this draft whitepaper and appendix as a broad 
 working term, referring generally to a detailed description of systems and their components. However, it 
 is important to note that this term might be replaced or updated based on more precise characterization 
-and applying the Linux Foundation licensing considerations.
+and applying the Linux Foundation licensing considerations._
 
+### A1: System Components 
 
-
-A1: System Components 
-
-Components
-Description
-Examples
-
-
-Open  Source
-Proprietary
-Agent framework
-Orchestration software for building and deploying workflows 
-combining information retrieval components with LLMs for 
-building AI agents with contextualized information
-Langchain, LlamaIndex, Haystack, 
-Semantic Kernel
-
-Ingest/Data 
-Processing
-Software components that can be used to enhance the data that 
-is indexed for retrieval. For example: process, clean, 
-normalization, information extraction, chunking, tokenization, 
-meta data enhancement. 
-NLTK, spaCY, HF Tokenizers, tiktoken, 
-SparkNLP
-
-Embedding 
-models/service
-Models or services that covert text chunks into embedding 
-vectors to be stored in a vector database
-HF Transformers, S-BERT
-HF TEI, OpenAI, Cohere, 
-GCP, Azure embedding APIs, 
-JinaAI
-Indexing/Vector 
-store
-A software for indexing information (sparse/vector) and for 
-retrieving given a query 
-Elasticsearch, Qdrant, Milvus, 
-ChromaDB, Weaviate, FAISS, Vespa, 
-HNSWLib, SVS, PLAID
-Pinecone, Redis
-Retrieval/Ranking
-A SW component that can re-evaluate existing contexts 
-relevancy order
-S-BERT, HF Transformers, Bi/Cross-
-encoders, ColBERT
-Cohere
-Prompt engine
-A component that creates task specific prompts given queries 
-and contexts, tracks user sessions (maintain history/memory)
-Langchain hub
-
-Memory
-Conversation history in memory and/or persistent database
-Langchain Memory module, vLLM 
-(automatic prefix caching)
-
-LLM 
-engine/service
-LLM inference engine that generate text responses based on 
-given prompts and contexts retrieved
-vLLM, Ray, TensorRT-LLM
-HF TGI, Deci Infery
-LLM Models
-Open-source and close-source models.
-LLama2-7B,13B, Falcon 40B, Mixtral-
-7b, Gemma etc.
-LLama2-70B, OpenAI, 
-Cohere, Gemini, etc.
-Guardrails
-A software component for enforcing compliance, filtering, safe 
-responses
-LLM Guard
-Purple llama, OpenAI safety 
-control, NEMO-Guardrails
-Evaluation
-Methods to evaluate compliance, Performance, Accuracy, Error 
-rate of the LLM response
-Recall, MAP, MTEB, MTBench, MMLU, 
-TriviaQA, TruthfulQA…
+| Components | Description | OSS Examples | Proprietary Examples |
+| ---------- | ----------- | ------------ | -------------------- |
+| Agent framework | Orchestration software for building and deploying workflows combining information retrieval components with LLMs for building AI agents with contextualized information | Langchain, LlamaIndex, Haystack, Semantic Kernel
+| Ingest/Data Processing | Software components that can be used to enhance the data that is indexed for retrieval. For example: process, clean, normalization, information extraction, chunking, tokenization, meta data enhancement.  | NLTK, spaCY, HF Tokenizers, tiktoken, SparkNLP
+| Embedding models/service | Models or services that covert text chunks into embedding vectors to be stored in a vector database | HF Transformers, S-BERT | HF TEI, OpenAI, Cohere, GCP, Azure embedding APIs, JinaAI
+| Indexing/Vector store | A software for indexing information (sparse/vector) and for retrieving given a query | Elasticsearch, Qdrant, Milvus, ChromaDB, Weaviate, FAISS, Vespa, HNSWLib, SVS, PLAID | Pinecone, Redis
+| Retrieval/Ranking | A SW component that can re-evaluate existing contexts relevancy order | S-BERT, HF Transformers, Bi/Cross-encoders, ColBERT | Cohere
+| Prompt engine | A component that creates task specific prompts given queries and contexts, tracks user sessions (maintain history/memory) | Langchain hub
+| Memory | Conversation history in memory and/or persistent database | Langchain Memory module, vLLM (automatic prefix caching)
+| LLM engine/service | LLM inference engine that generate text responses based on given prompts and contexts retrieved | vLLM, Ray, TensorRT-LLM | HF TGI, Deci Infery
+| LLM Models | Open-source and close-source models. | LLama2-7B,13B, Falcon 40B, Mixtral-7b, Gemma etc. | LLama2-70B, OpenAI, Cohere, Gemini, etc.
+| Guardrails | A software component for enforcing compliance, filtering, safe responses| LLM Guard | Purple llama, OpenAI safety control, NEMO-Guardrails
+| Evaluation | Methods to evaluate compliance, Performance, Accuracy, Error rate of the LLM response | Recall, MAP, MTEB, MTBench, MMLU, TriviaQA, TruthfulQA…
 
 
 Figure A1.1 List of key components.
 
-?
-A2: SW Architecture 
+### A2: SW Architecture 
 
 Support model selection and data integration across popular user-facing frameworks. It leverages 
 popular agent frameworks (aka orchestration frameworks or AI Construction Platforms) for developer 
@@ -514,81 +422,64 @@ Face ecosystem to reduce developer complexity and provide flexibility across pla
 Figure A2.1 – OPEA solution stack.
 
 
-?
-A3: System Flows 
-
-
+### A3: System Flows 
  
 Figure A3.1 – Main OPEA system RAG flow.
 
-A4: Select Specifications 
+### A4: Select Specifications 
 
-Evaluating a composite generative AI system requires a view of end-to-end capabilities as well as 
-assessment of individual components. 
+Evaluating a composite generative AI system requires a view of end-to-end capabilities as well as assessment of individual components. 
 
-A4.1 End-to-end assessment
+#### A4.1 End-to-end assessment
 
-Following are some examples of assessments addressing the four domains - performance, features, 
-trustworthiness and enterprise readiness.
+Following are some examples of assessments addressing the four domains - performance, features, trustworthiness and enterprise readiness.
 
-Performance – 
+##### Performance
+  *	Overall System Performance 
+    *	Latency (first token latency, average token latency, streaming vs non-streaming output)
+    *	Throughput
+    *	Given a fixed combination of various components of RAG (specific vendor instance for each component), overall system performance.
+    *	For a specific task/domain, list the combination that would give the best system performance.
+  *	Q&A evaluation (accuracy)
+    *	Task: Open Q&A
+    *	Databases: NQ, TriviaQA and HotpotQA
+    *	Metric: Average Accuracy
+    *	Indexing: KILT Wikipedia
 
-•	Overall System Performance 
-•	Latency (first token latency, average token latency, streaming vs non-streaming output)
-•	Throughput
-•	Given a fixed combination of various components of RAG (specific vendor instance for each 
-component), overall system performance.
-•	For a specific task/domain, list the combination that would give the best system 
-performance. 
+##### Features / Functionality
 
+  *	Functional 
+    *	Features – multimodal, Multi-LLM, Multiple embedding model choices, multiple Embedding DBs, context length 
+    *	Context Relevance (context precision/recall)
+    *	Groundedness/faithfulness 
+    *	Answer Relevance
+  *	Multi-step reasoning
+    *	Task: 3-shot multi-hop REACT agents
+    *	Databases: Wikipedia (HotPotQA), Internet (Bamboogle)
+    *	Metric: Accuracy
+    *	Test sets: Reflexion, Ofir Press
+  *	Multi-lingual 
+    *	Task: Semantic Search
+    *	Search Quality
+    *	Metric nDCG @10
+    *	18 languages
+    *	Benchmark: MIRCAL
+  *	Multi-lingual 
+    *	Tasks: Multilingual MMLU, Machine Translation 
+    *	Metric: Accuracy, BLEU 
+    *	French, Spanish, Italian, German, Portuguese, Japanese, Korean, Arabic, and Chinese
+    *	Benchmark: FLORES, MMLU 
+  *	Conversational agent and Function calling 
+    *	Task: conversational tool-use and single-turn function-calling capabilities
+    *	Benchmark-1: Microsoft’s ToolTalk
+    *	Benchmark-2: Berkeley's Function Calling Leaderboard (BFCL)
+    *	Tool-use Metric: Soft Success rate 
+    *	Function calls: Function Pass rate 
+  *	Human reference on enterprise RAG use cases 
+    *	Domains: Customer support, Workplace support (Tech), Workplace Assistant (Media), Tech FAQ
+    *	Metric: Win ratio vs. Mixtral
 
-•	Q&A evaluation (accuracy)
-*	Task: Open Q&A
-*	Databases: NQ, TriviaQA and HotpotQA
-*	Metric: Average Accuracy
-*	Indexing: KILT Wikipedia
-
-Features / Functionality - 
-
-•	Functional 
-•	Features – multimodal, Multi-LLM, Multiple embedding model choices, multiple Embedding 
-DBs, context length 
-•	Context Relevance (context precision/recall)
-•	 Groundedness/faithfulness 
-•	Answer Relevance
-
-*	Multi-step reasoning
-*	Task: 3-shot multi-hop REACT agents
-*	Databases: Wikipedia (HotPotQA), Internet (Bamboogle)
-*	Metric: Accuracy
-*	Test sets: Reflexion, Ofir Press
-
-*	Multi-lingual 
-*	Task: Semantic Search
-*	Search Quality
-*	Metric nDCG @10
-*	18 languages’
-*	Benchmark: MIRCAL
-
-*	Multi-lingual 
-*	Tasks: Multilingual MMLU, Machine Translation 
-*	Metric: Accuracy, BLEU 
-*	French, Spanish, Italian, German, Portuguese, Japanese, Korean, Arabic, and 
-Chinese
-*	Benchmark: FLORES, MMLU 
-
-*	Conversational agent and Function calling 
-*	Task: conversational tool-use and single-turn function-calling capabilities
-*	Benchmark-1: Microsoft’s ToolTalk
-*	Benchmark-2: Berkeley's Function Calling Leaderboard (BFCL)
-*	Tool-use Metric: Soft Success rate 
-*	Function calls: Function Pass rate 
-
-*	Human reference on enterprise RAG use cases 
-*	Domains: Customer support, Workplace support (Tech), Workplace Assistant (Media), Tech FAQ
-*	Metric: Win ratio vs. Mixtral
-
-Enterprise readiness - 
+##### Enterprise readiness
 
 Enterprise Readiness Assessment involving assessing for the following:
 1.	Scalability
@@ -596,8 +487,7 @@ Enterprise Readiness Assessment involving assessing for the following:
 3.	Updatability
 4.	Observability/Debuggability
  
-Scalability is associated with the ability of RAG system to scale the size/dimensions of different 
-components such as the following example metrics:
+Scalability is associated with the ability of RAG system to scale the size/dimensions of different components such as the following example metrics:
 *	Vector DB size
 *	Dimensionality of retriever (the value of K in top-K documents) 
 *	Maximum context length supported by the generator
@@ -625,37 +515,34 @@ Examples for observability include Databricks Inference Tables/Phoenix Open Infe
 Langsmith Observability/monitoring features.
  
 
-A4.2 Individual Components Assessment
+#### A4.2 Individual Components Assessment
 
 Evaluation of individual components (modules) will include:
-•	Data preprocessing pipeline 
-•	Embedding – Quality/Storage/Processing time
-•	Chunker, Retriever & Re-ranker 
-•	Generator LLM – quality/latency/context length/reasoning ability/function calling/tool 
-usage
-•	Auto evaluation vs Manul evaluation
-•	Observability  
-•	Guardrails - 
-•	Prompting
-•	Output Generation – structured/grammar/output types(json/text)
+*	Data preprocessing pipeline 
+*	Embedding – Quality/Storage/Processing time
+*	Chunker, Retriever & Re-ranker 
+*	Generator LLM – quality/latency/context length/reasoning ability/function calling/tool usage
+*	Auto evaluation vs Manul evaluation
+*	Observability  
+*	Guardrails - 
+*	Prompting
+*	Output Generation – structured/grammar/output types(json/text)
 
 Early example of next level articulation of metrics expected per each major component.
 
 Component Name: Retriever
-*	Metric:  Normalized Discounted Cumulative Gain@10 with BEIR benchmark datasets or 
-other QA datasets
+*	Metric:  Normalized Discounted Cumulative Gain@10 with BEIR benchmark datasets or other QA datasets
 *	Metric: Context Recall@k 
 *	Metric: Context Precision@k
 *	Metric: Hit Rate
 
 Component Name: LLM/Generation
-*	Metric: Faithfulness – How factually correct is the generated answer (computed as a ragas 
-metrics between 0 and 1)
+*	Metric: Faithfulness – How factually correct is the generated answer (computed as a ragas metrics between 0 and 1)
 *	Metric: Answer Relevance – how relevant generated answer to the query (computed as a 
 ragas metrics between 0 and 1)
 
 
-A5: Grading 
+### A5: Grading 
 
 To ensure that compositional systems are addressing the range of care-abouts for enterprise 
 deployment, the grading system has four categories:
@@ -673,176 +560,153 @@ Part of the recommendation is to have a certification (if and when it becomes pa
 process. It is assumed that a system needs to be at least at Level 2 for every aspect to be “OPEA 
 Certified”.
 
-A5.1 Performance Grading
+#### A5.1 Performance Grading
 
 Performance grading is based on running a set of vertical-specific end-to-end use cases on full system 
 and capturing the relevant metrics during the run.
 
-*	E2E/System View 
-o	Vendors have flexibility to innovate/differentiate their implementations within the black box
-*	Running a fixed set of use cases
-o	Covering different vertical scenarios
-o	Minimum level of accuracy and reliability
-*	Input Datasets for benchmark
-o	Open/publicly available
-o	Automatic generation 
-*	Scale factors
-o	Supports different input magnitude size
-*	Metrics
-o	First-token latency, overall latency, throughput, cost, consistency
-o	Formula to aggregate metrics for final score
-o	Vertical-specific metrics
+  *	E2E/System View 
+    *	Vendors have flexibility to innovate/differentiate their implementations within the black box
+  *	Running a fixed set of use cases
+    * Covering different vertical scenarios
+    * Minimum level of accuracy and reliability
+  *	Input Datasets for benchmark
+    * Open/publicly available
+    * Automatic generation 
+  *	Scale factors
+    * Supports different input magnitude size
+  *	Metrics
+    * First-token latency, overall latency, throughput, cost, consistency
+    * Formula to aggregate metrics for final score
+    * Vertical-specific metrics
 
-Performance
-Performance grade is based on a set of ‘black box’ end-to-end RAG benchmarks, based on real use 
-cases. Each solution submitted to the OpenRag alliance will be measured against it. Performance 
+Performance 
+Performance grade is based on a set of ‘black box’ end-to-end RAG benchmarks, based on real use
+cases. Each solution submitted to the OpenRag alliance will be measured against it. Performance
 measurements will include latency, throughput, scalability, accuracy and consistency.
-•	Level 1 – Baseline benchmark complete
-•	Level 2 – Meets performance levels that are expected for the bulk of GenAI solutions 
-performing similar benchmarks/tasks.
-•	Level 3 – Exceeds the performance of most solutions being evaluated at that time. Top-
-tier solutions per the tasks evaluated.
+
+*	Level 1 – Baseline benchmark complete
+*	Level 2 – Meets performance levels that are expected for the bulk of GenAI solutions performing similar benchmarks/tasks.
+*	Level 3 – Exceeds the performance of most solutions being evaluated at that time. Top-tier solutions per the tasks evaluated.
 
 Figure A5.1 – Performance Grading
 
 
-A5.2 Features Grading
+#### A5.2 Features Grading
 
 Feature grading consists of running functional tests to test system capabilities in a number of different 
 domains. Each domain will have its own score.
 
-•	Interoperability/API
-o	Functional tests for each interface
-o	Different granularity levels for components
-o	Open interfaces for 3rd party data sources
-o	Should enable multiple types of data sources
-•	Platform capabilities and AI methods
-o	Ingest, inference, fine tuning
-o	Gen AI and reinforcement learning
-•	User experience
-o	Ease of Use
-o	Management tools – single pane, inter-vendor
-o	GUI requirements
-o	Developer tools
-•	Deployment models
-o	Orchestration
-o	K8, hypervisor
-•	Compliance
-o	Potential certification (if and when it becomes part of the framework) based on functional 
-testing
+  *	Interoperability/API
+    * Functional tests for each interface
+    * Different granularity levels for components
+    * Open interfaces for 3rd party data sources
+    * Should enable multiple types of data sources
+  *	Platform capabilities and AI methods
+    * Ingest, inference, fine tuning
+    * Gen AI and reinforcement learning
+  *	User experience
+    * Ease of Use
+    * Management tools – single pane, inter-vendor
+    * GUI requirements
+    * Developer tools
+  *	Deployment models
+    * Orchestration
+    *	K8, hypervisor
+  * Compliance
+    * Potential certification (if and when it becomes part of the framework) based on functional testing
 
 Features
+
 Features evaluated for interoperability, platform capabilities, user experience (ease of use), AI 
 methods being applied, and specialized functionality.
-•	Level 1 – Single model and accesses few data sources; Limited data ingest; Basic or no 
-development tools; basic UI; bare metal, manual install.
-•	Level 2 - Multiple models, and accesses diverse enterprise data sources; full data ingest; basic 
-fine-tuning; flexible pipelining of modules in the flow; basic agent controls.
-•	L3 – Natively supports multimodal models and data source; Advanced development tools 
-with SotA fine-tuning and optimizations capabilities; leading specialized features 
+*	Level 1 – Single model and accesses few data sources; Limited data ingest; Basic or no development tools; basic UI; bare metal, manual install.
+*	Level 2 - Multiple models, and accesses diverse enterprise data sources; full data ingest; basic fine-tuning; flexible pipelining of modules in the flow; basic agent controls.
+*	L3 – Natively supports multimodal models and data source; Advanced development tools with SotA fine-tuning and optimizations capabilities; leading specialized features 
 
 Figure A5.2 – Feature Grading
 
 
-A5.3 Trustworthiness Grading 
+#### A5.3 Trustworthiness Grading 
+
 Trustworthiness and responsible AI are evolving in an operational sense. See NIST trustworthy and 
 responsible AI  and the EU AI Act. While these efforts are evolving, for the interim, we propose grading  
 solution trustworthiness along the axes of security, reliability, transparency, and confidence:
 
-•	Transparency
-•	Open Source Models and Code. This provides visibility into the actual code running, being 
-able to verify versions and signed binaries.
-•	Open standards, reusing existing standards.
-•	Data sets used in model training, which allows analysis of data distribution and any biases 
-therein. For instance, if a cancer detection model was trained on populations that are very 
-diverse - ethnically (genome), or environments (exposure to carcinogens), it carries with a 
-risk of applicability when used for individuals that are not representative of the training set.
-•	Citing sources/documents used in generating responses, protecting from hallucinations. One 
-of the chief benefits of RAG.
-•	Meeting regulatory requirements such as ISO27001, HIPAA, and FedRAMP as appropriate. 
-•	Security:
-•	Role-based access control, segmented access per user-role regardless of same model use. 
-This could be a pre or post processing step that filters out data based on user access to 
-different information. For instance, executive leadership may have access to company 
-revenues, financials and customer lists versus an engineer.
-•	Solutions that run at the minimum necessary process privilege to prevent exploits form 
-escalation of privileges should the application be hacked.
-•	Running in trusted execution environments, that is hardware supported confidential 
-compute environments that protect data in use – providing confidentiality and integrity 
-from privileged and other processes running on the same infrastructure. Valuable 
-particularly in the cloud.
-•	Attesting binaries in use, be it models or software. 
-•	Audit logs that indicate when and what updates were applied either to models or other 
-software, including security patches. 
-•	Ensuring that results, intermediate and final are persisted only on encrypted storage and 
-shared with end users through secure transport.
-•	Reliability
-•	Provide the same answer, all else remaining the same, when prompts are similar, differing in 
-their use of synonyms. 
-•	Returns correct answers, per tests.
-•	Confidence
-•	In question answering scenarios, awareness of the quality and how current/up-to-date data 
-used in RAG and providing that information along with the response helps an end user in 
-determining how confident they can be with a response.
-•	Cites sources for responses. Meta data can also be used to indicate how up-to-date the 
-input information is.
-•	With respect to diagnosis/classification tasks, such as cancer detection, the divergence of 
-the test subject from the training dataset is an indicator of applicability risk, confidence in 
-the response (alluded to in data transparency above).
+  *	Transparency
+    *	Open Source Models and Code. This provides visibility into the actual code running, being able to verify versions and signed binaries.
+    *	Open standards, reusing existing standards.
+    *	Data sets used in model training, which allows analysis of data distribution and any biases therein. For instance, if a cancer detection model was trained on populations that are very diverse - ethnically (genome), or environments (exposure to carcinogens), it carries with a risk of applicability when used for individuals that are not representative of the training set.
+    *	Citing sources/documents used in generating responses, protecting from hallucinations. One of the chief benefits of RAG.
+    *	Meeting regulatory requirements such as ISO27001, HIPAA, and FedRAMP as appropriate. 
+  *	Security:
+    *	Role-based access control, segmented access per user-role regardless of same model use. This could be a pre or post processing step that filters out data based on user access to different information. For instance, executive leadership may have access to company revenues, financials and customer lists versus an engineer.
+    *	Solutions that run at the minimum necessary process privilege to prevent exploits form escalation of privileges should the application be hacked.
+    *	Running in trusted execution environments, that is hardware supported confidential compute environments that protect data in use – providing confidentiality and integrity from privileged and other processes running on the same infrastructure. Valuable particularly in the cloud.
+    *	Attesting binaries in use, be it models or software. 
+    *	Audit logs that indicate when and what updates were applied either to models or other software, including security patches. 
+    *	Ensuring that results, intermediate and final are persisted only on encrypted storage and shared with end users through secure transport.
+  * Reliability
+    *	Provide the same answer, all else remaining the same, when prompts are similar, differing in their use of synonyms. 
+    *	Returns correct answers, per tests.
+    *	Confidence
+    *	In question answering scenarios, awareness of the quality and how current/up-to-date data used in RAG and providing that information along with the response helps an end user in determining how confident they can be with a response.
+    *	Cites sources for responses. Meta data can also be used to indicate how up-to-date the input information is.
+    *	With respect to diagnosis/classification tasks, such as cancer detection, the divergence of the test subject from the training dataset is an indicator of applicability risk, confidence in the response (alluded to in data transparency above).
 
 Trustworthiness
+
 Evaluating transparency, privacy protection and security aspects
-•	Level 1 – Documentation of aspects called for in trustworthiness domain
-•	Level 2 - Supports role-based access controls  - information being accessed/retrieved is 
+*	Level 1 – Documentation of aspects called for in trustworthiness domain
+*	Level 2 - Supports role-based access controls  - information being accessed/retrieved is 
 available based on approval for the user (even if all users access the same model); 
-•	Level 3 - Supports security features (e.g., running Confidential Computing / Trusted 
+*	Level 3 - Supports security features (e.g., running Confidential Computing / Trusted 
 Execution Environment). Supports attestation of the models being run; full open-
 source transparency on pre-training dataset, weights, fine-tuning data/recipes
 
 Figure A5.3 – Trustworthiness Grading
 
 
-A5.4 Enterprise-Ready Grading
+#### A5.4 Enterprise-Ready Grading
 
 Grading enterprise-readiness consists of evaluating the ability of the overall solution to be deployed in 
 production in an enterprise environment. The following criteria will be taken into account:
 
-•	Ability to have on-prem and cloud deployments
-•	At least two types of solution instances (on-premise installation, cloud, hybrid option)
-•	Cloud/Edge-native readiness (refer to CNCF process/guidelines)
-•	Security-ready for enterprise
-•	Multi-level Access Control & Response (including ability to integrate with internal tools)
-•	Data & Model Protection (e.g. including GDPR)
-•	Lifecycle management including security updates, bug fixes, etc
-•	Solutions that are packaged as containerized applications that do not run as root or have 
+  *	Ability to have on-prem and cloud deployments
+    * At least two types of solution instances (on-premise installation, cloud, hybrid option)
+    * Cloud/Edge-native readiness (refer to CNCF process/guidelines)
+  *	Security-ready for enterprise
+    * Multi-level Access Control & Response (including ability to integrate with internal tools)
+    * Data & Model Protection (e.g. including GDPR)
+    * Lifecycle management including security updates, bug fixes, etc
+    * Solutions that are packaged as containerized applications that do not run as root or have 
 more capabilities than necessary. OWASP container best practices.
-•	Ensure by-products/interim results if saved to disk are done so after encrypting.
-•	Quality assurance
-•	Accuracy & Uncertainty Metrics for domain-specific enterprise tasks
-•	Documentation
-•	High availability
-•	Replication & Data/Instance Protection 
-•	Resiliency – time to relaunch an instance when burned down to zero.
-•	Privides support and instrumentation for enterprise 24/7 support
-•	Licensing model and SW Distribution
-•	Scalable from small to large customers
-•	Ability to customize for specific enterprise needs
+    * Ensure by-products/interim results if saved to disk are done so after encrypting.
+  *	Quality assurance
+    * Accuracy & Uncertainty Metrics for domain-specific enterprise tasks
+    * Documentation
+  *	High availability
+    * Replication & Data/Instance Protection 
+    * Resiliency – time to relaunch an instance when burned down to zero.
+    * Privides support and instrumentation for enterprise 24/7 support
+  *	Licensing model and SW Distribution
+    * Scalable from small to large customers
+    * Ability to customize for specific enterprise needs
 
 Enterprise Readiness
 Must first meet mins across performance, features, and trustworthiness
-•	Level 1 – Reference Design and deployment guide
-•	Level 2 - Output ready for enterprise deployment (no post-OPEA steps needed); 
+*	Level 1 – Reference Design and deployment guide
+*	Level 2 - Output ready for enterprise deployment (no post-OPEA steps needed); 
 containerized, K8 support; generally robust (but not guaranteed) for production 
 deployment at scale
-•	Level 3 – Generating sophisticated monitoring and instrumentation for the enterprise 
+*	Level 3 – Generating sophisticated monitoring and instrumentation for the enterprise 
 deployment environment. High resiliency – meeting fast time to relaunch an 
 instance. Allows for L2 + 24/7 support mode out-of-the-box
 
 Figure A5.4 – Enterprise-Ready Grading
 
 
-?
-A6: Reference Flows
+### A6: Reference Flows
 
 This section includes descriptions of reference flows that will be available for loading and reproducing 
 with minimal effort. 
@@ -876,7 +740,7 @@ described in Figure 6.1 will be used for all reference flow depictions.
 Figure A6.1 - Reference Design Flows Visualization - legend
 
 
-A6.1 – Xeon + Gaudi2 LLM RAG flow for Chat QnA
+#### A6.1 – Xeon + Gaudi2 LLM RAG flow for Chat QnA
 
  A reference flow that illustrates an LLM enterprise RAG flow that runs on Xeon (GNR) with vector 
 database and an embedding model, and with a Gaudi2 serving backend for LLM model inference. 
@@ -921,7 +785,7 @@ A demo user Interface looks like below, which also shows the difference with and
 Figure A6-1.3  Xeon + Gaudi2 LLM RAG flow for Chat QnA – demo screen
 
 
-A6.2 - Multimodal Chat Over Images and Videos
+#### A6.2 - Multimodal Chat Over Images and Videos
 
 This reference flow demonstrates a multimodal RAG pipeline which utilizes Intel Labs’ BridgeTower 
 vision-language model for indexing and LLaVA for inference, both running on Intel Gaudi AI accelerators. 
@@ -958,7 +822,7 @@ Intel Vision:
  Figure A6.2.2 Multimodal Chat Over Images and Videos – demo screen
 
 
-A6.3 – Optimized Text and Multimodal RAG pipeline
+#### A6.3 – Optimized Text and Multimodal RAG pipeline
 
 The reference flow below demonstrates an optimized Text and Multimodal RAG pipeline which can be 
 leveraged by Enterprise customers on Intel Xeon processor.  
