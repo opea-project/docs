@@ -13,7 +13,7 @@ Thanks for considering contributing to OPEA project. The contribution process is
   - [Documentations](#documentations)
   - [Reporting Issues](#reporting-issues)
   - [Proposing New Features](#proposing-new-features)
-  - [Submitting Pull Requests](#submit-pull-request)
+  - [Submitting Pull Requests](#submitting-pull-requests)
     - [Create Pull Request](#create-pull-request)
     - [Pull Request Checklist](#pull-request-checklist)
     - [Pull Request Template](#pull-request-template)
@@ -34,7 +34,7 @@ Thanks for considering contributing to OPEA project. The contribution process is
 
 ## Proposing New Features
 
-## Submit Pull Requests
+## Submitting Pull Requests
 
 ### Create Pull Request
 
