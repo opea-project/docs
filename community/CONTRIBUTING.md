@@ -75,15 +75,15 @@ See [PR template](./pull_request_template.md)
 
 ### Pull Request Status Checks Overview
 
-The OPEA project leverages [Azure DevOps](https://learn.microsoft.com/en-us/azure/devops/pipelines/?view=azure-devops) for CI test.
+The OPEA project use GitHub Action for CICD test.
 
-And generally use [Azure Cloud Instance](https://azure.microsoft.com/en-us/pricing/purchase-options/pay-as-you-go) to deploy pipelines, e.g. Standard E16s v5.
-|     Test Name                 |     Test Scope                                |     Test Pass Criteria    |
-|-------------------------------|-----------------------------------------------|---------------------------|
-|     Code Scan                 |     Pylint/Bandit/CopyRight/DocStyle/SpellCheck       |     PASS          |
-|     [DCO](https://github.com/apps/dco/)     |     Use `git commit -s` to sign off     |     PASS          |
-|     Unit Test                 |     Pytest scripts under [test](/test)                |      PASS (No failure, No core dump, No segmentation fault, No coverage drop)      |
-|     Model Test                |     Pytorch + TensorFlow + ONNX Runtime + MXNet         |      PASS (Functionality pass, FP32/INT8 No performance regression)       |
+| Test Name                           | Test Scope                                      | Test Pass Criteria |
+|-------------------------------------|-------------------------------------------------|--------------------|
+| [DCO](https://github.com/apps/dco/) | Use `git commit -s` to sign off                 | PASS               |
+| Code Format Scan                    | pre-commit.ci [Bot]                             | PASS               |
+| Code Security Scan                  | Bandit/Hadolint/Dependabot/BDBA/Coverity/McAfee | PASS               |
+| Unit Test                           | Pytest scripts under tests folder               | PASS               |
+| E2E Workflow Test                   | microservice/megaservice/GenAI Examples         | PASS               |
 
 # Support
 
