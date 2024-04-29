@@ -31,6 +31,11 @@ Thanks for considering contributing to OPEA project. The contribution process is
 ## Documentations
 
 ## Reporting Issues
+You can contribute through: 
+- Opening an issue, if you encounter a bug and the bug has not been reported. You need to provide reproducing steps, environments...
+- Validating and issue or adding additional context 
+- Updating an issue, adding additional information to existing issues
+
 
 ## Proposing New Features
 
