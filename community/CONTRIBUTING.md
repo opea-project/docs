@@ -34,6 +34,28 @@ Thanks for considering contributing to OPEA project. The contribution process is
 
 ## Proposing New Features
 
+OPEA communities use the RFC (request for comments) process for collaborating on substantial changes to OPEA projects. RFCs enable contributors to collaborate during the design process, providing clarity and validation before jumping to implementation.
+
+*When the RFC process is needed?*
+
+The RFC process is necessary for changes which have a substantial impact on end users, operators, or contributors. It generally includes:
+
+- Changes to core workflow.
+- Changes with significant architectural implications.
+- changes which modify or introduce user facing interfaces.
+
+It is not necessary for changes like:
+
+- Bug fixes and optimizations with no semantic change.
+- Small features which only impact a narrow use case.
+
+#### Step-by-Step guidelines
+
+- Follow the [RFC Template](./rfc_template.md) to write your proposal.
+- Submit your proposal to the 'Issues' page of the repository's github website.
+- Reach out to your RFC's assignee if you need any help with the RFC process.
+- Amend your proposal in response to reviewer's feedback.
+
 ## Submitting Pull Requests
 
 ### Create Pull Request
@@ -42,12 +64,11 @@ If you have improvements to OPEA projects, send your pull requests to each proje
 If you are new to GitHub, view the pull request [How To](https://help.github.com/articles/using-pull-requests/).
 
 #### Step-by-Step guidelines
+
 - Star this repository using the button `Star` in the top right corner.
 - Fork this Repository using the button `Fork` in the top right corner.
-- Clone your forked repository to your pc.
-`git clone "url to your repo"`
-- Create a new branch for your modifications.
-`git checkout -b new-branch`
+- Clone your forked repository to your pc by running `git clone "url to your repo"`
+- Create a new branch for your modifications by running `git checkout -b new-branch`
 - Add your files with `git add -A`, commit `git commit -s -m "This is my commit message"` and push `git push origin new-branch`.
 - Create a `pull request` for the project you want to contribute.
 
@@ -87,8 +108,8 @@ The OPEA project use GitHub Action for CICD test.
 
 # Support
 
-Submit your questions, feature requests, and bug reports to each repository's `GitHub issues` page. You may also reach out to each repository's maintainers whose contact information is recorded in README.md.
+Submit your questions, feature requests, and bug reports to each repository's `GitHub issues` page. You may also reach out to each repository's maintainers.
 
 # Contributor Covenant Code of Conduct
 
-this project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant Code of Conduct](./CODE_OF_CONDUCT.md).
+This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant Code of Conduct](./CODE_OF_CONDUCT.md).
