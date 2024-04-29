@@ -15,12 +15,12 @@ List all contributors of this RFC.
 
 Update the PR status to Proposed / Accepted / Implemented / Obsolete.
 
-## Objective
+### Objective
 
 What are we doing and why? What problem will this solve? What are the goals and
 non-goals? This is your executive summary; keep it short, elaborate below.
 
-## Motivation
+### Motivation
 
 Why this is a valuable problem to solve? What background information is needed
 to show how this design addresses the problem?
@@ -28,12 +28,12 @@ to show how this design addresses the problem?
 Which users are affected by the problem? Why is it a problem? What data supports
 this? What related work exists?
 
-## User Benefit
+### User Benefit
 
 How will users (or other contributors) benefit from this work? What would be the
 headline in the release notes or blog post?
 
-## Design Proposal
+### Design Proposal
 
 This is the meat of the document, where you explain your proposal. If you have
 multiple alternatives, be sure to use sub-sections for better separation of the
