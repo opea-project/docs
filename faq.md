@@ -76,7 +76,8 @@ There is no cost for anyone to join and contribute.
 ## Do I need to be Linux Foundation member to join?  
 Anyone can join and contribute. You don’t need to be a Linux Foundation member. 
 
- 
+## Where can I report a bug?
+Vulnerability reports can be sent to info@opea.dev.
 
  
 
