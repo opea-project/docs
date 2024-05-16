@@ -30,7 +30,7 @@ The proposed architecture for the ChatQnA application involves the creation of t
 
 The Gateway class facilitates the registration of additional endpoints, enhancing the system's flexibility and extensibility. The /v1/dataprep endpoint is responsible for handling user documents to be stored in VectorStore under a predefined database name. The first megaservice will then query the data from this predefined database.
 
-![architecture](https://i.imgur.com/jA1LdCE.png)
+![architecture](https://i.imgur.com/YdsXy46.png)
 
 
 ### Construct Service Illustrative Code
