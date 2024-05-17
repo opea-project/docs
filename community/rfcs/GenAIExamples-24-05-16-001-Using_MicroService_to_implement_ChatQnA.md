@@ -191,7 +191,7 @@ class Gateway:
         self.gateway.start()
 
     def stop(self):
-        self.service.stop()
+        self.gateway.stop()
 
     async def handle_request(self, request: Request):
         raise NotImplementedError("Subclasses must implement this method")
