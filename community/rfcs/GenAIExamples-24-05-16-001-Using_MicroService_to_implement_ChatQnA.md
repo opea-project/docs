@@ -101,8 +101,14 @@ class ChatQnAService:
         self.data_gateway = DataPrepGateway(megaservice=self.data_service, host="0.0.0.0", port=self.data_port)
 
     def start_service(self):
+        self.construct_rag_service()
+        self.construct_data_service()
         self.rag_gateway.start()
         self.data_gateway.start()
+
+if __name__ == "__main__":
+    chatqna = ChatQnAService()
+    chatqna.start_service()
 ```
 
 ### Constructing Services with yaml
