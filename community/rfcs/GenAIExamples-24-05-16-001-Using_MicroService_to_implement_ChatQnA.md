@@ -1,14 +1,16 @@
 # Author
-liang1.lv@intel.com, feng.tian@intel.com, haihao.shen@intel.com, sihan.chen@intel.com, letong.han@intel.com 
+[lvliang-intel](https://github.com/lvliang-intel), [ftian1](https://github.com/ftian1), [hsehn14](https://github.com/hshen14), [Spycsh](https://github.com/Spycsh), [letonghan](https://github.com/letonghan)
 
 # Status
 Under Review
 
 # Objective
-This RFC aims to solve the problem of designing a flexible architecture for RAG (Retrieval-Augmented Generation) application by adopting a microservice architecture. The goal is to enable easier deployment where one or multiple microservices can compose a megaservice. Each megaservice interfaces with a gateway, allowing users to access services through endpoints exposed by the gateway.
+This RFC aims to introduce the OPEA microservice design and demonstrate its application to Retrieval-Augmented Generation (RAG). The objective is to address the challenge of designing a flexible architecture for Enterprise AI applicaitons by adopting a microservice approach. This approach facilitates easier deployment, enabling one or multiple microservices to form a megaservice. Each megaservice interfaces with a gateway, allowing users to access services through endpoints exposed by the gateway. The architecture is general and RAG is the first example that we want to apply.
+
 
 # Motivation
 The problem of designing a flexible architecture for RAG is valuable to solve because it allows for more scalable and maintainable deployment of RAG systems. While related work in microservice architectures exists, the specific requirements and design considerations for RAG systems may necessitate a tailored approach.
+
 
 # Design Proposal
 
