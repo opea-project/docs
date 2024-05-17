@@ -1,5 +1,5 @@
 # Author
-[lvliang-intel](https://github.com/lvliang-intel), [ftian1](https://github.com/ftian1), [hsehn14](https://github.com/hshen14), [Spycsh](https://github.com/Spycsh), [letonghan](https://github.com/letonghan)
+[lvliang-intel](https://github.com/lvliang-intel), [ftian1](https://github.com/ftian1), [hshen14](https://github.com/hshen14), [Spycsh](https://github.com/Spycsh), [letonghan](https://github.com/letonghan)
 
 # Status
 Under Review
@@ -9,7 +9,9 @@ This RFC aims to introduce the OPEA microservice design and demonstrate its appl
 
 
 # Motivation
-The problem of designing a flexible architecture for RAG is valuable to solve because it allows for more scalable and maintainable deployment of RAG systems. While related work in microservice architectures exists, the specific requirements and design considerations for RAG systems may necessitate a tailored approach.
+In designing the Enterprise AI applications, leveraging a microservices architecture offers significant advantages, particularly in handling large volumes of user requests. By breaking down the system into modular microservices, each dedicated to a specific function, we can achieve substantial performance improvements through the ability to scale out individual components. This scalability ensures that the system can efficiently manage high demand, distributing the load across multiple instances of each microservice as needed.
+
+The microservices architecture contrasts sharply with monolithic approaches, such as the tightly coupled module structure found in LangChain. In such monolithic designs, all modules are interdependent, posing significant deployment challenges and limiting scalability. Any change or scaling requirement in one module necessitates redeploying the entire system, leading to potential downtime and increased complexity.
 
 
 # Design Proposal
@@ -35,7 +37,7 @@ The Gateway class facilitates the registration of additional endpoints, enhancin
 ![architecture](https://i.imgur.com/YdsXy46.png)
 
 
-### Construct Service Illustrative Code
+### Example Python Code for Constructing Services
 
 Users can use `ServiceOrchestrator` class to build the microservice pipeline and add a gateway for each megaservice.
 
@@ -96,10 +98,63 @@ class ChatQnAService:
             service_type=ServiceType.DATAPREP,
         )
         self.data_service.add(dataprep)
-        self.data_gateway = ChatQnAGateway(megaservice=self.data_service, host="0.0.0.0", port=self.data_port)
+        self.data_gateway = DataPrepGateway(megaservice=self.data_service, host="0.0.0.0", port=self.data_port)
+
+    def start_service(self):
+        self.rag_gateway.start()
+        self.data_gateway.start()
 ```
 
-### Customize Gateway Illustrative Code
+### Constructing Services with yaml
+
+Below is an example of how to define microservices and megaservices using YAML for the ChatQnA application. This configuration outlines the endpoints for each microservice and specifies the workflow for the megaservices.
+
+```yaml
+opea_micro_services:
+  dataprep:
+    endpoint: http://localhost:5000/v1/chat/completions
+  embedding:
+    endpoint: http://localhost:6000/v1/embeddings
+  retrieval:
+    endpoint: http://localhost:7000/v1/retrieval
+  reranking:
+    endpoint: http://localhost:8000/v1/reranking
+  llm:
+    endpoint: http://localhost:9000/v1/chat/completions
+
+opea_mega_service:
+  mega_flow:
+    - embedding >> retrieval >> reranking >> llm
+  dataprep:
+    mega_flow:
+        - dataprep
+```
+
+```yaml
+opea_micro_services:
+  dataprep:
+    endpoint: http://localhost:5000/v1/chat/completions
+
+opea_mega_service:
+  mega_flow:
+    - dataprep
+```
+
+The following Python code demonstrates how to use the YAML configurations to initialize the microservices and megaservices, and set up the gateways for user interaction.
+
+```python
+from comps import ServiceOrchestratorWithYaml
+from comps import ChatQnAGateway, DataPrepGateway
+data_service = ServiceOrchestratorWithYaml(yaml_file_path="dataprep.yaml")
+rag_service = ServiceOrchestratorWithYaml(yaml_file_path="rag.yaml")
+rag_gateway = ChatQnAGateway(data_service, port=8888)
+data_gateway = DataPrepGateway(data_service, port=9999)
+# Start gateways
+rag_gateway.start()
+data_gateway.start()
+```
+
+### Example Code for Customizing Gateway
 
 The Gateway class provides a customizable interface for accessing the megaservice. It handles requests and responses, allowing users to interact with the megaservice. The class defines methods for adding custom routes, stopping the service, and listing available services and parameters. Users can extend this class to implement specific handling for requests and responses according to their requirements.
 
@@ -114,25 +169,15 @@ class Gateway:
         input_datatype=ChatCompletionRequest,
         output_datatype=ChatCompletionResponse,
     ):
-        self.megaservice = megaservice
-        self.host = host
-        self.port = port
-        self.endpoint = endpoint
-        self.input_datatype = input_datatype
-        self.output_datatype = output_datatype
-        self.service = MicroService(
+        ...
+        self.gateway = MicroService(
             service_role=ServiceRoleType.MEGASERVICE,
             service_type=ServiceType.GATEWAY,
-            host=self.host,
-            port=self.port,
-            endpoint=self.endpoint,
-            input_datatype=self.input_datatype,
-            output_datatype=self.output_datatype,
+            ...
         )
-        self.define_routes()
-        self.service.start()
+        self.define_default_routes()
 
-    def define_routes(self):
+    def define_default_routes(self):
         self.service.app.router.add_api_route(self.endpoint, self.handle_request, methods=["POST"])
         self.service.app.router.add_api_route(str(MegaServiceEndpoint.LIST_SERVICE), self.list_service, methods=["GET"])
         self.service.app.router.add_api_route(
@@ -141,6 +186,9 @@ class Gateway:
 
     def add_route(self, endpoint, handler, methods=["POST"]):
         self.service.app.router.add_api_route(endpoint, handler, methods=methods)
+
+    def start(self):
+        self.gateway.start()
 
     def stop(self):
         self.service.stop()
@@ -153,6 +201,8 @@ class Gateway:
 
     def list_parameter(self):
         raise NotImplementedError("Subclasses must implement this method")
+
+    ...
 ```
 
 # Alternatives Considered
