@@ -84,6 +84,12 @@ For GenAI applications, we provides two interfaces for deployment
 
 When user wants to deploy the GenAI application to clould environment, such yaml configuration file should be defined and coverted to `docker composer` or `kubernetes manifest` or `kubernetes helm chart` files.
 
+The whole deployment process illustrated by the diagram below.
+
+<a target="_blank" href="opea_deploy_process.png">
+  <img src="opea_deploy_process.png" alt="Deployment Process" width=480 height=310>
+</a>
+
 
 **Alternatives Considered**
 
