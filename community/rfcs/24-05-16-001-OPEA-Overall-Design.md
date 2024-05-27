@@ -16,7 +16,7 @@ The requirements include but not limited to:
 
     have the ability of offer config-based definition or low-code for constructing complex LLM applications.
 
-2. component registery
+2. component registry
 
     allow user to register new service for building complex GenAI applications
 
@@ -30,7 +30,7 @@ The requirements include but not limited to:
 
 **Motivation**
 
-This RFC is used to present the OPEA overall design philosophy, including overall architecture, working flow, componenet design, for community discussion.
+This RFC is used to present the OPEA overall design philosophy, including overall architecture, working flow, component design, for community discussion.
 
 **Design Proposal**
 

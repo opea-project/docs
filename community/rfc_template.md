@@ -33,11 +33,11 @@ List other alternatives if have, and corresponding pros/cons to each proposal.
 
 ### Compatibility
 
-list possbile incompatible interface or workflow changes if exists.
+list possible incompatible interface or workflow changes if exists.
 
 ### Miscs
 
-List other informations user and developer may care about, such as:
+List other information user and developer may care about, such as:
 
 - Performance Impact, such as speed, memory, accuracy.
 - Engineering Impact, such as binary size, startup time, build time, test times.
