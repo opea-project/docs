@@ -3,7 +3,7 @@ RFC Template
 
 ## RFC Title
 
-Format: [RFC] The short description of the feature you want to contribute
+The short description of the feature you want to contribute
 
 ## RFC Content
 
