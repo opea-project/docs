@@ -396,7 +396,7 @@ and applying the Linux Foundation licensing considerations._
 | ---------- | ----------- | ------------ | -------------------- |
 | Agent framework | Orchestration software for building and deploying workflows combining information retrieval components with LLMs for building AI agents with contextualized information | Langchain, LlamaIndex, Haystack, Semantic Kernel
 | Ingest/Data Processing | Software components that can be used to enhance the data that is indexed for retrieval. For example: process, clean, normalization, information extraction, chunking, tokenization, meta data enhancement.  | NLTK, spaCY, HF Tokenizers, tiktoken, SparkNLP
-| Embedding models/service | Models or services that covert text chunks into embedding vectors to be stored in a vector database | HF Transformers, S-BERT | HF TEI, OpenAI, Cohere, GCP, Azure embedding APIs, JinaAI
+| Embedding models/service | Models or services that convert text chunks into embedding vectors to be stored in a vector database | HF Transformers, S-BERT | HF TEI, OpenAI, Cohere, GCP, Azure embedding APIs, JinaAI
 | Indexing/Vector store | A software for indexing information (sparse/vector) and for retrieving given a query | Elasticsearch, Qdrant, Milvus, ChromaDB, Weaviate, FAISS, Vespa, HNSWLib, SVS, PLAID | Pinecone, Redis
 | Retrieval/Ranking | A SW component that can re-evaluate existing contexts relevancy order | S-BERT, HF Transformers, Bi/Cross-encoders, ColBERT | Cohere
 | Prompt engine | A component that creates task specific prompts given queries and contexts, tracks user sessions (maintain history/memory) | Langchain hub
@@ -688,7 +688,7 @@ more capabilities than necessary. OWASP container best practices.
   *	High availability
     * Replication & Data/Instance Protection 
     * Resiliency – time to relaunch an instance when burned down to zero.
-    * Privides support and instrumentation for enterprise 24/7 support
+    * Provides support and instrumentation for enterprise 24/7 support
   *	Licensing model and SW Distribution
     * Scalable from small to large customers
     * Ability to customize for specific enterprise needs

@@ -5,7 +5,7 @@
 Under Review
 
 # Objective
-This RFC aims to introduce the OPEA microservice design and demonstrate its application to Retrieval-Augmented Generation (RAG). The objective is to address the challenge of designing a flexible architecture for Enterprise AI applicaitons by adopting a microservice approach. This approach facilitates easier deployment, enabling one or multiple microservices to form a megaservice. Each megaservice interfaces with a gateway, allowing users to access services through endpoints exposed by the gateway. The architecture is general and RAG is the first example that we want to apply.
+This RFC aims to introduce the OPEA microservice design and demonstrate its application to Retrieval-Augmented Generation (RAG). The objective is to address the challenge of designing a flexible architecture for Enterprise AI applications by adopting a microservice approach. This approach facilitates easier deployment, enabling one or multiple microservices to form a megaservice. Each megaservice interfaces with a gateway, allowing users to access services through endpoints exposed by the gateway. The architecture is general and RAG is the first example that we want to apply.
 
 
 # Motivation
