@@ -13,11 +13,11 @@ Have a clear and good design for users to deploy their own GenAI applications on
 
 **Motivation**
 
-This RFC is used to present the OPEA deployment related design for community discussion.
+This RFC presents the OPEA deployment-related design for community discussion.
 
 **Design Proposal**
 
-The overall architecture please refer to [this](24-05-16-001-OPEA-Overall-Design.md).
+Refer to this [OPEA overall architecture design document](24-05-16-OPEA-001-Overall-Design.md).
 
 The proposed OPEA deployment workflow is
 
@@ -25,11 +25,11 @@ The proposed OPEA deployment workflow is
   <img src="opea_deploy_workflow.png" alt="Deployment" width=480 height=310>
 </a>
 
-For GenAI applications, we provides two interfaces for deployment
+We provide two interfaces for deploying GenAI applications:
 
 1. Docker deployment by python
 
-    For example, constructing RAG (Retrieval-Augmented Generation) application with python code is something like:
+    Here is a python example for constructing a RAG (Retrieval-Augmented Generation) application:
 
     ```python
     from comps import MicroService, ServiceOrchestrator
@@ -56,9 +56,9 @@ For GenAI applications, we provides two interfaces for deployment
     
     ```
 
-2. Kubernetes deployment by yaml
+2. Kubernetes deployment using YAML
 
-    For example, constructing RAG (Retrieval-Augmented Generation) application with yaml is something like:
+    Here is a YAML example for constructing a RAG (Retrieval-Augmented Generation) application:
 
     ```yaml
     opea_micro_services:
@@ -82,7 +82,8 @@ For GenAI applications, we provides two interfaces for deployment
     
     ```
 
-When user wants to deploy the GenAI application to Kubernetes environment, such yaml configuration file should be defined and coverted to `docker composer`or [GenAI Microservice Connecto -(GMC)](https://github.com/opea-project/GenAIInfra/tree/main/microservices-connector) Custom Resource files.
+When deploying the GenAI application to Kubernetes environment, you should define and convert the YAML configuration file to an appropriate `docker compose`, `kubernetes manifest`, , `kubernetes helm chart` or `[GenAI Microservice Connector-(GMC)](https://github.com/opea-project/GenAIInfra/tree/main/microservices-connector) custom resource` file.
+
 A sample GMC Custom Resource is like below:
 ```yaml
     apiVersion: gmc.opea.io/v1alpha3
@@ -175,7 +176,7 @@ And the user can access the application pipeline via the value of `URL` field in
 The whole deployment process illustrated by the diagram below.
 
 <a target="_blank" href="opea_deploy_process.png">
-  <img src="opea_deploy_process_v1.png" alt="Deployment Process" width=480 height=310>
+  <img src="opea_deploy_process_v2.png" alt="Deployment Process" width=480 height=310>
 </a>
 
 
