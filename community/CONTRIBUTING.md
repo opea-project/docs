@@ -71,18 +71,12 @@ If you are new to GitHub, view the pull request [How To](https://help.github.com
 
 #### Step-by-Step guidelines
 
+- Star this repository using the button `Star` in the top right corner.
 - Fork the corresponding OPEA repository using the button `Fork` in the top right corner.
 - Clone your forked repository to your pc by running `git clone "url to your repo"`
 - Create a new branch for your modifications by running `git checkout -b new-branch`
 - Add your files with `git add -A`, commit `git commit -s -m "This is my commit message"` and push `git push origin new-branch`.
 - Create a `pull request` for the project you want to contribute.
-
-### Pull Request Checklist
-
-Before sending your pull requests, follow the information below:
-
-- Add unit tests to cover the code you would like to contribute.
-- Follow [Developer Certificate of Origin](https://en.wikipedia.org/wiki/Developer_Certificate_of_Origin) to comply with the terms of Developer Certificate of Origin by signing off each of your commits with `-s`, e.g. `git commit -s -m 'This is my commit message'`.
 
 ### Pull Request Template
 
@@ -92,27 +86,30 @@ See [PR template](./pull_request_template.md)
 
 - At least two approvals from reviewers
 
-- All CICD tests passed
+- All detected status checks pass
 
 - All conversations solved
 
-- License compatible with existing one
+- Third-party dependency license compatible
 
 ### Pull Request Status Checks Overview
 
-The OPEA project use GitHub Action for CICD test.
+The OPEA projects use GitHub Action for CI test.
 
-| Test Name                           | Test Scope                                      | Test Pass Criteria |
-|-------------------------------------|-------------------------------------------------|--------------------|
-| [DCO](https://github.com/apps/dco/) | Use `git commit -s` to sign off                 | PASS               |
-| Code Format Scan                    | pre-commit.ci [Bot]                             | PASS               |
-| Code Security Scan                  | Bandit/Hadolint/Dependabot/Coverity/McAfee      | PASS               |
-| Unit Test                           | Pytest scripts under tests folder               | PASS               |
-| End to End Test                     | End to end tests, for example GenAI Examples    | PASS               |
+| Test Name          | Test Scope                                | Test Pass Criteria |
+|--------------------|-------------------------------------------|--------------------|
+| DCO                | Use `git commit -s` to sign off           | PASS               |
+| Code Format Scan   | pre-commit.ci [Bot]                       | PASS               |
+| Code Security Scan | Bandit/Hadolint/Dependabot/CodeQL/Trellix | PASS               |
+| Unit Test          | Unit test under test folder               | PASS               |
+| End to End Test    | End to end test workflow                  | PASS               |
+
+> Notes: [Developer Certificate of Origin (DCO)](https://en.wikipedia.org/wiki/Developer_Certificate_of_Origin), you must agree to the terms of Developer Certificate of Origin by signing off each of your commits with `-s`, e.g. `git commit -s -m 'This is my commit message'`.
 
 # Support
 
-Feel free to reach out to [OPEA maintainers](mailto: info@opea.dev) for support.
+- Feel free to reach out to [OPEA maintainers](mailto: info@opea.dev) for support. 
+- Submit your questions, feature requests, and bug reports to the GitHub issues page.
 
 # Contributor Covenant Code of Conduct
 
