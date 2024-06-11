@@ -181,7 +181,6 @@ The whole deployment process illustrated by the diagram below.
 
 <a target="_blank" href="opea_deploy_process.png">
   <img src="opea_deploy_process_v1.png" alt="Deployment Process" width=480 height=310>
-  <img src="opea_deploy_process_v2.png" alt="Deployment Process" width=480 height=310>
 </a>
 
 
