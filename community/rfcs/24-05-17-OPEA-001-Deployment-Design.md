@@ -1,6 +1,6 @@
 **Author**
 
-[ftian1](https://github.com/ftian1), [lvliang-intel](https://github.com/lvliang-intel), [hshen14](https://github.com/hshen14), [irisdingbj](https://github.com/irisdingbj), [KfreeZ](https://github.com/kfreez), [zhlsunshine](https://github.com/zhlsunshine) **Edit Here to add your id**
+[ftian1](https://github.com/ftian1), [lvliang-intel](https://github.com/lvliang-intel), [hshen14](https://github.com/hshen14), [mkbhanda](https://github.com/mkbhanda), [irisdingbj](https://github.com/irisdingbj), [KfreeZ](https://github.com/kfreez), [zhlsunshine](https://github.com/zhlsunshine) **Edit Here to add your id**
 
 **Status**
 
@@ -53,7 +53,7 @@ We provide two interfaces for deploying GenAI applications:
             self.service_builder.flow_to(embedding, retriever)
             self.service_builder.flow_to(retriever, rerank)
             self.service_builder.flow_to(rerank, llm)
-    
+
     ```
 
 2. Kubernetes deployment using YAML
@@ -74,17 +74,21 @@ We provide two interfaces for deploying GenAI applications:
       llm:
         endpoint: /v1/chat/completions
         port: 9000
-     
+
     opea_mega_service:
       port: 8080
       mega_flow:
         - embedding >> retrieval >> reranking >> llm
-    
+
     ```
+This YAML will be acting as a unified language interface for end user to define their GenAI Application.
 
-When deploying the GenAI application to Kubernetes environment, you should define and convert the YAML configuration file to an appropriate `docker compose`, `kubernetes manifest`, , `kubernetes helm chart` or `[GenAI Microservice Connector-(GMC)](https://github.com/opea-project/GenAIInfra/tree/main/microservices-connector) custom resource` file.
+When deploying the GenAI application to Kubernetes environment, you should define and convert the YAML configuration file to an appropriate [docker compose](https://docs.docker.com/compose/), or [GenAI Microservice Connector-(GMC)](https://github.com/opea-project/GenAIInfra/tree/main/microservices-connector) custom resource file.
 
-A sample GMC Custom Resource is like below:
+Note:  A convert tool will be provided for OPEA to convert unified language interface to docker componse or GMC.
+
+A sample GMC [Custom Resource](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/) is like below:
+
 ```yaml
     apiVersion: gmc.opea.io/v1alpha3
     kind: GMConnector
@@ -161,7 +165,7 @@ A sample GMC Custom Resource is like below:
                 hostPath: /root/GMC/data/tgi
                 modelId: Intel/neural-chat-7b-v3-3
                 endpoint: /generate
-              isDownstreamService: true 
+              isDownstreamService: true
 ```
 There should be an available `gmconnectors.gmc.opea.io` CR named `chatqna` under the namespace `gmcsample`, showing below：
 
@@ -176,13 +180,15 @@ And the user can access the application pipeline via the value of `URL` field in
 The whole deployment process illustrated by the diagram below.
 
 <a target="_blank" href="opea_deploy_process.png">
+  <img src="opea_deploy_process_v1.png" alt="Deployment Process" width=480 height=310>
   <img src="opea_deploy_process_v2.png" alt="Deployment Process" width=480 height=310>
 </a>
 
 
 **Alternatives Considered**
 
-n/a
+[Kserve](https://github.com/kserve/kserve): has provided [InferenceGraph](https://kserve.github.io/website/0.9/modelserving/inference_graph/), however it only supports inference service and lack of deployment support.
+
 
 **Compatibility**
 
@@ -195,6 +201,4 @@ n/a
   - [ ] one click deployment on AWS, GCP, Azure cloud
   - [ ] static cloud resource allocator vs dynamic cloud resource allocator
   - [ ] k8s GMC with istio
-
-
 
