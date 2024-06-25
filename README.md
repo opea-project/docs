@@ -3,7 +3,8 @@
 OPEA sits within the LF AI & Data Foundation.
 
 - Website: https://opea.dev/ 
-- X/Twitter: https://twitter.com/opeadev 
+- X/Twitter: https://twitter.com/opeadev
+- Linkedin: https://www.linkedin.com/company/opeadev/
 - Github: https://github.com/opea-project 
 - Contact us at: info@opea.dev
 
@@ -16,6 +17,16 @@ The OPEA platform includes:
 - A four-step assessment for grading generative AI systems around performance, features, trustworthiness and enterprise-grade readiness 
 
 Check out the [LF AI & Data Press Release](https://lfaidata.foundation/blog/2024/04/16/lf-ai-data-foundation-launches-open-platform-for-enterprise-ai-opea-for-groundbreaking-enterprise-ai-collaboration/) and [Intel's blog post](https://www.intel.com/content/www/us/en/developer/articles/news/introducing-the-open-platform-for-enterprise-ai.html).
+
+Technical Steering Committee
+- Ke Ding,	Senior Prinicipal AI Engineer,	Intel
+- Malini Bhandaru,	Senior Principal Engineer,	Intel
+- Amr Abdelhalem,	SVP, Head of Cloud Platforms,	Fidelity
+- Robert Hafner,	Senior Prinicipal Architect,	Comcast
+- Steven Grubb,	Senior Principal Engineer,	Red Hat
+- Nathan Cartwright,	Chief Architect - AI,	CDW
+- Logan Markewich,	Founding Software Developer,	LlamaIndex
+- Justin Cormack, CTO,	Docker
 
 Member companies at launch:
 
