@@ -3,7 +3,7 @@ RFC Template
 
 ## RFC Title
 
-Deploy GenAIComps on Kubernetes
+Deploy GenAIComps building blocks on Kubernetes
 
 ## RFC Content
 
@@ -17,7 +17,8 @@ Deploy GenAIComps on Kubernetes
 
 ### Objective
 
-Define how the GenAIComps/Microservices should be deployed on kubernetes.
+Define how the GenAIComps components should be deployed on kubernetes. And define
+the interface for GMC to call these building blocks to compose e2e AI application.
 
 Non-Goal: Pipeline to connect all microservices is out of scope.
 
@@ -33,15 +34,23 @@ but when we are providing deployment for more examples in GenAIExamples,
 there will be a lot of duplicated codes. This make the yaml files hard to
 maintain.
 
-The proposal is to provide helm chart for GenAIComps components, and define a
-few variables like model name, so we can generate the yaml files automatically
-by "helm template" for each GenAIExamples deployment.
+The proposal is to provide helm charts for GenAIComps components, and define a
+few variables like model name, cached model path etc, so we can generate the
+yaml files automatically by "helm template" for each GenAIExamples deployment.
 
-In detail, the helm chart for each component will be maintained at this directory:
+In detail, the helm chart for each component will be maintained at this directory, more components will be added later:
 
-GenAIInfra/helm-charts/common
+GenAIInfra/helm-charts/common/{llm-uservice|reranking-usvc|retriever-usvc|embedding-usvc|tgi|tei|teirerank|redis-vector-db}
 
-For example llm-uservice, then we can generate the yaml files for CodeTrans this way:
+Among these components, there are 2 levels, the llm-uservice|reranking-usvc|retriever-usvc|embedding-usvc are microservices components used to build pipeline, and tgi|tei|teirerank|redis-vector-db are backends called by the microservcies.
+
+Helm Charts for components will be deployed and verified by CICD systems as single function.
+
+Proposals for GMC on how to use the helm charts, use llm-uservice as example:
+
+## Option1: Use yaml files automatically generated from helm charts.
+
+We can generate the yaml files for CodeTrans with the following commands:
 
 ```console
 cd GenAIInfra/helm-charts/common
@@ -52,11 +61,39 @@ export MODELNAME="HuggingFaceH4/mistral-7b-grok"
 helm template codetrans llm-uservice --set global.HUGGINGFACEHUB_API_TOKEN=${HFTOKEN} --set tgi.volume=${MODELDIR} --set tgi.LLM_MODEL_ID=${MODELNAME} > ../../manifests/CodeTrans/xeon/llm.yaml
 ```
 
-We'll keep a copy of the generated yaml files at GenAIInfra/manifests/${WORKLOAD}/[xeon|gaudi] in case anyone want to use it directly with "kubectl apply -f".
+We'll set values like Model Name in the process of generating yaml file, and GMC can use this yaml file directly with few customization.
+
+## Option2: Generate yaml files for common components regardless how the Examples/Pipeline are using it.
+
+This way, the yaml files will not contain values for specified workloads, GMC use this file as template to modify/inject values using its own way. 
+
+```console
+cd GenAIInfra/helm-charts/common
+helm dependency update llm-uservice
+export HFTOKEN="insert-your-huggingface-token-here"
+export MODELDIR="/mnt"
+export MODELNAME="HuggingFaceH4/mistral-7b-grok"
+helm template WLNAME llm-uservice --set global.HUGGINGFACEHUB_API_TOKEN=${HFTOKEN} --set tgi.volume=${MODELDIR} --set tgi.LLM_MODEL_ID=${MODELNAME} > ../../manifests/common/xeon/llm.yaml
+```
+
+## Option3: GMC use go helm client to generate yaml files.
+
+This way, we'll not provide auto generated yaml files, GMC will set the values.yaml, or use --set option to customize yaml files at the time of calling helm client. In my opinion, this way is easiest to integrate and flexible.
+
+Refer to https://pkg.go.dev/github.com/mittwald/go-helm-client#HelmClient.TemplateChart
+
+## To discuss
+
+The microservices(llm-uservice|reranking-usvc|embedding-usvc|retriever-usvc) are components of building pipelines, and the underlying service(tgi|tei etc) can be hided from end users as implementation details. We will implement more choices of inference server like vLLM/RayServe as replacable backend in the future.
+
+Shall we provide both tgi and llm-uservice to GMC? If separated components are prefered, we'll need the remove the dependency of llm over tgi in the helm chart.
+
 
 ### Alternatives Considered
 
-List other alternatives if have, and corresponding pros/cons to each proposal.
+Use configmap to config the environment variables for yaml file, like the HUGGINGFACEHUB_API_TOKEN, MODEL_ID.
+
+This way we can provide reconfig for envrionment variables easily, but it's hard to modify other values which are not passed as env variables like Model_Cache_Dir for the deployment, the namespace etc.
 
 ### Compatibility
 
@@ -70,56 +107,3 @@ List other information user and developer may care about, such as:
 - Engineering Impact, such as binary size, startup time, build time, test times.
 - Security Impact, such as code vulnerability.
 - TODO List or staging plan.
-
-
-=============================================================================================
-## The Proposal for the GenAI helm-charts/manifests  
-<img width="1379" alt="image" src="https://github.com/yongfengdu/docs/assets/5109898/ae637f30-dfc0-4c6e-a624-7c8a1c41ca4e">
-
-
-### Steps:
-
-1. Translate workload to helmchart : from Docker-Compose + components  in GenAIExamles&GenAIComps 
-2. export helmchart  to manifests 
-3. GMC integrates the components (replace the backend in each workload)
-4. Submit each GenAI workloads into GenAIExamples/${workloadName}/kubernetes
-
-
-### Example  of ChatQnA
-1. Use helm update to get dependent charts
-   `helm dependency update`
-
-2. Use helm template to export manifests files
-
-   ```
-   $ export releaseName=chatqna
-   $ helm template ${releaseName} chatqna/  --output-dir test/ \
-      --set llm-uservice.HUGGINGFACEHUB_API_TOKEN="${HFTOKEN}" \
-      --set global.http_proxy=http://192.168.1.253:3128 \
-      --set global.https_proxy=http://192.168.1.253:3128 \
-      --set llm-uservice.tgi.LLM_MODEL_ID="/data/neural-chat-7b-v3-3" \
-      --set llm-uservice.tgi.volume="/mnt/models" \
-      --set embedding-usvc.tei.volume="/mnt/models" \
-      --set reranking-usvc.teirerank.volume="/mnt/models" \
-      --values chatqna/gaudi-values.yaml \
-      --create-namespace 
-   ```
-3. the yamls exported
-   ![image](https://github.com/yongfengdu/docs/assets/5109898/d8d9f8d5-7fc0-4acf-a42c-eeee9f3abdd6)
-
-4. only for verify:
-   ```
-   ### apply&delete the manifests:
-    kubectl apply -f ./test/chatqna -R
-    kubectl delete -f test/chatqna -R
-   ```
-5. replace each backend with GMC
-6. use GMC to orchestrate the components manifests
-
-### Several Points:
-1. the helm-charts of each workload only exist in GenAIInfra
-2. the GMC will orchestrate the workload
-3. the GMC + yamls of components will submit to each workload in GenAIExamples
-
-
-
