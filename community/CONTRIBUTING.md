@@ -28,7 +28,7 @@ Thanks for considering contributing to OPEA project. The contribution process is
 
 ## Community Discussions
 
-OPEA users are encouraged in participating open discussions in [X/Twitter](https://twitter.com/opeadev) or mail to [info@opea.dev](mailto:info@opea.dev) to get latest updates about OPEA project. 
+Developers are encouraged to participate in discussions by opening an issue in one of the GitHub repos at https://github.com/opea-project. Alternatively, they can send an email to [info@opea.dev](mailto:info@opea.dev) or subscribe to [X/Twitter](https://twitter.com/opeadev) and [LinkedIn Page](https://www.linkedin.com/company/opeadev/posts/?feedView=all) to get latest updates about the OPEA project. 
 
 ## Documentations
 
