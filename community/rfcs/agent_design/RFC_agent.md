@@ -19,6 +19,7 @@ The traditional approach to developing an AI agent, such as that used by Langcha
 Reflecting on existing workflows, some products choose to design tools and agents separately, constructing a logic graph that facilitates data transfer through "edges" or "conditional_edges" during inference. Recently, innovative agent products have conceptualized agent-tool cooperation akin to role-playing games. Here, adherence tothe [Standardized Operating Procedures](https://openreview.net/forum?id=VtmBAGCN7o#:~:text=MetaGPT%20encodes%20Standardized%20Operating%20Procedures,intermediate%20results%20and%20reduce%20errors.) allows users to assemble teams for task completion. Unlike traditional designs that treat tools and agents as distinct entities, this model considers each tool and agent as a virtual team member with specific skills—for example, a "Retriever" specializes in identifying closely related results, while a "Web Searcher" excels in online searches. Each team includes a "Researcher" responsible for coordinating tasks and synthesizing information, ultimately delivering a comprehensive result to the user. This unified approach eliminates the need for separate APIs for tools and agents, streamlining code architecture and reducing development efforts.
 
 ![alt text](image.png )
+
 Fig.1. The diagram of a Standardized Operating Procedures community
 
 Building on the OPEA project framework and inspired by popular products on the market, our agent is designed to emulate the collaborative teamwork seen among human experts through Standardized Operating Procedures. Moving beyond the conventional microservice-megaservice architecture, we envision each microservice and megaservice as an "Expert" within a "MessageGroup." In this setup, each Expert cooperates seamlessly to tackle assigned tasks, reflecting a unified and efficient approach to problem-solving.
@@ -35,13 +36,14 @@ graph = builder.compile()
 ```
 
 ![alt text](image-4.png)
+
 Fig.2. The relation connection inside a message group
 
 In a "MessageGroup", specific "Roles" utilize "MegaServices" and "Microservices" to perform targeted "Actions". A designated "Role" acts as a wrapper, establishing the "MessageGroup" environment and orchestrating the use of both "MicroServices" and "MegaServices" to execute actions.
 
 Consequently, it is essential to clearly define the "Roles" and "Actions" within a "MessageGroup". The design of a "Role" involves detailing the "Actions" and setting up link relationships between services. We can develop a series of "Microservices" or "MegaServices" to serve as the potential "Actions". These services are connected through edges that can be either unidirectional or bidirectional, allowing each "Role" to sequentially execute commands.
 
-Figure 2 presents a toy demonstration of a reflective agent featuring two roles: "Generation" and "Reflection". The "Generation" role, constructed from mega and microservices, takes user input to produce a response. Subsequently, the "Reflection" role observes this output, providing critical feedback on the results. This feedback is relayed back to the "Generation" role to refine the initial output.
+Fig.2 presents a toy demonstration of a reflective agent featuring two roles: "Generation" and "Reflection". The "Generation" role, constructed from mega and microservices, takes user input to produce a response. Subsequently, the "Reflection" role observes this output, providing critical feedback on the results. This feedback is relayed back to the "Generation" role to refine the initial output.
 
 To achieve this architecture, we need to define a wrapper "Role" that integrates and manages the micro/mega-services effectively.
 ```python
@@ -172,7 +174,8 @@ Each role should have a single prompt template to complete the given task. We ca
 The multi-agent design is more complex than the single agent working flow. But in our cases, the multiagent can be regarded as a group of Roles in a same messagegroup. The single agent design could be regarded as a cooperation of "Planning" role and some execuation role. The multiagent design will introduce more roles as shown in Fig.3. in the message group to complete a specific task.
 
 ![alt text](image-6.png)
-Fig.3. The role community to build complex agent type.
+
+Fig.4. The role community to build complex agent type.
 
 **Alternatives Considered**
 
