@@ -70,7 +70,20 @@ This RFC aims to provide agents as new microservice / megaservice for Enterprise
    ```
 
 * 'Hierarchical Multi Agent' megaservice overview
+
   
+
+   ![image](https://github.com/xuechendi/docs/assets/4355494/96f3a86a-d6ff-44e5-bb4b-c2d21a9f235c)
+
+   Single Agent Setting
+
+   ![image](https://github.com/xuechendi/docs/assets/4355494/49c1214f-4b40-45a6-8760-7c9630ed3d8f)
+
+   Multi Level Agent Setting
+
+   ![image](https://github.com/xuechendi/docs/assets/4355494/1d791bc6-80c7-4e6c-b27d-220ed1354ee5)
+
+    * Expected User Input
 
 * 'Agent' microservice tech details
 
