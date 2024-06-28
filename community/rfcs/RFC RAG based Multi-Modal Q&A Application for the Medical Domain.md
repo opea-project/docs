@@ -23,7 +23,7 @@ Ultimately, the motivation behind this RFC is to create a Multi-Modal QnA applic
 
 ### Design Proposal
 
-
+![image](../../assets/solution_aproach.png)
 
 - We are planning to use multi-modal models such as LLaVA or LLaVA-Med, leveraging the existing OPEA  architecture for our Q&A application. Our proposal includes a new use case where users can upload medical images (2D, 3D, 4D) for interpretation or submit a text query to find relevant images, benefiting from previous diagnoses stored in an offline system such as institutional knowledge from hospitals. Additionally, we will develop a user interface specifically designed to support these functionalities.
 
@@ -33,8 +33,15 @@ Ultimately, the motivation behind this RFC is to create a Multi-Modal QnA applic
 
 #### Use Case - 1
 
+![image](../../assets/case_1.png)
+
 In this scenario, the user aims to interpret a Contrast-Enhanced Spectral Mammography (CESM) image. Initially, the system searches the database for similar images and retrieves relevant diagnostic information associated with those images. This data is then utilized to construct a comprehensive prompt for the Large Multi Model (LMM). The LMM, employing advanced AI techniques, processes this prompt and generates a diagnostic interpretation, which is subsequently delivered to the user. This result not only provides an immediate analysis but also includes recommendations for further evaluation or treatment as necessary, ensuring a thorough and informed diagnostic process. Additionally, by running the data and the model on local systems equipped with robust security measures, we enhance the privacy and security of the information, aligning with stringent health data protection standards such as HIPAA and GDPR. This approach minimizes the need for expert involvement, thereby streamlining the analysis and potentially reducing operational costs without compromising diagnostic accuracy
 
 #### Use Case - 2
+<!-- ![image](../../assets/case_2.png) -->
+
+<p align="left">
+  <img src="../../assets/case_2.png" width="950" title="hover text">
+</p>
 
 In this scenario, the user specifies certain conditions, such as specific diagnostic features or patient demographics, and requests to view CESM images that meet these criteria. Initially, the system searches the database for diagnoses that match these conditions and retrieves the relevant images. These images can either be returned directly to the user or used as inputs for the Large Multi Model (LMM). If the latter option is chosen, the LMM analyzes the images to further validate their relevance to the specified conditions. Additionally, the system provides a justification for why these particular images were selected, ensuring transparency and enhancing user understanding of the process. This approach minimizes the need for expert involvement, thereby streamlining the analysis and potentially reducing operational costs.
