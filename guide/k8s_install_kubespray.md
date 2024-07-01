@@ -42,6 +42,8 @@ KUBESPRAYDIR=kubespray
 python3 -m venv $VENVDIR
 source $VENVDIR/bin/activate
 cd $KUBESPRAYDIR
+# Check out the latest release version tag of kubespray. Here we use kubespary v2.25.0 as an example.
+git checkout v2.25.0
 pip install -U -r requirements.txt
 ```
 
@@ -53,7 +55,7 @@ Ansible inventory defines the hosts and groups of hosts on which Ansible tasks a
 cp -r inventory/sample inventory/mycluster
 ```
 
-Edit your inventory file `inventory/mycluster/inventory.ini` to config the node name and IP address. The inventory file used in ths demo is as following:
+Edit your inventory file `inventory/mycluster/inventory.ini` to config the node name and IP address. The inventory file used in this demo is as following:
 ```
 [all]
 k8s-master ansible_host=192.168.121.35
@@ -86,7 +88,7 @@ You can clean up old Kubernetes cluster with Ansible playbook with following com
 # uninstalling old packages and interacting with various systemd daemons.
 # Without --become the playbook will fail to run!
 # And be mind it will remove the current Kubernetes cluster (if it's running)!
-ansible-playbook -i inventory/mycluster/inventory.ini  --become --become-user=root reset.yml
+ansible-playbook -i inventory/mycluster/inventory.ini  --become --become-user=root -e override_system_hostname=false reset.yml
 ```
 
 Then you can deploy Kubernetes with Ansible playbook with following command:
@@ -96,7 +98,7 @@ Then you can deploy Kubernetes with Ansible playbook with following command:
 # The option `--become` is required, as for example writing SSL keys in /etc/,
 # installing packages and interacting with various systemd daemons.
 # Without --become the playbook will fail to run!
-ansible-playbook -i inventory/mycluster/inventory.ini  --become --become-user=root cluster.yml
+ansible-playbook -i inventory/mycluster/inventory.ini  --become --become-user=root -e override_system_hostname=false cluster.yml
 ```
 
 The Ansible playbooks will take several minutes to finish. After playbook is done, you can check the output. If `failed=0` exists, it means playbook execution is successfully done.
@@ -111,7 +113,7 @@ sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ```
 
-If you want to access this Kubernetes cluster from other machines, you can install kubectl by `sudo apt-get install -y kubectl` and make the similiar configuration as in the node **k8s-master**.
+If you want to access this Kubernetes cluster from other machines, you can install kubectl by `sudo apt-get install -y kubectl` and make the similar configuration as in the node **k8s-master**.
 
 Then run following command to check the status of your Kubernetes cluster:
 ```
@@ -142,7 +144,7 @@ Now congratulations. Your two-node K8s cluster is ready to use.
 
 ### How to deploy a single node Kubernetes?
 
-Deploying single-node K8s is similiar as two-node K8s cluster. 
+Deploying single-node K8s is similar as two-node K8s cluster.
 
 Follow the previous [Step 1. Set up Kubespray and Ansible](#step-1-set-up-kubespray-and-ansible) to set up environment. 
 
@@ -177,7 +179,7 @@ kube_node
 kube_control_plane
 ```
 
-And then follow [Step 3. Deploy Kubernetes](#step-3-deploy-kubernetes), please pay attention to the **inventory name** while executing Ansible playbook, which is `inventory/mycluster/hosts.ini` in single node deployment. When the playbook is excuted successfully, you will get a 1-node K8s ready. 
+And then follow [Step 3. Deploy Kubernetes](#step-3-deploy-kubernetes), please pay attention to the **inventory name** while executing Ansible playbook, which is `inventory/mycluster/hosts.ini` in single node deployment. When the playbook is executed successfully, you will get a 1-node K8s ready.
 
 And the follow [Step 4. Create kubectl configuration](#step-4-create-kubectl-configuration) to set up `kubectl`. You can check the status by `kubectl get nodes`.
 
@@ -226,7 +228,7 @@ Then you can deploy Kubernetes to the third node with Ansible playbook with foll
 # Without --become the playbook will fail to run!
 ansible-playbook -i inventory/mycluster/inventory.ini --limit third-node --become --become-user=root scale.yml -b -v
 ```
-When the playbook is excuted successfully, you can check if the third node is ready with following command:
+When the playbook is executed successfully, you can check if the third node is ready with following command:
 ```
 kubectl get nodes
 ```
@@ -243,13 +245,13 @@ We assume your proxy is as below:
 - https_proxy="http://proxy.fake-proxy.com:912"
 ```
 
-You can change parameters in `inventory/mycluster/group_vars/all/all.yml` to set `http_proxy`,`https_proxy`, and `no_proxy` as following. Please make sure you've added all the nodes' ip addresses into the `no_proxy` environment variable. In this example, we use `192.168.121.0/24` to represent all nodes' ip addresses.
+You can change parameters in `inventory/mycluster/group_vars/all/all.yml` to set `http_proxy`,`https_proxy`, and `additional_no_proxy` as following. Please make sure you've added all the nodes' ip addresses into the `additional_no_proxy` parameter. In this example, we use `192.168.121.0/24` to represent all nodes' ip addresses.
 
 ```
 ## Set these proxy values in order to update package manager and docker daemon to use proxies and custom CA for https_proxy if needed
 http_proxy: "http://proxy.fake-proxy.com:911"
 https_proxy: "http://proxy.fake-proxy.com:912"
 
-## Refer to roles/kubespray-defaults/defaults/main/main.yml before modifying no_proxy
-no_proxy: "localhost, 127.0.0.1, 192.168.121.0/24, 10.233.0.0/16"
+## If you need exclude all cluster nodes from proxy and other resources, add other resources here.
+additional_no_proxy: "localhost,127.0.0.1,192.168.121.0/24"
 ```
