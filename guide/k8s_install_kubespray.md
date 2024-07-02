@@ -31,9 +31,10 @@ cat ~/.ssh/id_rsa.pub | ssh username@k8s-worker "mkdir -p ~/.ssh && cat >> ~/.ss
 
 ## Step 1. Set up Kubespray and Ansible
 
-Python3 is required in this step. If you don't have, go to [Python website](https://docs.python.org/3/using/index.html) for installation guide.
+Python3 (version >= 3.10) is required in this step. If you don't have, go to [Python website](https://docs.python.org/3/using/index.html) for installation guide.
 
-You shall set up a Python virtual environment and install Ansible and other Kubespray dependencies. Simply, you can just run following commands. You can also go to [Kubespray Ansible installation guide](https://github.com/kubernetes-sigs/kubespray/blob/master/docs/ansible/ansible.md#installing-ansible) for details. 
+You shall set up a Python virtual environment and install Ansible and other Kubespray dependencies. Simply, you can just run following commands. You can also go to [Kubespray Ansible installation guide](https://github.com/kubernetes-sigs/kubespray/blob/master/docs/ansible/ansible.md#installing-ansible) for details. To get the kubespray code, please check out the [latest release version](https://github.com/kubernetes-sigs/kubespray/releases) tag of kubespray. Here we use kubespary v2.25.0 as an example.
+
 
 ```
 git clone https://github.com/kubernetes-sigs/kubespray.git
@@ -42,7 +43,7 @@ KUBESPRAYDIR=kubespray
 python3 -m venv $VENVDIR
 source $VENVDIR/bin/activate
 cd $KUBESPRAYDIR
-# Check out the latest release version tag of kubespray. Here we use kubespary v2.25.0 as an example.
+# Check out the latest release version tag of kubespray.
 git checkout v2.25.0
 pip install -U -r requirements.txt
 ```
@@ -55,7 +56,7 @@ Ansible inventory defines the hosts and groups of hosts on which Ansible tasks a
 cp -r inventory/sample inventory/mycluster
 ```
 
-Edit your inventory file `inventory/mycluster/inventory.ini` to config the node name and IP address. The inventory file used in this demo is as following:
+Edit your inventory file `inventory/mycluster/inventory.ini` to config the node name and IP address. The inventory file used in this demo is as follows:
 ```
 [all]
 k8s-master ansible_host=192.168.121.35
@@ -87,7 +88,7 @@ You can clean up old Kubernetes cluster with Ansible playbook with following com
 # The option `--become` is required, as for example cleaning up SSL keys in /etc/,
 # uninstalling old packages and interacting with various systemd daemons.
 # Without --become the playbook will fail to run!
-# And be mind it will remove the current Kubernetes cluster (if it's running)!
+# And be mindful that it will remove the current Kubernetes cluster (if it's running)!
 ansible-playbook -i inventory/mycluster/inventory.ini  --become --become-user=root -e override_system_hostname=false reset.yml
 ```
 
@@ -113,7 +114,7 @@ sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ```
 
-If you want to access this Kubernetes cluster from other machines, you can install kubectl by `sudo apt-get install -y kubectl` and make the similar configuration as in the node **k8s-master**.
+If you want to access this Kubernetes cluster from other machines, you can install kubectl by `sudo apt-get install -y kubectl` and copy over the configuration from the k8-master node and set ownership as above.
 
 Then run following command to check the status of your Kubernetes cluster:
 ```
@@ -144,9 +145,9 @@ Now congratulations. Your two-node K8s cluster is ready to use.
 
 ### How to deploy a single node Kubernetes?
 
-Deploying single-node K8s is similar as two-node K8s cluster.
+Deploying a single-node K8s cluster is very similar to setting up a multi-node (>=2) K8s cluster.
 
-Follow the previous [Step 1. Set up Kubespray and Ansible](#step-1-set-up-kubespray-and-ansible) to set up environment. 
+Follow the previous [Step 1. Set up Kubespray and Ansible](#step-1-set-up-kubespray-and-ansible) to set up the environment.
 
 And then in [Step 2. Build your own inventory](#step-2-build-your-own-inventory), you can create single-node Ansible inventory by copying the single-node inventory sample as following:
 
