@@ -19,14 +19,15 @@ The OPEA platform includes:
 Check out the [LF AI & Data Press Release](https://lfaidata.foundation/blog/2024/04/16/lf-ai-data-foundation-launches-open-platform-for-enterprise-ai-opea-for-groundbreaking-enterprise-ai-collaboration/) and [Intel's blog post](https://www.intel.com/content/www/us/en/developer/articles/news/introducing-the-open-platform-for-enterprise-ai.html).
 
 Technical Steering Committee
-- Ke Ding,	Senior Prinicipal AI Engineer,	Intel
-- Malini Bhandaru,	Senior Principal Engineer,	Intel
-- Amr Abdelhalem,	SVP, Head of Cloud Platforms,	Fidelity
-- Robert Hafner,	Senior Prinicipal Architect,	Comcast
-- Steven Grubb,	Senior Principal Engineer,	Red Hat
-- Nathan Cartwright,	Chief Architect - AI,	CDW
-- Logan Markewich,	Founding Software Developer,	LlamaIndex
-- Justin Cormack, CTO,	Docker
+- [Ke Ding](https://www.linkedin.com/in/dingke/),	Senior Prinicipal AI Engineer,	Intel
+- [Malini Bhandaru](https://www.linkedin.com/in/malinibhandaru/),	Senior Principal Engineer,	Intel (Chair)
+- [Amr Abdelhalem](https://www.linkedin.com/in/amrhalem/),	SVP, Head of Cloud Platforms,	Fidelity
+- [Robert Hafner](https://www.linkedin.com/in/roberthafner/),	Senior Principal Architect,	Comcast
+- Steve Grubb,	Senior Principal Engineer,	Red Hat
+- [Nathan Cartwright](https://www.linkedin.com/in/nathan-cartwright-2008228/),	Chief Architect - AI,	CDW
+- [Logan Markewich](https://www.linkedin.com/in/logan-markewich/),	Founding Software Developer,	LlamaIndex
+- [Justin Cormack](https://www.linkedin.com/in/justincormack/), CTO,	Docker
+- [Melissa Mckay](https://www.linkedin.com/in/melissajmckay/), Head of Developer Relations, JFrog 
 
 Member companies at launch:
 
