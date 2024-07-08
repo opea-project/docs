@@ -33,9 +33,11 @@ Alternatively, you can refer to the AWS documentation directly: [AWS Management 
 ## Uploading images to an AWS Private Registry
 
 There are several reasons why your images might not be uploaded to a public image repository like Docker Hub.
-You can upload your image to an AWS private registry using following steps:
+You can upload your image to an AWS private registry using the following steps:
 
 1. Create a new ECR repository (if not already created): 
+
+An Amazon ECR private repository contains your Docker images, Open Container Initiative (OCI) images, and OCI compatible artifacts. More information about Amazon ECR private repository: https://docs.aws.amazon.com/AmazonECR/latest/userguide/Repositories.html
 
 ```
 aws ecr create-repository --repository-name my-app-repo --region <region> 
@@ -54,13 +56,13 @@ Replace <region> with your AWS region and <account_id> with your AWS account ID.
 3. Build Your Docker Image： 
 
 ```
-docker build -t my-app .
+docker build -t my-app:<tag> .
 ```
 
 4. Tag your Docker image so that it can be pushed to your ECR repository: 
 
 ```
-docker tag my-app:latest <account_id>.dkr.ecr.<region>.amazonaws.com/my-app-repo:latest 
+docker tag my-app:<tag> <account_id>.dkr.ecr.<region>.amazonaws.com/my-app-repo:<tag>
 ```
 
 Replace <account_id> with your AWS account ID, <region> with your AWS region, and my-app-repo with your repository name. 
