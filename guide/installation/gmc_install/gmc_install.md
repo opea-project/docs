@@ -10,10 +10,10 @@ GMC can be used to compose and adjust GenAI pipelines dynamically on Kubernetes.
 
 **Prerequisites**
 
-- For the ChatQnA example ensure your cluster has a running Kubernetes cluster with at least 16 CPUs, 32GB of memory, and 100GB of disk space. To install an Kubernetes cluster as your platform:
-[Kubernetes installation](../k8s_install/) 
+- For the ChatQnA example ensure your cluster has a running Kubernetes cluster with at least 16 CPUs, 32GB of memory, and 100GB of disk space. To install a Kubernetes cluster refer to:
+["Kubernetes installation"](../k8s_install/) 
 
-**Download the GMC github repostiry**
+**Download the GMC github repository**
 
 ```sh
 git clone https://github.com/opea-project/GenAIInfra.git && cd GenAIInfra/microservices-connector
@@ -25,7 +25,7 @@ git clone https://github.com/opea-project/GenAIInfra.git && cd GenAIInfra/micros
 make docker.build docker.push CTR_IMG=<some-registry>/gmcmanager:<tag>
 ```
 
-**NOTE:** This image ought to be published in the personal registry you specified.
+**NOTE:** This image will be published in the personal registry you specified.
 And it is required to have access to pull the image from the working environment.
 Make sure you have the proper permissions to the registry if the above commands don’t work.
 
@@ -55,7 +55,7 @@ export SYSTEM_NAMESPACE=system
 kubectl create namespace $SYSTEM_NAMESPACE
 ```
 
-**NOTE:** Please exact the same `SYSTEM_NAMESPACE` value setting you used while deploying gmc-manager.yaml and gmc-manager-rbac.yaml.
+**NOTE:** Please use the exact same `SYSTEM_NAMESPACE` value setting you used while deploying gmc-manager.yaml and gmc-manager-rbac.yaml.
 
 **Create ConfigMap for GMC to hold GenAI Components and GMC Router manifests**
 
