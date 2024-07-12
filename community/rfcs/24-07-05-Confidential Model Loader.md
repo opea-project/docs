@@ -28,20 +28,20 @@ The overall designs are as follows:
 
 The workflows is as follow:
 
-- Model-in-store phase: Model need to encrypted for the threat of model theft via the following steps
+- Model-in-store phase: Model need to encrypted for the threat of model theft via the following steps:
 
-In a trusted environment (may be enhanced by confidential TEE or TPM):
+  In a trusted environment (may be enhanced by confidential TEE or TPM):
 
-1. Requests the model key from Key Management Server via remote attestation.
-2. Encrypts the model via model key
-3. Publish the encrypted model into model registry
+  1. Creates a model key with a key transfer policy, register model key to Key Broker Server/Key Management Server.
+  2. Encrypts the model via model key.
+  3. Publish the encrypted model into model registry.
 
 - Model-in-use phase: the GenAI microservice need run within a TEE environment, the "confidential model loader"
-is designed as initContainer to decrypt the model via the following steps :
+is designed as initContainer to decrypt the model via the following steps:
 
-1. Calculate the evidence of runtime measurement at Node/Container level and launch time measurement from configFS or vTPM.
-2. Get model key via attestation service based on the evidences.
-3. Decrypt the model and put into RAM disk or the data disk with "Full Disk Encryption".
+  1. Calculate the evidence of runtime measurement at Node/Container level and launch time measurement from configFS or vTPM.
+  2. Get model key via attestation service based on the evidences.
+  3. Decrypt the model and put into RAM disk or the data disk with "Full Disk Encryption".
 
 With this design, the existing GenAI microservices themselves do not need to change the code, thereby reducing the complexity
 of protecting the model through confidential computing technology.
