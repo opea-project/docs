@@ -79,8 +79,27 @@ kube_control_plane
 kube_node
 calico_rr
 ```
+## Step 3. Define Kubernetes configuration
 
-## Step 3. Deploy Kubernetes
+Kubespray gives you ability to customize Kubernetes instalation, for example define:
+- network plugin
+- container manager
+- kube_apiserver_port
+- kube_pods_subnet
+- all K&s addons configurations, or even define to deploy cluster on hyperscaller like AWS or GCP.
+All of those settings are stored in group vars defined in `inventory/mycluster/group_vars`
+
+For K&s settings look in `inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml`
+
+**_NOTE:_** If you noted issues on `TASK [kubernetes/control-plane : Kubeadm | Initialize first master]` in K& deployment, change the port on which API Server will be listening on from 6443 to 8080. By default Kubespray configures kube_control_plane hosts with insecure access to kube-apiserver via port 8080. Refer to [kubespray getting-started](https://github.com/kubernetes-sigs/kubespray/blob/master/docs/getting_started/getting-started.md)
+
+```
+# The port the API Server will be listening on.
+kube_apiserver_ip: "{{ kube_service_addresses | ansible.utils.ipaddr('net') | ansible.utils.ipaddr(1) | ansible.utils.ipaddr('address') }}"
+kube_apiserver_port: 8080  # (http)
+```
+
+## Step 4. Deploy Kubernetes
 
 You can clean up old Kubernetes cluster with Ansible playbook with following command:
 ```
@@ -104,7 +123,7 @@ ansible-playbook -i inventory/mycluster/inventory.ini  --become --become-user=ro
 
 The Ansible playbooks will take several minutes to finish. After playbook is done, you can check the output. If `failed=0` exists, it means playbook execution is successfully done.
 
-## Step 4. Create kubectl configuration
+## Step 5. Create kubectl configuration
 
 If you want to use Kubernetes command line tool `kubectl` on **k8s-master** node, please login to the node **k8s-master** and run the following commands:
 
