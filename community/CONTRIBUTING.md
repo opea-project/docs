@@ -19,7 +19,7 @@ Thanks for considering contributing to OPEA project. The contribution process is
     - [Pull Request Template](#pull-request-template)
     - [Pull Request Acceptance Criteria](#pull-request-acceptance-criteria)
     - [Pull Request Status Checks Overview](#pull-request-status-checks-overview)
-    - [Pull Request Review]
+    - [Pull Request Review](#pull-request-review)
 - [Support](#support)
 - [Contributor Covenant Code of Conduct](#contributor-covenant-code-of-conduct)
 
