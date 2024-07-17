@@ -19,6 +19,7 @@ Thanks for considering contributing to OPEA project. The contribution process is
     - [Pull Request Template](#pull-request-template)
     - [Pull Request Acceptance Criteria](#pull-request-acceptance-criteria)
     - [Pull Request Status Checks Overview](#pull-request-status-checks-overview)
+    - [Pull Request Review]
 - [Support](#support)
 - [Contributor Covenant Code of Conduct](#contributor-covenant-code-of-conduct)
 
@@ -105,6 +106,9 @@ The OPEA projects use GitHub Action for CI test.
 | End to End Test    | End to end test workflow                  | PASS               |
 
 > Notes: [Developer Certificate of Origin (DCO)](https://en.wikipedia.org/wiki/Developer_Certificate_of_Origin), you must agree to the terms of Developer Certificate of Origin by signing off each of your commits with `-s`, e.g. `git commit -s -m 'This is my commit message'`.
+
+### Pull Request Review
+You can add reviewers from [the code owners list](../codeowner.md) to your PR.
 
 # Support
 
