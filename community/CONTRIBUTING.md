@@ -104,7 +104,11 @@ The OPEA projects use GitHub Action for CI test.
 | Unit Test          | Unit test under test folder               | PASS               |
 | End to End Test    | End to end test workflow                  | PASS               |
 
-> Notes: [Developer Certificate of Origin (DCO)](https://en.wikipedia.org/wiki/Developer_Certificate_of_Origin), you must agree to the terms of Developer Certificate of Origin by signing off each of your commits with `-s`, e.g. `git commit -s -m 'This is my commit message'`.
+- [Developer Certificate of Origin (DCO)](https://en.wikipedia.org/wiki/Developer_Certificate_of_Origin), the PR must agree to the terms of Developer Certificate of Origin by signing off each of commits with `-s`, e.g. `git commit -s -m 'This is my commit message'`.
+- Unit Test, the PR must pass all unit tests and without coverage regression.
+- End to End Test, the PR must pass all end to end tests.  
+  - If the PR introduces new microservice for `GenAIComps`, the PR must include new end to end tests. The test script name should match with the folder name so the test will be automatically triggered by test structure, for examples, if the new service is `GenAIComps/comps/dataprep/redis/langchain`, then the test script name should be `GenAIComps/tests/test_dataprep_redis_langchain.sh`.  
+  - If the PR introduces new example for `GenAIExamples`, the PR must include new example end to end tests. The test script name should match with the example name so the test will be automatically triggered by test structure, for examples, if the example is `GenAIExamples/ChatQnA`, then the test script name should be `ChatQnA/tests/test_chatqna_on_gaudi.sh` and `ChatQnA/tests/test_chatqna_on_xeon.sh`.  
 
 # Support
 
