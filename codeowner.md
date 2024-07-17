@@ -1,8 +1,10 @@
 
 These tables list the GitHub IDs of code owners. For a PR review, please contact the corresponding owner.
 - [GenAIExamples](#genaiexamples)
-
-
+- [GenAIComps](#genaicomps)
+- [GenAIEval](#genaieval)
+- [GenAIInfra](#genaiinfra)
+- [CICD](#cicd)
 
 # GenAIExamples
 | examples | owner  |
@@ -17,13 +19,26 @@ These tables list the GitHub IDs of code owners. For a PR review, please contact
 | VisualQnA     | lvliang-intel|
 | Others        | lvliang-intel|
 
-             
+# GenAIComps
+| comps | owner  |        
+|:-------------:|:-----------:|     
+|asr            |Spycsh       |
+|cores          |lvliang-intel|
+|dataprep       |XinyuYe-Intel|
+|embedding      |XuhuiRen     |
+|guardrails     |letonghan    |
+|llms           |lvliang-intel|
+|reranks        |XuhuiRen     |
+|retrievers     |XuhuiRen     |
+|tts            |Spycsh       |
+
+# GenAIEval
+lvliang-intel, changwangss, lkk12014402
+
+# GenAIInfra
+mkbhanda, irisdingbj, jfding, ftian1, yongfengdu
+
+# CICD
+chensuyue,daisy-ycguo, ashahba, preethivenkatesh
 
 
-| GenAIExamples | GenAIComps  | GenAIEval    | GenAIInfra           | docs      |
-|:-------------:|:-----------:|:------------:|:--------------------:|:---------:|
-| chensuyue     | chensuyue   | chensuyue    | chensuyue            | chensuyue |
-| kevinintel    | ftian1      |              | daisy-ycguo          | hshen14   |
-| ashahba       | ashahba     |              | jfding               | dbkinder  |
-| kding         | kding       |              | mkbhanda             | preethivenkatesh|
-|               |             |              | irisdingbj           |           | 
