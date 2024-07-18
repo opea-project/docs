@@ -5,7 +5,7 @@
 [Tiep Le](http://https://github.com/tileintel), 
 [Siddhi Velankar](https://github.com/siddhivelankar23), 
 [Siddhant Jagtap](https://github.com/sjagtap1803), 
-[Mustafa Cetin](https://github.com/MSCetin37), 
+[Mustafa Cetin](https://github.com/MSCetin37) 
 
 ## Status
 
