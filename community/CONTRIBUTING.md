@@ -108,7 +108,7 @@ The OPEA projects use GitHub Action for CI test.
 > Notes: [Developer Certificate of Origin (DCO)](https://en.wikipedia.org/wiki/Developer_Certificate_of_Origin), you must agree to the terms of Developer Certificate of Origin by signing off each of your commits with `-s`, e.g. `git commit -s -m 'This is my commit message'`.
 
 ### Pull Request Review
-You can add reviewers from [the code owners list](../codeowner.md) to your PR.
+You can add reviewers from [the code owners list](../CODEOWNERS) to your PR.
 
 # Support
 
