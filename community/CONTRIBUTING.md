@@ -19,6 +19,7 @@ Thanks for considering contributing to OPEA project. The contribution process is
     - [Pull Request Template](#pull-request-template)
     - [Pull Request Acceptance Criteria](#pull-request-acceptance-criteria)
     - [Pull Request Status Checks Overview](#pull-request-status-checks-overview)
+    - [Pull Request Review](#pull-request-review)
 - [Support](#support)
 - [Contributor Covenant Code of Conduct](#contributor-covenant-code-of-conduct)
 
@@ -109,6 +110,9 @@ The OPEA projects use GitHub Action for CI test.
 - End to End Test, the PR must pass all end to end tests.  
   - If the PR introduces new microservice for `GenAIComps`, the PR must include new end to end tests. The test script name should match with the folder name so the test will be automatically triggered by test structure, for examples, if the new service is `GenAIComps/comps/dataprep/redis/langchain`, then the test script name should be `GenAIComps/tests/test_dataprep_redis_langchain.sh`.  
   - If the PR introduces new example for `GenAIExamples`, the PR must include new example end to end tests. The test script name should match with the example name so the test will be automatically triggered by test structure, for examples, if the example is `GenAIExamples/ChatQnA`, then the test script name should be `ChatQnA/tests/test_chatqna_on_gaudi.sh` and `ChatQnA/tests/test_chatqna_on_xeon.sh`.  
+
+### Pull Request Review
+You can add reviewers from [the code owners list](../codeowner.md) to your PR.
 
 # Support
 
