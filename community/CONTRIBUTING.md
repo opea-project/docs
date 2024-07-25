@@ -1,10 +1,9 @@
-Contribution Guidelines
-=======================
+# Contribution Guidelines
 
 Thanks for considering contributing to OPEA project. The contribution process is similar with other open source projects on Github, involving an amount of open discussion in issues and feature requests between the maintainers, contributors and users.
 
 
-# Table of Contents
+## Table of Contents
 
 <!-- toc -->
 
@@ -25,21 +24,21 @@ Thanks for considering contributing to OPEA project. The contribution process is
 
 <!-- tocstop -->
 
-# All The Ways To Contribute
+## All The Ways To Contribute
 
-## Community Discussions
+### Community Discussions
 
-Developers are encouraged to participate in discussions by opening an issue in one of the GitHub repos at https://github.com/opea-project. Alternatively, they can send an email to [info@opea.dev](mailto:info@opea.dev) or subscribe to [X/Twitter](https://twitter.com/opeadev) and [LinkedIn Page](https://www.linkedin.com/company/opeadev/posts/?feedView=all) to get latest updates about the OPEA project. 
+Developers are encouraged to participate in discussions by opening an issue in one of the GitHub repos at https://github.com/opea-project. Alternatively, they can send an email to [info@opea.dev](mailto:info@opea.dev) or subscribe to [X/Twitter](https://twitter.com/opeadev) and [LinkedIn Page](https://www.linkedin.com/company/opeadev/posts/?feedView=all) to get latest updates about the OPEA project.
 
-## Documentations
+### Documentation
 
 The quality of OPEA project's documentation can have a huge impact on its success. We reply on OPEA maintainers and contributors to build clear, detailed and update-to-date documentation for user.
 
-## Reporting Issues
+### Reporting Issues
 
 If OPEA user runs into some unexpected behavior, reporting the issue to the `Issues` page under the corresponding github project is the proper way to do. Please ensure there is no similar one already existing on the issue list). Please follow the Bug Report template and supply as much information as you can, and any additional insights you might have. It's helpful if the issue submitter can narrow down the problematic behavior to a minimal reproducible test case.
 
-## Proposing New Features
+### Proposing New Features
 
 OPEA communities use the RFC (request for comments) process for collaborating on substantial changes to OPEA projects. The RFC process allows the contributors to collaborate during the design process, providing clarity and validation before jumping to implementation.
 
@@ -63,14 +62,14 @@ It is not necessary for changes like:
 - Reach out to your RFC's assignee if you need any help with the RFC process.
 - Amend your proposal in response to reviewer's feedback.
 
-## Submitting Pull Requests
+### Submitting Pull Requests
 
-### Create Pull Request
+#### Create Pull Request
 
 If you have improvements to OPEA projects, send your pull requests to each project for review.
 If you are new to GitHub, view the pull request [How To](https://help.github.com/articles/using-pull-requests/).
 
-#### Step-by-Step guidelines
+##### Step-by-Step guidelines
 
 - Star this repository using the button `Star` in the top right corner.
 - Fork the corresponding OPEA repository using the button `Fork` in the top right corner.
@@ -79,11 +78,11 @@ If you are new to GitHub, view the pull request [How To](https://help.github.com
 - Add your files with `git add -A`, commit `git commit -s -m "This is my commit message"` and push `git push origin new-branch`.
 - Create a `pull request` for the project you want to contribute.
 
-### Pull Request Template
+#### Pull Request Template
 
 See [PR template](./pull_request_template.md)
 
-### Pull Request Acceptance Criteria
+#### Pull Request Acceptance Criteria
 
 - At least two approvals from reviewers
 
@@ -93,7 +92,7 @@ See [PR template](./pull_request_template.md)
 
 - Third-party dependency license compatible
 
-### Pull Request Status Checks Overview
+#### Pull Request Status Checks Overview
 
 The OPEA projects use GitHub Action for CI test.
 
@@ -107,18 +106,18 @@ The OPEA projects use GitHub Action for CI test.
 
 - [Developer Certificate of Origin (DCO)](https://en.wikipedia.org/wiki/Developer_Certificate_of_Origin), the PR must agree to the terms of Developer Certificate of Origin by signing off each of commits with `-s`, e.g. `git commit -s -m 'This is my commit message'`.
 - Unit Test, the PR must pass all unit tests and without coverage regression.
-- End to End Test, the PR must pass all end to end tests.  
-  - If the PR introduces new microservice for `GenAIComps`, the PR must include new end to end tests. The test script name should match with the folder name so the test will be automatically triggered by test structure, for examples, if the new service is `GenAIComps/comps/dataprep/redis/langchain`, then the test script name should be `GenAIComps/tests/test_dataprep_redis_langchain.sh`.  
-  - If the PR introduces new example for `GenAIExamples`, the PR must include new example end to end tests. The test script name should match with the example name so the test will be automatically triggered by test structure, for examples, if the example is `GenAIExamples/ChatQnA`, then the test script name should be `ChatQnA/tests/test_chatqna_on_gaudi.sh` and `ChatQnA/tests/test_chatqna_on_xeon.sh`.  
+- End to End Test, the PR must pass all end to end tests.
+  - If the PR introduces new microservice for `GenAIComps`, the PR must include new end to end tests. The test script name should match with the folder name so the test will be automatically triggered by test structure, for examples, if the new service is `GenAIComps/comps/dataprep/redis/langchain`, then the test script name should be `GenAIComps/tests/test_dataprep_redis_langchain.sh`.
+  - If the PR introduces new example for `GenAIExamples`, the PR must include new example end to end tests. The test script name should match with the example name so the test will be automatically triggered by test structure, for examples, if the example is `GenAIExamples/ChatQnA`, then the test script name should be `ChatQnA/tests/test_chatqna_on_gaudi.sh` and `ChatQnA/tests/test_chatqna_on_xeon.sh`.
 
-### Pull Request Review
+#### Pull Request Review
 You can add reviewers from [the code owners list](../codeowner.md) to your PR.
 
-# Support
+## Support
 
-- Feel free to reach out to [OPEA maintainers](mailto: info@opea.dev) for support. 
+- Feel free to reach out to [OPEA maintainers](mailto: info@opea.dev) for support.
 - Submit your questions, feature requests, and bug reports to the GitHub issues page.
 
-# Contributor Covenant Code of Conduct
+## Contributor Covenant Code of Conduct
 
 This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant Code of Conduct](./CODE_OF_CONDUCT.md).
