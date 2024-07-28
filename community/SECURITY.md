@@ -1,6 +1,6 @@
-## Reporting a Vulnerability
+# Reporting a Vulnerability
 
-Please report any security vulnerabilities in this project utilizing the guidelines [here](https://www.linuxfoundation.org/security).
+Report any security vulnerabilities in this project by following these [Linux Foundation security guidelines](https://www.linuxfoundation.org/security).
 
 ## Script Usage Notice
 

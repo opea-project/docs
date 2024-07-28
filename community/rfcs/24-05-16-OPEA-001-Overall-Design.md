@@ -1,12 +1,14 @@
-**Author**
+# 24-05-16 OPEA-001 Overall Design
+
+## Author
 
 [ftian1](https://github.com/ftian1), [lvliang-intel](https://github.com/lvliang-intel), [hshen14](https://github.com/hshen14)
 
-**Status**
+## Status
 
 Under Review
 
-**Objective**
+## Objective
 
 Have a stable, extensible, secure, and easy-of-use orchestration framework design for OPEA users to quickly build their own GenAI applications.
 
@@ -28,20 +30,18 @@ The requirements include but not limited to:
 
     easily scale within K8S or other deployment techs at on-premis and cloud environment.
 
-**Motivation**
+## Motivation
 
 This RFC is used to present the OPEA overall design philosophy, including overall architecture, working flow, component design, for community discussion.
 
-**Design Proposal**
+## Design Proposal
 
 The proposed overall architecture is
 
-<a target="_blank" href="opea_architecture.png">
-  <img src="opea_architecture.png" alt="Architecture" width=480 height=480>
-</a>
+![OPEA Architecture](opea_architecture.png "OPEA Architecture")
 
 1. GenAIComps
-   
+
     The suite of microservices, leveraging a service composer to assemble a mega-service tailored for real-world Enterprise AI applications.
 
 2. GenAIExamples
@@ -58,9 +58,7 @@ The proposed overall architecture is
 
 The proposed OPEA workflow is
 
-<a target="_blank" href="opea_workflow.png">
-  <img src="opea_workflow.png" alt="Workflow" width=480 height=310>
-</a>
+![OPEA Workflow](opea_workflow.png "OPEA Workflow")
 
 1. Microservice
 
@@ -74,15 +72,15 @@ The proposed OPEA workflow is
 
     The Gateway serves as the interface for users to access the megaservice, providing customized access based on user requirements. It acts as the entry point for incoming requests, routing them to the appropriate microservices within the megaservice architecture. Gateways support API definition, API versioning, rate limiting, and request transformation, allowing for fine-grained control over how users interact with the underlying microservices. By abstracting the complexity of the underlying infrastructure, gateways provide a seamless and user-friendly experience for interacting with the megaservice.
 
-**Alternatives Considered**
+## Alternatives Considered
 
 n/a
 
-**Compatibility**
+## Compatibility
 
 n/a
 
-**Miscs**
+## Miscs
 
 - TODO List:
 
