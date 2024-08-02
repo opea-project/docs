@@ -1,15 +1,13 @@
-RFC Template
-==================
+# RFC Template
 
-## RFC Title
-
-The short description of the feature you want to contribute
+Replace the "RFC Template" heading with your RFC Title, followed by
+the short description of the feature you want to contribute
 
 ## RFC Content
 
 ### Author
 
-List all contributors of this RFC. 
+List all contributors of this RFC.
 
 ### Status
 
@@ -35,12 +33,12 @@ List other alternatives if have, and corresponding pros/cons to each proposal.
 
 list possible incompatible interface or workflow changes if exists.
 
-### Miscs
+### Miscellaneous
 
 List other information user and developer may care about, such as:
 
 - Performance Impact, such as speed, memory, accuracy.
 - Engineering Impact, such as binary size, startup time, build time, test times.
 - Security Impact, such as code vulnerability.
-- TODO List or staging plan. 
+- TODO List or staging plan.
 

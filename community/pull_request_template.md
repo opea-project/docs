@@ -1,5 +1,4 @@
-OPEA Pull Request Template
-=====================
+# OPEA Pull Request Template
 
 ## Description
 
