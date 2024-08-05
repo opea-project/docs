@@ -10,6 +10,7 @@ Using OPEA to implement a RAG-Powered Human-Like AI Avatar Audio Chatbot (WIP)
 <!-- Change the PR status to Under Review | Rejected | Accepted. -->
 v0.1 - ASMO Team sharing on Fri 6/28/2024  
 [GenAIComps pr #400](https://github.com/opea-project/GenAIComps/pull/400) (Under Review)
+[GenAIExamples pr #523](https://github.com/opea-project/GenAIExamples/pull/523) (Under Review)
 
 ## Objective
 <!-- List what problem will this solve? What are the goals and non-goals of this RFC? -->
