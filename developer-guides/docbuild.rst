@@ -28,7 +28,7 @@ their respective websites.
 The project's documentation contains the following items:
 
 * ReStructuredText and markdown source files used to generate documentation found at the
-  https://projectacrn.github.io website. All of the documentation sources
+  https://opea-project.github.io website. All of the documentation sources
   are found in the ``github.com/opea-project`` repos, rooted in the ``docs`` repo.
   There's also documentation in the repos where the project's code is
   maintained, such as ``GenAIComps``, ``GenAIExamples``, and others.
@@ -235,7 +235,7 @@ Publish Content
 ***************
 
 If you have merge rights to the opea-project repo called
-``projectacrn.github.io``, you can update the public project documentation
+``opea-project.github.io``, you can update the public project documentation
 found at https://opea-project.github.io.
 
 You'll need to do a one-time clone of the upstream repo (we publish

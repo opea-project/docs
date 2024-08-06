@@ -66,11 +66,6 @@ singlehtml: content
 	-$(Q)$(SPHINXBUILD) -t $(DOC_TAG) -b singlehtml -d $(BUILDDIR)/doctrees $(SOURCEDIR) $(BUILDDIR)/html $(SPHINXOPTS) $(OPTS) >> $(BUILDDIR)/doc.log 2>&1
 	$(Q)./scripts/filter-doc-log.sh $(BUILDDIR)/doc.log
 
-pdf: html
-	@echo now making $(BUILDDIR)/latex/opea.pdf
-	$(Q)make -silent latexpdf LATEXMKOPTS=$(LATEXMKOPTS) >> $(BUILDDIR)/doc.log 2>&1
-	$(Q)./scripts/filter-doc-log.sh $(BUILDDIR)/doc.log
-
 
 # Remove generated content
 
