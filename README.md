@@ -29,6 +29,11 @@ Technical Steering Committee
 - [Justin Cormack](https://www.linkedin.com/in/justincormack/), CTO,	Docker
 - [Melissa Mckay](https://www.linkedin.com/in/melissajmckay/), Head of Developer Relations, JFrog 
 
+Quality Documentation
+The quality of OPEA project's documentation can have a huge impact on its success. We reply on OPEA maintainers and contributors to build clear, detailed and update-to-date documentation for user.![image](https://github.com/user-attachments/assets/e7c898a0-b7b5-4969-a6d4-4e1ba88358fe)
+
+
+
 Member companies at launch:
 =======
 * Anyscale
