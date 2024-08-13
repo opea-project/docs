@@ -57,8 +57,8 @@ Related works include [Nvidia Audio2Face](https://docs.nvidia.com/ace/latest/mod
 <!-- Removed PPT slides -->
 
 <img src="assets/design.png" alt="Avatar Chatbot design" width="800"/>
-Currently, the RAG feature using the `embedding` and `dataprep` microservices is missing in the above design, including uploading relevant documents/weblinks, storing them in the database, and retrieving them for the LLM model. These features will be added in v0.2.
 
+Currently, the RAG feature using the `embedding` and `dataprep` microservices is missing in the above design, including uploading relevant documents/weblinks, storing them in the database, and retrieving them for the LLM model. These features will be added in v0.2.  
 
 Flowchart: AvatarChatbot Megaservice  
 <!-- Insert Mermaid flowchart here -->
@@ -91,8 +91,9 @@ flowchart TB
 
     subgraph Legend
         direction LR
-        L([Microservice]) ==> M([Microservice])
-        N([Microservice]) -.-> O{{Server API}}
+        L([Microservice]) 
+        M{{Server API}} 
+        N[Gateway]
     end
 ```
 
@@ -134,7 +135,8 @@ flowchart TB
     subgraph Legend
         direction LR
         L([Microservice]) 
-        N{{Server API}} 
+        M{{Server API}} 
+        N[Gateway]
     end
 ```
 
