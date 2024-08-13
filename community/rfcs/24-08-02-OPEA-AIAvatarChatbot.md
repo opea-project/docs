@@ -1,4 +1,3 @@
-Suggested change
 ##  A RAG-Powered Human-Like AI Avatar Audio Chatbot integrated with OPEA AudioQnA
 <!-- The short description of the feature you want to contribute -->
 
