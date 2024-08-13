@@ -147,13 +147,15 @@ The frontend UI is Gradio. User is prompted to upload either an image or a video
 </div>
 
 ### Real-time demo
-AI Avatar Chatbot Demo on Intel® Gaudi® 2, image input (left) and video input (right)
+AI Avatar Chatbot Demo on Intel® Gaudi® 2, image input (top) and video input (bottom)
 <!-- [AI Avatar Chatbot Demo on Intel® Gaudi® 2, image input](https://intel.sharepoint.com/:v:/s/mlconsultingandsupport/EZa7vjON10ZCpMvE7U-SPMwBRXbVHqe1Ybsa-fmnXayNUA?e=f6FPsl)   
 [AI Avatar Chatbot Demo on Intel® Gaudi® 2, video input](https://intel.sharepoint.com/:v:/s/mlconsultingandsupport/ESMIcBseFTdIuqkoB7TZy6ABfwR9CkfV49TvTa1X_Jihkg?e=zMH7O7) -->
-<div style="display: flex; justify-content: space-between;">
+<!-- <div style="display: flex; justify-content: space-between;">
   <video src="assets/demo_latest_image.mpg" controls style="width: 49%;"></video>
   <video src="assets/demo_latest_video.mpg" controls style="width: 49%;"></video>
-</div>
+</div> -->
+![AI Avatar Chatbot Demo on Intel® Gaudi® 2, image input](assets/demo_latest_image.gif)
+![AI Avatar Chatbot Demo on Intel® Gaudi® 2, video input](assets/demo_latest_video.gif)
 
 ## Compatibility
 <!-- List possible incompatible interface or workflow changes if exists. -->
