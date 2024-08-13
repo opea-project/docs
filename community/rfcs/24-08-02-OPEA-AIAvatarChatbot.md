@@ -59,10 +59,11 @@ Related works include [Nvidia Audio2Face](https://docs.nvidia.com/ace/latest/mod
 <img src="assets/design.png" alt="Avatar Chatbot design" width="800"/>
 Currently, the RAG feature using the `embedding` and `dataprep` microservices is missing in the above design, including uploading relevant documents/weblinks, storing them in the database, and retrieving them for the LLM model. These features will be added in v0.2.
 
+
 Flowchart: AvatarChatbot Megaservice  
 <!-- Insert Mermaid flowchart here -->
 ```mermaid
-flowchart LR
+flowchart TB
     subgraph AvatarChatbot
         direction LR
         A[User] --> |Input query| B[AvatarChatbot Gateway]
@@ -70,18 +71,22 @@ flowchart LR
         subgraph Megaservice["AvatarChatbot Megaservice"]
             direction LR
             subgraph AudioQnA["AudioQnA"]
-                direction TB
-                C((ASR<br>3001)) -. Post .-> D{{whisper-service<br>7066}}
-                E((LLM<br>3007)) -. Post .-> F{{tgi-service<br>3006}}
-                G((TTS<br>3002)) -. Post .-> H{{speecht5-service<br>7055}}
+                direction LR
+                C((ASR<br>3001))
+                E((LLM<br>3007))
+                G((TTS<br>3002))
+                C ==> E ==> G
             end
             subgraph AvatarAnimation["Avatar Animation"]
                 direction TB
-                I((AvatarAnime<br>3010)) -. Post .-> J{{animation<br>3009}}
+                I((AvatarAnime<br>3010))
             end
-            AudioQnA ==> AvatarAnimation
+            G ==> I
         end
-        Megaservice --> |Output| K[Response]
+        C -. Post .-> D{{whisper-service<br>7066}}
+        E -. Post .-> F{{tgi-service<br>3006}}
+        G -. Post .-> H{{speecht5-service<br>7055}}
+        I -. Post .-> J{{animation<br>3009}}
     end
 
     subgraph Legend
@@ -104,37 +109,32 @@ Support for alternative SoTA models such as [SadTalker](https://github.com/OpenT
 The AvatarChatbot megaservice is a new service that integrates the existing microservices that comprise AudioQnA service with the new animation microservice. The AudioQnA service is a pipeline that takes user audio input, converts it to text, generates an LLM response, and converts the response to audio output. The animation microservice is a new service that takes the audio response from the AudioQnA service, generates an animated avatar response, and sends it back to the user. The megaflow is as follows:  
 asr -> llm -> tts -> animation
 ```mermaid
-flowchart LR
+flowchart TB
     subgraph AvatarChatbot
         direction LR
         A[User] --> |Input query| B[AvatarChatbot Gateway]
         B --> |Invoke| Megaservice
         subgraph Megaservice["AvatarChatbot Megaservice 3009"]
             direction LR
-            subgraph asr
-                direction TB
-                C((ASR<br>3001)) -. Post .-> D{{whisper-service<br>7066}}
-            end
-            subgraph llm
-                direction TB
-                E((LLM<br>3007)) -. Post .-> F{{tgi-service<br>3006}}
-            end
-            subgraph tts
-                direction TB
-                G((TTS<br>3002)) -. Post .-> H{{speecht5-service<br>7055}}
-            end
-            subgraph animation
-                direction TB
-                I((Animation<br>3008)) -. Post .-> J{{animation<br>7060}}
-            end
-            asr ==> llm ==> tts ==> animation
+            C((ASR<br>3001))
+            E((LLM<br>3007))
+            G((TTS<br>3002))
+            I((Animation<br>3008))
+            C ==> E ==> G ==> I
         end
-        Megaservice --> |Output| K[Response]
+        D{{whisper-service<br>7066}}
+        F{{tgi-service<br>3006}}
+        H{{speecht5-service<br>7055}}
+        J{{animation<br>3009}}
+        C -. Post .-> D
+        E -. Post .-> F
+        G -. Post .-> H
+        I -. Post .-> J
     end
     subgraph Legend
         direction LR
-        L([Microservice]) ==> M([Microservice])
-        N([Microservice]) -.-> O{{Server API}}
+        L([Microservice]) 
+        N{{Server API}} 
     end
 ```
 
