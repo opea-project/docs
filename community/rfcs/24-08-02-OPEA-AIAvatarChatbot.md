@@ -151,8 +151,8 @@ AI Avatar Chatbot Demo on Intel® Gaudi® 2, image input (left) and video input 
 <!-- [AI Avatar Chatbot Demo on Intel® Gaudi® 2, image input](https://intel.sharepoint.com/:v:/s/mlconsultingandsupport/EZa7vjON10ZCpMvE7U-SPMwBRXbVHqe1Ybsa-fmnXayNUA?e=f6FPsl)   
 [AI Avatar Chatbot Demo on Intel® Gaudi® 2, video input](https://intel.sharepoint.com/:v:/s/mlconsultingandsupport/ESMIcBseFTdIuqkoB7TZy6ABfwR9CkfV49TvTa1X_Jihkg?e=zMH7O7) -->
 <div style="display: flex; justify-content: space-between;">
-  <img src="assets/demo_latest_image.mjpeg" alt="MJPEG Stream 1" style="width: 49%;"/>
-  <img src="assets/demo_latest_video.mjpeg" alt="MJPEG Stream 2" style="width: 49%;"/>
+  <video src="assets/demo_latest_image.mpg" controls style="width: 49%;"></video>
+  <video src="assets/demo_latest_video.mpg" controls style="width: 49%;"></video>
 </div>
 
 ## Compatibility
