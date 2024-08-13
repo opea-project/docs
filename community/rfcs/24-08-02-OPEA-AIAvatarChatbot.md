@@ -1,6 +1,6 @@
-## Title
+Suggested change
+##  A RAG-Powered Human-Like AI Avatar Audio Chatbot integrated with OPEA AudioQnA
 <!-- The short description of the feature you want to contribute -->
-Using OPEA to implement a RAG-Powered Human-Like AI Avatar Audio Chatbot (WIP)
 
 ## Author
 <!-- List all contributors of this RFC. -->
