@@ -14,10 +14,12 @@ v0.1 - ASMO Team sharing on Fri 6/28/2024
 
 ## Objective
 <!-- List what problem will this solve? What are the goals and non-goals of this RFC? -->
-* Introducing a new microservice, animation, that generates animated avatars from audio and image/video inputs; and a new megaservice, AvatarChatbot, that integrates the animation microservice with the existing AudioQnA service to build a human-like AI audio chatbot.
-* This microservice leverages multimodal inputs (audio and image/video) and co-process them with a visual-audio fusion model, enriching OPEA with a new multimodal processing capability.
-* Enhancing OPEA's general availability of GenAI microservices for digital human, human-computer interaction, and conversational AI applications. 
-* Demonstrating the combination of multi-modal AI models and neural graphics rendering in a real-time avatar chatbot service
+* "Digital humans will resolutionize industry". Given breakthroughs in LLMs and neural graphics, there emerged a surge in demand for human-computer interaction and conversational AI applications. To meet this demand, we need intent-driven computing where interacting with computers is as natural as interacting with humans. Yet all existing OPEA applications (ChatQnA, AudioQnA, SearchQnA, etc.) are text-based and lack interactive visual elements.
+
+* Also worthnoting, the majority of existing OPEA applications lack multimodal features, i.e., they do not process both audio and visual inputs. Whereas enterprises are increasingly looking for multimodal AI solutions that can process both audio and visual inputs, to build lip-synchronized and face-animated chatbot solutions that are more engaging and human-like.
+
+* Due to above reasons, we're hereby introducing a new microservice, animation, that generates animated avatars from audio and image/video inputs; and a new megaservice, AvatarChatbot, that integrates the animation microservice with the existing AudioQnA service to build a human-like AI audio chatbot.
+
 <p align="left">
   <img src="assets/avatar4.png" alt="Image 1" width="100"/>
   <img src="assets/avatar1.jpg" alt="Image 2" width="100"/>
