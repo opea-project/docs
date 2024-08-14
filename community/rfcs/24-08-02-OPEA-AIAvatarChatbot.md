@@ -64,7 +64,6 @@ Flowchart: AvatarChatbot Megaservice
 <!-- Insert Mermaid flowchart here -->
 ```mermaid
 %%{ init : { "theme" : "base", "flowchart" : { "curve" : "stepBefore" }}}%%
-
 flowchart TB
     subgraph AvatarChatbot
         direction LR
@@ -105,9 +104,21 @@ Support for alternative SoTA models such as [SadTalker](https://github.com/OpenT
 #### AvatarChatbot megaservice
 The AvatarChatbot megaservice is a new service that integrates the existing microservices that comprise AudioQnA service with the new animation microservice. The AudioQnA service is a pipeline that takes user audio input, converts it to text, generates an LLM response, and converts the response to audio output. The animation microservice is a new service that takes the audio response from the AudioQnA service, generates an animated avatar response, and sends it back to the user. The megaflow is as follows:  
 asr -> llm -> tts -> animation
+
 ```mermaid
-%%{ init : { "theme" : "base", "flowchart" : { "curve" : "stepBefore", "nodeSpacing": 100, "rankSpacing": 100 }, "themeVariables": { "fontSize": "42px" }}}%%
+---
+config:
+  flowchart:
+    nodeSpacing: 100
+    rankSpacing: 100
+    curve: stepBefore
+  theme: base
+  themeVariables:
+    fontSize: 42px
+---
 flowchart TB
+    classDef invisible fill:transparent,stroke:transparent;
+    style Megaservice stroke:#000000
     subgraph AvatarChatbot
         direction LR
         invisible1[ ]:::invisible 
@@ -136,8 +147,6 @@ flowchart TB
         M{{Server API}} 
         N[Gateway]
     end
-    classDef invisible fill:transparent,stroke:transparent;
-
 ```
 
 
