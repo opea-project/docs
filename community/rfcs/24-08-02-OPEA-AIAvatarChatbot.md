@@ -56,13 +56,15 @@ Related works include [Nvidia Audio2Face](https://docs.nvidia.com/ace/latest/mod
 ### Avatar Chatbot design
 <!-- Removed PPT slides -->
 
-<img src="assets/design.png" alt="Avatar Chatbot design" width="800"/>
+<img src="assets/design.png" alt="Avatar Chatbot design" width="800"/>  
 
 Currently, the RAG feature using the `embedding` and `dataprep` microservices is missing in the above design, including uploading relevant documents/weblinks, storing them in the database, and retrieving them for the LLM model. These features will be added in v0.2.  
 
 Flowchart: AvatarChatbot Megaservice  
 <!-- Insert Mermaid flowchart here -->
 ```mermaid
+%%{ init : { "theme" : "base", "flowchart" : { "curve" : "stepBefore" }}}%%
+
 flowchart TB
     subgraph AvatarChatbot
         direction LR
@@ -72,27 +74,21 @@ flowchart TB
             direction LR
             subgraph AudioQnA["AudioQnA"]
                 direction LR
-                C((ASR<br>3001))
-                E((LLM<br>3007))
-                G((TTS<br>3002))
+                C([ASR<br>3001])
+                E([LLM<br>3007])
+                G([TTS<br>3002])
                 C ==> E ==> G
             end
             subgraph AvatarAnimation["Avatar Animation"]
-                direction TB
-                I((AvatarAnime<br>3010))
+                direction LR
+                I([Animation<br>3008])
             end
             G ==> I
         end
-        C -. Post .-> D{{whisper-service<br>7066}}
-        E -. Post .-> F{{tgi-service<br>3006}}
-        G -. Post .-> H{{speecht5-service<br>7055}}
-        I -. Post .-> J{{animation<br>3009}}
     end
-
     subgraph Legend
         direction LR
         L([Microservice]) 
-        M{{Server API}} 
         N[Gateway]
     end
 ```
@@ -110,35 +106,40 @@ Support for alternative SoTA models such as [SadTalker](https://github.com/OpenT
 The AvatarChatbot megaservice is a new service that integrates the existing microservices that comprise AudioQnA service with the new animation microservice. The AudioQnA service is a pipeline that takes user audio input, converts it to text, generates an LLM response, and converts the response to audio output. The animation microservice is a new service that takes the audio response from the AudioQnA service, generates an animated avatar response, and sends it back to the user. The megaflow is as follows:  
 asr -> llm -> tts -> animation
 ```mermaid
+%%{ init : { "theme" : "base", "flowchart" : { "curve" : "stepBefore", "nodeSpacing": 100, "rankSpacing": 100 }, "themeVariables": { "fontSize": "42px" }}}%%
 flowchart TB
     subgraph AvatarChatbot
         direction LR
+        invisible1[ ]:::invisible 
+        invisible2[ ]:::invisible
         A[User] --> |Input query| B[AvatarChatbot Gateway]
         B --> |Invoke| Megaservice
         subgraph Megaservice["AvatarChatbot Megaservice 3009"]
             direction LR
-            C((ASR<br>3001))
-            E((LLM<br>3007))
-            G((TTS<br>3002))
-            I((Animation<br>3008))
+            C([ASR<br>3001])
+            E([LLM 'text-generation'<br>3007])
+            G([TTS<br>3002])
+            I([Animation<br>3008])
             C ==> E ==> G ==> I
         end
-        D{{whisper-service<br>7066}}
-        F{{tgi-service<br>3006}}
-        H{{speecht5-service<br>7055}}
-        J{{animation<br>3009}}
+        D{{Whisper service<br>7066}}
+        F{{TGI service<br>3006}}
+        H{{Speecht5 service<br>7055}}
         C -. Post .-> D
         E -. Post .-> F
         G -. Post .-> H
-        I -. Post .-> J
     end
     subgraph Legend
         direction LR
+        invisible3[ ]:::invisible
         L([Microservice]) 
         M{{Server API}} 
         N[Gateway]
     end
+    classDef invisible fill:transparent,stroke:transparent;
+
 ```
+
 
 #### Frontend UI
 The frontend UI is Gradio. User is prompted to upload either an image or a video as the avatar source. The user also asks his question verbally through the microphone by clicking on the "record" button. The AvatarChatbot backend processes the audio input and generates the response in the form of an animated avatar answering in its unique voice. The response is displayed on Gradio UI. User will be able to see the animated avatar speaking the response in real-time, and can interact with the avatar by asking more questions.
@@ -148,7 +149,7 @@ The frontend UI is Gradio. User is prompted to upload either an image or a video
 </div>
 
 ### Real-time demo
-AI Avatar Chatbot Demo on Intel® Gaudi® 2, image input (top) and video input (bottom)
+AI Avatar Chatbot Demo on Intel® Gaudi® 2, image input (left) and video input (right)
 <!-- [AI Avatar Chatbot Demo on Intel® Gaudi® 2, image input](https://intel.sharepoint.com/:v:/s/mlconsultingandsupport/EZa7vjON10ZCpMvE7U-SPMwBRXbVHqe1Ybsa-fmnXayNUA?e=f6FPsl)   
 [AI Avatar Chatbot Demo on Intel® Gaudi® 2, video input](https://intel.sharepoint.com/:v:/s/mlconsultingandsupport/ESMIcBseFTdIuqkoB7TZy6ABfwR9CkfV49TvTa1X_Jihkg?e=zMH7O7) -->
 <!-- <div style="display: flex; justify-content: space-between;">
