@@ -3,10 +3,9 @@
 OPEA Documentation Generation
 #############################
 
-These instructions walk you through generating the OPEA project
-documentation and publishing it to https://opea-project.github.io.
-You can also use these instructions to generate the OPEA documentation
-on your local system.
+These instructions walk you through generating the OPEA project documentation
+and publishing it to https://opea-project.github.io.  You can also use these
+instructions to generate the OPEA documentation on your local system.
 
 .. contents::
    :local:
@@ -15,12 +14,12 @@ on your local system.
 Documentation Overview
 **********************
 
-OPEA project content is written using combination of markdown (``.md``) and reStructuredText (``.rst``) markup
-languages (with Sphinx extensions), and processed
-using Sphinx to create a formatted stand-alone website. Developers can
-view this content either in its raw form as .rst markup files, or you
-can generate the HTML content and view it with a web browser directly on
-your workstation.
+OPEA project content is written using combination of markdown (``.md``) and
+reStructuredText (``.rst``) markup languages (with Sphinx extensions), and
+processed using Sphinx to create a formatted stand-alone website. Developers can
+view this content either in its raw form as .rst markup files, or you can
+generate the HTML content and view it with a web browser directly on your
+workstation.
 
 You can read details about `markdown`_, `reStructuredText`_, and `Sphinx`_ from
 their respective websites.
@@ -31,7 +30,8 @@ The project's documentation contains the following items:
   https://opea-project.github.io website. All of the documentation sources
   are found in the ``github.com/opea-project`` repos, rooted in the ``docs`` repo.
   There's also documentation in the repos where the project's code is
-  maintained, such as ``GenAIComps``, ``GenAIExamples``, and others.
+  maintained: ``GenAIComps``, ``GenAIEval``, ``GenAIExamples``, ``GenAIInfra``
+  and ``Governance``.
 
 .. graphviz:: images/doc-gen-flow.dot
    :align: center
@@ -50,64 +50,40 @@ You'll need ``git`` installed to get the working folders set up:
      sudo apt install git
 
 Here's the recommended folder setup for documentation contributions and
-generation, a parent folder called ``opea-project`` holds six locally cloned
-repos from the opea-project:
+generation, a parent folder called ``opea-project-docsgen`` holds six locally
+cloned repos from the opea-project:
 
 .. code-block:: none
 
-   opea-project
+   opea-project-docsgen
    ├── docs
    ├── GenAIComps
    ├── GenAIEval
    ├── GenAIExamples
    ├── GenAIInfra
    ├── Governance
+   ├── opea-project.github.io
 
-The parent ``opea-project`` folder is there to organize the cloned repos from
-the project.  If you have repo publishing
-rights, we'll also be creating a publishing area later in these steps.
+The parent ``opea-project-docsgen`` folder is there to organize the cloned repos
+from the project.  If you have repo publishing rights, we'll also be cloning the
+publishing repo opea-project.github.io later in these steps.
 
-In the following steps, you'll create a fork of all the upstream OPEA project
-repos needed to build the documentation to your personal GitHub account, clone
-your personal fork to your local development computer, and then link that to the
-upstream repo as well.  You'll only need to do this once to set up the folder
-structure:
+In the following steps, you'll clone the upstream repos You'll only need to do
+this once to set up the folder structure:
 
-#. Use your browser to visit https://github.com/opea-project and do a
-   fork of the **docs** repo to your personal GitHub account.)
-
-   .. image:: images/opea-docs-fork.png
-      :align: center
-      :class: drop-shadow
-
-#. At a command prompt, create a working folder on your development computer and
-   clone your personal ``docs`` repository:
+#. At a command prompt, create the working folder on your development computer and
+   clone all the opea-project repos containing documentation:
 
    .. code-block:: bash
 
       cd ~
-      mkdir opea-project && cd opea-project
-      git clone https://github.com/<github-username>/docs.git
+      mkdir opea-project-docsgen && cd opea-project-docsgen
+      for d in docs GenAIComps GenAIExamples GenAIEval GenAIInfra Governance ; do
+        git clone https://github.com/opea-project/$d.git
+      done
 
-#. For the cloned local repo, tell git about the upstream repo:
-
-   .. code-block:: bash
-
-      cd docs
-      git remote add upstream https://github.com/opea-project/docs.git
-
-   After that, you'll have ``origin`` pointing to your cloned personal repo and
-   ``upstream`` pointing to the project repo.
-
-#. Do the same steps (fork to your personal account, clone to your local
-   computer, and setup the git upstream remote) for the other repos containing
-   project documentation:
-
-   * GenAIComps
-   * GenAIEval
-   * GenAIExamples
-   * GenAIInfra
-   * Governance
+   After this, you'll have ``origin`` for each cloned repo pointing to the
+   upstream project repos.
 
 #. If you haven't done so already, be sure to configure git with your name
    and email address for the ``signed-off-by`` line in your commit messages:
@@ -130,8 +106,12 @@ later, and these other tools:
 * myst-parser               version: 3.0.1
 * sphinxcontrib-mermaid     version: 0.9.2
 
-Depending on your Linux version, install the needed tools.
+Depending on your Linux version, install the needed tools.  You should consider
+using the `Python virtual environment`_
+tools to maintain your Python environment from being changed by other work on
+your computer.
 
+.. _Python virtual environment: https://https://docs.python.org/3/library/venv.html
 
 For Ubuntu use:
 
@@ -144,7 +124,7 @@ Then use ``pip3`` to install the remaining Python-based tools specified in the
 
 .. code-block:: bash
 
-   cd ~/opea-project/docs
+   cd ~/opea-project-docsgen/docs
    pip3 install --user -r scripts/requirements.txt
 
 Use this command to add ``$HOME/.local/bin`` to the front of your ``PATH`` so
@@ -165,20 +145,20 @@ And with that you're ready to generate the documentation.
 
 .. note::
 
-   We've provided a script you can run to show what versions of the
-   documentation building tools are installed and compare with the
-   tool versions shown above. This tool will also verify you're using tool
-   versions known to work together::
+   We've provided a script in the docs repo you can run to show what versions of
+   the documentation building tools are installed and compare with the tool
+   versions shown above. This tool will also verify you're using tool versions
+   known to work together::
 
-      doc/scripts/show-versions.py
+      docs/scripts/show-versions.py
 
    for example:
 
    .. code-block:: console
 
-      ~/opea-project/docs$ scripts/show-versions.py
+      ~/opea-project-docsgen/docs$ scripts/show-versions.py
 
-      doc build tool versions found on your system per /home/david/opea-project/docs/scripts/requirements.txt...
+      doc build tool versions found on your system per /home/david/opea-project-docsgen/docs/scripts/requirements.txt...
 
       sphinx                    version: 7.3.0
       docutils                  version: 0.20
@@ -209,19 +189,19 @@ environment and a ``make html`` again generally fixes these issues.
 Run the Documentation Processors
 ********************************
 
-The ``docs`` folder (and cloned sibling repos) have all the doc source files,
+The ``docs`` folder (with all cloned sibling repos) have all the doc source files,
 images, extra tools, and ``Makefile`` for generating a local copy of the OPEA
 technical documentation. (The ``Makefile`` copies all needed files from these
-cloned repos into a temporary ``_build`` working folder.)
+cloned repos into a temporary folder in a ``_build`` working folder.)
 
 .. code-block:: bash
 
-   cd ~/opea-project/docs
+   cd ~/opea-project-docsgen/docs
    make html
 
 Depending on your development system, it will take less a minute to collect and
 generate the HTML content.  When done, you can view the HTML output in
-``~/opea-project/docs/_build/html/index.html``. You can also ``cd`` to the
+``~/opea-project-docsgen/docs/_build/html/index.html``. You can also ``cd`` to the
 ``_build/html`` folder and run a local web server with the command:
 
 .. code-block:: bash
@@ -243,7 +223,7 @@ directly to the upstream repo rather than to a personal forked copy):
 
 .. code-block:: bash
 
-   cd ~/opea-project
+   cd ~/opea-project-docsgen
    git clone https://github.com/opea-project/opea-project.github.io.git
 
 Then, after you've verified the generated HTML from ``make html`` looks
@@ -256,9 +236,9 @@ good, you can push directly to the publishing site with:
 This uses git commands to synchronize the new content with what's
 already published and will delete files in the publishing repo's
 **latest** folder that are no longer needed. New or changed files from
-the newly-generated HTML content are added to the GitHub pages
+the newly-generated HTML content are pushed to the GitHub pages
 publishing repo.  The public site at https://opea-project.github.io will
-be updated by the `GitHub pages system
+be automatically updated by the `GitHub pages system
 <https://guides.github.com/features/pages/>`_, typically within a few
 minutes.
 
@@ -268,7 +248,7 @@ Document Versioning
 The https://opea-project.github.io site has a document version selector
 at the top of the left nav panel.  The contents of this version
 selector are defined in the ``conf.py`` sphinx configuration file,
-specifically:
+specifically something like this:
 
 .. code-block:: python
    :emphasize-lines: 5-6
@@ -284,24 +264,29 @@ specifically:
        }
 
 
-As new versions of OPEA documentation are added, update this
-``versions`` selection list to include the version number and publishing
-folder.  Note that there's no direct selection to go to a newer version
-from an older one, without going to ``latest`` first.
+As new versions of OPEA documentation are added, typically when a new release is
+made, update this ``versions`` selection list to include the version number and
+publishing folder.  Note that there's no direct selection to go to a newer
+version from an older one, without going to ``latest`` first.
 
 By default, documentation build and publishing both assume we're generating
-documentation for the main branch and publishing to the ``/latest/``
-area on https://opea-project.github.io. When we're generating the
-documentation for a tagged version (e.g., 0.8), check out that version
-of all the component repos, and add some extra flags to the ``make`` commands:
+documentation for the main branch and publishing to the ``/latest/`` area on
+https://opea-project.github.io. When we're generating the documentation for a
+tagged version (e.g., 0.8), check out that version of **all** the component
+repos, and add some extra flags to the ``make`` commands:
 
 .. code-block:: bash
 
-   cd ~/opan-project/docs
-   git checkout v0.8
+   version=0.8
+   for d in docs GenAIComps GenAIExamples GenAIEval GenAIInfra Governance ; do
+    cd ~/opea-project-docsgen/$d
+    git checkout $version
+   done
+
+   cd ~/opea-project-docsgen/docs
    make clean
-   make DOC_TAG=release RELEASE=0.8 html
-   make DOC_TAG=release RELEASE=0.8 publish
+   make DOC_TAG=release RELEASE=$version html
+   make DOC_TAG=release RELEASE=$version publish
 
 .. _filter_expected:
 
