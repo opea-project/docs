@@ -65,6 +65,7 @@ Flowchart: AvatarChatbot Megaservice
 ```mermaid
 %%{ init : { "theme" : "base", "flowchart" : { "curve" : "stepBefore" }}}%%
 flowchart TB
+    style Megaservice stroke:#000000
     subgraph AvatarChatbot
         direction LR
         A[User] --> |Input query| B[AvatarChatbot Gateway]
