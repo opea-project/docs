@@ -154,12 +154,13 @@ flowchart TB
 #### Frontend UI
 The frontend UI is Gradio. User is prompted to upload either an image or a video as the avatar source. The user also asks his question verbally through the microphone by clicking on the "record" button. The AvatarChatbot backend processes the audio input and generates the response in the form of an animated avatar answering in its unique voice. The response is displayed on Gradio UI. User will be able to see the animated avatar speaking the response in real-time, and can interact with the avatar by asking more questions.
 <div style="display: flex; justify-content: space-between;">
-  <img src="assets/ui_1.png" alt="alt text" style="width: 49%;"/>
-  <img src="assets/ui_2.png" alt="alt text" style="width: 49%;"/>
+  <img src="assets/ui_latest_1.png" alt="alt text" style="width: 33%;"/>
+  <img src="assets/ui_latest_2.png" alt="alt text" style="width: 33%;"/>
+  <img src="assets/ui_latest_3.png" alt="alt text" style="width: 33%;"/>
 </div>
 
 ### Real-time demo
-AI Avatar Chatbot Demo on Intel® Gaudi® 2, image input (left) and video input (right)
+AI Avatar Chatbot Demo on Intel® Gaudi® 2, image input (top) and video input (down)
 <!-- [AI Avatar Chatbot Demo on Intel® Gaudi® 2, image input](https://intel.sharepoint.com/:v:/s/mlconsultingandsupport/EZa7vjON10ZCpMvE7U-SPMwBRXbVHqe1Ybsa-fmnXayNUA?e=f6FPsl)   
 [AI Avatar Chatbot Demo on Intel® Gaudi® 2, video input](https://intel.sharepoint.com/:v:/s/mlconsultingandsupport/ESMIcBseFTdIuqkoB7TZy6ABfwR9CkfV49TvTa1X_Jihkg?e=zMH7O7) -->
 <!-- <div style="display: flex; justify-content: space-between;">
