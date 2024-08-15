@@ -96,7 +96,7 @@ flowchart TB
 The AvatarChatbot megaservice is a new service that integrates the existing AudioQnA service with the new animation microservice. The AudioQnA service is a pipeline that takes user audio input, converts it to text, generates an LLM response, and converts the response to audio output. The animation microservice is a new service that takes the audio response from the AudioQnA service, generates an animated avatar response, and sends it back to the user. The AvatarChatbot Gateway invokes the AvatarChatbot backend megaservice to generate the response.
 
 #### animation microservice
-The animation microservice is a new service that generates animated avatar videos from audio and image/video inputs. The animation microservice takes the audio response from the AudioQnA service, synchronizes the audio response mel-spectrogram chunks with image/video frames, and generates a high-quality video of the avatar speaking in real-time. The animation microservice currently uses the [Wav2Lip-GFPGAN](https://github.com/ajay-sainy/Wav2Lip-GFPGAN) model for lip synchronization and face animation.  
+The animation microservice is a new service that generates animated avatar videos from audio and image/video inputs. The animation microservice takes the audio response from the AudioQnA service, synchronizes the audio response mel-spectrogram chunks with image/video frames, and generates a high-quality video of the avatar speaking in real-time. The animation microservice currently uses the [Wav2Lip](https://github.com/Rudrabha/Wav2Lip) model for lip synchronization and [GFPGAN](https://github.com/TencentARC/GFPGAN) model for face restoration.  
 
 User can build their own Docker image with `Dockerfile_hpu` and create a Docker container on Gaudi2 instance to run the animation microservice. They can then validate the service by sending a POST request to the server API, while providing audio and image/video inputs. The animation microservice will generate an animated avatar video response and save it to the specified output path.
 
@@ -166,8 +166,8 @@ AI Avatar Chatbot Demo on Intel® Gaudi® 2, image input (left) and video input 
   <video src="assets/demo_latest_image.mpg" controls style="width: 49%;"></video>
   <video src="assets/demo_latest_video.mpg" controls style="width: 49%;"></video>
 </div> -->
-![AI Avatar Chatbot Demo on Intel® Gaudi® 2, image input](assets/demo_latest_image.gif)
-![AI Avatar Chatbot Demo on Intel® Gaudi® 2, video input](assets/demo_latest_video.gif)
+![AI Avatar Chatbot Demo on Intel® Gaudi® 2, image input](assets/image_wav2lipgfpgan_cut.gif)
+![AI Avatar Chatbot Demo on Intel® Gaudi® 2, video input](assets/video_wav2lipgfpgan_cut.gif)
 
 ## Compatibility
 <!-- List possible incompatible interface or workflow changes if exists. -->
