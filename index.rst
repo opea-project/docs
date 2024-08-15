@@ -18,7 +18,7 @@ Source code for the OPEA Project is maintained in the
 
    <ul class="grid">
        <li class="grid-item">
-           <a href="introduction.html">
+           <a href="introduction/index.html">
                <img alt="" src="_static/images/opea-icon-white.svg" width="80px"/><br/>
                <h2>What is OPEA</h2>
            </a>
@@ -40,7 +40,7 @@ Source code for the OPEA Project is maintained in the
            <p>Select from several turnkey enterprise solutions that can be customized for your needs.</p>
        </li>
        <li class="grid-item">
-           <a href="deploy.html">
+           <a href="deploy/index.html">
                <span class="grid-icon fa fa-sign-in"></span>
                <h2>Deploy AI Solutions</h2>
            </a>
@@ -69,11 +69,12 @@ Source code for the OPEA Project is maintained in the
    :hidden:
 
    Documentation Home <self>
-   introduction
+   introduction/index
    getting-started/index
    examples/index
-   microservices
-   deploy
+   microservices/index
+   deploy/index
+   eval/index
    community/index
    release_notes/index
 

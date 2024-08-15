@@ -47,13 +47,13 @@ help:
 content:
 	$(Q)mkdir -p $(SOURCEDIR)
 	$(Q)rsync -a --exclude=$(BUILDDIR) . $(SOURCEDIR)
-#	$(Q)for dir in $(RSYNC_DIRS); do\
-#		rsync $(RSYNC_OPTS) ../$$dir $(SOURCEDIR); \
-#		done
+	$(Q)for dir in $(RSYNC_DIRS); do\
+		rsync $(RSYNC_OPTS) ../$$dir $(SOURCEDIR); \
+		done
 # temporarily, copy docs content too (were in the docs-work)
 #	$(Q)rsync $(RSYNC_OPTS) ../docs/* $(SOURCEDIR)
-#	$(Q)find $(SOURCEDIR) -type f -empty -name "README.md" -delete
-#	$(Q)scripts/fix-github-md-refs.sh $(SOURCEDIR)
+	$(Q)find $(SOURCEDIR) -type f -empty -name "README.md" -delete
+	$(Q)scripts/fix-github-md-refs.sh $(SOURCEDIR)
 
 
 html: content
@@ -89,6 +89,9 @@ ifeq ($(RELEASE),latest)
 	sed 's/<head>/<head>\n  <base href="https:\/\/opea-project.github.io\/latest\/">/' $(BUILDDIR)/html/404.html > $(PUBLISHDIR)/../404.html
 endif
 	cd $(PUBLISHDIR)/..; git add -A; git commit -s -m "publish $(RELEASE)"; git push origin main;
+
+server:
+	cd _build/html; python3 -m http.server
 
 
 # Catch-all target: route all unknown targets to Sphinx using the new
