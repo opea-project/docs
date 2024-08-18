@@ -30,8 +30,7 @@ The project's documentation contains the following items:
   https://opea-project.github.io website. All of the documentation sources
   are found in the ``github.com/opea-project`` repos, rooted in the ``docs`` repo.
   There's also documentation in the repos where the project's code is
-  maintained: ``GenAIComps``, ``GenAIEval``, ``GenAIExamples``, ``GenAIInfra``
-  and ``Governance``.
+  maintained: ``GenAIComps``, ``GenAIEval``, ``GenAIExamples``, and ``GenAIInfra``.
 
 .. graphviz:: images/doc-gen-flow.dot
    :align: center
@@ -61,7 +60,6 @@ cloned repos from the opea-project:
    ├── GenAIEval
    ├── GenAIExamples
    ├── GenAIInfra
-   ├── Governance
    ├── opea-project.github.io
 
 The parent ``opea-project-docsgen`` folder is there to organize the cloned repos
@@ -78,7 +76,7 @@ this once to set up the folder structure:
 
       cd ~
       mkdir opea-project-docsgen && cd opea-project-docsgen
-      for d in docs GenAIComps GenAIExamples GenAIEval GenAIInfra Governance ; do
+      for d in docs GenAIComps GenAIExamples GenAIEval GenAIInfra ; do
         git clone https://github.com/opea-project/$d.git
       done
 
@@ -278,7 +276,7 @@ repos, and add some extra flags to the ``make`` commands:
 .. code-block:: bash
 
    version=0.8
-   for d in docs GenAIComps GenAIExamples GenAIEval GenAIInfra Governance ; do
+   for d in docs GenAIComps GenAIExamples GenAIEval GenAIInfra ; do
     cd ~/opea-project-docsgen/$d
     git checkout $version
    done

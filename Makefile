@@ -27,7 +27,7 @@ DOC_TAG      ?= development
 RELEASE      ?= latest
 PUBLISHDIR    = $(OPEA_BASE)/opea-project.github.io/$(RELEASE)
 RSYNC_OPTS    = -am --exclude='.github/*' --include='*/' --include-from=scripts/rsync-include.txt --exclude='*'
-RSYNC_DIRS    = GenAIComps  GenAIEval  GenAIExamples  GenAIInfra  Governance
+RSYNC_DIRS    = GenAIComps  GenAIEval  GenAIExamples  GenAIInfra
 
 # Put it first so that "make" without argument is like "make help".
 help:
@@ -43,7 +43,7 @@ help:
 # Copy all the rst and md content (and images, etc) into the _build/rst folder
 # including rst and md content
 
-# GenAIComps  GenAIEval  GenAIExamples  GenAIInfra  Governance
+# GenAIComps  GenAIEval  GenAIExamples  GenAIInfra
 content:
 	$(Q)mkdir -p $(SOURCEDIR)
 	$(Q)rsync -a --exclude=$(BUILDDIR) . $(SOURCEDIR)
