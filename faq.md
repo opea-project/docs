@@ -13,7 +13,7 @@ Enterprises face a myriad of challenges in development and deployment of Gen AI.
 The major adoption and deployment cycle of robust, secure, enterprise-grade Gen AI solutions across all industries is at its early stages.  Enterprise-grade solutions will require collaboration in the open ecosystem. The time is now for the ecosystem to come together and accelerate GenAI deployments across enterprises by offering a standardized set of tools and technologies while supporting three key tenets – open, security, and scalability. This will require the ecosystem to work together to build reference implementations that are performant, trustworthy and enterprise-grade ready. 
 
 ## How does it compare to other options for deploying Gen AI solutions within the enterprise? 
-There is not an alternative that brings the entire ecosystem together in a vendor neutral manner and delivers on the promise of open, security and scalability. This is our primary motivation for creating OPEA project. 
+There is no alternative that brings the entire ecosystem together in a vendor neutral manner that delivers on the promises of open, secure, and scalable. This is our primary motivation for creating OPEA project.
 
 ## Will OPEA reference implementations work with proprietary components? 
 Like any other open-source project, the community will determine which components are needed by the broader ecosystem.  Enterprises can always extend OPEA project with other multi-vendor proprietary solutions to achieve their business goals. 
@@ -24,22 +24,22 @@ Open Platform for Enterprise AI
 ## How do I pronounce OPEA? 
 It is said ‘OH-PEA-AY' 
 
-## What companies and open-source projects are part of OPEA? 
-AnyScale 
-Cloudera 
-DataStax 
-Domino Data Lab 
-HuggingFace 
-Intel 
-KX 
-MariaDB Foundation 
-MinIO 
-Qdrant 
-Red Hat 
-SAS 
-VMware by Broadcom 
-Yellowbrick Data 
-Zilliz 
+## Initial partner companies that joined OPEA in April 2024? 
+- AnyScale 
+- Cloudera 
+- DataStax 
+- Domino Data Lab 
+- HuggingFace 
+- Intel 
+- KX 
+- MariaDB Foundation 
+- MinIO 
+- Qdrant 
+- Red Hat 
+- SAS 
+- VMware by Broadcom 
+- Yellowbrick Data 
+- Zilliz 
 
 ## What is Intel contributing? 
 OPEA is to be defined jointly by several community partners, with a call for broad ecosystem contribution, under the well-established LF AI & Data Foundation. As a starting point, Intel has contributed a Technical Conceptual Framework that shows how to construct and optimize curated GenAI pipelines built for secure, turnkey enterprise deployment.  At launch, Intel contributed several reference implementations on Intel hardware across Intel® Xeon® 5, Intel® Xeon® 6 and Intel® Gaudi® 2, which you can see in a Github repo here. Over time we intend to add to that contribution including a software infrastructure stack to enable fully containerized AI workload deployments as well as potentially implementations of those containerized workloads.  
@@ -73,11 +73,11 @@ A version of the spec is available in the docs repo in this project
 ## Is there a cost for joining? 
 There is no cost for anyone to join and contribute. 
 
-## Do I need to be Linux Foundation member to join?  
+## Do I need to be a Linux Foundation member to join?  
 Anyone can join and contribute. You don’t need to be a Linux Foundation member. 
 
-## Where can I report a bug?
-Vulnerability reports can be sent to info@opea.dev.
+## Where can I report a security vulnerability?
+Vulnerability reports can be sent to security@opea.dev.
 
  
 
