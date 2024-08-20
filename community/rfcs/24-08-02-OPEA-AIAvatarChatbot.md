@@ -20,12 +20,12 @@ v0.1 - ASMO Team sharing on Fri 6/28/2024
 * Due to above reasons, we're hereby introducing a new microservice, animation, that generates animated avatars from audio and image/video inputs; and a new megaservice, AvatarChatbot, that integrates the animation microservice with the existing AudioQnA service to build a human-like AI audio chatbot.
 
 <p align="left">
-  <img src="assets/avatar4.png" alt="Image 1" width="100"/>
-  <img src="assets/avatar1.jpg" alt="Image 2" width="100"/>
-  <img src="assets/avatar2.jpg" alt="Image 3" width="100"/>
-  <img src="assets/avatar3.png" alt="Image 4" width="100"/>
-  <img src="assets/avatar5.png" alt="Image 5" width="100"/>
-  <img src="assets/avatar6.png" alt="Image 6" width="100"/>
+  <img src="assets/avatar4.png" alt="Image 1" width="130"/>
+  <img src="assets/avatar1.jpg" alt="Image 2" width="130"/>
+  <img src="assets/avatar2.jpg" alt="Image 3" width="130"/>
+  <img src="assets/avatar3.png" alt="Image 4" width="130"/>
+  <!-- <img src="assets/avatar5.png" alt="Image 5" width="100"/> -->
+  <img src="assets/avatar6.png" alt="Image 6" width="130"/>
 </p> 
 
 The chatbot will:
