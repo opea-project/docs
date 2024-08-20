@@ -24,22 +24,22 @@ Open Platform for Enterprise AI
 ## How do I pronounce OPEA? 
 It is said ‘OH-PEA-AY' 
 
-## What companies and open-source projects are part of OPEA? 
-AnyScale 
-Cloudera 
-DataStax 
-Domino Data Lab 
-HuggingFace 
-Intel 
-KX 
-MariaDB Foundation 
-MinIO 
-Qdrant 
-Red Hat 
-SAS 
-VMware by Broadcom 
-Yellowbrick Data 
-Zilliz 
+## Initial companies that signed ontoO O in April 2024 OPEA? 
+- AnyScale
+- Cloudera 
+- DataStax 
+- Domino Data Lab 
+- HuggingFace 
+- Intel 
+- KX 
+- MariaDB Foundation 
+- MinIO 
+- Qdrant 
+- Red Hat 
+- SAS 
+- VMware by Broadcom 
+- Yellowbrick Data 
+- Zilliz 
 
 ## What is Intel contributing? 
 OPEA is to be defined jointly by several community partners, with a call for broad ecosystem contribution, under the well-established LF AI & Data Foundation. As a starting point, Intel has contributed a Technical Conceptual Framework that shows how to construct and optimize curated GenAI pipelines built for secure, turnkey enterprise deployment.  At launch, Intel contributed several reference implementations on Intel hardware across Intel® Xeon® 5, Intel® Xeon® 6 and Intel® Gaudi® 2, which you can see in a Github repo here. Over time we intend to add to that contribution including a software infrastructure stack to enable fully containerized AI workload deployments as well as potentially implementations of those containerized workloads.  
