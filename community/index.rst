@@ -52,11 +52,23 @@ Contributing Guides
 .. toctree::
    :maxdepth: 1
 
+   ../README
    CONTRIBUTING
+   ../codeowner
    SECURITY
    ../developer-guides/doc_guidelines
    ../developer-guides/graphviz
    ../developer-guides/docbuild
+
+Roadmaps
+********
+
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   ../roadmap/*
+
 
 Project Governance
 ******************
@@ -64,8 +76,18 @@ Project Governance
 .. toctree::
    :maxdepth: 1
 
+   charter
    CODE_OF_CONDUCT
    SECURITY
+
+Technical Steering Committee
+****************************
+
+.. toctree::
+   :maxdepth: 1
+
+   TSC_Gives_and_gets
+
 
 RFC Proposals
 *************

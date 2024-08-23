@@ -21,6 +21,16 @@ Examples in the `GenAIExamples GitHub repository`_.
    /GenAIExamples/README
    /GenAIExamples/*
 
+AgentQnA Application
+********************
+
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   /GenAIExamples/AgentQnA/*
+   /GenAIExamples/AgentQnA/*/*
+
 AudioQnA Application
 ********************
 
@@ -70,6 +80,17 @@ Code Translation Application
    /GenAIExamples/CodeTrans/*/*/*
    /GenAIExamples/CodeTrans/*/*/*/*
 
+Document Index Retriever Application
+************************************
+
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   /GenAIExamples/DocIndexRetriever/*
+   /GenAIExamples/DocIndexRetriever/*/*
+
+
 Document Summarization Application
 **********************************
 
@@ -95,6 +116,19 @@ FaqGen Application
    /GenAIExamples/FaqGen/*/*/*
    /GenAIExamples/FaqGen/*/*/*/*
    /GenAIExamples/FaqGen/*/*/*/*/*
+
+ProductivitySuite Application
+*****************************
+
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   /GenAIExamples/ProductivitySuite/*
+   /GenAIExamples/ProductivitySuite/*/*
+   /GenAIExamples/ProductivitySuite/*/*/*
+   /GenAIExamples/ProductivitySuite/*/*/*/*
+   /GenAIExamples/ProductivitySuite/*/*/*/*/*
 
 SearchQnA Application
 *********************
