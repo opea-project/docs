@@ -21,6 +21,24 @@ in the `GenAIInfra GitHub repository`_.
    /GenAIInfra/README
    /GenAIInfra/*
 
+Installation Guides
+*******************
+
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   ../guide/installation/*/*
+
+Authentication and Authorization
+********************************
+
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   /GenAIInfra/authN-authZ/*
+
 Helm Charts
 ***********
 

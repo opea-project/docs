@@ -26,7 +26,7 @@ OPEA_BASE     = $(CURDIR)/..
 DOC_TAG      ?= development
 RELEASE      ?= latest
 PUBLISHDIR    = $(OPEA_BASE)/opea-project.github.io/$(RELEASE)
-RSYNC_OPTS    = -am --exclude='.github/*' --include='*/' --include-from=scripts/rsync-include.txt --exclude='*'
+RSYNC_OPTS    = -am --exclude='.github/pull_request_template.md' --include='*/' --include-from=scripts/rsync-include.txt --exclude='*'
 RSYNC_DIRS    = GenAIComps  GenAIEval  GenAIExamples  GenAIInfra
 
 # Put it first so that "make" without argument is like "make help".
