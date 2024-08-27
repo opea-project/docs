@@ -14,3 +14,16 @@ _____
    :glob:
 
    rfcs/2*
+
+-----
+
+RFC Template
+************
+
+When creating a new RFC, follow the existing RFCs as an example, or use this
+template:
+
+.. include:: rfcs/rfc_template.txt
+   :code:
+
+

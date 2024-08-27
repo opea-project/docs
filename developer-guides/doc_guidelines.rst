@@ -1,0 +1,820 @@
+.. _doc_guidelines:
+
+Documentation Guidelines
+########################
+
+OPEA Project content is written using the `markdown`_ (``.md``) and `reStructuredText`_ markup
+language (``.rst``) with Sphinx extensions, and processed
+using Sphinx to create a formatted stand-alone website.  Developers can
+view this content either in its raw form as ``.md`` and ``.rst`` markup files, or (with
+Sphinx installed) they can build the documentation using the Makefile
+(on Linux systems) to generate the HTML content. The HTML content can then be
+viewed using a web browser. This same ``.md`` and ``.rst`` content is fed into the
+`OPEA Project documentation`_ website.
+
+You can read details about `reStructuredText`_ and about `Sphinx extensions`_
+from their respective websites.
+
+.. _Sphinx extensions: https://www.sphinx-doc.org/en/stable/contents.html
+.. _reStructuredText: http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html
+.. _Sphinx Inline Markup: https://www.sphinx-doc.org/en/master/usage/restructuredtext/roles.html
+.. _OPEA Project documentation:  https://opea-project.github.io
+.. _markdown: https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax
+
+This document provides a quick reference for commonly used markdown and reST
+with Sphinx-defined directives and roles used to create the documentation
+you're reading.
+
+Markdown vs. RestructuredText
+*****************************
+
+Both markdown and ReStructureText (reST) let you create individual documentation files that
+GitHub can render when viewing them in your browser on github.com. Markdown is
+popular because of it's familarity with developers and is the default markup
+language for StackOverflow, Reddit, GitHub, and others.  ReStructuredText came
+from the Python community for quite a while and became noticed outside that
+community with the release of Sphinx.  These days, reST is supported by GitHub
+and major projects use it for their documentation, including the Linux kernel,
+OpenCV and LLVM/Clang.
+
+ReStructuredText is more fully-featured, much more standardized and uniform, and
+has built-in support for extensions.  The markdown language has no standard way
+to implement complete documentation systems and doesnt have a standard extension
+mechanism, which leads to many different "flavors" of markdown. If you stick to
+the core and common markdown syntax (headings, paragraphs, lists, and such),
+using markdown is just fine.  However, slipping in raw HTML to do formatting
+(such as centering) or using HTML for tables creates problems when publishing to the
+https://opea-project.github.io site.
+
+
+Within the OPEA documentation, we use both markdown and reST files for the
+documentation "leaves".  We rely on reST for the documentation organization trunk and
+branches, through the use of the reST toctree directives.
+
+Documentation Organization
+**************************
+
+Documentation is maintained and updated the same as the project's code within
+the opea-project GitHub repos. There are many ``README.md`` files within the various
+repos along with the other files for those components. This is good because it
+keeps the relevent documentation and code for that component together.
+
+We use the ``docs`` repo to organize the presentation of all these ``README.md``
+files, along with other project related documents that are maintained in the
+``docs`` repo.  The root of the generated documentation starts with the
+``docs/index.rst`` file that starts off the organizational structure that's
+shown as the left navigation in the generated HTML site at
+https://opea-project.github.io.  That ``index.rst`` file uses a toctree
+directive to point to other documents that may include additional toctree
+directives of their own, ultimately collecting all the content into an
+organizational structure you can navigate.
+
+
+Headings
+********
+
+.. tabs::
+
+   .. group-tab:: reST
+
+        In reST, document sections are identified through their heading titles, indicated with
+        an underline below the title text.  (While reST allows use of both and
+        overline and matching underline to indicate a heading, we use only an
+        underline indicator for headings.)  For consistency in our documentation, we
+        define the order of characters used to indicate the nested levels in the
+        table of contents:
+
+        * Use ``#`` for the Document title underline character (H1)
+        * Use ``*`` for the First sub-section heading level (H2)
+        * Use ``=`` for the Second sub-section heading level (H3)
+        * Use ``-`` for the Third sub-section heading level (H4)
+
+        Additional heading-level depth is discouraged, but if needed, use ``%``
+        (H5), ``+`` (H6), and ``@`` (H7).
+
+        The heading underline must be at least as long as the title it's under.
+
+        Here's an example of nested heading levels and the appropriate
+        underlines to use:
+
+        .. code-block:: rest
+
+           Document Title heading
+           ######################
+
+           Section 1 heading
+           *****************
+
+           Section 2 heading
+           *****************
+
+           Section 2.1 heading
+           ===================
+
+           Section 2.1.1 heading
+           ---------------------
+
+           Section 2.2 heading
+           ===================
+
+           Section 3 heading
+           *****************
+
+
+   .. group-tab:: markdown
+
+      In markdown, headings are indicated as a line beginning with a ``#``
+      character, with additional ``#`` characters indicating a deeper heading
+      level, e.g., ``#`` for H1 (title), ``##`` for H2 headings, ``###`` for H3
+      headdings, and so on.)
+
+      * The ``#`` character for a heading must be the first character on the
+        line, then a space, followed by the heading.  For example::
+
+           # My Document's Title
+
+           Some content goes here.
+
+           ## First H2 heading
+
+           Some more content
+
+      * There must be only one ``#`` H1 heading at the beginning of the document
+        indicating the document's title.
+      * You must not skip heading levels on the way down in the document hierarchy, e.g., do not go from a H1 ``#`` to an
+        H3 ``###`` without an intervening H2 ``##``. You may skip heading levels
+        on the way back up, for example, from an H4 ``####`` back up to an H2 ``##``
+        as appropriate.
+
+
+
+
+Content Highlighting
+********************
+
+Some common reST and markdown inline markup samples:
+
+* one asterisk: ``*text*`` for emphasis (*italics*),
+* two asterisks: ``**text**`` for strong emphasis (**boldface**), and
+* two back quotes: ````text```` for ``inline code`` samples.
+
+ReST rules for inline markup try to be forgiving to account for common
+cases of using these marks.  For example, using an asterisk to indicate
+multiplication, such as ``2 * (x + y)`` will not be interpreted as an
+unterminated italics section. 
+
+For inline markup, the characters between
+the beginning and ending characters must not start or end with a space,
+so ``*this is italics*``, (*this is italics*)  while ``* this isn't*``
+(* this isn't*).
+
+If an asterisk or back quote appears in running text and could be confused
+with inline markup delimiters, you can eliminate the confusion by adding a
+backslash (``\``) before it.
+
+
+Lists
+*****
+
+For bullet lists, place an asterisk (``*``) or hyphen (``-``) at the start of
+a paragraph and indent continuation lines with two spaces.
+
+The first item in a list (or sublist) must have a blank line before it and
+should be indented at the same level as the preceding paragraph (and not
+indented itself).
+
+For numbered lists
+start with a ``1.`` or ``a)`` for example, and continue with autonumbering by
+using a ``#`` sign and a ``.`` or ``)`` as used in the first list item.
+Indent continuation lines with spaces to align with the text of first
+list item:
+
+.. code-block:: rest
+
+   * This is a bulleted list.
+   * It has two items, the second
+     item and has more than one line of reST text.  Additional lines
+     are indented to the first character of the
+     text of the bullet list.
+
+   1. This is a new numbered list. If there wasn't a blank line before it,
+      it would be a continuation of the previous list (or paragraph).
+   #. It has two items too.
+
+   a) This is a numbered list using alphabetic list headings
+   #) It has three items (and uses autonumbering for the rest of the list)
+   #) Here's the third item.  Use consistent punctuation on the list
+      number.
+
+   #. This is an autonumbered list (default is to use numbers starting
+      with 1).
+
+      #. This is a second-level list under the first item (also
+         autonumbered).  Notice the indenting.
+      #. And a second item in the nested list.
+   #. And a second item back in the containing list.  No blank line
+      needed, but it wouldn't hurt for readability.
+
+Definition lists (with one or more terms and their definition) are a
+convenient way to document a word or phrase with an explanation.  For example,
+this reST content:
+
+.. code-block:: rest
+
+   The Makefile has targets that include:
+
+   ``html``
+      Build the HTML output for the project
+
+   ``clean``
+      Remove all generated output, restoring the folders to a
+      clean state.
+
+Would be rendered as:
+
+   The Makefile has targets that include:
+
+   html
+      Build the HTML output for the project
+
+   clean
+      Remove all generated output, restoring the folders to a
+      clean state.
+
+Multi-Column Lists
+******************
+
+In reST, if you have a long bullet list of items, where each item is short, you can
+indicate that the list items should be rendered in multiple columns with a
+special ``.. rst-class:: rst-columns`` directive.  The directive will apply to
+the next non-comment element (for example, paragraph) or to content indented under
+the directive. For example, this unordered list::
+
+   .. rst-class:: rst-columns
+
+   * A list of
+   * short items
+   * that should be
+   * displayed
+   * horizontally
+   * so it doesn't
+   * use up so much
+   * space on
+   * the page
+
+would be rendered as:
+
+.. rst-class:: rst-columns
+
+   * A list of
+   * short items
+   * that should be
+   * displayed
+   * horizontally
+   * so it doesn't
+   * use up so much
+   * space on
+   * the page
+
+A maximum of three columns will be displayed if you use ``rst-columns``
+(or ``rst-columns3``), and two columns for ``rst-columns2``. The number
+of columns displayed can be reduced based on the available width of the
+display window, reducing to one column on narrow (phone) screens if necessary.
+
+.. note:: We've deprecated use of the ``hlist`` directive because it
+   misbehaves on smaller screens.
+
+Tables
+******
+
+There are a few ways to create tables, each with their limitations or quirks.
+`Grid tables
+<http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#grid-tables>`_
+offer the most capability for defining merged rows and columns, but are
+hard to maintain::
+
+   +------------------------+------------+----------+----------+
+   | Header row, column 1   | Header 2   | Header 3 | Header 4 |
+   | (header rows optional) |            |          |          |
+   +========================+============+==========+==========+
+   | body row 1, column 1   | column 2   | column 3 | column 4 |
+   +------------------------+------------+----------+----------+
+   | body row 2             | ...        | ...      | you can  |
+   +------------------------+------------+----------+ easily   +
+   | body row 3 with a two column span   | ...      | span     |
+   +------------------------+------------+----------+ rows     +
+   | body row 4             | ...        | ...      | too      |
+   +------------------------+------------+----------+----------+
+
+This example would render as:
+
++------------------------+------------+----------+----------+
+| Header row, column 1   | Header 2   | Header 3 | Header 4 |
+| (header rows optional) |            |          |          |
++========================+============+==========+==========+
+| body row 1, column 1   | column 2   | column 3 | column 4 |
++------------------------+------------+----------+----------+
+| body row 2             | ...        | ...      | you can  |
++------------------------+------------+----------+ easily   +
+| body row 3 with a two column span   | ...      | span     |
++------------------------+------------+----------+ rows     +
+| body row 4             | ...        | ...      | too      |
++------------------------+------------+----------+----------+
+
+For reST, `List tables
+<http://docutils.sourceforge.net/docs/ref/rst/directives.html#list-table>`_
+are much easier to maintain, but don't support row or column spans::
+
+   .. list-table:: Table title
+      :widths: 15 20 40
+      :header-rows: 1
+
+      * - Heading 1
+        - Heading 2
+        - Heading 3
+      * - body row 1, column 1
+        - body row 1, column 2
+        - body row 1, column 3
+      * - body row 2, column 1
+        - body row 2, column 2
+        - body row 2, column 3
+
+This example would render as:
+
+.. list-table:: Table title
+   :widths: 15 20 40
+   :header-rows: 1
+
+   * - Heading 1
+     - Heading 2
+     - Heading 3
+   * - body row 1, column 1
+     - body row 1, column 2
+     - body row 1, column 3
+   * - body row 2, column 1
+     - body row 2, column 2
+     - body row 2, column 3
+
+The ``:widths:`` parameter lets you define relative column widths.  The
+default is equal column widths. If you have a three-column table and you
+want the first column to be half as wide as the other two equal-width
+columns, you can specify ``:widths: 1 2 2``.  If you'd like the browser
+to set the column widths automatically based on the column contents, you
+can use ``:widths: auto``.
+
+File Names and Commands
+***********************
+
+Sphinx extends reST by supporting additional inline markup elements (called
+"roles") used to tag text with special meanings and enable output formatting.
+(You can refer to the `Sphinx Inline Markup`_ documentation for the full
+list).
+
+For example, there are roles for marking :file:`filenames`
+(``:file:`name```) and command names such as :command:`make`
+(``:command:`make```).  You can also use the \`\`inline code\`\`
+markup (double backticks) to indicate a ``filename``.
+
+Don't use items within a single backtick, for example ```word```. Instead
+use double backticks: ````word````.
+
+Branch-Specific File Links
+**************************
+
+You can add a link in the documentation to a specific file in the GitHub tree.
+Be sure the link points to the branch for that version of the documentation. For
+example, links in the v0.8 release of the documentation should be to files in
+the v0.8 branch. Do not link to files in the main branch because files in that
+branch could change or even be deleted after the release is made.
+
+In reST, to make this kind of file linking possible, use a special role that
+creates a hyperlink to that file in the branch currently checked out.
+
+.. note:: It's assumed that the checked out version of the **docs** repo when we
+   generate the HTML documentation is the same tagged version for all the repos
+   we want to reference.
+
+For example, a GitHub
+link to the reST file used to create this document can be generated
+using ``:docs_file:`developer-guides/doc_guidelines```, which will
+appear as :docs_file:`developer-guides/doc_guidelines.rst`, a link to
+the "blob" file in the GitHub repo as displayed by GitHub. There's also an
+``:docs_raw:`developer-guides/doc_guidelines.rst``` role that will link
+to the "raw" uninterpreted file,
+:docs_raw:`developer-guides/doc_guidelines.rst`. Click these links
+to see the difference.
+
+If you don't want the whole path to the file name to
+appear in the text, you use the usual linking notation to define what link text
+is shown, for example, ``:docs_file:`Guidelines <developer-guides/doc_guidelines.rst>```
+would show up as simply :docs_file:`Guidelines <developer-guides/doc_guidelines.rst>`.
+
+.. _internal-linking:
+
+Internal Cross-Reference Linking
+********************************
+
+Traditional ReST links are supported only within the current file using the
+notation:
+
+.. code-block:: rest
+
+   refer to the `internal-linking`_ page
+
+which renders as,
+
+   refer to the `internal-linking`_ page
+
+Note the use of a trailing underscore to indicate an outbound link. In this
+example, the label was added immediately before a heading, so the text that's
+displayed is the heading text itself.
+
+With Sphinx, however, we can create link-references to any tagged text within
+the project documentation.
+
+Target locations within documents are defined with a label directive:
+
+   .. code-block:: rst
+
+      .. _my label name:
+
+Note the leading underscore indicating an inbound link. The content
+immediately following this label is the target for a ``:ref:`my label name```
+reference from anywhere within the documentation set. The label **must** be
+added immediately before a heading so that there's a natural phrase to show
+when referencing this label (for example, the heading text).
+
+This directive is also used to define a label that's a reference to a URL:
+
+.. code-block:: rest
+
+   .. _Hypervisor Wikipedia Page:
+      https://en.wikipedia.org/wiki/Hypervisor
+
+To enable easy cross-page linking within the site, each file should have a
+reference label before its title so that it can be referenced from another
+file.
+
+.. note:: These reference labels must be unique across the whole site, so generic
+   names such as "samples" should be avoided.
+
+For example, the top of this
+document's ``.rst`` file is:
+
+.. code-block:: rst
+
+   .. _doc_guidelines:
+
+   Documentation Guidelines
+   ########################
+
+Other ``.rst`` documents can link to this document using the
+``:ref:`doc_guidelines``` tag, and it will appear as :ref:`doc_guidelines`.
+This type of internal cross-reference works across multiple files. The link
+text is obtained from the document source, so if the title changes, the link
+text will automatically update as well.
+
+There may be times when you'd like to change the link text that's shown in the
+generated document.  In this case, you can specify alternate text using
+``:ref:`alternate text <doc_guidelines>``` (renders as
+:ref:`alternate text <doc_guidelines>`).
+
+
+Non-ASCII Characters
+********************
+
+You can insert non-ASCII characters such as a Trademark symbol (|trade|) by
+using the notation ``|trade|``.  (It's also allowed to use the UTF-8
+characters directly.) Available replacement names are defined in an include
+file used during the Sphinx processing of the reST files.  The names of these
+replacement characters are the same as those used in HTML entities to insert
+special characters such as \&trade; and are defined in the file
+``sphinx_build/substitutions.txt`` as listed here:
+
+.. literalinclude:: ../sphinx/substitutions.txt
+   :language: rst
+
+We've kept the substitutions list small but you can add others as needed by
+submitting a change to the ``substitutions.txt`` file.
+
+Code and Command Examples
+*************************
+
+.. tabs::
+
+   .. group-tab:: reST
+
+        Use the reST ``code-block`` directive to create a highlighted block of
+        fixed-width text, typically used for showing formatted code or console
+        commands and output.  Smart syntax highlighting is also supported (using the
+        Pygments package). You can also directly specify the highlighting language.
+        For example:
+
+        .. code-block:: rest
+
+           .. code-block:: c
+
+              struct _k_object {
+                 char *name;
+                 u8_t perms[CONFIG_MAX_THREAD_BYTES];
+                 u8_t type;
+                 u8_t flags;
+                 u32_t data;
+              } __packed;
+
+        Note that there is a blank line between the ``code-block`` directive and the
+        first line of the code-block body, and the body content is indented three
+        spaces (to the first non-blank space of the directive name).
+
+        This example would render as:
+
+        .. code-block:: c
+
+          struct _k_object {
+             char *name;
+             u8_t perms[CONFIG_MAX_THREAD_BYTES];
+             u8_t type;
+             u8_t flags;
+             u32_t data;
+          } __packed;
+
+
+        You can specify other languages for the ``code-block`` directive, including
+        ``c``, ``python``, and ``rst``, and also ``console``, ``bash``, or ``shell``.
+        If you want no syntax highlighting, specify ``none``. For example:
+
+        .. code-block:: rest
+
+           .. code-block:: none
+
+              This block of text would be styled with a background
+              and box, but with no syntax highlighting.
+
+        Would display as:
+
+        .. code-block:: none
+
+          This block of text would be styled with a background
+          and box, but with no syntax highlighting.
+
+        There's a shorthand for writing code blocks, too: end the introductory
+        paragraph with a double colon (``::``) and indent the code block content
+        by three spaces.  On output, only one colon will appear.
+
+        .. note:: The highlighting package makes a best guess at the type of content
+           in the block, which can lead to odd
+           highlighting in the generated output.
+
+   .. group-tab:: markdown
+
+      In markdown, fenced code blocks are used to define code blocks.  Use three
+      backticks ``````` on the lines before and after the code block, for
+      example:
+
+      .. code-block:: none
+
+         ```
+         {
+            "firstName": "John",
+            "lastName": "Smith",
+            "age": 25
+         }
+         ```
+
+      The rendered output would look like this:
+
+      .. code-block:: none
+
+         {
+            "firstName": "John",
+            "lastName": "Smith",
+            "age": 25
+         }
+
+      Syntax highlighting is also supported for fenced code blocks by specifying
+      a language next to the backticks before the fenced code block:
+
+      .. code-block:: none
+
+         ```json
+         {
+            "firstName": "John",
+            "lastName": "Smith",
+            "age": 25
+         }
+         ```
+
+      The rendered output would look like this:
+
+      .. code-block:: json
+
+         {
+            "firstName": "John",
+            "lastName": "Smith",
+            "age": 25
+         }
+
+      TODO: add the list of supported languages.
+
+Images
+******
+
+.. tabs::
+
+   .. group-tab:: reST
+
+        In reST, images are included in documentation by using an image directive::
+
+           .. image:: ../images/opea-horizontal-color-w200.png
+              :align: center
+              :alt: alt text for the image
+
+        or if you'd like to add an image caption, use the figure directive::
+
+            .. figure:: ../images/opea-horizontal-color-w200.png
+               :alt: image description
+
+               Caption for the figure
+
+   .. group-tab:: markdown
+
+       In markdown, images are included in documentation using this syntax::
+
+          ![OPEA Logo](../images/opea-horizontal-color-w200.png)
+
+The file name specified is relative to the document source file. We
+recommend putting images into an ``images`` folder where the document source
+is found.  The usual image formats handled by a web browser are supported:
+JPEG, PNG, GIF, and SVG.  Keep the image size only as large as needed,
+generally at least 500 px wide but no more than 1000 px, and no more than
+250 KB unless a particularly large image is needed for clarity.
+
+
+
+Tabs, Spaces, and Indenting
+***************************
+
+Indenting is significant in reST file content, and using spaces is preferred.
+Extra indenting can (unintentionally) change the way content is rendered, too.
+For lists and directives, indent the content text to the first non-blank space
+in the preceding line.  For example:
+
+.. code-block:: rest
+
+   * List item that spans multiple lines of text
+     showing where to indent the continuation line.
+
+   1. And for numbered list items, the continuation
+      line should align with the text of the line above.
+
+   .. code-block::
+
+      The text within a directive block should align with the
+      first character of the directive name.
+
+Keep the line length for documentation fewer than 80 characters to make it
+easier for reviewing in GitHub. Long lines due to URL references are an
+allowed exception.
+
+Background Colors
+*****************
+
+We've defined some CSS styles for use as background colors for paragraphs.
+These styles can be applied using the ``.. rst-class`` directive using one of
+these style names.  You can also use the defined ``centered`` style to place the
+text centered within the element, useful for centering text within a table cell
+or column span:
+
+.. rst-class:: bg-opea-lightorange centered
+
+   \.\. rst-class:: bg-opea-lightorange centered
+
+.. rst-class:: bg-opea-darkorange centered
+
+   \.\. rst-class:: bg-opea-darkorange centered
+
+Drawings
+********
+
+In reST, we've included the ``graphviz`` Sphinx extension to enable you to use a
+text description language to render drawings.  For more information, see
+:ref:`graphviz-examples`.
+
+Alternative Tabbed Content
+**************************
+
+In ResST, instead of creating multiple documents with common material except for some
+specific sections, you can write one document and provide alternative content
+to the reader via a tabbed interface. When the reader clicks a tab, the
+content for that tab is displayed. For example::
+
+   .. tabs::
+
+      .. tab:: Apples
+
+         Apples are green, or sometimes red.
+
+      .. tab:: Pears
+
+         Pears are green.
+
+      .. tab:: Oranges
+
+         Oranges are orange.
+
+will display as:
+
+.. tabs::
+
+   .. tab:: Apples
+
+      Apples are green, or sometimes red.
+
+   .. tab:: Pears
+
+      Pears are green.
+
+   .. tab:: Oranges
+
+      Oranges are orange.
+
+Tabs can also be grouped so that changing the current tab in one area
+changes all tabs with the same name throughout the page.  For example:
+
+.. tabs::
+
+   .. group-tab:: Linux
+
+      Linux Line 1
+
+   .. group-tab:: macOS
+
+      macOS Line 1
+
+   .. group-tab:: Windows
+
+      Windows Line 1
+
+.. tabs::
+
+   .. group-tab:: Linux
+
+      Linux Line 2
+
+   .. group-tab:: macOS
+
+      macOS Line 2
+
+   .. group-tab:: Windows
+
+      Windows Line 2
+
+In this latter case, we're using a ``.. group-tab::`` directive instead of
+a ``.. tab::`` directive.  Under the hood, we're using the `sphinx-tabs
+<https://github.com/djungelorm/sphinx-tabs>`_ extension that's included
+in the ACRN (requirements.txt)  setup.  Within a tab, you can have most
+any content *other than a heading* (code-blocks, ordered and unordered
+lists, pictures, paragraphs, and such).
+
+Instruction Steps
+*****************
+
+In reST, a numbered instruction steps style makes it easy to create tutorial guides
+with clearly identified steps. Add the ``.. rst-class:: numbered-step``
+directive immediately before a second-level heading (by project convention, a
+heading underlined with asterisks ``******``, and it will be displayed as a
+numbered step, sequentially numbered within the document.  (Second-level
+headings without this ``rst-class`` directive will not be numbered.)
+For example::
+
+   .. rst-class:: numbered-step
+
+   Put your right hand in
+   **********************
+
+.. rst-class:: numbered-step
+
+First Instruction Step
+**********************
+
+This is the first instruction step material.  You can do the usual paragraph
+and pictures as you'd use in normal document writing. Write the heading to be
+a summary of what the step is (the step numbering is automated so you can move
+steps around easily if needed).
+
+.. rst-class:: numbered-step
+
+Second Instruction Step
+***********************
+
+This is the second instruction step.
+
+.. note:: As implemented,
+   only one set of numbered steps is intended per document and the steps
+   must be level 2 headings.
+
+
+Documentation Generation
+************************
+
+For instructions on building the documentation, see :ref:`opea_doc_generation`.

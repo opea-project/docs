@@ -38,6 +38,7 @@ extensions = [
    # 'last_updated',
    'myst_parser',
    'sphinxcontrib.mermaid',
+   'link_roles',
    #'sphinx_md',
 ]
 
@@ -116,7 +117,7 @@ else:
     html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
     html_theme_options = {
         'canonical_url': '',
-        # 'analytics_id': 'GTM-K4WWJZD',
+        'analytics_id': 'G-3QH5804YP8',
         'logo_only': False,
         'display_version': True,
         #'prev_next_buttons_location': 'None',
@@ -196,7 +197,7 @@ def setup(app):
 html_show_sphinx = False
 
 # If true, links to the reST sources are added to the pages.
-html_show_sourcelink = False
+html_show_sourcelink = True
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page
 # bottom,
@@ -208,12 +209,10 @@ html_last_updated_fmt = '%b %d, %Y'
 # html_search_scorer = 'scorer.js'
 
 
-# -- Options for Texinfo output -------------------------------------------
 
-
-# rst_epilog = """
-# .. include:: /substitutions.txt
-# """
+rst_epilog = """
+.. include:: /sphinx/substitutions.txt
+"""
 
 # Custom last_updated extension for updating last updated date based on git information
 # needs to know the folders where the cloned files can be found, relative to

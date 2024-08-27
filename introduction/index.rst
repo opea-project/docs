@@ -18,4 +18,4 @@ business systems and manage its deployments.
 .. toctree::
    :maxdepth: 1
 
-   framework/framework
+   ../framework/framework
