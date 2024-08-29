@@ -3,7 +3,9 @@
 Release Notes
 #############
 
-.. comment Maintain current release notes in the master branch/latest docs
+Release notes for the current and previous releases are archived here.
+
+.. rst-class:: rst-columns3
 
 .. toctree::
    :maxdepth: 1

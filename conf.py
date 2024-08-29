@@ -38,6 +38,7 @@ extensions = [
    # 'last_updated',
    'myst_parser',
    'sphinxcontrib.mermaid',
+   'link_roles',
    #'sphinx_md',
 ]
 
@@ -64,7 +65,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'OPEA™'
-copyright = u'2024-' + str(datetime.now().year) + u' ' + project + ', a Series of LF Projects, LLC'
+this_year=str(datetime.now().year);
+copyright = u'2024' + ('' if this_year == '2024' else ('-' + this_year)) + ' ' + project + ', a Series of LF Projects, LLC'
 author = u'OPEA Project developers'
 
 version = release = __version__
@@ -115,7 +117,7 @@ else:
     html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
     html_theme_options = {
         'canonical_url': '',
-        # 'analytics_id': 'GTM-K4WWJZD',
+        'analytics_id': 'G-3QH5804YP8',
         'logo_only': False,
         'display_version': True,
         #'prev_next_buttons_location': 'None',
@@ -206,79 +208,11 @@ html_last_updated_fmt = '%b %d, %Y'
 # implements a search results scorer. If empty, the default will be used.
 # html_search_scorer = 'scorer.js'
 
-# -- Options for LaTeX output ---------------------------------------------
 
-latex_engine = "xelatex"
 
-latex_elements = {
-    'fontpkg': r'''
-\setmainfont{DejaVu Serif}
-\setsansfont{DejaVu Sans}
-\setmonofont{DejaVu Sans Mono}
-''',
-
-    # The paper size ('letterpaper' or 'a4paper').
-    #
-    # 'papersize': 'letterpaper',
-
-    # The font size ('10pt', '11pt' or '12pt').
-    #
-    # 'pointsize': '10pt',
-
-    # Additional stuff for the LaTeX preamble.
-    #
-    'preamble': r'''
-\setcounter{tocdepth}{3}
-\renewcommand\_{\textunderscore\allowbreak}
-\usepackage{listings}
-\usepackage{xcolor}
-\definecolor{IntelMNBlue}{HTML}{003C71}
-\usepackage{titlesec}
-\title{\normalfont\\color{IntelMNBlue}}
-\usepackage{colortbl}
-\protected\def\sphinxstyletheadfamily{\cellcolor[HTML]{DCDCDC}\sffamily\bfseries\color{IntelMNBlue}}
-''',
-    'sphinxsetup': 'hmargin={0.7in,0.7in}, vmargin={1in,1in},\
-verbatimwithframe=true,\
-verbatimwrapslines=true,\
-TitleColor={HTML}{003C71},\
-HeaderFamily=\\rmfamily\\bfseries, \
-InnerLinkColor={HTML}{003C71},\
-OuterLinkColor={HTML}{003C71},\
-VerbatimColor={HTML}{F0F0F0},\
-VerbatimHighlightColor={HTML}{76CEFF},\
-VerbatimBorderColor={HTML}{00285A}',
-
-    # Latex figure (float) alignment
-    #
-    # 'figure_align': 'htbp',
-}
-
-# Grouping the document tree into LaTeX files. List of tuples
-# (source start file, target name, title,
-#  author, documentclass [howto, manual, or own class]).
-latex_documents = [
-    (master_doc, 'opea.tex', u'OPEA Project Documentation',
-     u'OPEA Project', 'manual',True),
-]
-
-latex_logo = 'images/OPEA-horizontal-color-w200.png'
-
-# -- Options for Texinfo output -------------------------------------------
-
-# Grouping the document tree into Texinfo files. List of tuples
-# (source start file, target name, title, author,
-#  dir menu entry, description, category)
-texinfo_documents = [
-    (master_doc, 'OPEA Project', u'OPEA Project Documentation',
-     author, 'OPEA Project',
-     'Streamlining implementation of enterprise-grade Generative AI',
-     'Miscellaneous'),
-]
-
-# rst_epilog = """
-# .. include:: /substitutions.txt
-# """
+rst_epilog = """
+.. include:: /sphinx/substitutions.txt
+"""
 
 # Custom last_updated extension for updating last updated date based on git information
 # needs to know the folders where the cloned files can be found, relative to
