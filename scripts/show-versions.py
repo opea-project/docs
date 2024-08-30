@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 #
-# Copyright (c) 2018-2022, Intel Corporation
-#
-# SPDX-License-Identifier: BSD-3-Clause
+# Copyright (c) 2018-2024, Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
 #
 # Show installed versions of doc building tools (per requirements.txt)
 
@@ -43,5 +42,5 @@ for reqs in pkg_resources.parse_requirements(rf):
 
 rf.close()
 
-# Print out the version of Doxygen (not installed via pip3)
+# Print out the version of relevent packages not installed via pip
 # print ("  " + "doxygen".ljust(25," ") + " version: " + subprocess.check_output(["doxygen", "-v"]).decode("utf-8"))

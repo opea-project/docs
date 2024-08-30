@@ -18,7 +18,7 @@ itself, and included by using a Graphviz directive:
    .. graphviz:: images/boot-flow.dot
       :name: boot-flow-example
       :align: center
-      :caption: ACRN Hypervisor Boot Flow
+      :caption: Hypervisor Boot Flow
 
 where the boot-flow.dot file contains the drawing commands:
 
@@ -29,7 +29,7 @@ and the generated output would appear as:
 .. graphviz:: images/boot-flow.dot
   :name: boot-flow-example
   :align: center
-  :caption: ACRN Hypervisor Boot Flow
+  :caption: Hypervisor Boot Flow
 
 
 Let's look at some more examples and then we'll get into more details about

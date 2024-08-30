@@ -3,27 +3,6 @@
 Thanks for considering contributing to OPEA project. The contribution process is similar with other open source projects on Github, involving an amount of open discussion in issues and feature requests between the maintainers, contributors and users.
 
 
-## Table of Contents
-
-<!-- toc -->
-
-- [All The Ways to Contribute](#all-the-ways-to-contribute)
-  - [Community Discussions](#community-discussions)
-  - [Documentations](#documentations)
-  - [Reporting Issues](#reporting-issues)
-  - [Proposing New Features](#proposing-new-features)
-  - [Submitting Pull Requests](#submitting-pull-requests)
-    - [Create Pull Request](#create-pull-request)
-    - [Pull Request Checklist](#pull-request-checklist)
-    - [Pull Request Template](#pull-request-template)
-    - [Pull Request Acceptance Criteria](#pull-request-acceptance-criteria)
-    - [Pull Request Status Checks Overview](#pull-request-status-checks-overview)
-    - [Pull Request Review](#pull-request-review)
-- [Support](#support)
-- [Contributor Covenant Code of Conduct](#contributor-covenant-code-of-conduct)
-
-<!-- tocstop -->
-
 ## All The Ways To Contribute
 
 ### Community Discussions
@@ -57,7 +36,11 @@ It is not necessary for changes like:
 
 #### Step-by-Step guidelines
 
-- Follow the [RFC Template](./rfc_template.md) to propose your idea.
+- Follow this RFC Template to propose your idea (found in the docs repo community/rfcs/rfc_template.txt):
+
+  ```{literalinclude} rfcs/rfc_template.txt
+  ```
+
 - Submit the proposal to the `Issues` page of the corresponding OPEA github repository.
 - Reach out to your RFC's assignee if you need any help with the RFC process.
 - Amend your proposal in response to reviewer's feedback.
@@ -80,7 +63,11 @@ If you are new to GitHub, view the pull request [How To](https://help.github.com
 
 #### Pull Request Template
 
-See [PR template](./pull_request_template.md)
+When you submit a PR, you'll be presented with a PR template that looks
+something like this:
+
+```{literalinclude} pull_request_template.txt
+```
 
 #### Pull Request Acceptance Criteria
 
