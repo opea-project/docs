@@ -1,8 +1,8 @@
 .. _ChatQnA_deploy_xeon:
 
 
-Single Node On-Prem Deployment
-##############################
+Single Node On-Prem Deployment: XEON Scalable Processors  
+########################################################
 
 e.g use case:
 Should provide context for selecting between vLLM and TGI.
