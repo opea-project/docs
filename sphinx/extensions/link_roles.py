@@ -38,7 +38,7 @@ def setup(app):
     repos = ["GenAIComps", "GenAIEval", "GenAIExamples", "GenAIInfra", "Governance", "docs"]
 
     for r in repos:
-        app.add_role('{}_file'.format(r), autolink('{}{}/blob/{}/%s'.format(baseurl, r, rev)))
+        app.add_role('{}_blob'.format(r), autolink('{}{}/blob/{}/%s'.format(baseurl, r, rev)))
         app.add_role('{}_raw'.format(r), autolink('{}{}/raw/{}/%s'.format(baseurl, r, rev)))
 
     # The role just creates new nodes based on information in the

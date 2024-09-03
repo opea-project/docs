@@ -6,29 +6,57 @@ ChatQnA Sample Guide
 Introduction/Purpose
 ********************
 
-Tom to provide. 
+TODO: Tom to provide.
 
 Overview/Intro
 ==============
 
+Chatbots are a  widely adopted use case for leveraging the powerful chat and reasoning capabilities of large language models (LLMs).  The ChatQnA example provides the start point for developers to begin working in the GenAI space.  Consider it the “hello world” of GenAI applications and can be leveraged for solutions across wide enterprise verticals, both internally and externally.
+
 Purpose
 =======
 
-Preview 
+The ChatQnA example uses retrieval augmented generation (RAG) architecture, which is quickly becoming the industry standard for chatbots development. It combines the benefits of a knowledge base (via a vector store) and generative models to reduce hallucinations, maintain up-to-date information, and leverage domain-specific knowledge.
+
+RAG bridges the knowledge gap by dynamically fetching relevant information from external sources, ensuring that responses generated remain factual and current. The core of this architecture are vector databases, which are instrumental in enabling efficient and semantic retrieval of information. These databases store data as vectors, allowing RAG to swiftly access the most pertinent documents or data points based on semantic similarity.
+
+Central to the RAG architecture is the use of a generative model, which is responsible for generating responses to user queries. The generative model is trained on a large corpus of customized and relavent text data and is capable of generating human-like responses. Developers can easily swap out the generative model or vector database with their own custom models or databases. This allows developers to build chatbots that are tailored to their specific use cases and requirements. By combining the generative model with the vector database, RAG can provide accurate and contextually relevant responses speicfic to your users' queries.
+
+The ChatQnA example is designed to be a simple, yet powerful, demonstration of the RAG architecture. It is a great starting point for developers looking to build chatbots that can provide accurate and up-to-date information to users.
+
+In addition, the ChatQnA provides several deployment options, including single-node on-premises deployments using Xeon Scalable Processors, Gaudi servers, NVIDIA GPUs, and AI PCs. It also supports Kubernetes deployments with and without the GenAI Management Console (GMC), as well as cloud-native deployments using Red Hat OpenShift Container Platform (RHOCP).
+
+Preview
 =======
 
-AI catalog if applicable, or recorded demos. 
+To get a preview of the ChatQnA example, you visit the `AI Explore page <https://aiexplorer.intel.com/explore>`_. The **ChatQnA Solution** provides a basic chatbot while the **ChatQnA with Augmented Context** allows you to upload your own files in order to quickly experiment with a RAG solution to see how a developer supplied corpus can provide relevant and up to date responses.
 
-Key Implementation Details 
+Key Implementation Details
 ==========================
 
-Tech Overview
-*************
+- Embedding: The process of transforming user queries into numerical representations called embeddings.
+- Vector Database: The storage and retrieval of relevant data points using vector databases.
+- RAG Architecture: The use of the RAG architecture to combine knowledge bases and generative models for development of chatbots with relevant and up to date query responses.
+- Large Language Models (LLMs): The training and utilization of LLMs for generating responses.
+- Deployment Options: production ready deployment options for the ChatQnA example, including single-node deployments and Kubernetes deployments.
 
 How It Works
 ============
 
-High level graphics to summarize the application.
+The ChatQnA Examples follows a basic flow of information in the chatbot system, starting from the user input and going through the retrieve, analyze, and generate components, ultimately resulting in the bot's output.
+
+.. figure:: /GenAIExamples/ChatQnA/assets/img/chatqna_architecture.png
+   :alt: ChatQnA Architecture Diagram
+
+   This diagram illustrates the flow of information in the chatbot system, starting from the user input and going through the retrieve, analyze, and generate components, ultimately resulting in the bot's output.
+
+The architecture follows a series of steps to process user queries and generate responses:
+
+1. **Embedding**: The user query is first transformed into a numerical representation called an embedding. This embedding captures the semantic meaning of the query and allows for efficient comparison with other embeddings.
+#. **Vector Database**: The embedding is then used to search a vector database, which stores relevant data points as vectors. The vector database enables efficient and semantic retrieval of information based on the similarity between the query embedding and the stored vectors.
+#. **Relevant Data**: The vector database retrieves the most relevant data points based on the query embedding. These data points can include documents, articles, or any other relevant information that can help generate accurate responses.
+#. **LLMs**: The retrieved data points are then passed to large language models (LLMs) for further processing. LLMs are powerful generative models that have been trained on a large corpus of text data. They can generate human-like responses based on the input data.
+#. **Generate Response**: The LLMs generate a response based on the input data and the user query. This response is then returned to the user as the chatbot's answer.
 
 Expected Output
 ===============
@@ -36,12 +64,14 @@ Expected Output
 Validation Matrix and Prerequisites
 ***********************************
 
+See :doc:`/GenAIExamples/supported_examples`
+
 Architecture
 ************
 
-Includes microservice level graphics.
+TODO: Includes microservice level graphics.
 
-Need to include the architecture with microservices. Like the ones Xigui/Chun made and explain in a para or 2 on the highlights of the arch including Gateway, UI, mega service, how models are deployed and how the microservices use the deployment service. The architecture can be laid out as general as possible, maybe  calling out “for e.g” on variable pieces. Will also be good to include a linw or 2 on what the overall use case is. For e.g. This chatqna is setup to assist in ansewering question on OPEA. The microservices are set up with RAG and llm pipeline to query on OPEA pdf documents 
+TODO: Need to include the architecture with microservices. Like the ones Xigui/Chun made and explain in a para or 2 on the highlights of the arch including Gateway, UI, mega service, how models are deployed and how the microservices use the deployment service. The architecture can be laid out as general as possible, maybe  calling out “for e.g” on variable pieces. Will also be good to include a linw or 2 on what the overall use case is. For e.g. This chatqna is setup to assist in ansewering question on OPEA. The microservices are set up with RAG and llm pipeline to query on OPEA pdf documents
 
 Microservice Outline and Diagram
 ================================
@@ -49,40 +79,34 @@ Microservice Outline and Diagram
 Deployment
 **********
 
-+--------------------------------------------------------------------------------------+
-| Single Node                                                                          |
-|                                                                                      |
-+============================================+=========================================+
-| XEON Scalable Processors                   |Gaudi Servers                            |
-|                                            |                                         |
-+--------------------------------------------+-----------------------------------------+
-| NNIDIA GPUs                                | AI PC                                   |
-|                                            |                                         |
-+--------------------------------------------+-----------------------------------------+
 
-+--------------------------------------------------------------------------------------+
-| Kubernetes                                                                           |
-|                                                                                      |
-+============================================+=========================================+
-| Xeon & Gaudi with GMC                      |Xeon & Gaudi without GMC                 |
-|                                            |                                         |
-+--------------------------------------------+-----------------------------------------+
-| Using Helm Charts                          |                                         |
-|                                            |                                         |
-+--------------------------------------------+-----------------------------------------+
+Single Node
+===========
 
-+--------------------------------------------------------------------------------------+
-|Cloud Native                                                                          |
-|                                                                                      |
-+============================================+=========================================+
-| Red Hat OpenShift Container Platform       |                                         |
-| (RHOCP)                                    |                                         |
-+--------------------------------------------+-----------------------------------------+
+.. toctree::
+   :maxdepth: 1
+
+   deploy/xeon
+   deploy/gaudi
+   deploy/nvidia
+   deploy/AIPC
+
+Kubernetes
+==========
+
+* Xeon & Gaudi with GMC
+* Xeon & Gaudi without GMC
+* Using Helm Charts
+
+Cloud Native
+============
+
+* Red Hat OpenShift Container Platform (RHOCP)
 
 Troubleshooting
 ***************
 
-Monitoring 
+Monitoring
 **********
 
 Evaluate performance and accuracy

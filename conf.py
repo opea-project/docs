@@ -42,6 +42,9 @@ extensions = [
    #'sphinx_md',
 ]
 
+# myst settings
+myst_heading_anchors = 1
+
 # sphinx_md config
 sphinx_md_useGitHubURL = True
 

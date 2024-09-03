@@ -69,6 +69,11 @@ publishing repo opea-project.github.io later in these steps.
 In the following steps, you'll clone the upstream repos You'll only need to do
 this once to set up the folder structure:
 
+.. note:: These instructions are cloning the upstream OPEA project repositories
+   to do documentation generation. If you're doing OPEA development, you may
+   already have forked copies of these repos on your system.  You may have to
+   adjust these instructions accordingly.
+
 #. At a command prompt, create the working folder on your development computer and
    clone all the opea-project repos containing documentation:
 
@@ -81,7 +86,10 @@ this once to set up the folder structure:
       done
 
    After this, you'll have ``origin`` for each cloned repo pointing to the
-   upstream project repos.
+   upstream project repos. (Again, if you're doing OPEA development, you may
+   have forked the upstream repos to your personal GitHub account and cloned
+   your personal repo locally as ``origin`` and set the OPEA project repos as the
+   ``upstream`` repo.)
 
 #. If you haven't done so already, be sure to configure git with your name
    and email address for the ``signed-off-by`` line in your commit messages:
