@@ -22,15 +22,23 @@ Source code for the OPEA Project is maintained in the
                <img alt="" src="_static/images/opea-icon-white.svg" width="80px"/><br/>
                <h2>What is OPEA</h2>
            </a>
-           <p>Overview, architecture, and features</p>
+           <p>Learn about the OPEA architecture, features, and benefits.</p>
        </li>
        <li class="grid-item">
            <a href="getting-started/index.html">
                <span class="grid-icon fa fa-map-signs"></span>
                <h2>Getting Started</h2>
            </a>
-           <p>Getting started guide for running ChatQnA example
+           <p>Get started, whether building GenAI solutions or contributing to
+           the community.
               </p>
+       </li>
+       <li class="grid-item">
+           <a href="community/index.html">
+               <span class="grid-icon fa fa-github"></span>
+               <h2>OPEA Community</h2>
+           </a>
+           <p>Join the OPEA community with your contributions and solution ideas.</p>
        </li>
        <li class="grid-item">
            <a href="examples/index.html">
@@ -42,24 +50,17 @@ Source code for the OPEA Project is maintained in the
        <li class="grid-item">
            <a href="deploy/index.html">
                <span class="grid-icon fa fa-sign-in"></span>
-               <h2>Deploy AI Solutions</h2>
+               <h2>Deploy GenAI Solutions</h2>
            </a>
            <p>Select from several deployment strategies that best match your
            enterprise needs.</p>
        </li>
        <li class="grid-item">
-           <a href="community/index.html">
-               <span class="grid-icon fa fa-github"></span>
-               <h2>OPEA Community</h2>
-           </a>
-           <p>Community Guides</p>
-       </li>
-       <li class="grid-item">
-           <a href="release_notes/index.html">
+           <a href="microservices/index.html">
                <span class="grid-icon fa fa-object-group"></span>
-               <h2>Release Notes</h2>
+               <h2>Browse GenAI Microservices</h2>
            </a>
-           <p>OPEA release notes archive</p>
+           <p>Use modular building blocks to build robust GenAI solutions</p>
        </li>
    </ul>
 

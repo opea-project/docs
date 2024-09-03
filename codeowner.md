@@ -1,50 +1,28 @@
 # OPEA Project Code Owners
 
-These tables list the GitHub IDs of code owners. For a PR review, please contact the corresponding owner.
-- [GenAIExamples](#genaiexamples)
-- [GenAIComps](#genaicomps)
-- [GenAIEval](#genaieval)
-- [GenAIInfra](#genaiinfra)
-- [CICD](#cicd)
+These tables list the GitHub code owners, as found in the CODEOWNERS file in the
+corresponding OPEA repository. Code owners are responsible for code and
+documentation in a repository. They are automatically requested for
+review when someone opens a pull request (PR) that modifies code or
+documentation that they own.
 
-## GenAIExamples
+Select or contact the corresponding area owner for a PR review or questions
+about content within a repository.
 
-| examples | owner  |
-|:-------------:|:-----------:|
-| AudioQnA      | Spycsh      |
-| ChatQnA       | lvliang-intel|
-| CodeGen       | lvliang-intel|
-| CodeTrans     | Spycsh      |
-| DocSum        | Spycsh      |
-| SearchQnA     | letonghan   |
-| Language Translation |letonghan|
-| VisualQnA     | lvliang-intel|
-| Others        | lvliang-intel|
+<!-- codeowners.txt is generated at docbuild time from the CODEOWNERS files from each repo -->
+```{include} codeowners.txt
+```
 
-## GenAIComps
-
-| comps | owner  |
-|:-------------:|:-----------:|
-|asr            |Spycsh       |
-|cores          |lvliang-intel|
-|dataprep       |XinyuYe-Intel|
-|embedding      |XuhuiRen     |
-|guardrails     |letonghan    |
-|llms           |lvliang-intel|
-|reranks        |XuhuiRen     |
-|retrievers     |XuhuiRen     |
-|tts            |Spycsh       |
-
-## GenAIEval
-
-lvliang-intel, changwangss, lkk12014402
+-----
 
 ## GenAIInfra
 
-mkbhanda, irisdingbj, jfding, ftian1, yongfengdu
+* mkbhanda, irisdingbj, jfding, ftian1, yongfengdu
 
-## CICD
+## Continuous Integration (CICD) owners
 
-chensuyue,daisy-ycguo, ashahba, preethivenkatesh
+CI/CD processing is defined and managed by these owners:
+
+* chensuyue, daisy-ycguo, ashahba, preethivenkatesh
 
 

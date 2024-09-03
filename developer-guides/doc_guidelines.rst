@@ -3,26 +3,34 @@
 Documentation Guidelines
 ########################
 
-OPEA Project content is written using the `markdown`_ (``.md``) and `reStructuredText`_ markup
-language (``.rst``) with Sphinx extensions, and processed
-using Sphinx to create a formatted stand-alone website.  Developers can
+OPEA Project content is written using the `markdown`_ (``.md``) with `MyST extensions`_ and `reStructuredText`_ markup
+language (``.rst``) with `Sphinx extensions`_, and processed
+using `Sphinx`_ to create a formatted stand-alone website.  Developers can
 view this content either in its raw form as ``.md`` and ``.rst`` markup files, or (with
 Sphinx installed) they can build the documentation using the Makefile
 (on Linux systems) to generate the HTML content. The HTML content can then be
-viewed using a web browser. This same ``.md`` and ``.rst`` content is fed into the
+viewed using a web browser. These ``.md`` and ``.rst`` files are maintained in
+the project's GitHub repos and processed to create the
 `OPEA Project documentation`_ website.
 
-You can read details about `reStructuredText`_ and about `Sphinx extensions`_
-from their respective websites.
+.. note:: While GitHub supports viewing `.md` and `.rst` content with your browser on the
+   `github.com` site, markdown and reST extensions are not recognized there, so the
+   best viewing experience is through the `OPEA Project documentation`_ github.io
+   website.
 
+You can read details about `reStructuredText`_ and `Sphinx extensions`_, and
+`markdown`_ and `MyST extensions`_ from their respective websites.
+
+.. _MyST extensions: https://mystmd.org/guide/quickstart-myst-markdown
 .. _Sphinx extensions: https://www.sphinx-doc.org/en/stable/contents.html
 .. _reStructuredText: http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html
+.. _Sphinx: https://www.sphinx-doc.org
 .. _Sphinx Inline Markup: https://www.sphinx-doc.org/en/master/usage/restructuredtext/roles.html
 .. _OPEA Project documentation:  https://opea-project.github.io
 .. _markdown: https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax
 
 This document provides a quick reference for commonly used markdown and reST
-with Sphinx-defined directives and roles used to create the documentation
+with MyST and Sphinx-defined directives and roles used to create the documentation
 you're reading.
 
 Markdown vs. RestructuredText
@@ -32,8 +40,8 @@ Both markdown and ReStructureText (reST) let you create individual documentation
 GitHub can render when viewing them in your browser on github.com. Markdown is
 popular because of it's familarity with developers and is the default markup
 language for StackOverflow, Reddit, GitHub, and others.  ReStructuredText came
-from the Python community for quite a while and became noticed outside that
-community with the release of Sphinx.  These days, reST is supported by GitHub
+from the Python community in 2001 and became noticed outside that
+community with the release of Sphinx in 2008.  These days, reST is supported by GitHub
 and major projects use it for their documentation, including the Linux kernel,
 OpenCV and LLVM/Clang.
 
@@ -44,7 +52,9 @@ mechanism, which leads to many different "flavors" of markdown. If you stick to
 the core and common markdown syntax (headings, paragraphs, lists, and such),
 using markdown is just fine.  However, slipping in raw HTML to do formatting
 (such as centering) or using HTML for tables creates problems when publishing to the
-https://opea-project.github.io site.
+https://opea-project.github.io site. The MyST parser provides extensions to
+markdown that integrated well with Sphinx, so we use this as a bridge for the
+markdown content within the OPEA project.
 
 
 Within the OPEA documentation, we use both markdown and reST files for the
@@ -64,8 +74,8 @@ files, along with other project related documents that are maintained in the
 ``docs`` repo.  The root of the generated documentation starts with the
 ``docs/index.rst`` file that starts off the organizational structure that's
 shown as the left navigation in the generated HTML site at
-https://opea-project.github.io.  That ``index.rst`` file uses a toctree
-directive to point to other documents that may include additional toctree
+https://opea-project.github.io.  That ``index.rst`` file uses a ``toctree``
+directive to point to other documents that may include additional ``toctree``
 directives of their own, ultimately collecting all the content into an
 organizational structure you can navigate.
 
@@ -126,7 +136,7 @@ Headings
       In markdown, headings are indicated as a line beginning with a ``#``
       character, with additional ``#`` characters indicating a deeper heading
       level, e.g., ``#`` for H1 (title), ``##`` for H2 headings, ``###`` for H3
-      headdings, and so on.)
+      headings, and so on.)
 
       * The ``#`` character for a heading must be the first character on the
         line, then a space, followed by the heading.  For example::
@@ -141,10 +151,10 @@ Headings
 
       * There must be only one ``#`` H1 heading at the beginning of the document
         indicating the document's title.
-      * You must not skip heading levels on the way down in the document hierarchy, e.g., do not go from a H1 ``#`` to an
-        H3 ``###`` without an intervening H2 ``##``. You may skip heading levels
-        on the way back up, for example, from an H4 ``####`` back up to an H2 ``##``
-        as appropriate.
+      * You must not skip heading levels on the way down in the document
+        hierarchy, e.g., do not go from a H1 ``#`` to an H3 ``###`` without an
+        intervening H2 ``##``. You may skip heading levels on the way back up,
+        for example, from an H4 ``####`` back up to an H2 ``##`` as appropriate.
 
 
 
@@ -155,13 +165,22 @@ Content Highlighting
 Some common reST and markdown inline markup samples:
 
 * one asterisk: ``*text*`` for emphasis (*italics*),
-* two asterisks: ``**text**`` for strong emphasis (**boldface**), and
-* two back quotes: ````text```` for ``inline code`` samples.
+* two asterisks: ``**text**`` for strong emphasis (**boldface**)
 
-ReST rules for inline markup try to be forgiving to account for common
-cases of using these marks.  For example, using an asterisk to indicate
-multiplication, such as ``2 * (x + y)`` will not be interpreted as an
-unterminated italics section. 
+.. tabs::
+
+   .. group-tab:: reST
+
+      * two back quotes: ````text```` for ``inline code`` samples.
+
+      ReST rules for inline markup try to be forgiving to account for common
+      cases of using these marks.  For example, using an asterisk to indicate
+      multiplication, such as ``2 * (x + y)`` will not be interpreted as an
+      unterminated italics section.
+
+   .. group-tab:: markdown
+
+      * one back quote: ```text``` for `inline code` samples.
 
 For inline markup, the characters between
 the beginning and ending characters must not start or end with a space,
@@ -290,8 +309,9 @@ Tables
 There are a few ways to create tables, each with their limitations or quirks.
 `Grid tables
 <http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#grid-tables>`_
-offer the most capability for defining merged rows and columns, but are
-hard to maintain::
+offer the most capability for defining merged rows and columns (where content
+spans multiple rows or columns, but are hard to maintain because the grid
+characters must be aligned throughout the table::
 
    +------------------------+------------+----------+----------+
    | Header row, column 1   | Header 2   | Header 3 | Header 4 |
@@ -365,18 +385,28 @@ can use ``:widths: auto``.
 File Names and Commands
 ***********************
 
-Sphinx extends reST by supporting additional inline markup elements (called
-"roles") used to tag text with special meanings and enable output formatting.
-(You can refer to the `Sphinx Inline Markup`_ documentation for the full
-list).
+.. tabs::
 
-For example, there are roles for marking :file:`filenames`
-(``:file:`name```) and command names such as :command:`make`
-(``:command:`make```).  You can also use the \`\`inline code\`\`
-markup (double backticks) to indicate a ``filename``.
+   .. group-tab:: reST
 
-Don't use items within a single backtick, for example ```word```. Instead
-use double backticks: ````word````.
+      Sphinx extends reST by supporting additional inline markup elements (called
+      "roles") used to tag text with special meanings and enable output formatting.
+      (You can refer to the `Sphinx Inline Markup`_ documentation for the full
+      list).
+
+      For example, there are roles for marking :file:`filenames`
+      (``:file:`name```) and command names such as :command:`make`
+      (``:command:`make```).  You can also use the \`\`inline code\`\`
+      markup (double backticks) to indicate a ``filename``.
+
+      Don't use items within a single backtick, for example ```word```. Instead
+      use double backticks: ````word````.
+
+   .. group-tab:: markdown
+
+      MyST extends markdown by supporting additional inline markup elements
+      (called "roles") used to tag text with special meanings and enable output
+      formatting.
 
 Branch-Specific File Links
 **************************
@@ -396,8 +426,8 @@ creates a hyperlink to that file in the branch currently checked out.
 
 For example, a GitHub
 link to the reST file used to create this document can be generated
-using ``:docs_file:`developer-guides/doc_guidelines```, which will
-appear as :docs_file:`developer-guides/doc_guidelines.rst`, a link to
+using ``:docs_blob:`developer-guides/doc_guidelines```, which will
+appear as :docs_blob:`developer-guides/doc_guidelines.rst`, a link to
 the "blob" file in the GitHub repo as displayed by GitHub. There's also an
 ``:docs_raw:`developer-guides/doc_guidelines.rst``` role that will link
 to the "raw" uninterpreted file,
@@ -406,78 +436,86 @@ to see the difference.
 
 If you don't want the whole path to the file name to
 appear in the text, you use the usual linking notation to define what link text
-is shown, for example, ``:docs_file:`Guidelines <developer-guides/doc_guidelines.rst>```
-would show up as simply :docs_file:`Guidelines <developer-guides/doc_guidelines.rst>`.
+is shown, for example, ``:docs_blob:`Guidelines <developer-guides/doc_guidelines.rst>```
+would show up as simply :docs_blob:`Guidelines <developer-guides/doc_guidelines.rst>`.
 
 .. _internal-linking:
 
 Internal Cross-Reference Linking
 ********************************
 
-Traditional ReST links are supported only within the current file using the
-notation:
+.. tabs::
 
-.. code-block:: rest
+   .. group-tab:: reST
 
-   refer to the `internal-linking`_ page
+      Traditional reST links are supported only within the current file using the
+      notation:
 
-which renders as,
+      .. code-block:: rest
 
-   refer to the `internal-linking`_ page
+         refer to the `internal-linking`_ documentation
 
-Note the use of a trailing underscore to indicate an outbound link. In this
-example, the label was added immediately before a heading, so the text that's
-displayed is the heading text itself.
+      which renders as,
 
-With Sphinx, however, we can create link-references to any tagged text within
-the project documentation.
+         refer to the `internal-linking`_ documentation
 
-Target locations within documents are defined with a label directive:
+      Note the use of a trailing underscore indicates an **outbound link**. In this
+      example, the label was added immediately before a heading, so the text that's
+      displayed is the heading text itself.
 
-   .. code-block:: rst
+      With Sphinx, we can create link-references to any tagged text within
+      the project documentation.
 
-      .. _my label name:
+      Target locations within documents are defined with a label directive:
 
-Note the leading underscore indicating an inbound link. The content
-immediately following this label is the target for a ``:ref:`my label name```
-reference from anywhere within the documentation set. The label **must** be
-added immediately before a heading so that there's a natural phrase to show
-when referencing this label (for example, the heading text).
+         .. code-block:: rst
 
-This directive is also used to define a label that's a reference to a URL:
+            .. _my label name:
 
-.. code-block:: rest
+      Note the leading underscore indicating an **inbound link**. The content
+      immediately following this label is the target for a ``:ref:`my label name```
+      reference from anywhere within the documentation set. The label **must** be
+      added immediately before a heading so that there's a natural phrase to show
+      when referencing this label (for example, the heading text).
 
-   .. _Hypervisor Wikipedia Page:
-      https://en.wikipedia.org/wiki/Hypervisor
+      This directive is also used to define a label that's a reference to a URL:
 
-To enable easy cross-page linking within the site, each file should have a
-reference label before its title so that it can be referenced from another
-file.
+      .. code-block:: rest
 
-.. note:: These reference labels must be unique across the whole site, so generic
-   names such as "samples" should be avoided.
+         .. _Hypervisor Wikipedia Page:
+            https://en.wikipedia.org/wiki/Hypervisor
 
-For example, the top of this
-document's ``.rst`` file is:
+      To enable easy cross-page linking within the site, each file should have a
+      reference label before its title so that it can be referenced from another
+      file.
 
-.. code-block:: rst
+      .. note:: These reference labels must be unique across the whole site, so generic
+         names such as "samples" or "introduction" should be avoided.
 
-   .. _doc_guidelines:
+      For example, the top of this document's ``.rst`` file is:
 
-   Documentation Guidelines
-   ########################
+      .. code-block:: rst
 
-Other ``.rst`` documents can link to this document using the
-``:ref:`doc_guidelines``` tag, and it will appear as :ref:`doc_guidelines`.
-This type of internal cross-reference works across multiple files. The link
-text is obtained from the document source, so if the title changes, the link
-text will automatically update as well.
+         .. _doc_guidelines:
 
-There may be times when you'd like to change the link text that's shown in the
-generated document.  In this case, you can specify alternate text using
-``:ref:`alternate text <doc_guidelines>``` (renders as
-:ref:`alternate text <doc_guidelines>`).
+         Documentation Guidelines
+         ########################
+
+      Other ``.rst`` documents can link to this document using the
+      ``:ref:`doc_guidelines``` tag, and it will appear as :ref:`doc_guidelines`.
+      This type of internal cross-reference works across multiple files. The link
+      text is obtained from the document source, so if the title changes, the link
+      text will automatically update as well.
+
+      There may be times when you'd like to change the link text that's shown in the
+      generated document.  In this case, you can specify alternate text using
+      ``:ref:`alternate text <doc_guidelines>``` (renders as
+      :ref:`alternate text <doc_guidelines>`).
+
+   .. group-tab:: markdown
+
+      TODO
+
 
 
 Non-ASCII Characters
@@ -496,6 +534,86 @@ special characters such as \&trade; and are defined in the file
 
 We've kept the substitutions list small but you can add others as needed by
 submitting a change to the ``substitutions.txt`` file.
+
+Include Content from Other Files
+
+You can directly incorporate a document fragment from another file into your reST or
+markdown content by using an ``include`` directive.
+
+.. important:: Be aware that references to content within the included content
+   are relative to the file doing the including. For example a relative reference
+   to an image must be correct from the point-of-view of the file doing the
+   inclusion, not the point-of-view of the included file.  Also, the included
+   file must be appropriate in the current document's context at the point of
+   the directive.  If an included document fragment contains section structure,
+   the title structure must match and be consistent in context.
+
+.. tabs::
+
+   .. group-tab:: reST
+
+      In reST, you incorporate content from another file using an include
+      directive. Unless options are given, the included file is parsed in the
+      current document's context::
+
+         Here is some text in the reST document.
+
+         .. include::  path/to/file
+
+         And now we're back to the original document after the content in the
+         included file, as if that content were directly in the current file.
+
+      You can use options to alter how the included file is processed:
+
+      \:code\: language
+         The included content is treated as a ``code-block`` with ``language``
+         highlighting.
+
+      \:parser\: text
+         By default, the included content is parsed the same as the current
+         document (e.g., rst). This option specifies another parser such as
+         ``:parser: myst_parser.sphinx_`` if the included file is markdown.
+
+      \:start-after\: text
+         Only the content after the first occurance of the specified ``text`` in
+         the external file will be included.
+
+      \:end-before\:
+         Only the content before the first occurance of the specified ``text``
+         in the external file will be included.
+
+      These and other options described in the `docutils include directive <https://docutils.sourceforge.io/docs/ref/rst/directives.html#including-an-external-document-fragment>`_
+      documentation.
+
+   .. group-tab:: markdown
+
+         MyST directives can be used to incorporate content from another file
+         into the current document as if it were part of the current document::
+
+            ```{include} relativepath/to/file
+            ```
+
+        The ``relativepath/to/file`` can starts with a ``/`` to indicate a path
+        starting from the root of the document directory tree (not the root of
+        the underlying file system).  You can reference files outside the
+        document tree root using ``../../`` syntax to get to the file.
+
+        You can include an external file and show it as if it were a codeblock
+        by using the ``literalinclude`` directive::
+
+           ```{literalinclude} relativepath/to/file
+           ```
+
+        You can include reST content, interpreted as reST by using the
+        ``eval-rst`` directive an using the reST syntax and options for an
+        ``include`` directive, such as::
+
+           ```{eval-rst}
+           .. include:: path/to-file
+              :start-after: <start include marker>
+              :end-before: <end include marker>
+           ```
+
 
 Code and Command Examples
 *************************
@@ -619,11 +737,20 @@ Code and Command Examples
 Images
 ******
 
+The image file name specified is relative to the document source file. We
+recommend putting images into an ``images`` folder where the document source
+is found.  The usual image formats handled by a web browser are supported:
+JPEG, PNG, GIF, and SVG.  Keep the image size only as large as needed,
+generally at least 500 px wide but no more than 1000 px, and no more than
+250 KB unless a particularly large image is needed for clarity.
+
+You can also specify an URL to an image file if needed.
+
 .. tabs::
 
    .. group-tab:: reST
 
-        In reST, images are included in documentation by using an image directive::
+        In reST, images are placed the document using an image directive::
 
            .. image:: ../images/opea-horizontal-color-w200.png
               :align: center
@@ -638,16 +765,9 @@ Images
 
    .. group-tab:: markdown
 
-       In markdown, images are included in documentation using this syntax::
+In markdown, images are placed in documentation using this syntax::
 
           ![OPEA Logo](../images/opea-horizontal-color-w200.png)
-
-The file name specified is relative to the document source file. We
-recommend putting images into an ``images`` folder where the document source
-is found.  The usual image formats handled by a web browser are supported:
-JPEG, PNG, GIF, and SVG.  Keep the image size only as large as needed,
-generally at least 500 px wide but no more than 1000 px, and no more than
-250 KB unless a particularly large image is needed for clarity.
 
 
 
@@ -696,9 +816,63 @@ or column span:
 Drawings
 ********
 
-In reST, we've included the ``graphviz`` Sphinx extension to enable you to use a
-text description language to render drawings.  For more information, see
-:ref:`graphviz-examples`.
+.. tabs::
+
+   .. group-tab:: reST
+
+      In reST, we've included the ``graphviz`` Sphinx extension to enable that
+      text description language to render drawings.  For more information, see
+      :ref:`graphviz-examples`.
+
+      We'v ealso included an extension providing ``mermaid`` support that also enables
+      that text description language to render drawings using::
+
+         .. mermaid::
+
+            graph LR;
+              A--> B & C;
+              B--> A & C;
+              C--> A & B;
+
+      This will be rendered into this graph drawing:
+
+      .. mermaid::
+
+         graph LR;
+           A--> B & C;
+           B--> A & C;
+           C--> A & B;
+
+      See the `Mermaid User Guide <https://mermaid.js.org/intro/getting-started.html>`_ for more
+      information.
+
+   .. group-tab:: markdown
+
+      In markdown, we've included the MyST ``mermaid`` extensions to enable that text
+      description language to render drawings using::
+
+         ```{mermaid}
+         graph LR;
+           A--> B & C & D;
+           B--> A & E;
+           C--> A & E;
+           D--> A & E;
+           E--> B & C & D;
+         ```
+
+      This will be rendered into this graph drawing:
+
+      .. mermaid::
+
+         graph LR;
+           A--> B & C & D;
+           B--> A & E;
+           C--> A & E;
+           D--> A & E;
+           E--> B & C & D;
+
+      See the `Mermaid User Guide <https://mermaid.js.org/intro/getting-started.html>`_ for more
+      information.
 
 Alternative Tabbed Content
 **************************
@@ -772,7 +946,7 @@ changes all tabs with the same name throughout the page.  For example:
 In this latter case, we're using a ``.. group-tab::`` directive instead of
 a ``.. tab::`` directive.  Under the hood, we're using the `sphinx-tabs
 <https://github.com/djungelorm/sphinx-tabs>`_ extension that's included
-in the ACRN (requirements.txt)  setup.  Within a tab, you can have most
+in the OPEA docs (requirements.txt)  setup.  Within a tab, you can have most
 any content *other than a heading* (code-blocks, ordered and unordered
 lists, pictures, paragraphs, and such).
 
