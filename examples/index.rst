@@ -146,6 +146,18 @@ ProductivitySuite Application
    /GenAIExamples/ProductivitySuite/*/*/*/*
    /GenAIExamples/ProductivitySuite/*/*/*/*/*
 
+Rerank Model Fine Tuning
+************************
+
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   /GenAIExamples/RerankFinetuning/*
+   /GenAIExamples/RerankFinetuning/*/*
+   /GenAIExamples/RerankFinetuning/*/*/*
+
+
 SearchQnA Application
 *********************
 
