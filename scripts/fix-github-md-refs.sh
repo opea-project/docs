@@ -44,4 +44,4 @@ sed -i 's/^```mermaid/```{mermaid}/' `grep -ril --include="*.md" '\`\`\`mermaid'
 # these lists up-to-date.
 
 cfiles=`find -name CODEOWNERS | sort`
-scripts/codeowners_to_md.py $cfiles > codeowners.txt
+scripts/codeowners_to_md.py $cfiles > community/codeowners.txt
