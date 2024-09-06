@@ -30,7 +30,7 @@ support systems:
 * **Source Code in GitHub**: OPEA Project source code is maintained on a
   public GitHub repository at https://github.com/opea-project.
   You'll find information about getting access to the repository and how to
-  contribute to the project in this `Contribution Guide`_ document.
+  contribute to the project in this :doc:`Contribution Guide <CONTRIBUTING>`.
 
 * **Documentation**: Project technical documentation is developed
   along with the project's code, and can be found at
@@ -43,9 +43,6 @@ support systems:
 * **Mailing List**: TBD
 
 
-.. _Contribution Guide: https://opea-project.github.io/latest/community/CONTRIBUTING.html
-
-
 Contributing Guides
 *******************
 
@@ -54,11 +51,11 @@ Contributing Guides
 
    ../README
    CONTRIBUTING
-   ../codeowner
+   codeowner
    SECURITY
    ../developer-guides/doc_guidelines
-   ../developer-guides/graphviz
    ../developer-guides/docbuild
+   ../developer-guides/graphviz
 
 Roadmaps
 ********
@@ -77,17 +74,9 @@ Project Governance
    :maxdepth: 1
 
    charter
+   TSC
    CODE_OF_CONDUCT
    SECURITY
-
-Technical Steering Committee
-****************************
-
-.. toctree::
-   :maxdepth: 1
-
-   TSC_Gives_and_gets
-
 
 RFC Proposals
 *************
