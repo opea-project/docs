@@ -76,6 +76,19 @@ Microservices Connector
    /GenAIInfra/microservices-connector/*/*/*
    /GenAIInfra/microservices-connector/*/*/*/*
 
+Pipeline Proxy
+**************
+
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   /GenAIInfra/proxy/README
+   /GenAIInfra/proxy/*
+   /GenAIInfra/proxy/*/*
+   /GenAIInfra/proxy/*/*/*
+
+
 Scripts
 *******
 
