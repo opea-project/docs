@@ -8,7 +8,7 @@
 ## Status
 <!-- Change the PR status to Under Review | Rejected | Accepted. -->
 v0.1 - ASMO Team sharing on Fri 6/28/2024  
-[GenAIComps pr #400](https://github.com/opea-project/GenAIComps/pull/400) (Under Review)
+[GenAIComps pr #400](https://github.com/opea-project/GenAIComps/pull/400) (Under Review)  
 [GenAIExamples pr #523](https://github.com/opea-project/GenAIExamples/pull/523) (Under Review)
 
 ## Objective
@@ -112,42 +112,67 @@ config:
   flowchart:
     nodeSpacing: 100
     rankSpacing: 100
-    curve: stepBefore
-  theme: base
+    curve: linear
   themeVariables:
     fontSize: 42px
 ---
-flowchart TB
+flowchart LR
+    %% Colors %%
+    classDef blue fill:#ADD8E6,stroke:#ADD8E6,stroke-width:2px,fill-opacity:0.5
+    classDef thistle fill:#D8BFD8,stroke:#ADD8E6,stroke-width:2px,fill-opacity:0.5
+    classDef orange fill:#FBAA60,stroke:#ADD8E6,stroke-width:2px,fill-opacity:0.5
+    classDef orchid fill:#C26DBC,stroke:#ADD8E6,stroke-width:2px,fill-opacity:0.5
     classDef invisible fill:transparent,stroke:transparent;
-    style Megaservice stroke:#000000
-    subgraph AvatarChatbot
+    style AvatarChatbot-Megaservice stroke:#000000
+
+    %% Subgraphs %%    
+    subgraph AvatarChatbot-Megaservice["AvatarChatbot Megaservice"]
         direction LR
-        invisible1[ ]:::invisible 
-        invisible2[ ]:::invisible
-        A[User] --> |Input query| B[AvatarChatbot Gateway]
-        B --> |Invoke| Megaservice
-        subgraph Megaservice["AvatarChatbot Megaservice 3009"]
-            direction LR
-            C([ASR<br>3001])
-            E([LLM 'text-generation'<br>3007])
-            G([TTS<br>3002])
-            I([Animation<br>3008])
-            C ==> E ==> G ==> I
-        end
-        D{{Whisper service<br>7066}}
-        F{{TGI service<br>3006}}
-        H{{Speecht5 service<br>7055}}
-        C -. Post .-> D
-        E -. Post .-> F
-        G -. Post .-> H
+        ASR([ASR<br>3001]):::blue
+        LLM([LLM 'text-generation'<br>3007]):::blue
+        TTS([TTS<br>3002]):::blue
+        animation([Animation<br>3008]):::blue
     end
-    subgraph Legend
+    subgraph UserInterface["User Interface"]
         direction LR
-        invisible3[ ]:::invisible
-        L([Microservice]) 
-        M{{Server API}} 
-        N[Gateway]
+        invis1[ ]:::invisible
+        USER1([User Audio Query]):::orchid
+        USER2([User Image/Video Query]):::orchid
+        UI([UI server<br>]):::orchid
     end
+    subgraph ChatQnA GateWay
+        direction LR
+        invis2[ ]:::invisible
+        GW([AvatarChatbot GateWay<br>]):::orange
+    end
+    subgraph  
+        direction LR
+        X([OPEA Microservice]):::blue
+        Y{{Open Source Service}}:::thistle
+        Z([OPEA Gateway]):::orange
+        Z1([UI]):::orchid
+    end
+
+    %% Services %%    
+    WHISPER{{Whisper service<br>7066}}:::thistle
+    TGI{{LLM service<br>3006}}:::thistle
+    T5{{Speecht5 service<br>7055}}:::thistle
+    WAV2LIP{{Wav2Lip service<br>3003}}:::thistle
+
+    %% Connections %%
+    direction LR
+    USER1 -->|1| UI
+    UI -->|2| GW
+    GW <==>|3| AvatarChatbot-Megaservice
+    ASR ==>|4| LLM ==>|5| TTS ==>|6| animation
+
+    direction TB
+    ASR <-.->|3'| WHISPER
+    LLM <-.->|4'| TGI
+    TTS <-.->|5'| T5
+    animation <-.->|6'| WAV2LIP
+
+    USER2 <-.-> WAV2LIP
 ```
 
 
