@@ -14,7 +14,4 @@ We're building this documentation from content in the
 
    /GenAIEval/README
    /GenAIEval/*
-   /GenAIEval/*/*
-   /GenAIEval/*/*/*
-   /GenAIEval/*/*/*/*
-   /GenAIEval/*/*/*/*/*
+   /GenAIEval/**/*
