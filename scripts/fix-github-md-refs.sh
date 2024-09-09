@@ -20,6 +20,9 @@ sed -i 's/https:\/\/github.com\/opea-project\/\([^\/]*\)\/\(blob\|tree\)\/main\/
 
 sed -i 's/(\/docs\//(\//g' $files
 
-# fix tagging on mermaid diagrams, sigh.
+# links to a folder should instead be to the folder's README.md
+# sed -i 's/\(\/[a-zA-z]*\))/\1\/README.md)/g' $files
+
+# fix tagging on code blocks, sigh.
 
 sed -i 's/^```mermaid/```{mermaid}/' `grep -ril --include="*.md" '\`\`\`mermaid'`

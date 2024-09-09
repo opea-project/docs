@@ -2,3 +2,4 @@
 *.png
 *.rst
 *.md
+CODEOWNERS

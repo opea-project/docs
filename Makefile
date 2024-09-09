@@ -26,8 +26,8 @@ OPEA_BASE     = $(CURDIR)/..
 DOC_TAG      ?= development
 RELEASE      ?= latest
 PUBLISHDIR    = $(OPEA_BASE)/opea-project.github.io/$(RELEASE)
-RSYNC_OPTS    = -am --exclude='.github/*' --include='*/' --include-from=scripts/rsync-include.txt --exclude='*'
-RSYNC_DIRS    = GenAIComps  GenAIEval  GenAIExamples  GenAIInfra  Governance
+RSYNC_OPTS    = -am --exclude='.github/pull_request_template.md' --include='*/' --include-from=scripts/rsync-include.txt --exclude='*'
+RSYNC_DIRS    = GenAIComps  GenAIEval  GenAIExamples  GenAIInfra
 
 # Put it first so that "make" without argument is like "make help".
 help:
@@ -43,17 +43,17 @@ help:
 # Copy all the rst and md content (and images, etc) into the _build/rst folder
 # including rst and md content
 
-# GenAIComps  GenAIEval  GenAIExamples  GenAIInfra  Governance
+# GenAIComps  GenAIEval  GenAIExamples  GenAIInfra
 content:
 	$(Q)mkdir -p $(SOURCEDIR)
 	$(Q)rsync -a --exclude=$(BUILDDIR) . $(SOURCEDIR)
-#	$(Q)for dir in $(RSYNC_DIRS); do\
-#		rsync $(RSYNC_OPTS) ../$$dir $(SOURCEDIR); \
-#		done
+	$(Q)for dir in $(RSYNC_DIRS); do\
+		rsync $(RSYNC_OPTS) ../$$dir $(SOURCEDIR); \
+		done
 # temporarily, copy docs content too (were in the docs-work)
 #	$(Q)rsync $(RSYNC_OPTS) ../docs/* $(SOURCEDIR)
-#	$(Q)find $(SOURCEDIR) -type f -empty -name "README.md" -delete
-#	$(Q)scripts/fix-github-md-refs.sh $(SOURCEDIR)
+	$(Q)find $(SOURCEDIR) -type f -empty -name "README.md" -delete
+	$(Q)scripts/fix-github-md-refs.sh $(SOURCEDIR)
 
 
 html: content
@@ -64,11 +64,6 @@ html: content
 
 singlehtml: content 
 	-$(Q)$(SPHINXBUILD) -t $(DOC_TAG) -b singlehtml -d $(BUILDDIR)/doctrees $(SOURCEDIR) $(BUILDDIR)/html $(SPHINXOPTS) $(OPTS) >> $(BUILDDIR)/doc.log 2>&1
-	$(Q)./scripts/filter-doc-log.sh $(BUILDDIR)/doc.log
-
-pdf: html
-	@echo now making $(BUILDDIR)/latex/opea.pdf
-	$(Q)make -silent latexpdf LATEXMKOPTS=$(LATEXMKOPTS) >> $(BUILDDIR)/doc.log 2>&1
 	$(Q)./scripts/filter-doc-log.sh $(BUILDDIR)/doc.log
 
 
@@ -94,6 +89,9 @@ ifeq ($(RELEASE),latest)
 	sed 's/<head>/<head>\n  <base href="https:\/\/opea-project.github.io\/latest\/">/' $(BUILDDIR)/html/404.html > $(PUBLISHDIR)/../404.html
 endif
 	cd $(PUBLISHDIR)/..; git add -A; git commit -s -m "publish $(RELEASE)"; git push origin main;
+
+server:
+	cd _build/html; python3 -m http.server
 
 
 # Catch-all target: route all unknown targets to Sphinx using the new

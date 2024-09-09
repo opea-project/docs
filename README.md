@@ -18,7 +18,8 @@ The OPEA platform includes:
 
 Check out the [LF AI & Data Press Release](https://lfaidata.foundation/blog/2024/04/16/lf-ai-data-foundation-launches-open-platform-for-enterprise-ai-opea-for-groundbreaking-enterprise-ai-collaboration/) and [Intel's blog post](https://www.intel.com/content/www/us/en/developer/articles/news/introducing-the-open-platform-for-enterprise-ai.html).
 
-Technical Steering Committee
+## Technical Steering Committee
+
 - [Ke Ding](https://www.linkedin.com/in/dingke/),	Senior Prinicipal AI Engineer,	Intel
 - [Malini Bhandaru](https://www.linkedin.com/in/malinibhandaru/),	Senior Principal Engineer,	Intel (Chair)
 - [Amr Abdelhalem](https://www.linkedin.com/in/amrhalem/),	SVP, Head of Cloud Platforms,	Fidelity
@@ -29,8 +30,8 @@ Technical Steering Committee
 - [Justin Cormack](https://www.linkedin.com/in/justincormack/), CTO,	Docker
 - [Melissa Mckay](https://www.linkedin.com/in/melissajmckay/), Head of Developer Relations, JFrog 
 
-Member companies at launch:
-=======
+## Member companies at launch:
+
 * Anyscale
 * Cloudera
 * Datastax

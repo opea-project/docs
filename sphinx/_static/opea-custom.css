@@ -207,7 +207,7 @@ kbd
         -ms-flex-align: center;
             align-items: center;
     border: 1px solid #c6cbce;
-    background-color: #2B978F;
+    background-color: #FF6900;
     border-radius: 30px;
     color: white;
 }
@@ -216,15 +216,18 @@ kbd
     font-size: 1.1rem;
 }
 
+/* tweek for images in the home-page grid */
+
+/*
 .grid-item img {
     /* max-width: 50%;
-    max-height: 50%; */
+    max-height: 50%;
     margin-bottom: 0.7rem;
-}
+} */
 
 
 .grid-item a:hover {
-    background-color: #51A192;
+    background-color: #FFB500;
     color: white;
 }
 
@@ -239,7 +242,7 @@ kbd
 .grid-icon {
    line-height: 1.8;
    font-size: 4rem;
-   color: #114B4F;
+   color: #FFFFFF;
 }
 
 
