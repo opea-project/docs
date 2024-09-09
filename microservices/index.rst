@@ -19,10 +19,5 @@ We're building this microservices documentation from content in the
 
    /GenAIComps/README
    /GenAIComps/*
-   /GenAIComps/*/*
-   /GenAIComps/*/*/*
-   /GenAIComps/*/*/*/*
-   /GenAIComps/*/*/*/*/*
-   /GenAIComps/*/*/*/*/*/*
-   /GenAIComps/*/*/*/*/*/*/*
+   /GenAIComps/**/*
 

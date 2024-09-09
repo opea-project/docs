@@ -33,7 +33,7 @@ AgentQnA Application
    :glob:
 
    /GenAIExamples/AgentQnA/*
-   /GenAIExamples/AgentQnA/*/*
+   /GenAIExamples/AgentQnA/**/*
 
 AudioQnA Application
 ********************
@@ -43,9 +43,7 @@ AudioQnA Application
    :glob:
 
    /GenAIExamples/AudioQnA/*
-   /GenAIExamples/AudioQnA/*/*
-   /GenAIExamples/AudioQnA/*/*/*
-   /GenAIExamples/AudioQnA/*/*/*/*
+   /GenAIExamples/AudioQnA/**/*
 
 ChatQnA Application
 *******************
@@ -55,9 +53,7 @@ ChatQnA Application
    :glob:
 
    /GenAIExamples/ChatQnA/*
-   /GenAIExamples/ChatQnA/*/*
-   /GenAIExamples/ChatQnA/*/*/*
-   /GenAIExamples/ChatQnA/*/*/*/*
+   /GenAIExamples/ChatQnA/**/*
 
 Code Generation Application
 ***************************
@@ -67,10 +63,7 @@ Code Generation Application
    :glob:
 
    /GenAIExamples/CodeGen/*
-   /GenAIExamples/CodeGen/*/*
-   /GenAIExamples/CodeGen/*/*/*
-   /GenAIExamples/CodeGen/*/*/*/*
-   /GenAIExamples/CodeGen/*/*/*/*/*
+   /GenAIExamples/CodeGen/**/*
 
 Code Translation Application
 ****************************
@@ -80,9 +73,7 @@ Code Translation Application
    :glob:
 
    /GenAIExamples/CodeTrans/*
-   /GenAIExamples/CodeTrans/*/*
-   /GenAIExamples/CodeTrans/*/*/*
-   /GenAIExamples/CodeTrans/*/*/*/*
+   /GenAIExamples/CodeTrans/**/*
 
 Document Index Retriever Application
 ************************************
@@ -92,7 +83,7 @@ Document Index Retriever Application
    :glob:
 
    /GenAIExamples/DocIndexRetriever/*
-   /GenAIExamples/DocIndexRetriever/*/*
+   /GenAIExamples/DocIndexRetriever/**/*
 
 
 Document Summarization Application
@@ -103,10 +94,7 @@ Document Summarization Application
    :glob:
 
    /GenAIExamples/DocSum/*
-   /GenAIExamples/DocSum/*/*
-   /GenAIExamples/DocSum/*/*/*
-   /GenAIExamples/DocSum/*/*/*/*
-   /GenAIExamples/DocSum/*/*/*/*/*
+   /GenAIExamples/DocSum/**/*
 
 FaqGen Application
 *********************
@@ -116,10 +104,7 @@ FaqGen Application
    :glob:
 
    /GenAIExamples/FaqGen/*
-   /GenAIExamples/FaqGen/*/*
-   /GenAIExamples/FaqGen/*/*/*
-   /GenAIExamples/FaqGen/*/*/*/*
-   /GenAIExamples/FaqGen/*/*/*/*/*
+   /GenAIExamples/FaqGen/**/*
 
 Instruction Tuning Application
 ******************************
@@ -129,8 +114,7 @@ Instruction Tuning Application
    :glob:
 
    /GenAIExamples/InstructionTuning/*
-   /GenAIExamples/InstructionTuning/*/*
-   /GenAIExamples/InstructionTuning/*/*/*
+   /GenAIExamples/InstructionTuning/**/*
 
 
 ProductivitySuite Application
@@ -141,10 +125,7 @@ ProductivitySuite Application
    :glob:
 
    /GenAIExamples/ProductivitySuite/*
-   /GenAIExamples/ProductivitySuite/*/*
-   /GenAIExamples/ProductivitySuite/*/*/*
-   /GenAIExamples/ProductivitySuite/*/*/*/*
-   /GenAIExamples/ProductivitySuite/*/*/*/*/*
+   /GenAIExamples/ProductivitySuite/**/*
 
 Rerank Model Fine Tuning
 ************************
@@ -154,8 +135,7 @@ Rerank Model Fine Tuning
    :glob:
 
    /GenAIExamples/RerankFinetuning/*
-   /GenAIExamples/RerankFinetuning/*/*
-   /GenAIExamples/RerankFinetuning/*/*/*
+   /GenAIExamples/RerankFinetuning/**/*
 
 
 SearchQnA Application
@@ -166,9 +146,7 @@ SearchQnA Application
    :glob:
 
    /GenAIExamples/SearchQnA/*
-   /GenAIExamples/SearchQnA/*/*
-   /GenAIExamples/SearchQnA/*/*/*
-   /GenAIExamples/SearchQnA/*/*/*/*
+   /GenAIExamples/SearchQnA/**/*
 
 Translation Application
 ***********************
@@ -178,9 +156,7 @@ Translation Application
    :glob:
 
    /GenAIExamples/Translation/*
-   /GenAIExamples/Translation/*/*
-   /GenAIExamples/Translation/*/*/*
-   /GenAIExamples/Translation/*/*/*/*
+   /GenAIExamples/Translation/**/*
 
 VisualQnA Application
 *********************
@@ -190,6 +166,4 @@ VisualQnA Application
    :glob:
 
    /GenAIExamples/VisualQnA/*
-   /GenAIExamples/VisualQnA/*/*
-   /GenAIExamples/VisualQnA/*/*/*
-   /GenAIExamples/VisualQnA/*/*/*/*
+   /GenAIExamples/VisualQnA/**/*
