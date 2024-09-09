@@ -4,11 +4,11 @@ OPEA Project Documentation
 ##########################
 
 Welcome to the OPEA Project (|version|) documentation published |today|.
-OPEA streamlines implementation of enterprise-grade Generative AI by efficiently
-integrating secure, performant, and cost-effective Generative AI workflows to business value.
+OPEA streamlines the implementation of enterprise-grade Generative AI by efficiently
+integrating secure, performant, and cost-effective Generative AI workflows into business processes.
 
 Source code for the OPEA Project is maintained in the
-`OPEA Project GitHub repo`_.
+`OPEA Project GitHub repository`_.
 
 .. comment The links in this grid display can't use :ref: because we're
    using raw html.  There's a risk of broken links if referenced content is
@@ -20,17 +20,23 @@ Source code for the OPEA Project is maintained in the
        <li class="grid-item">
            <a href="introduction/index.html">
                <img alt="" src="_static/images/opea-icon-white.svg" width="80px"/><br/>
-               <h2>What is OPEA</h2>
+               <h2>What is OPEA?</h2>
            </a>
-           <p>Overview, architecture, and features</p>
+           <p>Learn about the OPEA architecture, features, and benefits.</p>
        </li>
        <li class="grid-item">
            <a href="getting-started/index.html">
                <span class="grid-icon fa fa-map-signs"></span>
                <h2>Getting Started</h2>
            </a>
-           <p>Getting started guide for running ChatQnA example
-              </p>
+           <p>Start building GenAI solutions or contribute to the community.</p>
+       </li>
+       <li class="grid-item">
+           <a href="community/index.html">
+               <span class="grid-icon fa fa-github"></span>
+               <h2>OPEA Community</h2>
+           </a>
+           <p>Join the OPEA community with your contributions and solution ideas.</p>
        </li>
        <li class="grid-item">
            <a href="examples/index.html">
@@ -42,24 +48,16 @@ Source code for the OPEA Project is maintained in the
        <li class="grid-item">
            <a href="deploy/index.html">
                <span class="grid-icon fa fa-sign-in"></span>
-               <h2>Deploy AI Solutions</h2>
+               <h2>Deploy GenAI Solutions</h2>
            </a>
-           <p>Select from several deployment strategies that best match your
-           enterprise needs.</p>
+           <p>Select from several deployment strategies that best match your enterprise needs.</p>
        </li>
        <li class="grid-item">
-           <a href="community/index.html">
-               <span class="grid-icon fa fa-github"></span>
-               <h2>OPEA Community</h2>
-           </a>
-           <p>Community Guides</p>
-       </li>
-       <li class="grid-item">
-           <a href="release_notes/index.html">
+           <a href="microservices/index.html">
                <span class="grid-icon fa fa-object-group"></span>
-               <h2>Release Notes</h2>
+               <h2>Browse GenAI Microservices</h2>
            </a>
-           <p>OPEA release notes archive</p>
+           <p>Use modular building blocks to build robust GenAI solutions.</p>
        </li>
    </ul>
 
@@ -79,4 +77,4 @@ Source code for the OPEA Project is maintained in the
    release_notes/index
    faq
 
-.. _OPEA Project GitHub repo: https://github.com/opea-project
+.. _OPEA Project GitHub repository: https://github.com/opea-project

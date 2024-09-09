@@ -8,11 +8,15 @@ testing, and scalability. All examples are fully compatible with Docker and
 Kubernetes, supporting a wide range of hardware platforms such as Gaudi, Xeon,
 and other hardwares.
 
-As we're building this documentation site, for now, read more about these
-Examples in the `GenAIExamples GitHub repository`_.
+.. toctree::
+   :maxdepth: 1
 
-.. _GenAIExamples Github repository: https://github.com/opea-project/GenAIExamples/blob/main/README.md
+   ChatQnA/ChatQnA_Guide
 
+----
+
+We're building this documentation from content in the
+:GenAIExamples_blob:`GenAIExamples<README.md>` GitHub repository.
 
 .. toctree::
    :maxdepth: 1
@@ -117,6 +121,18 @@ FaqGen Application
    /GenAIExamples/FaqGen/*/*/*/*
    /GenAIExamples/FaqGen/*/*/*/*/*
 
+Instruction Tuning Application
+******************************
+
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   /GenAIExamples/InstructionTuning/*
+   /GenAIExamples/InstructionTuning/*/*
+   /GenAIExamples/InstructionTuning/*/*/*
+
+
 ProductivitySuite Application
 *****************************
 
@@ -129,6 +145,18 @@ ProductivitySuite Application
    /GenAIExamples/ProductivitySuite/*/*/*
    /GenAIExamples/ProductivitySuite/*/*/*/*
    /GenAIExamples/ProductivitySuite/*/*/*/*/*
+
+Rerank Model Fine Tuning
+************************
+
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   /GenAIExamples/RerankFinetuning/*
+   /GenAIExamples/RerankFinetuning/*/*
+   /GenAIExamples/RerankFinetuning/*/*/*
+
 
 SearchQnA Application
 *********************
