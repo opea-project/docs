@@ -1,4 +1,6 @@
-##  A RAG-Powered Human-Like AI Avatar Audio Chatbot integrated with OPEA AudioQnA
+# 24-08-02-OPEA-AIAvatarChatbot
+
+A RAG-Powered Human-Like AI Avatar Audio Chatbot integrated with OPEA AudioQnA
 <!-- The short description of the feature you want to contribute -->
 
 ## Author
