@@ -25,7 +25,8 @@ Installation Guides
    :maxdepth: 1
    :glob:
 
-   ../guide/installation/*/*
+   ../guide/installation/*
+   ../guide/installation/**/*
 
 Authentication and Authorization
 ********************************
@@ -35,7 +36,7 @@ Authentication and Authorization
    :glob:
 
    /GenAIInfra/authN-authZ/*
-   /GenAIInfra/authN-authZ/*/*
+   /GenAIInfra/authN-authZ/**/*
 
 Helm Charts
 ***********
@@ -46,9 +47,7 @@ Helm Charts
 
    /GenAIInfra/helm-charts/README
    /GenAIInfra/helm-charts/*
-   /GenAIInfra/helm-charts/*/*
-   /GenAIInfra/helm-charts/*/*/*
-   /GenAIInfra/helm-charts/*/*/*/*
+   /GenAIInfra/helm-charts/**/*
 
 Kubernetes Addons
 *****************
@@ -59,9 +58,7 @@ Kubernetes Addons
 
    /GenAIInfra/kubernetes-addons/README
    /GenAIInfra/kubernetes-addons/*
-   /GenAIInfra/kubernetes-addons/*/*
-   /GenAIInfra/kubernetes-addons/*/*/*
-   /GenAIInfra/kubernetes-addons/*/*/*/*
+   /GenAIInfra/kubernetes-addons/**/*
 
 Microservices Connector
 ***********************
@@ -72,9 +69,18 @@ Microservices Connector
 
    /GenAIInfra/microservices-connector/README
    /GenAIInfra/microservices-connector/*
-   /GenAIInfra/microservices-connector/*/*
-   /GenAIInfra/microservices-connector/*/*/*
-   /GenAIInfra/microservices-connector/*/*/*/*
+   /GenAIInfra/microservices-connector/**/*
+
+Pipeline Proxy
+**************
+
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   /GenAIInfra/proxy/README
+   /GenAIInfra/proxy/*
+   /GenAIInfra/proxy/**/*
 
 Scripts
 *******
@@ -85,6 +91,4 @@ Scripts
 
    /GenAIInfra/scripts/README
    /GenAIInfra/scripts/*
-   /GenAIInfra/scripts/*/*
-   /GenAIInfra/scripts/*/*/*
-   /GenAIInfra/scripts/*/*/*/*
+   /GenAIInfra/scripts/**/*
