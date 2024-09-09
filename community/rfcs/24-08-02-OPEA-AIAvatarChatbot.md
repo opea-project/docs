@@ -172,7 +172,8 @@ flowchart LR
     TTS <-.->|5'| T5
     animation <-.->|6'| WAV2LIP
 
-    USER2 <-.-> WAV2LIP
+    USER2 -->|1| UI
+    UI <-.->|6'| WAV2LIP
 ```
 
 
