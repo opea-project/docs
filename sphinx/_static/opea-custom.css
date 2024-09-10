@@ -290,12 +290,12 @@ section.numbered-step h2::before {
   font-weight: bold;
 }
 
-/* add icon on external links */
+/* add icon on external links - changed my mind about this one
 a.reference.external::after {
    font-family: 'FontAwesome';
    font-size: 80%;
    content: " \f08e";
-}
+} */
 
 /* generic light gray box shadow (for use on images via class directive) */
 .drop-shadow {
