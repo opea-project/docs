@@ -39,8 +39,11 @@ extensions = [
    'myst_parser',
    'sphinxcontrib.mermaid',
    'link_roles',
+   'sphinx_design',
    #'sphinx_md',
 ]
+
+myst_enable_extensions = ["colon_fence"]
 
 # sphinx_md config
 sphinx_md_useGitHubURL = True
