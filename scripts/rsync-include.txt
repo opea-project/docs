@@ -1,5 +1,8 @@
 *.jpg
 *.png
+*.gif
+*.svg
 *.rst
 *.md
+*.rst
 CODEOWNERS

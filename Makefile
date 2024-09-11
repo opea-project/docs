@@ -26,6 +26,7 @@ OPEA_BASE     = $(CURDIR)/..
 DOC_TAG      ?= development
 RELEASE      ?= latest
 PUBLISHDIR    = $(OPEA_BASE)/opea-project.github.io/$(RELEASE)
+# scripts/rsync-include.txt lists file extensions to look for and copy
 RSYNC_OPTS    = -am --exclude='.github/pull_request_template.md' --include='*/' --include-from=scripts/rsync-include.txt --exclude='*'
 RSYNC_DIRS    = GenAIComps  GenAIEval  GenAIExamples  GenAIInfra
 

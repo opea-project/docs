@@ -18,6 +18,8 @@ and other hardwares.
 We're building this documentation from content in the
 :GenAIExamples_blob:`GenAIExamples<README.md>` GitHub repository.
 
+.. rst-class:: rst-columns
+
 .. toctree::
    :maxdepth: 1
    :glob:
@@ -25,8 +27,22 @@ We're building this documentation from content in the
    /GenAIExamples/README
    /GenAIExamples/*
 
+----
+
+**Example Applications Table of Contents**
+
+.. rst-class:: rst-columns
+
+.. contents::
+   :local:
+   :depth: 1
+
+----
+
 AgentQnA Application
 ********************
+
+.. rst-class:: rst-columns
 
 .. toctree::
    :maxdepth: 1
@@ -38,6 +54,8 @@ AgentQnA Application
 AudioQnA Application
 ********************
 
+.. rst-class:: rst-columns
+
 .. toctree::
    :maxdepth: 1
    :glob:
@@ -47,6 +65,8 @@ AudioQnA Application
 
 ChatQnA Application
 *******************
+
+.. rst-class:: rst-columns
 
 .. toctree::
    :maxdepth: 1
@@ -58,6 +78,8 @@ ChatQnA Application
 Code Generation Application
 ***************************
 
+.. rst-class:: rst-columns
+
 .. toctree::
    :maxdepth: 1
    :glob:
@@ -68,6 +90,8 @@ Code Generation Application
 Code Translation Application
 ****************************
 
+.. rst-class:: rst-columns
+
 .. toctree::
    :maxdepth: 1
    :glob:
@@ -77,6 +101,8 @@ Code Translation Application
 
 Document Index Retriever Application
 ************************************
+
+.. rst-class:: rst-columns
 
 .. toctree::
    :maxdepth: 1
@@ -89,6 +115,8 @@ Document Index Retriever Application
 Document Summarization Application
 **********************************
 
+.. rst-class:: rst-columns
+
 .. toctree::
    :maxdepth: 1
    :glob:
@@ -99,6 +127,8 @@ Document Summarization Application
 FaqGen Application
 *********************
 
+.. rst-class:: rst-columns
+
 .. toctree::
    :maxdepth: 1
    :glob:
@@ -108,6 +138,8 @@ FaqGen Application
 
 Instruction Tuning Application
 ******************************
+
+.. rst-class:: rst-columns
 
 .. toctree::
    :maxdepth: 1
@@ -120,6 +152,8 @@ Instruction Tuning Application
 ProductivitySuite Application
 *****************************
 
+.. rst-class:: rst-columns
+
 .. toctree::
    :maxdepth: 1
    :glob:
@@ -129,6 +163,8 @@ ProductivitySuite Application
 
 Rerank Model Fine Tuning
 ************************
+
+.. rst-class:: rst-columns
 
 .. toctree::
    :maxdepth: 1
@@ -141,6 +177,8 @@ Rerank Model Fine Tuning
 SearchQnA Application
 *********************
 
+.. rst-class:: rst-columns
+
 .. toctree::
    :maxdepth: 1
    :glob:
@@ -151,6 +189,8 @@ SearchQnA Application
 Translation Application
 ***********************
 
+.. rst-class:: rst-columns
+
 .. toctree::
    :maxdepth: 1
    :glob:
@@ -158,8 +198,22 @@ Translation Application
    /GenAIExamples/Translation/*
    /GenAIExamples/Translation/**/*
 
+VideoRAGQnA Application
+***********************
+
+.. rst-class:: rst-columns
+
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   /GenAIExamples/VideoRAGQnA/*
+   /GenAIExamples/VideoRAGQnA/**/*
+
 VisualQnA Application
 *********************
+
+.. rst-class:: rst-columns
 
 .. toctree::
    :maxdepth: 1
