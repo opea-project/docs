@@ -5,6 +5,146 @@ Thanks for considering contributing to OPEA project. The contribution process is
 
 ## All The Ways To Contribute
 
+### Contribute a GenAIComponent
+
+1. Local Dev Environment setting? 
+
+2. Navigate to [OPEA GenAIComps](https://github.com/opea-project/GenAIComps) and locate the component folder your integration belongs to. If the microservice type already exists, review the [OPEA microservice API](https://opea-project.github.io/0.9.99/developer-guides/OPEA_API.html#opea-micro-service-api) and follow it in your implementation. Otherwise, if you are contributing a brand new microservice type, you need to define and contribute the API specifications. Consider starting with an RFC.
+
+3. Follow the folder structure in the TEI embedding example below:
+  - `embedding_tei.py`: This file defines and registers the microservice. It serves as the entrypoint of the Docker container. Refer to [asr-comp] for a simple example or [tgi-llm] for a more complete example that required adapting to OpenAI API
+  - `requirements.txt`: This file is used by Docker to install the necessary dependencies.
+  - `Dockerfile` and optionally `docker_compose_yaml`: These files are used to generate the service container image. **Once PR is merged the imaged can be pushed to Hub. Handled by maintainer or vendor/library contrirbutors?**. If your Dockerfile is hardware specific please make it explicit in the name like `Dokerfile.Intel_hpu`
+  - `test_<component_folder_path>.sh` : test should building image, start service, validate microservie, stop and destroy docker. Please refer to an example [link](). 
+  - `README.md`: at minimum it should include: microservice description, build and start microservice command, curl command for test with expected output how to run tests.
+
+```
+├── comps
+│   ├── embeddings
+│   │   ├── __init__.py
+│   │   └── tei     #vendor name or serving framework name
+│   │       ├── langchain
+│   │       │   ├── docker_compose_embedding.yaml  #could be multiple for different HW
+│   │       │   ├── Dockerfile        # could be multiple for different HW
+│   │       │   ├── embedding_tei.py  # definition and registration of microservice
+│   │       │   ├── README.md
+│   │       │   └── requirements.txt
+│   │       └── llama_index
+│   │           └── . . .
+├── tests
+│   └── embeddings
+│       ├── test_embeddings_tei_langchain.sh    # "test_<folder_path>.sh" filename 
+│       └── test_embeddings_tei_llama_index.sh
+└── README.md
+
+```
+**ths tree doesn't show hardware specific subfolders. do we need them for ci/cd simplicity?** 
+
+4. Now you have created all the required files, and validated your service. Last step is to modify the `README.md` at the component level to list your new component. Now you are ready to file your PR!. 
+
+5. After your component has been merged you are likely interested to build an application with it, and perhaps contributing it also to OPEA! so please continue to the "Contribute a GenAIExample" guide
+
+### Contribute a GenAIExample
+
+All OPEA GenAIExamples can be deployed on a single node with docker compose or on a Kubernetes cluster. When you contribute an example you will need to ensure both deployment paths are supported. If you don't have Kubernetes experience don't fret!, maintainers are available to provide support. **can we say this or is just docker compose minimum requirement?**
+
+- Navigate to [OPEA GenAIExamples]() and check the catalog of examples. If you find one that is very similar to what you are looking for, you can contribute your variation of it to that particular example folder. If you are bringing a completly new application you will need to create a separate example folder. 
+
+- Before stitching together all the microservices to build your application, let's make sure all the required building blocks are available!. You will notice [add link to diagram>]() OPEA uses gateways to handle requests and route them to the corresponding megaservices. If you are just making small changes to the application, like swaping one DB for another, you can reuse the existng Gateway but if you are contributing a completely new application, you will need to add a Gateway class. Navigate to [OPEA GenAIComps Gateway Component](https://github.com/opea-project/GenAIComps/blob/main/comps/cores/mega/gateway.py) and implement how Gateway should handle requests for your application. **do gateways PR have tests that need to be run, seems not possible on the GenAIComp side????**
+
+- Follow the folder structure in the ChatQA example below:
+  - `chatqna.py`: application definition using microservice, megaservice and gateway. There could be multiple .py in the folder based on slight modification of the example application.
+  - `example/docker_build_image/build.yaml`: builds necessary images pointing to the Dockerfiles in the GenAIComp repository. 
+  - `docker_compose/vendor/device/compose.yaml`: defines pipeline for  docker compose deployment 
+  - `kubernetes/vendor/device/manifests/chatqna.yaml`: (required?) will be used for K8s deployemnt
+  - `kubernetes/vendor/device/gmc/chatqna.yaml`: (optional) will be used for deployment with GMC
+  - `tests\test_compose.sh, test_manifest.sh, test_gmc.sh`: at minimum you need to provide an E2E test with docker compose. if you are contritbutng K8s manifests and GMC yaml, you should also provide test script for those.
+  - `ui`: **is this optional or required?**
+  - `assets`: nice to have an application flow diagram
+
+```
+├── assets
+├── benchmark     # optional
+├── chatqna.py    # Main application definition (microservices, megaservice, gateway). 
+├── chatqna.yaml  # starting v1.0 used to generate manifests for k8s. Keep? 
+├── docker_compose
+│   ├── intel
+│   │   ├── cpu
+│   │   │   ├── aipc
+│   │   │   │   ├── compose.yaml
+│   │   │   │   └── README.md 
+│   │   │   └── xeon
+│   │   │       ├── compose.yaml
+│   │   │       ├── README.md 
+│   │   │       └── set_env.sh #optional or required? export env variables, sometimes in README
+│   │   └── hpu
+│   │       └── gaudi
+│   │           ├── compose.yaml
+│   │           ├── how_to_validate_service.md    #optional
+│   │           ├── README.md
+│   │           └── set_env.sh
+│   └── nvidia
+│       └── gpu   #require device subfolder??
+│           ├── compose.yaml
+│           ├── README.md
+│           └── set_env.sh
+├── Dockerfile
+├── docker_image_build
+│   └── build.yaml
+├── kubernetes
+│   ├── intel
+│   │   ├── cpu
+│   │   │   └── xeon
+│   │   │       ├── gmc
+│   │   │       │   ├── chatQnA_dataprep_xeon.yaml  # are these different flavors too?  
+│   │   │       │   ├── chatQnA_switch_xeon.yaml
+│   │   │       │   └── chatQnA_xeon.yaml
+│   │   │       └── manifest
+│   │   │           └── chatqna.yaml     # could be multiple .yaml for various applications
+│   │   └── hpu
+│   │       └── gaudi
+│   │           ├── gmc
+│   │           │   ├── chatQnA_dataprep_gaudi.yaml
+│   │           │   ├── chatQnA_gaudi.yaml
+│   │           │   └── chatQnA_switch_gaudi.yaml
+│   │           └── manifest
+│   │               └── chatqna.yaml
+│   ├── amd
+│   │   ├── cpu      #require device subfolder??
+│   │   │   ├── gmc
+│   │   │   └── manifest
+│   │   └── gpu
+│   │       ├── gmc
+│   │       └── manifest
+│   ├── README_gmc.md    #K8s quickstar
+│   └── README.md #docker pull, env set, curl # example quickstart
+├── README.md
+├── tests
+│   ├── test_compose_on_gaudi.sh  #could be more tests for different flavors of the app
+│   ├── test_compose_on_xeon.sh
+│   ├── test_gmc_on_gaudi.sh
+│   ├── test_gmc_on_xeon.sh
+│   ├── test_manifest_on_gaudi.sh
+│   └── test_manifest_on_xeon.sh
+└── ui
+    ├── docker
+    │   ├── Dockerfile
+    │   └── Dockerfile.react
+    ├── react
+    └── svelte
+```
+
+
+#### Additional steps if your contribution is Hardware Specific
+
+You will need additional step to configure CI/CD for merging your GenAIComp or GenAIExample. 
+- Connect hardware into OPEA GHA as self-hosted runner 
+#- Contribute new test scripts for the new hardware:
+#- Dockerfile for the Component (i,e GenAIComp/comps/llm/text-generation/tgi/docker/Dockerfile_Intel_HPU
+#- Update image build yaml for new images​
+- Update CI/CD workflow to identify and deploy new test
+OPEA maintainer [suyue git handle]() can assist with this. 
+
 ### Community Discussions
 
 Developers are encouraged to participate in discussions by opening an issue in one of the GitHub repos at https://github.com/opea-project. Alternatively, they can send an email to [info@opea.dev](mailto:info@opea.dev) or subscribe to [X/Twitter](https://twitter.com/opeadev) and [LinkedIn Page](https://www.linkedin.com/company/opeadev/posts/?feedView=all) to get latest updates about the OPEA project.
