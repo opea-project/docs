@@ -19,8 +19,9 @@ The purpose of this RFC is to propose the creation of GenAI Studio, a platform d
 
 This RFC outlines the creation of the Enterprise GenAI Assembly Framework, a streamlined platform for OPEA users. The framework's key goals include:
 - Assembly and Configuration: Simplify the process of assembling and configuring GenAI components, such as GenAIComps, with an interactive interface for crafting functional applications.
-- Benchmarking and Evaluation: Perform benchmarking and evaluation on the application for tuning and optimization, including use of [GenAIEval](https://github.com/opea-project/GenAIEval) facilities.  
+- Benchmarking and Evaluation: Perform benchmarking and evaluation on the application for tuning and optimization, including use of [GenAIEval](https://github.com/opea-project/GenAIEval) facilities.
 - Enterprise Deployment Package Creation: Provide tools to create ready-to-deploy Enterprise Packages, including integration of [GenAIInfra](https://github.com/opea-project/GenAIInfra).
+
 The framework is designed to democratize development, evaluation, and deployment of GenAI applications for OPEA users, promoting innovation and operational efficiency in the enterprise AI landscape with OPEA.
 
 ### Value Proposition
@@ -38,26 +39,29 @@ A Day-0 solution that offers users a foundational skeleton, allowing them to foc
 OPEA is a framework designed to streamline the automation of enterprise processes through a series of microservices. The GenAI Studio enhances OPEA by enabling users to develop, deploy, and optimize AI-driven solutions. This scenario demonstrates how different personas—OPEA Developers, Enterprise Users (DevOps), and End Users—can leverage the GenAI Studio to build and deploy enterprise-ready solutions efficiently.
 
 Scenarios:
+
 1. Developer Persona
-    - Objective: Develop and integrate GenAI Application for specific business use-case within OPEA microservice architecture.
-    - Use of the Studio:
-        - The OPEA Developer uses the GenAI Studio to create a GenAI model help enhances business use-case
-        - The Studio's advanced development tools allow the developer to fine-tune the model based on enterprise-specific data, ensuring optimal performance.
-        - After development, the Studio automatically generates a ready-to-use enterprise deployment package that includes all necessary components, such as configurations and resource management tools, ensuring seamless integration with the existing OPEA infrastructure.
-        - This package is designed to be easily deployable at the customer’s site, minimizing the need for additional configuration and setup.
+   - Objective: Develop and integrate GenAI Application for specific business use-case within OPEA microservice architecture.
+   - Use of the Studio:
+     - The OPEA Developer uses the GenAI Studio to create a GenAI model help enhances business use-case
+     - The Studio's advanced development tools allow the developer to fine-tune the model based on enterprise-specific data, ensuring optimal performance.
+     - After development, the Studio automatically generates a ready-to-use enterprise deployment package that includes all necessary components, such as configurations and resource management tools, ensuring seamless integration with the existing OPEA infrastructure.
+     - This package is designed to be easily deployable at the customer’s site, minimizing the need for additional configuration and setup.
+
 2. Enterprise User Persona
-    - Objective: Optimize and deploy the GenAI application with OPEA microservices to meet specific enterprise needs.
-    - Use of the Studio:
-        - The enterprise user uses the GenAI Studio to test and optimize the deployment package generated.
-        - With the Studio’s benchmarking tools, they evaluate the AI model's performance from both inference and compute perspectives, ensuring it meets the enterprise's operational requirements.
-        - The Studio provides insights into resource allocation, helping DevOps fine-tune the deployment to achieve the best possible performance. Once optimized, the deployment package is easily launched, allowing the enterprise to immediately benefit from the AI enhancements.
+   - Objective: Optimize and deploy the GenAI application with OPEA microservices to meet specific enterprise needs.
+   - Use of the Studio:
+     - The enterprise user uses the GenAI Studio to test and optimize the deployment package generated.
+     - With the Studio’s benchmarking tools, they evaluate the AI model's performance from both inference and compute perspectives, ensuring it meets the enterprise's operational requirements.
+     - The Studio provides insights into resource allocation, helping DevOps fine-tune the deployment to achieve the best possible performance. Once optimized, the deployment package is easily launched, allowing the enterprise to immediately benefit from the AI enhancements.
+
 3. End User Persona
-    - Objective: Implement and utilize the AI-enhanced OPEA solution for specific business tasks.
-    - Use of the Studio:
-        - The End User accesses the GenAI Studio to explore the ready-to-use deployment package provided by the DevOps team.
-        - The Studio offers tools to evaluate the solution's performance in real-world scenarios, ensuring it aligns with the business’s objectives.
-        - With minimal setup, the End User can deploy the AI-enhanced solution in their environment, automating complex workflows and optimizing resource usage to achieve business goals more efficiently.
-    
+   - Objective: Implement and utilize the AI-enhanced OPEA solution for specific business tasks.
+   - Use of the Studio:
+     - The End User accesses the GenAI Studio to explore the ready-to-use deployment package provided by the DevOps team.
+     - The Studio offers tools to evaluate the solution's performance in real-world scenarios, ensuring it aligns with the business’s objectives.
+     - With minimal setup, the End User can deploy the AI-enhanced solution in their environment, automating complex workflows and optimizing resource usage to achieve business goals more efficiently.
+
 The Generative AI Studio empowers Developers, Enterprise User, and End Users to create, optimize, and deploy AI-driven enterprise solutions effortlessly. By providing tools to generate ready-to-use deployment packages and benchmark performance, the Studio ensures that AI solutions are not only powerful but also easy to deploy and maintain, making them highly effective for business applications.
 
 ### Stragegy and Scope of Work
@@ -82,15 +86,15 @@ Scope of model development/optimization
 ### Design Proposal
 
 ### Design Space
-Providing a interactive user interface for user to build, configure, test and generate final deployment package.  
+Providing a interactive user interface for user to build, configure, test and generate final deployment package.
 User may utilize the yaml data file for creation and modification of studio project, as an alternate to GUI.
-  
+
 #### Part 1: Application Build and Configuration
-User to build GenAI application with configuration, such as  
-- model selection  
-- model parameter setting (temp, top-p, top-k, max response)  
-- system instruction  
-  
+User to build GenAI application with configuration, such as
+- model selection
+- model parameter setting (temp, top-p, top-k, max response)
+- system instruction
+
 Provides 2 mode of configuration
 - Wizard Mode: User is guided through step-by-step process to create an application
     - ![screenshot sample of wizard mode](https://github.com/user-attachments/assets/1c780be1-d6dc-47fb-8a23-5229392ab45b)
@@ -99,17 +103,17 @@ Provides 2 mode of configuration
     - Note: Need further feasibility study on
         - Ease of customization or adding new UI components
         - Connectivity and integration to Mega Service (HelmChart, DockerCompose, GMC)
-    
 
- 
+
+
 #### Part 2: Benchmark and Evaluation
 A. Inference Performance
 - General Benchmarking
-    - GLUE/SuperGLUE 
-    - GPQA 
-    - SQuAD  
-    - ImageNet  
-    - MLPerf  
+    - GLUE/SuperGLUE
+    - GPQA
+    - SQuAD
+    - ImageNet
+    - MLPerf
 - Halucination
 - Vertical/Domain Specific Benchmarking (with ground truth)
 - Finetuning – next phase
@@ -130,25 +134,25 @@ Enablement of components for compute performance evaluation
 - Loki: log store for pod/Kubernetes
 - Grafana: visualization of metrics, trace and logs
 - Prometheus
-  
+
 #### Part 3: Enterprise Deployment
-Generate Enterprise Deployment Package base on the applicaiton with enterprise facilities features, including,  
+Generate Enterprise Deployment Package base on the applicaiton with enterprise facilities features, including,
 Features:
 - Application UI
-- user management (login, create, update, delete)  
-- Session management (e.g. Chat sessions)  
-- inference parameter setting (top-p, top-k, temperature)  
+- user management (login, create, update, delete)
+- Session management (e.g. Chat sessions)
+- inference parameter setting (top-p, top-k, temperature)
 - Vector Store
-- token generation  
-- API access  
-  
-Applications:  
+- token generation
+- API access
+
+Applications:
 - QnA
-- AudioChat  
-- VisualChat  
-- Translation  
-- CodeGen  
-- CodeTrans  
+- AudioChat
+- VisualChat
+- Translation
+- CodeGen
+- CodeTrans
 - Summarizer
 
 Deployment configuration - Sample UI
@@ -166,6 +170,6 @@ Generated Deployment Package generally contains the follow parts:
 - App backend server codes
 - Other OPEA microservice component images can be pulled from OPEA registry directly during setup.
 
-  
+
 ### Compatibility
-This RFC will require a feasibility study on tools to use for Part 1 Drag-n-Drop Workflow Mode design. Flowise AI is a good candidate but it needs to run as a separate service which will add to the complexity of the UI/UX design. 
+This RFC will require a feasibility study on tools to use for Part 1 Drag-n-Drop Workflow Mode design. Flowise AI is a good candidate but it needs to run as a separate service which will add to the complexity of the UI/UX design.
