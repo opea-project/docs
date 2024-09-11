@@ -1,31 +1,29 @@
-## RFC Title
+# 24-06-21-OPEA-001-Guardrails-Gateway
 
 Guardrails Gateway
 
-## RFC Content
-
-### Author
+## Author
 
 [zhxie](https://github.com/zhxie), [Forrest-zhao](https://github.com/Forrest-zhao), [ruijin-intel](https://github.com/ruijin-intel)
 
-### Status
+## Status
 
 Under Review
 
-### Objective
+## Objective
 
 Deploy opt-in guardrails in gateway on deployment environment.
 
-### Motivation
+## Motivation
 
 - Reduce latency in network transmission and protocol encoding/decoding.
 - Support stateful guardrails.
 - Enhance Observability.
 - Leverage OpenVINO for AI acceleration instructions including AVX, AVX512 and AMX.
 
-### Design Proposal
+## Design Proposal
 
-#### Inference In Place
+### Inference In Place
 
 The LangChain-like workflow is presented below.
 
@@ -79,7 +77,7 @@ graph TD
 
 A unified inference runtime API provides a general interface for inference runtimes. Any inference runtime can be integrated into the system including OpenVINO. The guardrails leverages the inferece runtime and decides if the request/reponse is valid.
 
-#### Stateful Guardrails
+### Stateful Guardrails
 
 The traditional workflow from ingress to egress is presented below.
 
@@ -117,13 +115,13 @@ flowchart LR
 
 As a alternative choice, the gateway will also provide guardrails ability, no matter stateful or stateless.
 
-#### Observability
+### Observability
 
 Envoy is the most popular proxy in cloud native, which contains out-of-box access log, stats and metrics, and can be integrated into observability platform including OpenTelemetry and Prometheus naturally.
 
 Guardrails in gateway will leverages these abilities about observability to meet potential regulartory and compliance needs.
 
-#### Multi-Services Deployment
+### Multi-Services Deployment
 
 Let's say the embedding and LLM services are AI-powered and require guardrails protection.
 
@@ -160,15 +158,15 @@ graph LR
   end
 ```
 
-### Alternatives Considered
+## Alternatives Considered
 
 [Guardrails Microservice](https://github.com/xuechendi/GenAIComps/tree/pii_detection/comps/guardrails): has provided certain guardrails, however it only supports stateless guardrails.
 
-### Compatibility
+## Compatibility
 
 N/A
 
-### Miscs
+## Miscs
 
 - TODO
 
