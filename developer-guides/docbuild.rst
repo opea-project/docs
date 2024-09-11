@@ -19,7 +19,8 @@ reStructuredText (``.rst``) markup languages (with Sphinx extensions), and
 processed using Sphinx to create a formatted stand-alone website. Developers can
 view this content either in its raw form as .rst markup files, or you can
 generate the HTML content and view it with a web browser directly on your
-workstation.
+workstation. The best reading experience is by viewing the generated HTML at
+https://opea-project.github.io.
 
 You can read details about `markdown`_, `reStructuredText`_, and `Sphinx`_ from
 their respective websites.
@@ -49,12 +50,13 @@ You'll need ``git`` installed to get the working folders set up:
      sudo apt install git
 
 Here's the recommended folder setup for documentation contributions and
-generation, a parent folder called ``opea-project-docsgen`` holds six locally
-cloned repos from the opea-project:
+generation, a parent folder called ``opea-project`` holds six locally
+cloned repos from the opea-project.  You can use a different name for the parent
+folder but the doc build process assumes the repo names are as shown here:
 
 .. code-block:: none
 
-   opea-project-docsgen
+   opea-project
    ├── docs
    ├── GenAIComps
    ├── GenAIEval
@@ -62,37 +64,55 @@ cloned repos from the opea-project:
    ├── GenAIInfra
    ├── opea-project.github.io
 
-The parent ``opea-project-docsgen`` folder is there to organize the cloned repos
+The parent ``opea-project`` folder is there to organize the cloned repos
 from the project.  If you have repo publishing rights, we'll also be cloning the
 publishing repo opea-project.github.io later in these steps.
 
-In the following steps, you'll clone the upstream repos You'll only need to do
-this once to set up the folder structure:
+In the following steps, you'll create a fork of all the upstream OPEA project
+repos needed to build the documentation to your personal GitHub account, clone
+your personal fork to your local development computer, and then link that to the
+upstream repo as well.  You'll only need to do this once to set up the folder
+structure:
 
-.. note:: These instructions are cloning the upstream OPEA project repositories
-   to do documentation generation. If you're doing OPEA development, you may
-   already have forked copies of these repos on your system.  You may have to
-   adjust these instructions accordingly.
+#. Use your browser to visit https://github.com/opea-project and do a
+   fork of the **docs** repo to your personal GitHub account.)
 
-#. At a command prompt, create the working folder on your development computer and
-   clone all the opea-project repos containing documentation:
+   .. image:: images/opea-docs-fork.png
+      :align: center
+      :class: drop-shadow
+
+#. At a command prompt, create a working folder on your development computer and
+   clone your personal ``docs`` repository:
 
    .. code-block:: bash
 
       cd ~
-      mkdir opea-project-docsgen && cd opea-project-docsgen
-      for d in docs GenAIComps GenAIExamples GenAIEval GenAIInfra ; do
-        git clone https://github.com/opea-project/$d.git
-      done
+      mkdir opea-project && cd opea-project
+      git clone https://github.com/<github-username>/docs.git
 
-   After this, you'll have ``origin`` for each cloned repo pointing to the
-   upstream project repos. (Again, if you're doing OPEA development, you may
-   have forked the upstream repos to your personal GitHub account and cloned
-   your personal repo locally as ``origin`` and set the OPEA project repos as the
-   ``upstream`` repo.)
+#. For the cloned local repo, tell git about the upstream repo:
+
+   .. code-block:: bash
+
+      cd docs
+      git remote add upstream https://github.com/opea-project/docs.git
+
+   After that, you'll have ``origin`` pointing to your cloned personal repo and
+   ``upstream`` pointing to the project repo.
+
+#. Do the same steps (fork to your personal account, clone to your local
+   computer, and setup the git upstream remote) for the other repos containing
+   project documentation, replacing the docs.git repo name in the previous step
+   with the appropriate repo name in this list:
+
+   * GenAIComps
+   * GenAIEval
+   * GenAIExamples
+   * GenAIInfra
+
 
 #. If you haven't done so already, be sure to configure git with your name
-   and email address for the ``signed-off-by`` line in your commit messages:
+   and email address for the ``Signed-off-by`` line in your commit messages:
 
    .. code-block:: bash
 
@@ -111,6 +131,7 @@ later, and these other tools:
 * sphinx-tabs               version: 3.4.5
 * myst-parser               version: 3.0.1
 * sphinxcontrib-mermaid     version: 0.9.2
+* pymarkdownlnt             version: 0.9.21
 
 Depending on your Linux version, install the needed tools.  You should consider
 using the `Python virtual environment`_
@@ -119,7 +140,7 @@ your computer.
 
 .. _Python virtual environment: https://https://docs.python.org/3/library/venv.html
 
-For Ubuntu use:
+For Ubuntu, use:
 
 .. code-block:: bash
 
@@ -130,7 +151,7 @@ Then use ``pip3`` to install the remaining Python-based tools specified in the
 
 .. code-block:: bash
 
-   cd ~/opea-project-docsgen/docs
+   cd ~/opea-project/docs
    pip3 install --user -r scripts/requirements.txt
 
 Use this command to add ``$HOME/.local/bin`` to the front of your ``PATH`` so
@@ -162,9 +183,9 @@ And with that you're ready to generate the documentation.
 
    .. code-block:: console
 
-      ~/opea-project-docsgen/docs$ scripts/show-versions.py
+      ~/opea-project/docs$ scripts/show-versions.py
 
-      doc build tool versions found on your system per /home/david/opea-project-docsgen/docs/scripts/requirements.txt...
+      doc build tool versions found on your system per /home/david/opea-project/docs/scripts/requirements.txt...
 
       sphinx                    version: 7.3.0
       docutils                  version: 0.20
@@ -173,7 +194,7 @@ And with that you're ready to generate the documentation.
       myst-parser               version: 3.0.1
       sphinx-md                 version: 0.0.3
       sphinxcontrib-mermaid     version: 0.9.2
-
+      pymarkdownlnt             version: 0.9.21
 
 Documentation Presentation Theme
 ********************************
@@ -197,25 +218,30 @@ Run the Documentation Processors
 
 The ``docs`` folder (with all cloned sibling repos) have all the doc source files,
 images, extra tools, and ``Makefile`` for generating a local copy of the OPEA
-technical documentation. (The ``Makefile`` copies all needed files from these
-cloned repos into a temporary folder in a ``_build`` working folder.)
+technical documentation. It's best to start with a clean doc-build environment
+so use ``make clean`` to remove the ``_build`` working folder if it exists.  The
+``Makefile`` creates the ``_build`` folder (if it doesn't exist) and copies all
+needed files from these cloned repos into the ``_build/rst`` working folder.
 
 .. code-block:: bash
 
-   cd ~/opea-project-docsgen/docs
+   cd ~/opea-project/docs
+   make clean
    make html
 
 Depending on your development system, it will take less a minute to collect and
 generate the HTML content.  When done, you can view the HTML output in
-``~/opea-project-docsgen/docs/_build/html/index.html``. You can also ``cd`` to the
-``_build/html`` folder and run a local web server with the command:
+``~/opea-project/docs/_build/html/index.html``.
+
+As a convenience, there's a make target that will ``cd`` to the ``_build/html``
+folder and run a local Python web server:
 
 .. code-block:: bash
 
-   cd _build/html
-   python3 -m http.server
+   make server
 
-and use your web browser to open the URL:  ``http://localhost:8000``.
+and use your web browser to open the URL:  ``http://localhost:8000``.  When
+done, press :kbd:`ctrl-C` in your command-prompt window to stop the web server.
 
 Publish Content
 ***************
@@ -229,11 +255,11 @@ directly to the upstream repo rather than to a personal forked copy):
 
 .. code-block:: bash
 
-   cd ~/opea-project-docsgen
+   cd ~/opea-project
    git clone https://github.com/opea-project/opea-project.github.io.git
 
-Then, after you've verified the generated HTML from ``make html`` looks
-good, you can push directly to the publishing site with:
+Then, after you've verified the generated HTML produced by ``make html`` looks
+good, you can push to the publishing site with:
 
 .. code-block:: bash
 
@@ -285,11 +311,11 @@ repos, and add some extra flags to the ``make`` commands:
 
    version=0.8
    for d in docs GenAIComps GenAIExamples GenAIEval GenAIInfra ; do
-    cd ~/opea-project-docsgen/$d
+    cd ~/opea-project/$d
     git checkout $version
    done
 
-   cd ~/opea-project-docsgen/docs
+   cd ~/opea-project/docs
    make clean
    make DOC_TAG=release RELEASE=$version html
    make DOC_TAG=release RELEASE=$version publish
@@ -301,15 +327,37 @@ Filter Expected Warnings
 
 Alas, there are some known issues with the Sphinx processing that generate
 warnings.  We've added a post-processing filter on the output of the
-documentation build process to check for "expected" messages from the generation
-process output. By doing this, only "unexpected" messages will be reported and
+documentation build process to check for "expected" warning messages in the generated
+log output. By doing this, only "unexpected" messages will be reported and
 cause the build process to fail with a message:
 
 .. code-block:: console
 
    New errors/warnings found, please fix them:
 
-followed by messages that weren't expected. If all messages were filtered away,
+followed by messages that weren't expected. Note that the file names shown in
+the error/warning messages will be for files in the ``_build/rst`` folder
+(copied from the repos). For example,
+
+.. code-block:: console
+
+   New errors/warnings found, please fix them:
+   ==============================================
+
+   /home/david/opea-project/docs/_build/rst/GenAIInfra/kubernetes-addons/Observability/README.md:5: WARNING: Non-consecutive header level increase; H1 to H4 [myst.header]
+   /home/david/opea-project/docs/_build/rst/GenAIInfra/kubernetes-addons/Observability/README.md:111: WARNING: Non-consecutive header level increase; H3 to H6 [myst.header]
+
+For files copied from repos other than the docs repo, you'll see the repo name
+in the file path, for example, ``_build/rst/GenAIInfra`` with the path to
+specific file with an issue. For example, the warnings shown here indicate
+a heading level problem on lines 5 and 111 in
+``GenAIInfra/kubernetes-addons/Observability/README.md``.
+
+If you do a ``make html`` without first doing a ``make clean``, there may be
+files left behind from a previous build that can cause some unexpected messages
+to be reported.
+
+If all messages were filtered away,
 the build process will report as successful, reporting:
 
 .. code-block:: console
