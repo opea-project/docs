@@ -19,5 +19,5 @@ We're building this microservices documentation from content in the
 
    /GenAIComps/README
    /GenAIComps/*
-   /GenAIComps/**/*
 
+.. include:: microservices.txt
