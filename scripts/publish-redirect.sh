@@ -15,14 +15,14 @@ fi
 cat>"$1"<<EOF
 <html>
   <head>
-    <title>ACRN Hypervisor documentation Redirect</title>
+    <title>OPEA Project documentation Redirect</title>
     <meta http-equiv="refresh" content="0; URL=$2">
     <script>
       window.location.href = "$2"
     </script>
   </head>
   <body>
-    <p>Please visit the <a href="/latest/">latest ACRN documentation</a></p>
+    <p>Please visit the <a href="/latest/">latest OPEA Project documentation</a></p>
   </body>
 </html>
 EOF
