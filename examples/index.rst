@@ -198,7 +198,7 @@ Translation Application
    /GenAIExamples/Translation/*
    /GenAIExamples/Translation/**/*
 
-VideoRAGQnA Application
+VideoQnA Application
 ***********************
 
 .. rst-class:: rst-columns
@@ -207,8 +207,8 @@ VideoRAGQnA Application
    :maxdepth: 1
    :glob:
 
-   /GenAIExamples/VideoRAGQnA/*
-   /GenAIExamples/VideoRAGQnA/**/*
+   /GenAIExamples/VideoQnA/*
+   /GenAIExamples/VideoQnA/**/*
 
 VisualQnA Application
 *********************
