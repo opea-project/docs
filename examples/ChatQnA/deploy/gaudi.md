@@ -38,12 +38,11 @@ are interested to use.
 
 To summarize, Below is the flow of contents we will be covering in this tutorial:
 
-1. Pre-requistes
+1. Prerequisites
 2. Prepare (Building / Pulling) Docker images
 3. Use case setup
-4. Validate microservice
-5. Deploy the use case
-6. Interacting with ChatQnA deployment
+4. Deploy the use case
+5. Interacting with ChatQnA deployment
 
 ## Prerequisites
 
