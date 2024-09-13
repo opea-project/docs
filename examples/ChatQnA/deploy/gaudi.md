@@ -333,7 +333,8 @@ Set the necessary environment variables to setup the use case case
     export MEGA_SERVICE_HOST_IP=${host_ip}
     export BACKEND_SERVICE_ENDPOINT="http://${host_ip}:8888/v1/chatqna"
 
-### Gaurdrails(optional)
+### Guardrails (optional)
+
 If guardrails microservice is enabled in the pipeline, the below environment variables are necessary to be set.
 ```
 export GURADRAILS_MODEL_ID="meta-llama/Meta-Llama-Guard-2-8B"
