@@ -377,15 +377,15 @@ cd GenAIExamples/ChatQnA/docker_compose/intel/hpu/gaudi
 Follow ONE of the methods below.
 1. Use TGI for the LLM backend.
 
-```bash
-docker compose -f compose.yaml up -d
-```
+   ```bash
+   docker compose -f compose.yaml up -d
+   ```
 
 2. Enable the Guardrails microservice in the pipeline. It will use a TGI Guardrails service.
 
-```bash
-docker compose -f compose_guardrails.yaml up -d
-```
+   ```bash
+   docker compose -f compose_guardrails.yaml up -d
+   ```
 :::
 ::::
 
