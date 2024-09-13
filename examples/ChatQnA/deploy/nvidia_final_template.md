@@ -1,4 +1,4 @@
-# Single node on-prem deployment with vLLM or TGI on Xeon Scalable processors
+# Single node on-prem deployment with TGI on Nvidia gpu
 
 This deployment section covers single-node on-prem deployment of the ChatQnA
 example with OPEA comps to deploy using TGI service. There are several
