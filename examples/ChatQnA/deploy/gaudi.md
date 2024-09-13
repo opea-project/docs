@@ -778,7 +778,7 @@ data: b'.'
 data: b'</s>'
 data: [DONE]
 ```
-### Gaurdrail Microservice
+### Guardrail Microservice
 If you had enabled Guardrail microservice, access via the below curl command
 
 
