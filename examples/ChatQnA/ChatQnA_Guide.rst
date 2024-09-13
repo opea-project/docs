@@ -169,7 +169,7 @@ Single Node
    deploy/xeon
    deploy/gaudi
    deploy/nvidia
-   deploy/AIPC
+   deploy/aipc
 
 Kubernetes
 ==========
