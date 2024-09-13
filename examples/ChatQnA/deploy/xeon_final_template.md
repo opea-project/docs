@@ -356,7 +356,7 @@ docker compose -f compose.yaml up -d
 ::::{tab-set}
 :::{tab-item} vllm
 :sync: vllm
-    Check the start up log by `docker compose -f ./docker/xeon/compose_vllm.yaml logs`.
+    Check the start up log by `docker compose -f ./compose_vllm.yaml logs`.
 The warning messages print out the variables if they are **NOT** set.
 
     ubuntu@xeon-vm:~/GenAIExamples/ChatQnA/docker_compose/intel/cpu/xeon$ docker compose -f ./compose_vllm.yaml up -d
@@ -373,7 +373,7 @@ The warning messages print out the variables if they are **NOT** set.
 :::{tab-item} TGI
 :sync: TGI
 
-    Check the start up log by `docker compose -f ./docker/xeon/compose_vllm.yaml logs`.
+    Check the start up log by `docker compose -f ./compose.yaml logs`.
 The warning messages print out the variables if they are **NOT** set.
 
     ubuntu@xeon-vm:~/GenAIExamples/ChatQnA/docker_compose/intel/cpu/xeon$ docker compose -f ./compose.yaml up -d
