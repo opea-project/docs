@@ -788,6 +788,7 @@ To access the frontend, open the following URL in your browser: http://{host_ip}
     ...
     ports:
       - "80:5173"
+```
 ### Conversational UI
 To access the Conversational UI (react based) frontend, modify the UI service in the compose.yaml file. Replace chaqna-gaudi-ui-server service with the chatqna-gaudi-conversation-ui-server service as per the config below:
 ```
