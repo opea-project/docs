@@ -769,7 +769,7 @@ data: b'.'
 data: b'</s>'
 data: [DONE]
 ```
-##### Gaurdrail Microservice
+### Gaurdrail Microservice
 If you had enabled Gaurdrail microservice, access via the below curl command
 
 curl http://${host_ip}:9090/v1/guardrails\
@@ -778,7 +778,7 @@ curl http://${host_ip}:9090/v1/guardrails\
   -H 'Content-Type: application/json'
 
 
-##Launch UI
+## Launch UI
 ### Basic UI
 To access the frontend, open the following URL in your browser: http://{host_ip}:5173. By default, the UI runs on port 5173 internally. If you prefer to use a different host port to access the frontend, you can modify the port mapping in the compose.yaml file as shown below:
 ```
