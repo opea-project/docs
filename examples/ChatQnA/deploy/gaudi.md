@@ -778,7 +778,8 @@ data: b'</s>'
 data: [DONE]
 ```
 ### Gaurdrail Microservice
-If you had enabled Gaurdrail microservice, access via the below curl command
+If you had enabled Guardrail microservice, access via the below curl command
+
 
 ```
 curl http://${host_ip}:9090/v1/guardrails\
