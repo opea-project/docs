@@ -165,11 +165,9 @@ Single Node
 
 .. toctree::
    :maxdepth: 1
+   :glob:
 
-   deploy/xeon
-   deploy/gaudi
-   deploy/nvidia
-   deploy/AIPC
+   deploy/*
 
 Kubernetes
 ==========
