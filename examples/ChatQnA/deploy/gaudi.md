@@ -345,7 +345,8 @@ Set the necessary environment variables to setup the use case case
 
 If guardrails microservice is enabled in the pipeline, the below environment variables are necessary to be set.
 ```
-export GAURDRAILS_MODEL_ID="meta-llama/Meta-Llama-Guard-2-8B"
+export GUARDRAILS_MODEL_ID="meta-llama/Meta-Llama-Guard-2-8B"
+
 
 export SAFETY_GUARD_MODEL_ID="meta-llama/Meta-Llama-Guard-2-8B"
 export SAFETY_GUARD_ENDPOINT="http://${host_ip}:8088"
