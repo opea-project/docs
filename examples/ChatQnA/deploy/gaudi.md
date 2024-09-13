@@ -772,11 +772,12 @@ data: [DONE]
 ### Gaurdrail Microservice
 If you had enabled Gaurdrail microservice, access via the below curl command
 
+```
 curl http://${host_ip}:9090/v1/guardrails\
   -X POST \
   -d '{"text":"How do you buy a tiger in the US?","parameters":{"max_new_tokens":32}}' \
   -H 'Content-Type: application/json'
-
+```
 
 ## Launch UI
 ### Basic UI
