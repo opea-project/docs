@@ -54,9 +54,6 @@ GenAIComps
     ├── prompt_registry
     ├── reranks
     ├── retrievers
-    ├── test_finetuning_llm_pretraining.sh
-    ├── test_finetuning_rerank.sh
-    ├── test_reranks_mosec-neuralspeed.sh
     ├── tts
     ├── vectorstores
     └── web_retrievers
@@ -71,10 +68,9 @@ GenAIComps
 │       ├── __init__.py
 │       └── tei     #vendor name or serving framework name
 │           ├── langchain
-│           │   ├── docker_compose_embedding.yaml  #could be multiple for different HW
 │           │   ├── Dockerfile        
-│           │   ├── Dockerfile_AMD_GPU         
-│           │   ├── Dockerfile_Nvidia_GPU      
+│           │   ├── Dockerfile.amd_gpu         
+│           │   ├── Dockerfile.nvidia_gpu      
 │           │   ├── embedding_tei.py    # definition and registration of microservice
 │           │   ├── README.md
 │           │   └── requirements.txt
@@ -83,7 +79,7 @@ GenAIComps
 ├── tests
 │   └── embeddings
 │       ├── test_embeddings_tei_langchain.sh
-│       ├── test_embeddings_tei_langchain_amd_gpu.sh     
+│       ├── test_embeddings_tei_langchain_on_amd_gpu.sh     
 │       └── test_embeddings_tei_llama_index.sh
 └── README.md
 
@@ -91,12 +87,13 @@ GenAIComps
 - **File Descriptions**:
   - `embedding_tei.py`: This file defines and registers the microservice. It serves as the entrypoint of the Docker container. Refer to [whisper ASR](https://github.com/opea-project/GenAIComps/tree/main/comps/asr/whisper) for a simple example or [TGI](https://github.com/opea-project/GenAIComps/blob/main/comps/llms/text-generation/tgi/llm.py) for a more complex example that required adapting to OpenAI API.
   - `requirements.txt`: This file is used by Docker to install the necessary dependencies.
-  - `Dockerfile` and optionally `docker_compose_yaml`: These files are used to generate the service container image. Please follow naming conventions:
-    - Dockerfile: `Dockerfile_[vendor]_[hardware]`
-    - Docker Compose: `docker_compose_[microservice type]_[vendor]_[hardware]` all lower case (i,e opea/llm-vllm-intel-hpu, opea/llm-faqgen-tgi-intel-hpu-svc)
-    - Docker Image: `opea/[microservice type]-[microservice sub type]-[library name]-[vendor]-[hardware]:latest`
+  - `Dockerfile`: Used to generate the service container image. Please follow naming conventions:
+    - Dockerfile: `Dockerfile.[vendor]_[hardware]`, vendor and hardware in lower case (i,e Dockerfile.amd_gpu)
+    - Docker Image: `opea/[microservice type]-[microservice sub type]-[library name]-[vendor]-[hardware]:latest` all lower case (i,e opea/llm-vllm-intel-hpu, opea/llm-faqgen-tgi-intel-hpu-svc)
 
-  - `tests/` : test should validate building image, starting service, validating microservie, stoping and destroying the container. Please refer to an example [test_asr_whisper.sh](https://github.com/opea-project/GenAIComps/blob/main/tests/asr/test_asr_whisper.sh). Please follow naming convention:`test_[microservice type]-[microservice sub type]-[library name]-[vendor]-[hardware].sh` 
+  - `tests/[microservices type]/` : contains end-to-end test for microservices Please refer to an example [test_asr_whisper.sh](https://github.com/opea-project/GenAIComps/blob/main/tests/asr/test_asr_whisper.sh). Please follow naming convention:`test_[microservice type]_[microservice sub type]_[library name]_on_[vendor]_[hardware].sh` 
+  - `tests/cores/` : contains UT test for core python components (orchestrator, gateway...). Please follow naming convention:`test_[core component].sh` 
+
   - `README.md`: at minimum it should include: microservice description, build and start microservice commands and curl command with expected output.
 
 4. Now you have created all the required files, and validated your service. Last step is to modify the `README.md` at the component level `GenaIComps/comp/microservice type` to list your new component. Now you are ready to file your PR!. In the upcoming release maintainers will push the Docker Image to the Docker Hub. 
@@ -109,7 +106,7 @@ OPEA GenAIExamples examples offer simple deployment, testing, and scalability wi
 
 - Navigate to [OPEA GenAIExamples](https://github.com/opea-project/GenAIExamples/tree/main) and check the catalog of examples. If you find one that is very similar to what you are looking for, you can contribute your variation of it to that particular example folder. If you are bringing a completly new application you will need to create a separate example folder. 
 
-- Before stitching together all the microservices to build your application, let's make sure all the required building blocks are available!. You will notice [ChatQnA Flow Chart]() OPEA uses gateways to handle requests and route them to the corresponding megaservices (unless you have an agent that will otherwise handle the gateway function). If you are just making small changes to the application, like swaping one DB for another, you can reuse the existng Gateway but if you are contributing a completely new application, you will need to add a Gateway class. Navigate to [OPEA GenAIComps Gateway](https://github.com/opea-project/GenAIComps/blob/main/comps/cores/mega/gateway.py) and implement how Gateway should handle requests for your application. Note that Gateway implementation will move to GenAIExamples in future release. 
+- Before stitching together all the microservices to build your application, let's make sure all the required building blocks are available!. You will notice in [ChatQnA Flow Chart](https://github.com/opea-project/GenAIExamples/blob/main/ChatQnA/README.md) OPEA uses gateways to handle requests and route them to the corresponding megaservices (unless you have an agent that will otherwise handle the gateway function). If you are just making small changes to the application, like swaping one DB for another, you can reuse the existing Gateway but if you are contributing a completely new application, you will need to add a Gateway class. Navigate to [OPEA GenAIComps Gateway](https://github.com/opea-project/GenAIComps/blob/main/comps/cores/mega/gateway.py) and implement how Gateway should handle requests for your application. Note that Gateway implementation is moving to GenAIExamples in future release. 
 
 - Follow the folder structure in the ChatQA example below:
 
@@ -124,7 +121,7 @@ OPEA GenAIExamples examples offer simple deployment, testing, and scalability wi
 │   │   │   └── xeon
 │   │   │       ├── compose.yaml
 │   │   │       ├── README.md 
-│   │   │       └── set_env.sh  #optional export env variables, sometimes in README
+│   │   │       └── set_env.sh  #export env variables
 │   │   └── hpu
 │   │       └── gaudi
 │   │           ├── compose.yaml
@@ -146,7 +143,7 @@ OPEA GenAIExamples examples offer simple deployment, testing, and scalability wi
 │   │   │       ├── gmc
 │   │   │       │   └── chatQnA_xeon.yaml
 │   │   │       └── manifest
-│   │   │           └── chatqna.yaml     # could be multiple .yaml for various applications
+│   │   │           └── chatqna.yaml     
 │   │   └── hpu
 │   │       └── gaudi
 │   │           ├── gmc
@@ -188,11 +185,11 @@ OPEA GenAIExamples examples offer simple deployment, testing, and scalability wi
 
 You will need additional step to configure CI/CD for merging your GenAIComp or GenAIExample. 
 - Connect hardware into OPEA GHA as self-hosted runner 
-- Contribute new test scripts for the new hardware:
-- Dockerfile for the Component (i,e `GenAIComp/comps/llm/text-generation/tgi/docker/Dockerfile_[vendor]_[hardware]` )
+- Contribute new test scripts for the new hardware
+- Dockerfile for the Component (i,e `GenAIComp/comps/llm/text-generation/tgi/Dockerfile.[vendor]_[hardware]` )
 - Update image build yaml for new images​
 - Update CI/CD workflow to identify and deploy new test
-OPEA maintainer [suyue git handle?]() can assist with this. 
+OPEA maintainer [@chensuyue](suyue.chen@intel.com) can assist in this process. 
 
 ### Community Discussions
 
@@ -283,8 +280,6 @@ The OPEA projects use GitHub Action for CI test.
 - [Developer Certificate of Origin (DCO)](https://en.wikipedia.org/wiki/Developer_Certificate_of_Origin), the PR must agree to the terms of Developer Certificate of Origin by signing off each of commits with `-s`, e.g. `git commit -s -m 'This is my commit message'`.
 - Unit Test, the PR must pass all unit tests and without coverage regression.
 - End to End Test, the PR must pass all end to end tests.
-  - If the PR introduces new microservice for `GenAIComps`, the PR must include new end to end tests. The test script name should match with the folder name so the test will be automatically triggered by test structure, for examples, if the new service is `GenAIComps/comps/dataprep/redis/langchain`, then the test script name should be `GenAIComps/tests/test_dataprep_redis_langchain.sh`.
-  - If the PR introduces new example for `GenAIExamples`, the PR must include new example end to end tests. The test script name should match with the example name so the test will be automatically triggered by test structure, for examples, if the example is `GenAIExamples/ChatQnA`, then the test script name should be `ChatQnA/tests/test_chatqna_on_gaudi.sh` and `ChatQnA/tests/test_chatqna_on_xeon.sh`.
 
 #### Pull Request Review
 You can add reviewers from [the code owners list](../codeowner.md) to your PR.
