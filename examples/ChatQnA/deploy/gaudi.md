@@ -36,6 +36,15 @@ use:
 Conversational UI is optional, but a feature supported in this example if you
 are interested to use.
 
+To summarize, Below is the flow of contents we will be covering in this tutorial:
+
+1. Pre-requistes
+2. Prepare (Building / Pulling) Docker images
+3. Use case setup
+4. Validate microservice
+5. Deploy the use case
+6. Interacting with ChatQnA deployment
+
 ## Prerequisites
 
 First step is to clone the GenAIExamples and GenAIComps. GenAIComps are
