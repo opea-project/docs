@@ -27,4 +27,14 @@ We're building this documentation from content in the
    /GenAIExamples/README
    /GenAIExamples/*
 
+**Example Applications Table of Contents**
+
+.. rst-class:: rst-columns
+
+.. contents::
+   :local:
+   :depth: 1
+
+----
+
 .. include:: examples.txt
