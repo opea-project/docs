@@ -96,9 +96,9 @@ GenAIComps
 
   - `README.md`: at minimum it should include: microservice description, build and start microservice commands and curl command with expected output.
 
-4. Now you have created all the required files, and validated your service. Last step is to modify the `README.md` at the component level `GenAIComps/comp/[microservice type]` to list your new component. Now you are ready to file your PR!. In the upcoming release maintainers will push the Docker Image to the Docker Hub.
+4. Now you have created all the required files, and validated your service. Last step is to modify the `README.md` at the component level `GenAIComps/comps/[microservice type]` to list your new component. Now you are ready to file your PR!. In the upcoming release maintainers will push the Docker Image to the Docker Hub.
 
-5. After your component has been merged you are likely interested to build an application with it, and perhaps contributing it also to OPEA! so please continue to the "Contribute a GenAIExample" guide
+5. After your component has been merged you are likely interested to build an application with it, and perhaps contributing it also to OPEA! so please continue to the [Contribute a GenAI Example](#contribute-a-genai-example) guide.
 
 ### Contribute a GenAI Example
 
@@ -170,12 +170,12 @@ OPEA GenAIExamples examples offer simple deployment, testing, and scalability wi
 - **File Descriptions**:
   - `chatqna.py`: application definition using microservice, megaservice and gateway. There could be multiple .py in the folder based on slight modification of the example application.
   - `docker_build_image/build.yaml`: builds necessary images pointing to the Dockerfiles in the GenAIComp repository. 
-  - `docker_compose/vendor/device/compose.yaml`: defines pipeline for  docker compose deployment. For selectng docker image name please follow the naming convention: 
+  - `docker_compose/vendor/device/compose.yaml`: defines pipeline for  Docker compose deployment. For selectng docker image name please follow the naming convention: 
     - Docker Image: `opea/[example name]-[feature name]:latest` all lower case (i,e: opea/chatqna, opea/codegen-react-ui)
   - `kubernetes/vendor/device/manifests/chatqna.yaml`: used for K8s deployemnt
   - `kubernetes/vendor/device/gmc/chatqna.yaml`: (optional) used for deployment with GMC
-  - `tests/`: at minimum you need to provide an E2E test with docker compose. If you are contritbutng K8s manifests and GMC yaml, you should also provide test for those. Please follow naming convention: 
-    - docker compose test: `tests/test_compose_on_[hardware].sh`
+  - `tests/`: at minimum you need to provide an E2E test with Docker compose. If you are contritbutng K8s manifests and GMC yaml, you should also provide test for those. Please follow naming convention: 
+    - Docker compose test: `tests/test_compose_on_[hardware].sh`
     - K8s test: `tests/test_manifest_on_[hardware].sh`
     - K8s with GMC test: `tests/test_gmc_on_[hardware].sh`
   - `ui`: (optional)
