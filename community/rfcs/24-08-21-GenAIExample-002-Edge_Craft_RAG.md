@@ -80,6 +80,58 @@ The EC-RAG pipeline will expose 3 types of REST API endpoint:
 - **/v1/settings** for configuration
 - **/v1/chatqna** for inferencing
 
+#### /v1/data
+
+| Description   | Action | Endpoint      | Data Schema        |
+| ------------- | ------ | ------------- | ------------------ |
+| Upload a file | POST	 | /v1/data      | FastAPI.UploadFile |
+| List files	| GET	 | /v1/data	     |                    |
+| Remove	    | DELETE | /v1/data/{id} |	                  |
+
+#### /v1/settings/pipelines
+
+| Description        | Action | Endpoint                      | Data Schema        |
+| ------------------ | ------ | ----------------------------- | ------------------ |
+| Setup a pipeline   | POST   | /v1/settings/pipelines        |	Pipeline object    |
+| Get/list pipelines | GET    | /v1/settings/pipelines(/{id}) | Pipeline object(s) |               |
+| Update pipelines   | PATCH  | /v1/settings/pipelines/{id}   | Pipeline object    |
+| Remove a pipeline  | DELETE | /v1/settings/pipelines/{id}   |                    |
+
+### /v1/settings/models
+
+| Description     |	Action | Endpoint                   | Data Schema     |
+| --------------- | ------ | -------------------------- | --------------- |
+| Load models     |	POST   | /v1/settings/models        | Model object    |
+| Get/list models | GET    | /v1/settings/models(/{id}) | Model object(s) |
+| Update models   | PATCH  | /v1/settings/models/{id}   | Model object    |
+| Remove a model  | DELETE | /v1/settings/models/{id}   |                 |
+
+### Pipeline configuration example
+
+```json
+{
+    "name": "test1",
+    "node_parser" : {
+        "chunk_size": 30,
+        "chunk_overlap": 10,
+        "parser_type": "simple"
+    },
+    "indexer": {
+        "indexer_type": "vector",
+        "embedding_model": {
+            "model_id": "BAAI/bge-small-en-v1.5",
+            "model_path": "./bge_ov",
+            "device": "cpu"
+        }
+    },
+    "retriever": "vectorsimilarity",
+
+    // ... More to be added ...
+
+    "active": "True"
+}
+```
+
 #### UI
 
 The EC-RAG UI is gradio. The user is able to select the models as well as input
