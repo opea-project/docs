@@ -31,8 +31,8 @@ sed -i 's/(\/docs\//(\//g' $mdfiles
 # sed -i 's/\(\/[a-zA-z]*\))/\1\/README.md)/g' $files
 
 # fix tagging on code blocks, for myst parser (vs. GFM syntax)
-
-sed -i 's/^```mermaid/```{mermaid}/' `grep -ril --include="*.md" '\`\`\`mermaid'`
+# with myst_fence_as_directive = ["mermaid"] we don't need to do this any mre
+# sed -i 's/^```mermaid/```{mermaid}/' `grep -ril --include="*.md" '\`\`\`mermaid'`
 
 # fix references to opea-project/blob/main/... to use the special role # :{repo}_raw:`{path to file}`
 # alas, using sphinx roles doesn't work in markdown files, so leave them alone
