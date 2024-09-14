@@ -103,25 +103,25 @@ From within the `GenAIComps` folder
 #### Build Dataprep Image
 
 ```bash
-docker build --no-cache -t opea/dataprep-redis:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/dataprep/redis/langchain/docker/Dockerfile .
+docker build --no-cache -t opea/dataprep-redis:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/dataprep/redis/langchain/Dockerfile .
 ```
 
 #### Build Embedding Image
 
 ```bash
-docker build --no-cache -t opea/embedding-tei:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/embeddings/langchain/docker/Dockerfile .
+docker build --no-cache -t opea/embedding-tei:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/embeddings/tei/langchain/Dockerfile .
 ```
 
 #### Build Retriever Image
 
 ```bash
-docker build --no-cache -t opea/retriever-redis:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/retrievers/langchain/redis/docker/Dockerfile .
+docker build --no-cache -t opea/retriever-redis:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/retrievers/redis/langchain/Dockerfile .
 ```
 
 #### Build Rerank Image
 
 ```bash
-docker build --no-cache -t opea/reranking-tei:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/reranks/tei/docker/Dockerfile .
+docker build --no-cache -t opea/reranking-tei:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/reranks/tei/Dockerfile .
 ```
 
 #### Build docker
@@ -176,14 +176,14 @@ Build the megaservice image for this use case
 
 ```
 cd ..
-cd GenAIExamples/ChatQnA
+cd GenAIExamples
 git checkout tags/v1.0
-cd docker
+cd ChatQnA
 ```
 
 ```bash
 docker build --no-cache -t opea/chatqna:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f Dockerfile .
-cd ../../..
+cd ../..
 ```
 
 ### Build Other Service images
@@ -191,8 +191,9 @@ cd ../../..
 If you want to enable guardrails microservice in the pipeline, please use the below command instead:
 
 ```bash
-docker build --no-cache -t opea/chatqna-guardrails:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f Dockerfile_guardrails .
-cd ../../..
+cd GenAIExamples/ChatQnA/
+docker build --no-cache -t opea/chatqna-guardrails:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f Dockerfile.guardrails .
+cd ../..
 ```
 
 #### Build the UI Image
@@ -204,6 +205,7 @@ As mentioned, you can build 2 modes of UI
 ```bash
 cd GenAIExamples/ChatQnA/ui/
 docker build --no-cache -t opea/chatqna-ui:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f ./docker/Dockerfile .
+cd ../../..
 ```
 
 *Conversation UI*
@@ -212,6 +214,7 @@ If you want a conversational experience with chatqna megaservice.
 ```bash
 cd GenAIExamples/ChatQnA/ui/
 docker build --no-cache -t opea/chatqna-conversation-ui:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f ./docker/Dockerfile.react .
+cd ../../..
 ```
 
 ### Sanity Check
@@ -225,10 +228,13 @@ Check if you have the below set of docker images, before moving on to the next s
 * opea/embedding-tei:latest
 * opea/retriever-redis:latest
 * opea/reranking-tei:latest
-* opea/vllm:latest
+* opea/tei-gaudi:latest
+* opea/chatqna:latest or opea/chatqna-guardrails:latest
 * opea/chatqna:latest
 * opea/chatqna-ui:latest
+* opea/vllm:latest
 * opea/llm-vllm:latest
+
 :::
 :::{tab-item} TGI
 :sync: TGI
@@ -295,19 +301,18 @@ Set the necessary environment variables to setup the use case case
     export DATAPREP_GET_FILE_ENDPOINT="http://${host_ip}:6007/v1/dataprep/get_file"
     export DATAPREP_DELETE_FILE_ENDPOINT="http://${host_ip}:6007/v1/dataprep/delete_file"
 
-### VectorDB
-
+  ### VectorDB
 
     export REDIS_URL="redis://${host_ip}:6379"
     export INDEX_NAME="rag-redis"
 
-### Embedding Service
-
+  ### Embedding Service
 
     export EMBEDDING_MODEL_ID="BAAI/bge-base-en-v1.5"
     export EMBEDDING_SERVICE_HOST_IP=${host_ip}
     export RETRIEVER_SERVICE_HOST_IP=${host_ip}
     export TEI_EMBEDDING_ENDPOINT="http://${host_ip}:8090"
+    export tei_embedding_devices=all
 
 ### Reranking Service
 
@@ -325,6 +330,7 @@ Set the necessary environment variables to setup the use case case
     export LLM_SERVICE_HOST_IP=${host_ip}
     export LLM_SERVICE_PORT=9000
     export vLLM_LLM_ENDPOINT="http://${host_ip}:8007"
+
 :::
 :::{tab-item} TGI
 :sync: TGI
@@ -336,18 +342,17 @@ Set the necessary environment variables to setup the use case case
 :::
 ::::
 
+    export llm_service_devices=all
+
 ### Megaservice
 
     export MEGA_SERVICE_HOST_IP=${host_ip}
     export BACKEND_SERVICE_ENDPOINT="http://${host_ip}:8888/v1/chatqna"
 
-### Guardrails (optional)
-
+### Gaurdrails(optional)
 If guardrails microservice is enabled in the pipeline, the below environment variables are necessary to be set.
 ```
-export GUARDRAILS_MODEL_ID="meta-llama/Meta-Llama-Guard-2-8B"
-
-
+export GURADRAILS_MODEL_ID="meta-llama/Meta-Llama-Guard-2-8B"
 export SAFETY_GUARD_MODEL_ID="meta-llama/Meta-Llama-Guard-2-8B"
 export SAFETY_GUARD_ENDPOINT="http://${host_ip}:8088"
 export GUARDRAIL_SERVICE_HOST_IP=${host_ip}
@@ -377,15 +382,15 @@ cd GenAIExamples/ChatQnA/docker_compose/intel/hpu/gaudi
 Follow ONE of the methods below.
 1. Use TGI for the LLM backend.
 
-   ```bash
-   docker compose -f compose.yaml up -d
-   ```
+```bash
+docker compose -f compose.yaml up -d
+```
 
 2. Enable the Guardrails microservice in the pipeline. It will use a TGI Guardrails service.
 
-   ```bash
-   docker compose -f compose_guardrails.yaml up -d
-   ```
+```bash
+docker compose -f compose_guardrails.yaml up -d
+```
 :::
 ::::
 
@@ -397,21 +402,42 @@ The warning messages print out the variables if they are **NOT** set.
 ::::{tab-set}
 :::{tab-item} vllm
 :sync: vllm
-
+```bash
     ubuntu@xeon-vm:~/GenAIExamples/ChatQnA/docker_compose/intel/hpu/gaudi$ docker compose -f ./compose_vllm.yaml up -d
-    WARN[0000] The "LANGCHAIN_API_KEY" variable is not set. Defaulting to a blank string.
-    WARN[0000] The "LANGCHAIN_TRACING_V2" variable is not set. Defaulting to a blank string.
-    WARN[0000] The "LANGCHAIN_API_KEY" variable is not set. Defaulting to a blank string.
-    WARN[0000] The "LANGCHAIN_TRACING_V2" variable is not set. Defaulting to a blank string.
-    WARN[0000] The "LANGCHAIN_API_KEY" variable is not set. Defaulting to a blank string.
-    WARN[0000] The "LANGCHAIN_TRACING_V2" variable is not set. Defaulting to a blank string.
-    WARN[0000] The "LANGCHAIN_API_KEY" variable is not set. Defaulting to a blank string.
-    WARN[0000] The "LANGCHAIN_TRACING_V2" variable is not set. Defaulting to a blank string.
-    WARN[0000] /home/ubuntu/GenAIExamples/ChatQnA/docker_compose/intel/hpu/gaudi/compose_vllm.yaml: `version` is obsolete
+    [+] Running 12/12
+    ✔ Network gaudi_default                   Created                                                                        0.1s
+    ✔ Container tei-embedding-gaudi-server    Started                                                                        1.3s
+    ✔ Container vllm-gaudi-server             Started                                                                        1.3s
+    ✔ Container tei-reranking-gaudi-server    Started                                                                        0.8s
+    ✔ Container redis-vector-db               Started                                                                        0.7s
+    ✔ Container reranking-tei-gaudi-server    Started                                                                        1.7s
+    ✔ Container retriever-redis-server        Started                                                                        1.3s
+    ✔ Container llm-vllm-gaudi-server         Started                                                                        2.1s
+    ✔ Container dataprep-redis-server         Started                                                                        2.1s
+    ✔ Container embedding-tei-server          Started                                                                        2.0s
+    ✔ Container chatqna-gaudi-backend-server  Started                                                                        2.3s
+    ✔ Container chatqna-gaudi-ui-server       Started                                                                        2.6s
+```
+
 :::
 :::{tab-item} TGI
 :sync: TGI
-    placeholder
+```bash
+    ubuntu@xeon-vm:~/GenAIExamples/ChatQnA/docker_compose/intel/hpu/gaudi$ docker compose -f ./compose.yaml up -d
+    [+] Running 12/12
+    ✔ Network gaudi_default                   Created                                                                        0.1s
+    ✔ Container tei-reranking-gaudi-server    Started                                                                        1.1s
+    ✔ Container tgi-gaudi-server              Started                                                                        0.8s
+    ✔ Container redis-vector-db               Started                                                                        1.5s
+    ✔ Container tei-embedding-gaudi-server    Started                                                                        1.1s
+    ✔ Container retriever-redis-server        Started                                                                        2.7s
+    ✔ Container reranking-tei-gaudi-server    Started                                                                        2.0s
+    ✔ Container dataprep-redis-server         Started                                                                        2.5s
+    ✔ Container embedding-tei-server          Started                                                                        2.1s
+    ✔ Container llm-tgi-gaudi-server          Started                                                                        1.8s
+    ✔ Container chatqna-gaudi-backend-server  Started                                                                        2.9s
+    ✔ Container chatqna-gaudi-ui-server       Started                                                                        3.3s
+```
 :::
 ::::
 
@@ -427,28 +453,39 @@ To do a quick sanity check, try `docker ps -a` to see if all the containers are 
 
 :::{tab-item} vllm
 :sync: vllm
+```bash
+CONTAINER ID   IMAGE                                                   COMMAND                  CREATED              STATUS              PORTS                                                                                  NAMES
+42c8d5ec67e9   opea/chatqna-ui:latest                                  "docker-entrypoint.s…"   About a minute ago   Up About a minute   0.0.0.0:5173->5173/tcp, :::5173->5173/tcp                                              chatqna-gaudi-ui-server
+7f7037a75f8b   opea/chatqna:latest                                     "python chatqna.py"      About a minute ago   Up About a minute   0.0.0.0:8888->8888/tcp, :::8888->8888/tcp                                              chatqna-gaudi-backend-server
+4049c181da93   opea/embedding-tei:latest                               "python embedding_te…"   About a minute ago   Up About a minute   0.0.0.0:6000->6000/tcp, :::6000->6000/tcp                                              embedding-tei-server
+171816f0a789   opea/dataprep-redis:latest                              "python prepare_doc_…"   About a minute ago   Up About a minute   0.0.0.0:6007->6007/tcp, :::6007->6007/tcp                                              dataprep-redis-server
+10ee6dec7d37   opea/llm-vllm:latest                                    "bash entrypoint.sh"     About a minute ago   Up About a minute   0.0.0.0:9000->9000/tcp, :::9000->9000/tcp                                              llm-vllm-gaudi-server
+ce4e7802a371   opea/retriever-redis:latest                             "python retriever_re…"   About a minute ago   Up About a minute   0.0.0.0:7000->7000/tcp, :::7000->7000/tcp                                              retriever-redis-server
+be6cd2d0ea38   opea/reranking-tei:latest                               "python reranking_te…"   About a minute ago   Up About a minute   0.0.0.0:8000->8000/tcp, :::8000->8000/tcp                                              reranking-tei-gaudi-server
+cc45ff032e8c   opea/tei-gaudi:latest                                   "text-embeddings-rou…"   About a minute ago   Up About a minute   0.0.0.0:8090->80/tcp, :::8090->80/tcp                                                  tei-embedding-gaudi-server
+4969ec3aea02   opea/llm-vllm-hpu:latest                                "/bin/bash -c 'expor…"   About a minute ago   Up About a minute   0.0.0.0:8007->80/tcp, :::8007->80/tcp                                                  vllm-gaudi-server
+0657cb66df78   redis/redis-stack:7.2.0-v9                              "/entrypoint.sh"         About a minute ago   Up About a minute   0.0.0.0:6379->6379/tcp, :::6379->6379/tcp, 0.0.0.0:8001->8001/tcp, :::8001->8001/tcp   redis-vector-db
+684d3e9d204a   ghcr.io/huggingface/text-embeddings-inference:cpu-1.2   "text-embeddings-rou…"   About a minute ago   Up About a minute   0.0.0.0:8808->80/tcp, :::8808->80/tcp                                                  tei-reranking-gaudi-server
+```
 
-```
-CONTAINER ID   IMAGE                                                   COMMAND                  CREATED        STATUS        PORTS                                                                                  NAMES
-3b5fa9a722da   opea/chatqna-ui:latest                                  "docker-entrypoint.s…"   32 hours ago   Up 2 hours   0.0.0.0:5173->5173/tcp, :::5173->5173/tcp                                              chatqna-xeon-ui-server
-d3b37f3d1faa   opea/chatqna:latest                                     "python chatqna.py"      32 hours ago   Up 2 hours   0.0.0.0:8888->8888/tcp, :::8888->8888/tcp                                              chatqna-xeon-backend-server
-b3e1388fa2ca   opea/reranking-tei:latest                               "python reranking_te…"   32 hours ago   Up 2 hours   0.0.0.0:8000->8000/tcp, :::8000->8000/tcp                                              reranking-tei-xeon-server
-24a240f8ad1c   opea/retriever-redis:latest                             "python retriever_re…"   32 hours ago   Up 2 hours   0.0.0.0:7000->7000/tcp, :::7000->7000/tcp                                              retriever-redis-server
-9c0d2a2553e8   opea/embedding-tei:latest                               "python embedding_te…"   32 hours ago   Up 2 hours   0.0.0.0:6000->6000/tcp, :::6000->6000/tcp                                              embedding-tei-server
-24cae0db1a70   opea/llm-vllm:latest                                    "bash entrypoint.sh"     32 hours ago   Up 2 hours   0.0.0.0:9000->9000/tcp, :::9000->9000/tcp                                              llm-vllm-server
-ea3986c3cf82   opea/dataprep-redis:latest                              "python prepare_doc_…"   32 hours ago   Up 2 hours   0.0.0.0:6007->6007/tcp, :::6007->6007/tcp                                              dataprep-redis-server
-e10dd14497a8   redis/redis-stack:7.2.0-v9                              "/entrypoint.sh"         32 hours ago   Up 2 hours   0.0.0.0:6379->6379/tcp, :::6379->6379/tcp, 0.0.0.0:8001->8001/tcp, :::8001->8001/tcp   redis-vector-db
-b98fa07a4f5c   opea/vllm:latest                                        "python3 -m vllm.ent…"   32 hours ago   Up 2 hours   0.0.0.0:9009->80/tcp, :::9009->80/tcp                                                  vllm-service
-79276cf45a47   ghcr.io/huggingface/text-embeddings-inference:cpu-1.2   "text-embeddings-rou…"   32 hours ago   Up 2 hours   0.0.0.0:6006->80/tcp, :::6006->80/tcp                                                  tei-embedding-server
-4943e5f6cd80   ghcr.io/huggingface/text-embeddings-inference:cpu-1.2   "text-embeddings-rou…"   32 hours ago   Up 2 hours   0.0.0.0:8808->80/tcp, :::8808->80/tcp                                                  tei-reranking-server
-```
 :::
 :::{tab-item} TGI
 :sync: TGI
+```bash
+CONTAINER ID   IMAGE                                                   COMMAND                  CREATED         STATUS         PORTS                                                                                  NAMES
+0355d705484a   opea/chatqna-ui:latest                                  "docker-entrypoint.s…"   2 minutes ago   Up 2 minutes   0.0.0.0:5173->5173/tcp, :::5173->5173/tcp                                              chatqna-gaudi-ui-server
+29a7a43abcef   opea/chatqna:latest                                     "python chatqna.py"      2 minutes ago   Up 2 minutes   0.0.0.0:8888->8888/tcp, :::8888->8888/tcp                                              chatqna-gaudi-backend-server
+1eb6f5ad6f85   opea/llm-tgi:latest                                     "bash entrypoint.sh"     2 minutes ago   Up 2 minutes   0.0.0.0:9000->9000/tcp, :::9000->9000/tcp                                              llm-tgi-gaudi-server
+ad27729caf68   opea/reranking-tei:latest                               "python reranking_te…"   2 minutes ago   Up 2 minutes   0.0.0.0:8000->8000/tcp, :::8000->8000/tcp                                              reranking-tei-gaudi-server
+84f02cf2a904   opea/dataprep-redis:latest                              "python prepare_doc_…"   2 minutes ago   Up 2 minutes   0.0.0.0:6007->6007/tcp, :::6007->6007/tcp                                              dataprep-redis-server
+367459f6e65b   opea/embedding-tei:latest                               "python embedding_te…"   2 minutes ago   Up 2 minutes   0.0.0.0:6000->6000/tcp, :::6000->6000/tcp                                              embedding-tei-server
+8c78cde9f588   opea/retriever-redis:latest                             "python retriever_re…"   2 minutes ago   Up 2 minutes   0.0.0.0:7000->7000/tcp, :::7000->7000/tcp                                              retriever-redis-server
+fa80772de92c   ghcr.io/huggingface/tgi-gaudi:2.0.1                     "text-generation-lau…"   2 minutes ago   Up 2 minutes   0.0.0.0:8005->80/tcp, :::8005->80/tcp                                                  tgi-gaudi-server
+581687a2cc1a   opea/tei-gaudi:latest                                   "text-embeddings-rou…"   2 minutes ago   Up 2 minutes   0.0.0.0:8090->80/tcp, :::8090->80/tcp                                                  tei-embedding-gaudi-server
+c59178629901   redis/redis-stack:7.2.0-v9                              "/entrypoint.sh"         2 minutes ago   Up 2 minutes   0.0.0.0:6379->6379/tcp, :::6379->6379/tcp, 0.0.0.0:8001->8001/tcp, :::8001->8001/tcp   redis-vector-db
+5c3a78144498   ghcr.io/huggingface/text-embeddings-inference:cpu-1.5   "text-embeddings-rou…"   2 minutes ago   Up 2 minutes   0.0.0.0:8808->80/tcp, :::8808->80/tcp                                                  tei-reranking-gaudi-server
+```
 
-```
-placeholder
-```
 :::
 ::::
 
@@ -519,6 +556,7 @@ curl -X POST "http://${host_ip}:6007/v1/dataprep/delete_file" \
      -d '{"file_path": "all"}' \
      -H "Content-Type: application/json"
 ```
+
 ### TEI Embedding Service
 
 The TEI embedding service takes in a string as input, embeds the string into a
@@ -565,8 +603,8 @@ curl http://${host_ip}:7000/v1/retrieval \
   -X POST \
   -d "{\"text\":\"test\",\"embedding\":${your_embedding}}" \
   -H 'Content-Type: application/json'
-
 ```
+
 The output of the retriever microservice comprises of the a unique id for the
 request, initial query or the input to the retrieval microservice, a list of top
 `n` retrieved documents relevant to the input query, and top_n where n refers to
@@ -602,10 +640,9 @@ The reranking microservice consumes the TEI Reranking service and pads the
 response with default parameters required for the llm microservice.
 
 ```
-curl http://${host_ip}:8000/v1/reranking\
+curl http://${host_ip}:8000/v1/reranking \
   -X POST \
-  -d '{"initial_query":"What is Deep Learning?", "retrieved_docs": \
-     [{"text":"Deep Learning is not..."}, {"text":"Deep learning is..."}]}' \
+  -d '{"initial_query":"What is Deep Learning?", "retrieved_docs": [{"text":"Deep Learning is not..."}, {"text":"Deep learning is..."}]}' \
   -H 'Content-Type: application/json'
 ```
 
@@ -616,10 +653,9 @@ with other default parameter such as temperature, `repetition_penalty`,
 of the input parameters. For example:
 
 ```
-curl http://${host_ip}:8000/v1/reranking\
+curl http://${host_ip}:8000/v1/reranking \
   -X POST \
-  -d '{"initial_query":"What is Deep Learning?" ,"top_n":2, "retrieved_docs": \
-     [{"text":"Deep Learning is not..."}, {"text":"Deep learning is..."}]}' \
+  -d '{"initial_query":"What is Deep Learning?" ,"top_n":2, "retrieved_docs": [{"text":"Deep Learning is not..."}, {"text":"Deep learning is..."}]}' \
   -H 'Content-Type: application/json'
 ```
 
@@ -642,16 +678,19 @@ while reranking service are not.
 ```
 curl http://${host_ip}:8007/v1/completions \
   -H "Content-Type: application/json" \
-  -d '{"model": "Intel/neural-chat-7b-v3-3", \
-     "prompt": "What is Deep Learning?", \
-     "max_tokens": 32, "temperature": 0}'
+  -d '{
+  "model": "Intel/neural-chat-7b-v3-3",
+  "prompt": "What is Deep Learning?",
+  "max_tokens": 32,
+  "temperature": 0
+  }'
 ```
 
 vLLM service generate text for the input prompt. Here is the expected result
 from vllm:
 
 ```
-{"generated_text":"We have all heard the buzzword, but our understanding of it is still growing. It’s a sub-field of Machine Learning, and it’s the cornerstone of today’s Machine Learning breakthroughs.\n\nDeep Learning makes machines act more like humans through their ability to generalize from very large"}
+{"id":"cmpl-be8e1d681eb045f082a7b26d5dba42ff","object":"text_completion","created":1726269914,"model":"Intel/neural-chat-7b-v3-3","choices":[{"index":0,"text":"\n\nDeep Learning is a subset of Machine Learning that is concerned with algorithms inspired by the structure and function of the brain. It is a part of Artificial","logprobs":null,"finish_reason":"length","stop_reason":null}],"usage":{"prompt_tokens":6,"total_tokens":38,"completion_tokens":32}}d
 ```
 
 **NOTE**: After launch the vLLM, it takes few minutes for vLLM server to load
@@ -663,16 +702,14 @@ LLM model and warm up.
 ```
 curl http://${host_ip}:8005/generate \
   -X POST \
-  -d '{"inputs":"What is Deep Learning?", \
-     "parameters":{"max_new_tokens":17, "do_sample": true}}' \
+  -d '{"inputs":"What is Deep Learning?","parameters":{"max_new_tokens":64, "do_sample": true}}' \
   -H 'Content-Type: application/json'
-
 ```
 
 TGI service generate text for the input prompt. Here is the expected result from TGI:
 
 ```
-{"generated_text":"We have all heard the buzzword, but our understanding of it is still growing. It’s a sub-field of Machine Learning, and it’s the cornerstone of today’s Machine Learning breakthroughs.\n\nDeep Learning makes machines act more like humans through their ability to generalize from very large"}
+{"generated_text":"Artificial Intelligence (AI) has become a very popular buzzword in the tech industry. While the phrase conjures images of sentient robots and self-driving cars, our current AI landscape is much more subtle. In fact, it most often manifests in the forms of algorithms that help recognize the faces of"}
 ```
 
 **NOTE**: After launch the TGI, it takes few minutes for TGI server to load LLM model and warm up.
@@ -700,12 +737,10 @@ and the log shows model warm up, please wait for a while and try it later.
 ### LLM Microservice
 
 ```
-curl http://${host_ip}:9000/v1/chat/completions\
+curl http://${host_ip}:9000/v1/chat/completions \
   -X POST \
-  -d '{"query":"What is Deep Learning?","max_new_tokens":17,"top_k":10,"top_p":0.95,\
-     "typical_p":0.95,"temperature":0.01,"repetition_penalty":1.03,"streaming":true}' \
+  -d '{"query":"What is Deep Learning?","max_new_tokens":17,"top_k":10,"top_p":0.95,"typical_p":0.95,"temperature":0.01,"repetition_penalty":1.03,"streaming":true}' \
   -H 'Content-Type: application/json'
-
 ```
 
 You will get generated text from LLM:
@@ -714,20 +749,20 @@ You will get generated text from LLM:
 data: b'\n'
 data: b'\n'
 data: b'Deep'
-data: b' learning'
+data: b' Learning'
 data: b' is'
 data: b' a'
 data: b' subset'
 data: b' of'
-data: b' machine'
-data: b' learning'
+data: b' Machine'
+data: b' Learning'
 data: b' that'
-data: b' uses'
+data: b' is'
+data: b' concerned'
+data: b' with'
 data: b' algorithms'
-data: b' to'
-data: b' learn'
-data: b' from'
-data: b' data'
+data: b' inspired'
+data: b' by'
 data: [DONE]
 ```
 
@@ -738,7 +773,6 @@ curl http://${host_ip}:8888/v1/chatqna -H "Content-Type: application/json" -d '{
      "model": "Intel/neural-chat-7b-v3-3",
      "messages": "What is the revenue of Nike in 2023?"
      }'
-
 ```
 
 Here is the output for your reference:
@@ -778,30 +812,30 @@ data: b'.'
 data: b'</s>'
 data: [DONE]
 ```
-### Guardrail Microservice
-If you had enabled Guardrail microservice, access via the below curl command
 
+##### Gaurdrail Microservice
+If you had enabled Gaurdrail microservice, access via the below curl command
 
-```
 curl http://${host_ip}:9090/v1/guardrails\
   -X POST \
   -d '{"text":"How do you buy a tiger in the US?","parameters":{"max_new_tokens":32}}' \
   -H 'Content-Type: application/json'
-```
 
-## Launch UI
+
+##Launch UI
 ### Basic UI
 To access the frontend, open the following URL in your browser: http://{host_ip}:5173. By default, the UI runs on port 5173 internally. If you prefer to use a different host port to access the frontend, you can modify the port mapping in the compose.yaml file as shown below:
-```
+```bash
   chaqna-gaudi-ui-server:
     image: opea/chatqna-ui:latest
     ...
     ports:
       - "80:5173"
 ```
+
 ### Conversational UI
 To access the Conversational UI (react based) frontend, modify the UI service in the compose.yaml file. Replace chaqna-gaudi-ui-server service with the chatqna-gaudi-conversation-ui-server service as per the config below:
-```
+```bash
 chaqna-gaudi-conversation-ui-server:
   image: opea/chatqna-conversation-ui:latest
   container_name: chatqna-gaudi-conversation-ui-server
@@ -823,26 +857,6 @@ Once the services are up, open the following URL in your browser: http://{host_i
     ports:
       - "80:80"
 ```
-### Stop the services
-
-Once you are done with the entire pipeline and wish to stop and remove all the containers, use the command below:
-::::{tab-set}
-
-:::{tab-item} vllm
-:sync: vllm
-
-```
-docker compose -f compose_vllm.yaml down
-```
-:::
-:::{tab-item} TGI
-:sync: TGI
-
-```
-docker compose -f compose.yaml down
-```
-:::
-::::
 
 ## Check docker container log
 
@@ -870,32 +884,37 @@ The log indicates the `MODEL_ID` is not set.
 
 View the docker input parameters in  `./ChatQnA/docker_compose/intel/hpu/gaudi/compose_vllm.yaml`
 
-```
-vllm_service:
-    image: ${REGISTRY:-opea}/vllm:${TAG:-latest}
-    container_name: vllm-service
+```yaml
+  vllm-service:
+    image: ${REGISTRY:-opea}/llm-vllm-hpu:${TAG:-latest}
+    container_name: vllm-gaudi-server
     ports:
-      - "9009:80"
+      - "8007:80"
     volumes:
       - "./data:/data"
-    shm_size: 128g
     environment:
       no_proxy: ${no_proxy}
       http_proxy: ${http_proxy}
       https_proxy: ${https_proxy}
       HF_TOKEN: ${HUGGINGFACEHUB_API_TOKEN}
+      HABANA_VISIBLE_DEVICES: all
+      OMPI_MCA_btl_vader_single_copy_mechanism: none
       LLM_MODEL_ID: ${LLM_MODEL_ID}
-    command: --model $LLM_MODEL_ID --host 0.0.0.0 --port 80
-
+    runtime: habana
+    cap_add:
+      - SYS_NICE
+    ipc: host
+    command: /bin/bash -c "export VLLM_CPU_KVCACHE_SPACE=40 && python3 -m vllm.entrypoints.openai.api_server --enforce-eager --model $LLM_MODEL_ID --tensor-parallel-size 1 --host 0.0.0.0 --port 80 --block-size 128 --max-num-seqs 256 --max-seq_len-to-capture 2048"
 ```
+
 :::
 :::{tab-item} TGI
 :sync: TGI
 
 View the docker input parameters in  `./ChatQnA/docker_compose/intel/hpu/gaudi/compose.yaml`
 
-```
- tgi-service:
+```yaml
+  tgi-service:
     image: ghcr.io/huggingface/tgi-gaudi:2.0.1
     container_name: tgi-gaudi-server
     ports:
@@ -943,6 +962,68 @@ docker compose -f ./docker_compose/intel/hpu/gaudi/compose_vllm.yaml logs
 
 ```
 docker compose -f ./docker_compose/intel/hpu/gaudi/compose.yaml logs
+```
+:::
+::::
+
+## Launch UI
+
+### Basic UI
+
+To access the frontend, open the following URL in your browser: http://{host_ip}:5173. By default, the UI runs on port 5173 internally. If you prefer to use a different host port to access the frontend, you can modify the port mapping in the compose.yaml file as shown below:
+```
+  chaqna-gaudi-ui-server:
+    image: opea/chatqna-ui:latest
+    ...
+    ports:
+      - "80:5173"
+```
+
+### Conversational UI
+
+To access the Conversational UI (react based) frontend, modify the UI service in the compose.yaml file. Replace chaqna-gaudi-ui-server service with the chatqna-gaudi-conversation-ui-server service as per the config below:
+```
+chaqna-gaudi-conversation-ui-server:
+  image: opea/chatqna-conversation-ui:latest
+  container_name: chatqna-gaudi-conversation-ui-server
+  environment:
+    - APP_BACKEND_SERVICE_ENDPOINT=${BACKEND_SERVICE_ENDPOINT}
+    - APP_DATA_PREP_SERVICE_URL=${DATAPREP_SERVICE_ENDPOINT}
+  ports:
+    - "5174:80"
+  depends_on:
+    - chaqna-gaudi-backend-server
+  ipc: host
+  restart: always
+```
+
+Once the services are up, open the following URL in your browser: http://{host_ip}:5174. By default, the UI runs on port 80 internally. If you prefer to use a different host port to access the frontend, you can modify the port mapping in the compose.yaml file as shown below:
+
+```
+  chaqna-gaudi-conversation-ui-server:
+    image: opea/chatqna-conversation-ui:latest
+    ...
+    ports:
+      - "80:80"
+```
+
+### Stop the services
+
+Once you are done with the entire pipeline and wish to stop and remove all the containers, use the command below:
+::::{tab-set}
+
+:::{tab-item} vllm
+:sync: vllm
+
+```
+docker compose -f compose_vllm.yaml down
+```
+:::
+:::{tab-item} TGI
+:sync: TGI
+
+```
+docker compose -f compose.yaml down
 ```
 :::
 ::::
