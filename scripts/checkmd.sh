@@ -8,6 +8,7 @@
 
 drules=line-length,no-bare-urls,no-multiple-blanks,blanks-around-fences,no-hard-tabs,blanks-around-headings
 drules=$drules,fenced-code-language,no-duplicate-heading,no-emphasis-as-heading,no-trailing-spaces
+drules=$drules,code-block-style
 
 pymarkdown --disable-rules $drules scan -r .
 
