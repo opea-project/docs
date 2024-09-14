@@ -19,5 +19,18 @@ We're building this microservices documentation from content in the
 
    /GenAIComps/README
    /GenAIComps/*
-   /GenAIComps/**/*
 
+**Microservices Table of Contents**
+
+.. rst-class:: rst-columns
+
+.. contents::
+   :local:
+   :depth: 1
+
+----
+
+.. comment This include file is generated in the Makefile during doc build
+   time from all the directories found in the GenAIComps/comps directory
+
+.. include:: microservices.txt
