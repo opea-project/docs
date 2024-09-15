@@ -85,7 +85,7 @@ GenAIComps
 
 ```
 - **File Descriptions**:
-  - `embedding_tei.py`: This file defines and registers the microservice. It serves as the entrypoint of the Docker container. Refer to [whisper ASR](https://github.com/opea-project/GenAIComps/tree/main/comps/asr/whisper) for a simple example or [TGI](https://github.com/opea-project/GenAIComps/blob/main/comps/llms/text-generation/tgi/llm.py) for a more complex example that required adapting to OpenAI API.
+  - `embedding_tei.py`: This file defines and registers the microservice. It serves as the entrypoint of the Docker container. Refer to [whisper ASR](https://github.com/opea-project/GenAIComps/tree/main/comps/asr/whisper) for a simple example or [TGI](https://github.com/opea-project/GenAIComps/blob/main/comps/llms/text-generation/tgi/llm.py) for a more complex example that required adapting to the OpenAI API.
   - `requirements.txt`: This file is used by Docker to install the necessary dependencies.
   - `Dockerfile`: Used to generate the service container image. Please follow naming conventions:
     - Dockerfile: `Dockerfile.[vendor]_[hardware]`, vendor and hardware in lower case (i,e Dockerfile.amd_gpu)
