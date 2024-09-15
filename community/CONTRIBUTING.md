@@ -98,7 +98,7 @@ GenAIComps
 
 4. Now you have created all the required files, and validated your service. Last step is to modify the `README.md` at the component level `GenAIComps/comps/[microservice type]` to list your new component. Now you are ready to file your PR! Once your PR is merged, in the next release the project  release maintainers will publish the Docker Image for the same to the Docker Hub.
 
-5. After your component has been merged you are likely interested to build an application with it, and perhaps contributing it also to OPEA! so please continue to the [Contribute a GenAI Example](#contribute-a-genai-example) guide.
+5. After your component has been merged, you are likely interested in building an application with it, and perhaps contributing it also to OPEA! Please continue on to the [Contribute a GenAI Example](#contribute-a-genai-example) guide.
 
 ### Contribute a GenAI Example
 
