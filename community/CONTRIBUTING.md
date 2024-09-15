@@ -92,7 +92,7 @@ GenAIComps
     - Docker Image: `opea/[microservice type]-[microservice sub type]-[library name]-[vendor]-[hardware]:latest` all lower case (i,e opea/llm-vllm-intel-hpu, opea/llm-faqgen-tgi-intel-hpu-svc)
 
   - `tests/[microservices type]/` : contains end-to-end test for microservices Please refer to an example [test_asr_whisper.sh](https://github.com/opea-project/GenAIComps/blob/main/tests/asr/test_asr_whisper.sh). Please follow naming convention:`test_[microservice type]_[microservice sub type]_[library name]_on_[vendor]_[hardware].sh` 
-  - `tests/cores/` : contains UT test for core python components (orchestrator, gateway...). Please follow naming convention:`test_[core component].sh` 
+  - `tests/cores/` : contains Unit Tests (UT) for the core python components (orchestrator, gateway...). Please follow the naming convention:`test_[core component].sh` 
 
   - `README.md`: at minimum it should include: microservice description, build and start microservice commands and curl command with expected output.
 
