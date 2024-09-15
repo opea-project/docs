@@ -21,14 +21,16 @@ v0.1 - ASMO Team sharing on Fri 6/28/2024
 
 * Due to above reasons, we're hereby introducing a new microservice, animation, that generates animated avatars from audio and image/video inputs; and a new megaservice, AvatarChatbot, that integrates the animation microservice with the existing AudioQnA service to build a human-like AI audio chatbot.
 
-<p align="left">
+<!--<p align="left">
   <img src="assets/avatar4.png" alt="Image 1" width="130"/>
   <img src="assets/avatar1.jpg" alt="Image 2" width="130"/>
   <img src="assets/avatar2.jpg" alt="Image 3" width="130"/>
-  <img src="assets/avatar3.png" alt="Image 4" width="130"/>
+  <img src="assets/avatar3.png" alt="Image 4" width="130"/> -->
   <!-- <img src="assets/avatar5.png" alt="Image 5" width="100"/> -->
-  <img src="assets/avatar6.png" alt="Image 6" width="130"/>
-</p> 
+  <!-- <img src="assets/avatar6.png" alt="Image 6" width="130"/>
+</p> -->
+
+![avatars chatbot](assets/avatars-chatbot.png)
 
 The chatbot will:
 * Be able to understand and respond to user text and audio queries, with a backend LLM model
@@ -58,7 +60,7 @@ Related works include [Nvidia Audio2Face](https://docs.nvidia.com/ace/latest/mod
 ### Avatar Chatbot design
 <!-- Removed PPT slides -->
 
-<img src="assets/design.png" alt="Avatar Chatbot design" width="800"/>  
+![avatar chatbot design](assets/design.png)
 
 Currently, the RAG feature using the `embedding` and `dataprep` microservices is missing in the above design, including uploading relevant documents/weblinks, storing them in the database, and retrieving them for the LLM model. These features will be added in v0.2.  
 
@@ -181,11 +183,14 @@ flowchart LR
 
 #### Frontend UI
 The frontend UI is Gradio. User is prompted to upload either an image or a video as the avatar source. The user also asks his question verbally through the microphone by clicking on the "record" button. The AvatarChatbot backend processes the audio input and generates the response in the form of an animated avatar answering in its unique voice. The response is displayed on Gradio UI. User will be able to see the animated avatar speaking the response in real-time, and can interact with the avatar by asking more questions.
-<div style="display: flex; justify-content: space-between;">
+
+<!-- <div style="display: flex; justify-content: space-between;">
   <img src="assets/ui_latest_1.png" alt="alt text" style="width: 33%;"/>
   <img src="assets/ui_latest_2.png" alt="alt text" style="width: 33%;"/>
   <img src="assets/ui_latest_3.png" alt="alt text" style="width: 33%;"/>
-</div>
+</div> -->
+
+![avatars ui](assets/avatars-ui.png)
 
 ### Real-time demo
 AI Avatar Chatbot Demo on Intel® Gaudi® 2, image input (top) and video input (down)
@@ -196,6 +201,8 @@ AI Avatar Chatbot Demo on Intel® Gaudi® 2, image input (top) and video input (
   <video src="assets/demo_latest_video.mpg" controls style="width: 49%;"></video>
 </div> -->
 ![AI Avatar Chatbot Demo on Intel® Gaudi® 2, image input](assets/image_wav2lipgfpgan_cut.gif)
+
+
 ![AI Avatar Chatbot Demo on Intel® Gaudi® 2, video input](assets/video_wav2lipgfpgan_cut.gif)
 
 ## Compatibility
