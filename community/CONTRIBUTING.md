@@ -184,7 +184,7 @@ OPEA GenAIExamples examples offer simple deployment, testing, and scalability wi
 #### Additional steps if your contribution is Hardware Specific
 
 You will need additional steps to configure the CI/CD for first testing and then deploying your merged your GenAIComp or GenAIExample. 
-- Connect hardware into OPEA GHA as self-hosted runner 
+- Connect hardware into OPEA GHA as a self-hosted runner 
 - Contribute new test scripts for the new hardware
 - Dockerfile for the Component (i,e `GenAIComp/comps/llm/text-generation/tgi/Dockerfile.[vendor]_[hardware]` )
 - Update image build yaml for new images​
