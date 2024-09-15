@@ -7,7 +7,7 @@ Thanks for considering contributing to OPEA project. The contribution process is
 
 ### Contribute a GenAI Component
 
-1. Navigate to [OPEA GenAIComps](https://github.com/opea-project/GenAIComps) and locate the component folder your integration belongs to. If the microservice type already exists, review the [OPEA microservice API](https://opea-project.github.io/0.9.99/developer-guides/OPEA_API.html#opea-micro-service-api) and follow it in your implementation. Otherwise, if you are contributing a brand new microservice type, you need to define and contribute the API specifications. Please start by submit an RFC to get contributors feedback. 
+1. Navigate to [OPEA GenAIComps](https://github.com/opea-project/GenAIComps) and locate the component folder your integration belongs to. If the microservice type already exists, review the [OPEA microservice API](https://opea-project.github.io/0.9.99/developer-guides/OPEA_API.html#opea-micro-service-api) and follow it in your implementation. Otherwise, if you are contributing a brand new microservice type, you need to define and contribute first its API specification. Please start by submitting an RFC to get community feedback. 
 
 
 ```
