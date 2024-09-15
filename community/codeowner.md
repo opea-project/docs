@@ -15,10 +15,6 @@ about content within a repository.
 
 -----
 
-## GenAIInfra
-
-* mkbhanda, irisdingbj, jfding, ftian1, yongfengdu
-
 ## Continuous Integration (CICD) owners
 
 CI/CD processing is defined and managed by these owners:
