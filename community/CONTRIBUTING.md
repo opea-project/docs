@@ -188,7 +188,7 @@ You will need additional steps to configure the CI/CD for first testing and then
 - Contribute new test scripts for the new hardware
 - Dockerfile for the Component (i,e `GenAIComp/comps/llm/text-generation/tgi/Dockerfile.[vendor]_[hardware]` )
 - Update image build yaml for new images​
-- Update CI/CD workflow to identify and deploy new test
+- Update the CI/CD workflow to identify and deploy new test
 OPEA maintainer [@chensuyue](suyue.chen@intel.com) can assist in this process. 
 
 ### Community Discussions
