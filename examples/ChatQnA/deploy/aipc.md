@@ -162,7 +162,7 @@ ollama list
 NAME            ID              SIZE    MODIFIED
 llama3:latest   365c0bd3c000    4.7 GB  5 days ago
 ```
-
+:::
 ::::
 
 
@@ -460,7 +460,7 @@ length 768.
 ### Embedding Microservice
 The embedding microservice depends on the TEI embedding service. In terms of
 input parameters, it takes in a string, embeds it into a vector using the TEI
-embedding service and pads other default parameters that are required for the
+embedding service and adds other default parameters that are required for the
 retrieval microservice and returns it.
 
 ```
@@ -472,7 +472,7 @@ curl http://${host_ip}:6000/v1/embeddings\
 ### Retriever Microservice
 
 To consume the retriever microservice, you need to generate a mock embedding
-vector by Python script. The length of embedding vector is determined by the
+vector using Python script. The length of embedding vector is determined by the
 embedding model. Here we use the
 model EMBEDDING_MODEL_ID="BAAI/bge-base-en-v1.5", which vector size is 768.
 
@@ -519,7 +519,7 @@ Output is:  `[{"index":1,"score":0.9988041},{"index":0,"score":0.022948774}]`
 
 
 The reranking microservice consumes the TEI Reranking service and pads the
-response with default parameters required for the llm microservice.
+response with default parameters required for the LLM microservice.
 
 ```
 curl http://${host_ip}:8000/v1/reranking\
@@ -531,7 +531,7 @@ curl http://${host_ip}:8000/v1/reranking\
 
 The input to the microservice is the `initial_query` and a list of retrieved
 documents and it outputs the most relevant document to the initial query along
-with other default parameter such as temperature, `repetition_penalty`,
+with other default parameter such as the temperature, `repetition_penalty`,
 `chat_template` and so on. We can also get top n documents by setting `top_n` as one
 of the input parameters. For example:
 
@@ -601,7 +601,7 @@ curl http://${host_ip}:9000/v1/chat/completions\
 
 ```
 
-You will get generated text from LLM:
+You will get the below generated text from LLM:
 
 ```
 data: b'\n'
@@ -753,5 +753,5 @@ Once you are done with the entire pipeline and wish to stop and remove all the c
 ```
 docker compose -f compose.yaml down
 ```
-
+:::
 ::::
