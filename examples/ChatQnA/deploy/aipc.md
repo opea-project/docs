@@ -148,8 +148,8 @@ Environment="https_proxy=http://proxy.example.com:8080"
 ```
 Restart Ollama services
 ```
-$ sudo systemctl daemon-reload
-$ sudo systemctl restart ollama.service
+sudo systemctl daemon-reload
+sudo systemctl restart ollama.service
 ```
 
 Pull LLM model
