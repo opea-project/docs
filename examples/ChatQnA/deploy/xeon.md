@@ -631,7 +631,7 @@ curl http://${host_ip}:9009/v1/completions \
      "max_tokens": 32, "temperature": 0}'
 ```
 
-vLLM service generate text for the input prompt. Here is the expected result
+vLLM service generates text for the input prompt. Here is the expected result
 from vllm:
 
 ```
