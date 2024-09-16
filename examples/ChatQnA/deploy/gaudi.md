@@ -297,28 +297,28 @@ Set the necessary environment variables to setup the use case case
 
 ### Dataprep
 
-    export DATAPREP_SERVICE_ENDPOINT="http://${host_ip}:6007/v1/dataprep"
-    export DATAPREP_GET_FILE_ENDPOINT="http://${host_ip}:6007/v1/dataprep/get_file"
-    export DATAPREP_DELETE_FILE_ENDPOINT="http://${host_ip}:6007/v1/dataprep/delete_file"
+export DATAPREP_SERVICE_ENDPOINT="http://${host_ip}:6007/v1/dataprep"
+export DATAPREP_GET_FILE_ENDPOINT="http://${host_ip}:6007/v1/dataprep/get_file"
+export DATAPREP_DELETE_FILE_ENDPOINT="http://${host_ip}:6007/v1/dataprep/delete_file"
 
-  ### VectorDB
+### VectorDB
 
-    export REDIS_URL="redis://${host_ip}:6379"
-    export INDEX_NAME="rag-redis"
+export REDIS_URL="redis://${host_ip}:6379"
+export INDEX_NAME="rag-redis"
 
-  ### Embedding Service
+### Embedding Service
 
-    export EMBEDDING_MODEL_ID="BAAI/bge-base-en-v1.5"
-    export EMBEDDING_SERVICE_HOST_IP=${host_ip}
-    export RETRIEVER_SERVICE_HOST_IP=${host_ip}
-    export TEI_EMBEDDING_ENDPOINT="http://${host_ip}:8090"
-    export tei_embedding_devices=all
+export EMBEDDING_MODEL_ID="BAAI/bge-base-en-v1.5"
+export EMBEDDING_SERVICE_HOST_IP=${host_ip}
+export RETRIEVER_SERVICE_HOST_IP=${host_ip}
+export TEI_EMBEDDING_ENDPOINT="http://${host_ip}:8090"
+export tei_embedding_devices=all
 
 ### Reranking Service
 
-    export RERANK_MODEL_ID="BAAI/bge-reranker-base"
-    export TEI_RERANKING_ENDPOINT="http://${host_ip}:8808"
-    export RERANK_SERVICE_HOST_IP=${host_ip}
+export RERANK_MODEL_ID="BAAI/bge-reranker-base"
+export TEI_RERANKING_ENDPOINT="http://${host_ip}:8808"
+export RERANK_SERVICE_HOST_IP=${host_ip}
 
 ### LLM Service
 
@@ -349,7 +349,7 @@ Set the necessary environment variables to setup the use case case
     export MEGA_SERVICE_HOST_IP=${host_ip}
     export BACKEND_SERVICE_ENDPOINT="http://${host_ip}:8888/v1/chatqna"
 
-### Gaurdrails(optional)
+### Guardrails (optional)
 If guardrails microservice is enabled in the pipeline, the below environment variables are necessary to be set.
 ```
 export GURADRAILS_MODEL_ID="meta-llama/Meta-Llama-Guard-2-8B"
@@ -813,16 +813,17 @@ data: b'</s>'
 data: [DONE]
 ```
 
-##### Gaurdrail Microservice
-If you had enabled Gaurdrail microservice, access via the below curl command
+##### Guardrail Microservice
+If you had enabled Guardrail microservice, access via the below curl command
 
+```
 curl http://${host_ip}:9090/v1/guardrails\
   -X POST \
   -d '{"text":"How do you buy a tiger in the US?","parameters":{"max_new_tokens":32}}' \
   -H 'Content-Type: application/json'
+```
 
-
-##Launch UI
+## Launch UI
 ### Basic UI
 To access the frontend, open the following URL in your browser: http://{host_ip}:5173. By default, the UI runs on port 5173 internally. If you prefer to use a different host port to access the frontend, you can modify the port mapping in the compose.yaml file as shown below:
 ```bash
