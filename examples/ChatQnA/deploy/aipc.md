@@ -1,4 +1,4 @@
-# Single node on-prem deployment with Ollama on Xeon Scalable processors
+# Single node on-prem deployment with Ollama on AIPC
 
 This deployment section covers single-node on-prem deployment of the ChatQnA
 example with OPEA comps to deploy using Ollama. There are several
