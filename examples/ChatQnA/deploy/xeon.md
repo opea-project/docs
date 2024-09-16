@@ -50,7 +50,7 @@ git clone https://github.com/opea-project/GenAIExamples.git
 Checkout the release tag
 ```
 cd GenAIComps
-git checkout tags/v0.9
+git checkout tags/v1.0
 ```
 
 The examples utilize model weights from HuggingFace and langchain.
@@ -96,31 +96,31 @@ From within the `GenAIComps` folder
 
 ```
 docker build --no-cache -t opea/dataprep-redis:latest --build-arg https_proxy=$https_proxy \
-  --build-arg http_proxy=$http_proxy -f comps/dataprep/redis/langchain/docker/Dockerfile .
+  --build-arg http_proxy=$http_proxy -f comps/dataprep/redis/langchain/Dockerfile .
 ```
 
 #### Build Embedding Image
 
 ```
 docker build --no-cache -t opea/embedding-tei:latest --build-arg https_proxy=$https_proxy \
-   --build-arg http_proxy=$http_proxy -f comps/embeddings/langchain/docker/Dockerfile .
+  --build-arg http_proxy=$http_proxy -f comps/embeddings/tei/langchain/Dockerfile .
 ```
 
 #### Build Retriever Image
 
 ```
-docker build --no-cache -t opea/retriever-redis:latest --build-arg https_proxy=$https_proxy \
-   --build-arg http_proxy=$http_proxy -f comps/retrievers/langchain/redis/docker/Dockerfile .
+ docker build --no-cache -t opea/retriever-redis:latest --build-arg https_proxy=$https_proxy \
+  --build-arg http_proxy=$http_proxy -f comps/retrievers/redis/langchain/Dockerfile .
 ```
 
 #### Build Rerank Image
 
 ```
 docker build --no-cache -t opea/reranking-tei:latest --build-arg https_proxy=$https_proxy \
-   --build-arg http_proxy=$http_proxy -f comps/reranks/tei/docker/Dockerfile .
+  --build-arg http_proxy=$http_proxy -f comps/reranks/tei/Dockerfile .
 ```
 
-#### Build docker
+#### Build LLM Image
 
 ::::{tab-set}
 
@@ -140,8 +140,9 @@ Next, we'll build the vllm microservice docker. This will set the entry point
 needed for the vllm to suit the ChatQnA examples
 ```
 docker build --no-cache -t opea/llm-vllm:latest --build-arg https_proxy=$https_proxy \
-   --build-arg http_proxy=$http_proxy \
-   -f comps/llms/text-generation/vllm/docker/Dockerfile.microservice .
+  --build-arg http_proxy=$http_proxy \
+  -f comps/llms/text-generation/vllm/langchain/Dockerfile.microservice .
+
 ```
 :::
 :::{tab-item} TGI
@@ -149,7 +150,7 @@ docker build --no-cache -t opea/llm-vllm:latest --build-arg https_proxy=$https_p
 
 ```
 docker build --no-cache -t opea/llm-tgi:latest --build-arg https_proxy=$https_proxy \
-   --build-arg http_proxy=$http_proxy -f comps/llms/text-generation/tgi/Dockerfile .
+  --build-arg http_proxy=$http_proxy -f comps/llms/text-generation/tgi/Dockerfile .
 ```
 :::
 ::::
@@ -168,13 +169,13 @@ Build the megaservice image for this use case
 
 ```
 cd ..
-cd GenAIExamples/ChatQnA/docker
-git checkout tags/v0.9
+cd GenAIExamples/ChatQnA
+git checkout tags/v1.0
 ```
 
 ```
 docker build --no-cache -t opea/chatqna:latest --build-arg https_proxy=$https_proxy \
-   --build-arg http_proxy=$http_proxy -f Dockerfile .
+  --build-arg http_proxy=$http_proxy -f Dockerfile .
 ```
 
 ### Build Other Service images
@@ -186,18 +187,18 @@ As mentioned, you can build 2 modes of UI
 *Basic UI*
 
 ```
-cd GenAIExamples/ChatQnA/docker/ui/
+cd GenAIExamples/ChatQnA/ui/
 docker build --no-cache -t opea/chatqna-ui:latest --build-arg https_proxy=$https_proxy \
-   --build-arg http_proxy=$http_proxy -f ./docker/Dockerfile .
+  --build-arg http_proxy=$http_proxy -f ./docker/Dockerfile .
 ```
 
 *Conversation UI*
 If you want a conversational experience with chatqna megaservice.
 
 ```
-docker build --no-cache -t opea/chatqna-conversation-ui:latest \
-   --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy \
-   -f ./docker/Dockerfile.react .
+cd GenAIExamples/ChatQnA/ui/
+docker build --no-cache -t opea/chatqna-conversation-ui:latest --build-arg https_proxy=$https_proxy \
+  --build-arg http_proxy=$http_proxy -f ./docker/Dockerfile.react .
 ```
 
 ### Sanity Check
@@ -212,7 +213,7 @@ Check if you have the below set of docker images, before moving on to the next s
 * opea/retriever-redis:latest
 * opea/reranking-tei:latest
 * opea/vllm:latest
-* opea/chatqna:latest  or  opea/chatqna-guardrails:latest
+* opea/chatqna:latest
 * opea/chatqna-ui:latest
 * opea/llm-vllm:latest
 :::
@@ -223,8 +224,7 @@ Check if you have the below set of docker images, before moving on to the next s
 * opea/embedding-tei:latest
 * opea/retriever-redis:latest
 * opea/reranking-tei:latest
-* opea/vllm:latest
-* opea/chatqna:latest  or  opea/chatqna-guardrails:latest
+* opea/chatqna:latest
 * opea/chatqna-ui:latest
 * opea/llm-tgi:latest
 :::
@@ -291,7 +291,7 @@ Set the necessary environment variables to setup the use case case
     export EMBEDDING_MODEL_ID="BAAI/bge-base-en-v1.5"
     export EMBEDDING_SERVICE_HOST_IP=${host_ip}
     export RETRIEVER_SERVICE_HOST_IP=${host_ip}
-    export TEI_EMBEDDING_ENDPOINT="http://${host_ip}:8090"
+    export TEI_EMBEDDING_ENDPOINT="http://${host_ip}:6006"
 
 ### Reranking Service
 
@@ -306,19 +306,17 @@ Set the necessary environment variables to setup the use case case
 :sync: vllm
 
     export LLM_MODEL_ID="Intel/neural-chat-7b-v3-3"
-    export LLM_MODEL_ID_NAME="neural-chat-7b-v3-3"
     export LLM_SERVICE_HOST_IP=${host_ip}
     export LLM_SERVICE_PORT=9000
-    export vLLM_LLM_ENDPOINT="http://${host_ip}:8007"
+    export vLLM_LLM_ENDPOINT="http://${host_ip}:9009"
 :::
 :::{tab-item} TGI
 :sync: TGI
 
     export LLM_MODEL_ID="Intel/neural-chat-7b-v3-3"
-    export LLM_MODEL_ID_NAME="neural-chat-7b-v3-3"
     export LLM_SERVICE_HOST_IP=${host_ip}
     export LLM_SERVICE_PORT=9000
-    export TGI_LLM_ENDPOINT="http://${host_ip}:8007"
+    export TGI_LLM_ENDPOINT="http://${host_ip}:9009"
 :::
 ::::
 
@@ -326,12 +324,6 @@ Set the necessary environment variables to setup the use case case
 
     export MEGA_SERVICE_HOST_IP=${host_ip}
     export BACKEND_SERVICE_ENDPOINT="http://${host_ip}:8888/v1/chatqna"
-
-### Guardrails
-
-    export GUARDRAILS_MODEL_ID="meta-llama/Meta-Llama-Guard-2-8B"
-    export SAFETY_GUARD_MODEL_ID="meta-llama/Meta-Llama-Guard-2-8B"
-    export SAFETY_GUARD_ENDPOINT="http://${host_ip}:8088"
 
 ## Deploy the use case
 
@@ -344,7 +336,7 @@ above mentioned services as containers.
 :sync: vllm
 
 ```
-cd GenAIExamples/ChatQnA/docker/xeon
+cd GenAIExamples/ChatQnA/docker_compose/intel/cpu/xeon
 docker compose -f compose_vllm.yaml up -d
 ```
 :::
@@ -352,7 +344,7 @@ docker compose -f compose_vllm.yaml up -d
 :sync: TGI
 
 ```
-cd GenAIExamples/ChatQnA/docker/xeon
+cd GenAIExamples/ChatQnA/docker_compose/intel/cpu/xeon
 docker compose -f compose.yaml up -d
 ```
 :::
@@ -360,14 +352,14 @@ docker compose -f compose.yaml up -d
 
 ### Validate microservice
 #### Check Env Variables
-Check the start up log by `docker compose -f ./docker/xeon/compose_vllm.yaml logs`.
-The warning messages print out the variables if they are **NOT** set.
 
 ::::{tab-set}
 :::{tab-item} vllm
 :sync: vllm
+    Check the start up log by `docker compose -f ./compose_vllm.yaml logs`.
+The warning messages print out the variables if they are **NOT** set.
 
-    ubuntu@xeon-vm:~/GenAIExamples/ChatQnA/docker/xeon$ docker compose -f ./compose_vllm.yaml up -d
+    ubuntu@xeon-vm:~/GenAIExamples/ChatQnA/docker_compose/intel/cpu/xeon$ docker compose -f ./compose_vllm.yaml up -d
     WARN[0000] The "LANGCHAIN_API_KEY" variable is not set. Defaulting to a blank string.
     WARN[0000] The "LANGCHAIN_TRACING_V2" variable is not set. Defaulting to a blank string.
     WARN[0000] The "LANGCHAIN_API_KEY" variable is not set. Defaulting to a blank string.
@@ -376,12 +368,15 @@ The warning messages print out the variables if they are **NOT** set.
     WARN[0000] The "LANGCHAIN_TRACING_V2" variable is not set. Defaulting to a blank string.
     WARN[0000] The "LANGCHAIN_API_KEY" variable is not set. Defaulting to a blank string.
     WARN[0000] The "LANGCHAIN_TRACING_V2" variable is not set. Defaulting to a blank string.
-    WARN[0000] /home/ubuntu/GenAIExamples/ChatQnA/docker/xeon/compose.yaml: `version` is obsolete
+    WARN[0000] /home/ubuntu/GenAIExamples/ChatQnA/docker_compose/intel/cpu/xeon/compose_vllm.yaml: `version` is obsolete
 :::
 :::{tab-item} TGI
 :sync: TGI
 
-    ubuntu@xeon-vm:~/GenAIExamples/ChatQnA/docker/xeon$ docker compose -f ./compose.yaml up -d
+    Check the start up log by `docker compose -f ./compose.yaml logs`.
+The warning messages print out the variables if they are **NOT** set.
+
+    ubuntu@xeon-vm:~/GenAIExamples/ChatQnA/docker_compose/intel/cpu/xeon$ docker compose -f ./compose.yaml up -d
     WARN[0000] The "LANGCHAIN_API_KEY" variable is not set. Defaulting to a blank string.
     WARN[0000] The "LANGCHAIN_TRACING_V2" variable is not set. Defaulting to a blank string.
     WARN[0000] The "LANGCHAIN_API_KEY" variable is not set. Defaulting to a blank string.
@@ -390,7 +385,7 @@ The warning messages print out the variables if they are **NOT** set.
     WARN[0000] The "LANGCHAIN_TRACING_V2" variable is not set. Defaulting to a blank string.
     WARN[0000] The "LANGCHAIN_API_KEY" variable is not set. Defaulting to a blank string.
     WARN[0000] The "LANGCHAIN_TRACING_V2" variable is not set. Defaulting to a blank string.
-    WARN[0000] /home/ubuntu/GenAIExamples/ChatQnA/docker/xeon/compose.yaml: `version` is obsolete
+    WARN[0000] /home/ubuntu/GenAIExamples/ChatQnA/docker_compose/intel/cpu/xeon/compose.yaml: `version` is obsolete
 :::
 ::::
 
@@ -688,8 +683,6 @@ and the log shows model warm up, please wait for a while and try it later.
 
 ### LLM Microservice
 
-[](https://github.com/opea-project/GenAIExamples/blob/main/ChatQnA/docker/xeon/how_to_validate_service.md#7-llm-microservice)
-
 ```
 curl http://${host_ip}:9000/v1/chat/completions\
   -X POST \
@@ -723,8 +716,6 @@ data: [DONE]
 ```
 
 ### MegaService
-
-[](https://github.com/opea-project/GenAIExamples/blob/main/ChatQnA/docker/xeon/how_to_validate_service.md#8-megaservice)
 
 ```
 curl http://${host_ip}:8888/v1/chatqna -H "Content-Type: application/json" -d '{
@@ -774,8 +765,6 @@ data: [DONE]
 
 ## Check docker container log
 
-[](https://github.com/opea-project/GenAIExamples/blob/main/ChatQnA/docker/xeon/how_to_validate_service.md#3-check-docker-container-log)
-
 Check the log of container by:
 
 `docker logs <CONTAINER ID> -t`
@@ -798,7 +787,7 @@ The log indicates the `MODEL_ID` is not set.
 :::{tab-item} vllm
 :sync: vllm
 
-View the docker input parameters in  `./ChatQnA/docker/xeon/compose_vllm.yaml`
+View the docker input parameters in  `./ChatQnA/docker_compose/intel/cpu/xeon/compose_vllm.yaml`
 
 ```
 vllm_service:
@@ -822,7 +811,7 @@ vllm_service:
 :::{tab-item} TGI
 :sync: TGI
 
-View the docker input parameters in  `./ChatQnA/docker/xeon/compose.yaml`
+View the docker input parameters in  `./ChatQnA/docker_compose/intel/cpu/xeon/compose.yaml`
 
 ```
  tgi-service:
@@ -861,15 +850,76 @@ compose.yaml is the mega service docker-compose configuration file.
 :sync: vllm
 
 ```
-docker compose -f ./docker-composer/xeon/compose_vllm.yaml logs
+docker compose -f ./docker_compose/intel/cpu/xeon/compose_vllm.yaml logs
 ```
 :::
 :::{tab-item} TGI
 :sync: TGI
 
 ```
-docker compose -f ./docker-composer/xeon/compose.yaml logs
+docker compose -f ./docker_compose/intel/cpu/xeon/compose.yaml logs
 ```
 :::
 ::::
 
+## Launch UI
+
+### Basic UI
+
+To access the frontend, open the following URL in your browser: http://{host_ip}:5173. By default, the UI runs on port 5173 internally. If you prefer to use a different host port to access the frontend, you can modify the port mapping in the compose.yaml file as shown below:
+```
+  chaqna-xeon-ui-server:
+    image: opea/chatqna-ui:latest
+    ...
+    ports:
+      - "80:5173"
+```
+
+### Conversational UI
+
+To access the Conversational UI (react based) frontend, modify the UI service in the compose.yaml file. Replace chaqna-xeon-ui-server service with the chatqna-xeon-conversation-ui-server service as per the config below:
+```
+chaqna-xeon-conversation-ui-server:
+  image: opea/chatqna-conversation-ui:latest
+  container_name: chatqna-xeon-conversation-ui-server
+  environment:
+    - APP_BACKEND_SERVICE_ENDPOINT=${BACKEND_SERVICE_ENDPOINT}
+    - APP_DATA_PREP_SERVICE_URL=${DATAPREP_SERVICE_ENDPOINT}
+  ports:
+    - "5174:80"
+  depends_on:
+    - chaqna-xeon-backend-server
+  ipc: host
+  restart: always
+```
+
+Once the services are up, open the following URL in your browser: http://{host_ip}:5174. By default, the UI runs on port 80 internally. If you prefer to use a different host port to access the frontend, you can modify the port mapping in the compose.yaml file as shown below:
+
+```
+  chaqna-xeon-conversation-ui-server:
+    image: opea/chatqna-conversation-ui:latest
+    ...
+    ports:
+      - "80:80"
+```
+
+### Stop the services
+
+Once you are done with the entire pipeline and wish to stop and remove all the containers, use the command below:
+::::{tab-set}
+
+:::{tab-item} vllm
+:sync: vllm
+
+```
+docker compose -f compose_vllm.yaml down
+```
+:::
+:::{tab-item} TGI
+:sync: TGI
+
+```
+docker compose -f compose.yaml down
+```
+:::
+::::
