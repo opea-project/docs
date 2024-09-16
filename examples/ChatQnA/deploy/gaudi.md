@@ -196,7 +196,7 @@ docker build --no-cache -t opea/chatqna-guardrails:latest --build-arg https_prox
 cd ../..
 ```
 
-#### Build the UI Image
+### Build the UI Image
 
 As mentioned, you can build 2 modes of UI
 
@@ -297,28 +297,28 @@ Set the necessary environment variables to setup the use case case
 
 ### Dataprep
 
-export DATAPREP_SERVICE_ENDPOINT="http://${host_ip}:6007/v1/dataprep"
-export DATAPREP_GET_FILE_ENDPOINT="http://${host_ip}:6007/v1/dataprep/get_file"
-export DATAPREP_DELETE_FILE_ENDPOINT="http://${host_ip}:6007/v1/dataprep/delete_file"
+    export DATAPREP_SERVICE_ENDPOINT="http://${host_ip}:6007/v1/dataprep"
+    export DATAPREP_GET_FILE_ENDPOINT="http://${host_ip}:6007/v1/dataprep/get_file"
+    export DATAPREP_DELETE_FILE_ENDPOINT="http://${host_ip}:6007/v1/dataprep/delete_file"
 
 ### VectorDB
 
-export REDIS_URL="redis://${host_ip}:6379"
-export INDEX_NAME="rag-redis"
+    export REDIS_URL="redis://${host_ip}:6379"
+    export INDEX_NAME="rag-redis"
 
 ### Embedding Service
 
-export EMBEDDING_MODEL_ID="BAAI/bge-base-en-v1.5"
-export EMBEDDING_SERVICE_HOST_IP=${host_ip}
-export RETRIEVER_SERVICE_HOST_IP=${host_ip}
-export TEI_EMBEDDING_ENDPOINT="http://${host_ip}:8090"
-export tei_embedding_devices=all
+    export EMBEDDING_MODEL_ID="BAAI/bge-base-en-v1.5"
+    export EMBEDDING_SERVICE_HOST_IP=${host_ip}
+    export RETRIEVER_SERVICE_HOST_IP=${host_ip}
+    export TEI_EMBEDDING_ENDPOINT="http://${host_ip}:8090"
+    export tei_embedding_devices=all
 
 ### Reranking Service
 
-export RERANK_MODEL_ID="BAAI/bge-reranker-base"
-export TEI_RERANKING_ENDPOINT="http://${host_ip}:8808"
-export RERANK_SERVICE_HOST_IP=${host_ip}
+    export RERANK_MODEL_ID="BAAI/bge-reranker-base"
+    export TEI_RERANKING_ENDPOINT="http://${host_ip}:8808"
+    export RERANK_SERVICE_HOST_IP=${host_ip}
 
 ### LLM Service
 
@@ -813,7 +813,7 @@ data: b'</s>'
 data: [DONE]
 ```
 
-##### Guardrail Microservice
+#### Guardrail Microservice
 If you had enabled Guardrail microservice, access via the below curl command
 
 ```
