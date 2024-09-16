@@ -523,7 +523,7 @@ curl http://${host_ip}:8008/generate \
 
 ```
 
-TGI service generate text for the input prompt. Here is the expected result from TGI:
+TGI service generates text for the input prompt. Here is the expected result from TGI:
 
 ```
 {"generated_text":"We have all heard the buzzword, but our understanding of it is still growing. It’s a sub-field of Machine Learning, and it’s the cornerstone of today’s Machine Learning breakthroughs.\n\nDeep Learning makes machines act more like humans through their ability to generalize from very large"}
