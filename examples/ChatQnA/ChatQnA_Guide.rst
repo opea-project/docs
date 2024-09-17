@@ -166,10 +166,10 @@ Single Node
 .. toctree::
    :maxdepth: 1
 
-   deploy/xeon
-   deploy/gaudi
-   deploy/nvidia
-   deploy/aipc
+   Xeon Scalable Processor <deploy/xeon>
+   Gaudi AI Accelerator <deploy/gaudi>
+   Nvidia GPU <deploy/nvidia>
+   AI PC <deploy/aipc>
 
 Kubernetes
 ==========
