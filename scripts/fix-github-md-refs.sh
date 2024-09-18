@@ -15,14 +15,20 @@ cd ${1:-.}
 # look for markdown files containing a hard github.com/opea-project/...
 # reference to a markdown file
 
-mdfiles=`grep -ril --include="*.md" 'github.com/opea-project.*\/[^\)]*\.md'`
+mdfiles=`grep -ril --include="*.md" 'github.com/opea-project.*\/[^\)]*'`
 
 # fix references to opea-project/tree/main/.../*.md or blob/.../*.md to be to the repo name and
-# subsequent path to the md file  \1 is repo \3 is file path
+# subsequent path to the md file  \1 is repo \3 is file path \4 is an optional #xxx target
 
-sed -i 's/(https:\/\/github.com\/opea-project\/\([^\/]*\)\/\(blob\|tree\)\/main\/\([^)]*\.md\)/(\/\1\/\3/g' $mdfiles
+#sed -i 's/(https:\/\/github.com\/opea-project\/\([^\/]*\)\/\(blob\|tree\)\/main\/\([^)]*\.md\)/(\/\1\/\3/g' $mdfiles
+sed -iE  's/(https:\/\/github.com\/opea-project\/\([^\/]*\)\/\(blob\|tree\)\/main\/\([^#)]*\)\(#[^)]*\)*)/(\/\1\/\3\/README.md\4)/g' $mdfiles
 
-# links such as (docs/...) should have the repo name removed since docs repo is the build root
+# That sed script might have introduced an error of "README.md/README.md", so
+# clean that up just in case
+
+sed -i 's/README\.md\/README\.md/README\.md/g' $mdfiles
+
+# links to the docs repo such as (docs/...) should have the repo name removed since docs repo is the build root
 
 sed -i 's/(\/docs\//(\//g' $mdfiles
 
