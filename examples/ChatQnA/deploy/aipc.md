@@ -269,12 +269,12 @@ Set the necessary environment variables to setup the use case case
     export DATAPREP_GET_FILE_ENDPOINT="http://${host_ip}:6007/v1/dataprep/get_file"
     export DATAPREP_DELETE_FILE_ENDPOINT="http://${host_ip}:6007/v1/dataprep/delete_file"
 
-  ### VectorDB
+### VectorDB
 
     export REDIS_URL="redis://${host_ip}:6379"
     export INDEX_NAME="rag-redis"
 
-  ### Embedding Service
+### Embedding Service
 
     export EMBEDDING_MODEL_ID="BAAI/bge-base-en-v1.5"
     export EMBEDDING_SERVICE_HOST_IP=${host_ip}
