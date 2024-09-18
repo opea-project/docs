@@ -55,17 +55,6 @@ Scalable Processors, Gaudi servers, NVIDIA GPUs, and even on AI PCs.  It also
 supports Kubernetes deployments with and without the GenAI Management Console
 (GMC), as well as cloud-native deployments using RHOCP.
 
-
-Preview
-=======
-
-To get a preview of the ChatQnA example, visit the
-`AI Explore site <https://aiexplorer.intel.com/explore>`_. The **ChatQnA Solution**
-provides a basic chatbot while the **ChatQnA with Augmented Context**
-allows you to upload your own files in order to quickly experiment with a RAG
-solution to see how a developer supplied corpus can provide relevant and up to
-date responses.
-
 Key Implementation Details
 ==========================
 
@@ -122,7 +111,7 @@ The architecture follows a series of steps to process user queries and generate 
    chatbot's answer.
 
 Expected Output
-===============
+***************
 
 Validation Matrix and Prerequisites
 ***********************************
@@ -130,12 +119,18 @@ Validation Matrix and Prerequisites
 See :doc:`/GenAIExamples/supported_examples`
 
 Architecture
-************
+============
 
 The ChatQnA architecture is displayed below:
 
 .. figure:: /GenAIExamples/ChatQnA/assets/img/chatqna_flow_chart.png
    :alt: ChatQnA Architecture Diagram
+
+Microservice Outline and Diagram
+********************************
+
+A GenAI application or pipeline in OPEA  typically consists of a collection of microservices to create a megaservice, accessed via a gateway. A microservice is a component designed to perform a specific function or task. Microservices are building blocks, offering the fundamental services. Microservices promote modularity, flexibility, and scalability in the system. A megaservice is a higher-level architectural construct composed of one or more microservices, providing the capability to assemble end-to-end applications.
+The gateway serves as the interface for users to access. The gateway routes incoming requests to the appropriate microservices within the megaservice architecture. See `GenAI Components <https://github.com/opea-project/GenAIComps>`_ for more information.
 
 .. mermaid::
 
@@ -203,19 +198,13 @@ The ChatQnA architecture is displayed below:
         Z[Gateway]
     end
 
-
-Microservice Outline and Diagram
-================================
-
-A GenAI application or pipeline in OPEA  typically consists of a collection of microservices to create a megaservice, accessed via a gateway. A microservice is a component designed to perform a specific function or task. Microservices are building blocks, offering the fundamental services. Microservices promote modularity, flexibility, and scalability in the system. A megaservice is a higher-level architectural construct composed of one or more microservices, providing the capability to assemble end-to-end applications.
-The gateway serves as the interface for users to access. The gateway routes incoming requests to the appropriate microservices within the megaservice architecture. See `GenAI Components <https://github.com/opea-project/GenAIComps>`_ for more information.
-
 Deployment
-**********
+==========
 
+From the below deployment options, choose the one that best fits your requirements:
 
 Single Node
-===========
+***********
 
 .. toctree::
    :maxdepth: 1
@@ -226,22 +215,22 @@ Single Node
    deploy/AIPC
 
 Kubernetes
-==========
+**********
 
 * Xeon & Gaudi with GMC
 * Xeon & Gaudi without GMC
 * Using Helm Charts
 
 Cloud Native
-============
+************
 
 * Red Hat OpenShift Container Platform (RHOCP)
 
 Troubleshooting
-***************
+===============
 
 Monitoring
-**********
+==========
 
 Now that you have deployed the ChatQnA example, let's talk about monitoring the performance of the microservices in the ChatQnA pipeline.
 
@@ -398,4 +387,4 @@ Log in to Grafana using the default credentials:
    You can also monitor the incoming requests to the microservice, the response time per token, etc., in real time.
 
 Summary and Next Steps
-**********************
+=======================
