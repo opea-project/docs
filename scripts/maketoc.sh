@@ -35,7 +35,9 @@ cd ../GenAIExamples
 ls -d1 */ | \
    awk \
      -v repo="GenAIExamples" \
-     -e '{dirname=substr($0,1,length($0)-1); title=dirname " Application"; \
+     -e '{dirname=substr($0,1,length($0)-1); if (dirname==repo) {\
+            print("\n.. comment maketoc: ignoring " dirname " directory\n\n"); next}\
+         title=dirname " Application"; \
          print title;gsub(/./,"*",title); print title; \
          print "\n.. rst-class:: rst-columns\n\n.. toctree::\n   :maxdepth: 1\n   :glob:\n\n   /" \
          repo "/" dirname "/*\n   /" \
