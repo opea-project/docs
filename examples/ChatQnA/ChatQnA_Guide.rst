@@ -207,7 +207,7 @@ The ChatQnA architecture is displayed below:
 Microservice Outline and Diagram
 ================================
 
-A GenAI application or pipeline in OPEA  typically consists of a collection of microservices to create a megaservice, accessed via a gateway. A microservice is a component designed to perform a specific function or task. Microservices are building blocks, offering the fundamental services. Microservices promote the modularity, flexibility, and scalability in the system. A megaservice is a higher-level architectural construct composed of one or more microservices, providing the capability to assemble end-to-end applications.
+A GenAI application or pipeline in OPEA  typically consists of a collection of microservices to create a megaservice, accessed via a gateway. A microservice is a component designed to perform a specific function or task. Microservices are building blocks, offering the fundamental services. Microservices promote modularity, flexibility, and scalability in the system. A megaservice is a higher-level architectural construct composed of one or more microservices, providing the capability to assemble end-to-end applications.
 The gateway serves as the interface for users to access. The gateway routes incoming requests to the appropriate microservices within the megaservice architecture. See `GenAI Components <https://github.com/opea-project/GenAIComps>`_ for more information.
 
 Deployment
@@ -263,7 +263,7 @@ The `/metrics` endpoint on the port running each microservice exposes the metric
 Set up the Prometheus server:
 
 1. Download Prometheus:
-   Download the Prometheus v2.52.0 from the official youbsite, and extract the files:
+   Download the Prometheus v2.52.0 from the official site, and extract the files:
 
 .. code-block:: bash
 
@@ -342,7 +342,7 @@ Grafana is a tool used for visualizing metrics and creating dashboards. It can b
 To set up the Grafana dashboard, follow these steps:
 
 1. Download Grafana:
-   Download the Grafana v8.0.6 from the official youbsite, and extract the files:
+   Download the Grafana v8.0.6 from the official site, and extract the files:
 
 .. code-block:: bash
 
