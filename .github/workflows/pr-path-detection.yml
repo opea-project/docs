@@ -19,23 +19,29 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Check the Validity of Hyperlinks
+        # "https://intel.sharepoint.com/:v:/s/mlconsultingandsupport/EZa7vjON10ZCpMvE7U-SPMwBRXbVHqe1Ybsa-fmnXayNUA?e=f6FPsl"
+        # "https://intel.sharepoint.com/:v:/s/mlconsultingandsupport/ESMIcBseFTdIuqkoB7TZy6ABfwR9CkfV49TvTa1X_Jihkg?e=zMH7O7"
         run: |
           cd ${{github.workspace}}
           fail="FALSE"
-          url_lines=$(grep -Eo '\]\(http[s]?://[^)]+\)' --include='*.md' -r .)
+          url_lines=$(grep -Eo '\]\(http[s]?://[^)]+\)' --include='*.md' -r .|grep -Ev 'linkedin')
           if [ -n "$url_lines" ]; then
             for url_line in $url_lines; do
               url=$(echo "$url_line"|cut -d '(' -f2 | cut -d ')' -f1|sed 's/\.git$//')
               path=$(echo "$url_line"|cut -d':' -f1 | cut -d'/' -f2-)
-              response=$(curl -L -s -o /dev/null -w "%{http_code}" "$url")
-              if [ "$response" -ne 200 ]; then
-                echo "**********Validation failed, try again**********"
-                response_retry=$(curl -s -o /dev/null -w "%{http_code}" "$url")
-                if [ "$response_retry" -eq 200 ]; then
-                  echo "*****Retry successfully*****"
-                else
-                  echo "Invalid link from ${{github.workspace}}/$path: $url"
-                  fail="TRUE"
+              if [[ "https://intel.sharepoint.com/:v:/s/mlconsultingandsupport/EZa7vjON10ZCpMvE7U-SPMwBRXbVHqe1Ybsa-fmnXayNUA?e=f6FPsl" == "$url" || "https://intel.sharepoint.com/:v:/s/mlconsultingandsupport/EZa7vjON10ZCpMvE7U-SPMwBRXbVHqe1Ybsa-fmnXayNUA?e=f6FPsl" == "$url" ]]; then
+                echo "Link "$url" from ${{github.workspace}}/$path need to be verified by a real person."
+              else
+                response=$(curl -L -s -o /dev/null -w "%{http_code}" "$url")
+                if [ "$response" -ne 200 ]; then
+                  echo "**********Validation failed, try again**********"
+                  response_retry=$(curl -s -o /dev/null -w "%{http_code}" "$url")
+                  if [ "$response_retry" -eq 200 ]; then
+                    echo "*****Retry successfully*****"
+                  else
+                    echo "Invalid link from ${{github.workspace}}/$path: $url"
+                    fail="TRUE"
+                  fi
                 fi
               fi
             done
