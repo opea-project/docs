@@ -100,7 +100,7 @@ jobs:
                   echo "**********Validation failed, try again**********"
                   response_retry=$(curl -s -o /dev/null -w "%{http_code}" "$url")
                   if [ "$response_retry" -eq 200 ]; then
-                    echo "*****Retry successfully*****"
+                    echo "*****Retry successful*****"
                   else
                     echo "Retry failed. Check branch ${{ github.event.pull_request.head.ref }}"
                     url_dev=$branch$(echo "$real_path" | sed 's|.*/docs||')
