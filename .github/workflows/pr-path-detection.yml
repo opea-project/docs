@@ -109,7 +109,7 @@ jobs:
                       echo "**********Validation failed, try again**********"
                       response_retry=$(curl -s -o /dev/null -w "%{http_code}" "$url_dev")
                       if [ "$response_retry" -eq 200 ]; then
-                        echo "*****Retry successfully*****"
+                        echo "*****Retry successful*****"
                       else
                         echo "Invalid path from ${{github.workspace}}/$refer_path: $png_path"
                         echo "$png_line"
