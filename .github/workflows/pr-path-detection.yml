@@ -121,6 +121,6 @@ jobs:
           if [[ "$fail" == "TRUE" ]]; then
             exit 1
           else
-            echo "All hyperlinks are valid."
+            echo "All relative links valid."
           fi
         shell: bash
