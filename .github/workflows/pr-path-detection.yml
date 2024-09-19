@@ -100,7 +100,7 @@ jobs:
                   echo "**********Validation failed, try again**********"
                   response_retry=$(curl -s -o /dev/null -w "%{http_code}" "$url")
                   if [ "$response_retry" -eq 200 ]; then
-                    echo "*****Retry successfully*****"
+                    echo "*****Retry successful*****"
                   else
                     echo "Retry failed. Check branch ${{ github.event.pull_request.head.ref }}"
                     url_dev=$branch$(echo "$real_path" | sed 's|.*/docs||')
@@ -109,7 +109,7 @@ jobs:
                       echo "**********Validation failed, try again**********"
                       response_retry=$(curl -s -o /dev/null -w "%{http_code}" "$url_dev")
                       if [ "$response_retry" -eq 200 ]; then
-                        echo "*****Retry successfully*****"
+                        echo "*****Retry successful*****"
                       else
                         echo "Invalid path from ${{github.workspace}}/$refer_path: $png_path"
                         echo "$png_line"
@@ -127,6 +127,6 @@ jobs:
           if [[ "$fail" == "TRUE" ]]; then
             exit 1
           else
-            echo "All hyperlinks are valid."
+            echo "All relative links valid."
           fi
         shell: bash
