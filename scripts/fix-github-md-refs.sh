@@ -21,7 +21,7 @@ mdfiles=`grep -ril --include="*.md" 'github.com/opea-project.*\/[^\)]*'`
 # subsequent path to the md file  \1 is repo \3 is file path \4 is an optional #xxx target
 
 #sed -i 's/(https:\/\/github.com\/opea-project\/\([^\/]*\)\/\(blob\|tree\)\/main\/\([^)]*\.md\)/(\/\1\/\3/g' $mdfiles
-sed -iE  's/(https:\/\/github.com\/opea-project\/\([^\/]*\)\/\(blob\|tree\)\/main\/\([^#)]*\)\(#[^)]*\)*)/(\/\1\/\3\/README.md\4)/g' $mdfiles
+sed -i  's/(https:\/\/github.com\/opea-project\/\([^\/]*\)\/\(blob\|tree\)\/main\/\([^#)]*\)\(#[^)]*\)*)/(\/\1\/\3\/README.md\4)/g' $mdfiles
 
 # That sed script might have introduced an error of "README.md/README.md", so
 # clean that up just in case
