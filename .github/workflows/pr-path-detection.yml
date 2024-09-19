@@ -69,6 +69,7 @@ jobs:
             branch="https://github.com/opea-project/docs/blob/${{ github.event.pull_request.head.ref }}"
           fi
           link_head="https://github.com/opea-project/docs/blob/main"
+          IFS=$'\n'
           png_lines=$(grep -Eo '\]\([^)]+\)' --include='*.md' -r .|grep -Ev 'http')
           if [ -n "$png_lines" ]; then
             for png_line in $png_lines; do
@@ -116,7 +117,7 @@ jobs:
               fi
             done
           fi
-
+          IFS=$OLDIFS
           if [[ "$fail" == "TRUE" ]]; then
             exit 1
           else
