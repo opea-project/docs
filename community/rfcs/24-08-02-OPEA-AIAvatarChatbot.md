@@ -104,7 +104,7 @@ The animation microservice is a new service that generates animated avatar video
 
 User can build their own Docker image with `Dockerfile_hpu` and create a Docker container on Gaudi2 instance to run the animation microservice. They can then validate the service by sending a POST request to the server API, while providing audio and image/video inputs. The animation microservice will generate an animated avatar video response and save it to the specified output path.
 
-Support for alternative SoTA models such as [SadTalker](https://github.com/OpenTalker/SadTalker) and [LivePortrait](https://github.com/KwaiVGI/LivePortraitare) in progress.
+Support for alternative SoTA models such as [SadTalker](https://github.com/OpenTalker/SadTalker) and [LivePortrait](https://github.com/KwaiVGI/LivePortrait) are in progress.
 
 #### AvatarChatbot megaservice
 The AvatarChatbot megaservice is a new service that integrates the existing microservices that comprise AudioQnA service with the new animation microservice. The AudioQnA service is a pipeline that takes user audio input, converts it to text, generates an LLM response, and converts the response to audio output. The animation microservice is a new service that takes the audio response from the AudioQnA service, generates an animated avatar response, and sends it back to the user. The megaflow is as follows:  
