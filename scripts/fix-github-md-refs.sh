@@ -23,10 +23,10 @@ mdfiles=`grep -ril --include="*.md" 'github.com/opea-project.*\/[^\)]*'`
 #sed -i 's/(https:\/\/github.com\/opea-project\/\([^\/]*\)\/\(blob\|tree\)\/main\/\([^)]*\.md\)/(\/\1\/\3/g' $mdfiles
 sed -i  's/(https:\/\/github.com\/opea-project\/\([^\/]*\)\/\(blob\|tree\)\/main\/\([^#)]*\)\(#[^)]*\)*)/(\/\1\/\3\/README.md\4)/g' $mdfiles
 
-# That sed script might have introduced an error of "README.md/README.md", so
-# clean that up just in case
+# That sed script might have introduced an error of "xxx.md/README.md", so
+# clean that up just in case (keep the xxx.md)
 
-sed -i 's/README\.md\/README\.md/README\.md/g' $mdfiles
+sed -i 's/\(\/[^\.]*\.md\)\/README\.md/\1/g' $mdfiles
 
 # links to the docs repo such as (docs/...) should have the repo name removed since docs repo is the build root
 
