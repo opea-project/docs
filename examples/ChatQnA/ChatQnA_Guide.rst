@@ -7,7 +7,7 @@ ChatQnA Sample Guide
    placeholder content.
 
 Overview
-========
+********
 
 Chatbots are a  widely adopted use case for leveraging the powerful chat and
 reasoning capabilities of large language models (LLMs).  The ChatQnA example
@@ -16,7 +16,7 @@ Consider it the “hello world” of GenAI applications and can be leveraged for
 solutions across wide enterprise verticals, both internally and externally.
 
 Purpose
-=======
+*******
 
 The ChatQnA example uses retrieval augmented generation (RAG) architecture,
 which is quickly becoming the industry standard for chatbot development. It
@@ -55,19 +55,8 @@ Scalable Processors, Gaudi servers, NVIDIA GPUs, and even on AI PCs.  It also
 supports Kubernetes deployments with and without the GenAI Management Console
 (GMC), as well as cloud-native deployments using RHOCP.
 
-
-Preview
-=======
-
-To get a preview of the ChatQnA example, visit the
-`AI Explore site <https://aiexplorer.intel.com/explore>`_. The **ChatQnA Solution**
-provides a basic chatbot while the **ChatQnA with Augmented Context**
-allows you to upload your own files in order to quickly experiment with a RAG
-solution to see how a developer supplied corpus can provide relevant and up to
-date responses.
-
 Key Implementation Details
-==========================
+**************************
 
 Embedding:
   The process of transforming user queries into numerical representations called
@@ -85,7 +74,7 @@ Deployment Options:
   example, including single-node deployments and Kubernetes deployments.
 
 How It Works
-============
+************
 
 The ChatQnA Examples follows a basic flow of information in the chatbot system,
 starting from the user input and going through the retrieve, re-ranker, and
@@ -122,10 +111,12 @@ The architecture follows a series of steps to process user queries and generate 
    chatbot's answer.
 
 Expected Output
-===============
++==============
+
+TBD
 
 Validation Matrix and Prerequisites
-***********************************
+===================================
 
 See :doc:`/GenAIExamples/supported_examples`
 
@@ -136,6 +127,12 @@ The ChatQnA architecture is displayed below:
 
 .. figure:: /GenAIExamples/ChatQnA/assets/img/chatqna_flow_chart.png
    :alt: ChatQnA Architecture Diagram
+
+Microservice Outline and Diagram
+================================
+
+A GenAI application or pipeline in OPEA  typically consists of a collection of microservices to create a megaservice, accessed via a gateway. A microservice is a component designed to perform a specific function or task. Microservices are building blocks, offering the fundamental services. Microservices promote modularity, flexibility, and scalability in the system. A megaservice is a higher-level architectural construct composed of one or more microservices, providing the capability to assemble end-to-end applications.
+The gateway serves as the interface for users to access. The gateway routes incoming requests to the appropriate microservices within the megaservice architecture. See `GenAI Components <https://github.com/opea-project/GenAIComps>`_ for more information.
 
 .. mermaid::
 
@@ -203,28 +200,25 @@ The ChatQnA architecture is displayed below:
         Z[Gateway]
     end
 
-
-Microservice Outline and Diagram
-================================
-
 A GenAI application or pipeline in OPEA  typically consists of a collection of microservices to create a megaservice, accessed via a gateway. A microservice is a component designed to perform a specific function or task. Microservices are building blocks, offering the fundamental services. Microservices promote modularity, flexibility, and scalability in the system. A megaservice is a higher-level architectural construct composed of one or more microservices, providing the capability to assemble end-to-end applications.
 The gateway serves as the interface for users to access. The gateway routes incoming requests to the appropriate microservices within the megaservice architecture. See `GenAI Components <https://github.com/opea-project/GenAIComps>`_ for more information.
 
 Deployment
 **********
 
+From the below deployment options, choose the one that best fits your requirements:
 
 Single Node
 ===========
 
 .. toctree::
    :maxdepth: 1
-
+   
    Xeon Scalable Processor <deploy/xeon>
    Gaudi AI Accelerator <deploy/gaudi>
    Nvidia GPU <deploy/nvidia>
    AI PC <deploy/aipc>
-
+   
 Kubernetes
 ==========
 
@@ -239,6 +233,8 @@ Cloud Native
 
 Troubleshooting
 ***************
+
+TDB.
 
 Monitoring
 **********
@@ -398,4 +394,6 @@ Log in to Grafana using the default credentials:
    You can also monitor the incoming requests to the microservice, the response time per token, etc., in real time.
 
 Summary and Next Steps
-**********************
+=======================
+
+TBD
