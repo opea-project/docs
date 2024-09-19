@@ -70,7 +70,7 @@ jobs:
           fi
           link_head="https://github.com/opea-project/docs/blob/main"
           IFS=$'\n'
-          png_lines=$(grep -Eo '\]\([^)]+\)' --include='*.md' -r .|grep -Ev 'http')
+          png_lines=$(grep -Eo '\]\([^)]+\)' --include='*.md' -r .|grep -Ev 'http'|grep -Ev 'mailto')
           if [ -n "$png_lines" ]; then
             for png_line in $png_lines; do
               echo "$png_line"
