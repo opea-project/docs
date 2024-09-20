@@ -27,6 +27,7 @@ jobs:
             for url_line in $url_lines; do
               url=$(echo "$url_line"|cut -d '(' -f2 | cut -d ')' -f1|sed 's/\.git$//')
               path=$(echo "$url_line"|cut -d':' -f1 | cut -d'/' -f2-)
+              echo "$url"
               if [[ "https://intel.sharepoint.com/:v:/s/mlconsultingandsupport/EZa7vjON10ZCpMvE7U-SPMwBRXbVHqe1Ybsa-fmnXayNUA?e=f6FPsl" == "$url" || "https://intel.sharepoint.com/:v:/s/mlconsultingandsupport/ESMIcBseFTdIuqkoB7TZy6ABfwR9CkfV49TvTa1X_Jihkg?e=zMH7O7" == "$url" ]]; then
                 echo "Link "$url" from ${{github.workspace}}/$path need to be verified by a real person."
               else
@@ -37,8 +38,7 @@ jobs:
                   if [ "$response_retry" -eq 200 ]; then
                     echo "*****Retry successful*****"
                   else
-                    retry=$(curl -s -o /dev/null -w "%{http_code}" "$url")
-                    echo $retry
+                    urls+=("$url")
                     echo "Invalid link from ${{github.workspace}}/$path: $url status code: $response_retry"
                     fail="TRUE"
                   fi
@@ -47,6 +47,11 @@ jobs:
             done
           fi
 
+          for link in "${urls[@]}"; do
+            retry=$(curl -s -o /dev/null -w "%{http_code}" "$url")
+            echo $retry
+          done
+          
           if [[ "$fail" == "TRUE" ]]; then
             exit 1
           else
