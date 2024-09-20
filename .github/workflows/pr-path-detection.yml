@@ -19,8 +19,6 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Check the Validity of Hyperlinks
-        # "https://intel.sharepoint.com/:v:/s/mlconsultingandsupport/EZa7vjON10ZCpMvE7U-SPMwBRXbVHqe1Ybsa-fmnXayNUA?e=f6FPsl"
-        # "https://intel.sharepoint.com/:v:/s/mlconsultingandsupport/ESMIcBseFTdIuqkoB7TZy6ABfwR9CkfV49TvTa1X_Jihkg?e=zMH7O7"
         run: |
           cd ${{github.workspace}}
           fail="FALSE"
@@ -34,7 +32,7 @@ jobs:
               else
                 response=$(curl -L -s -o /dev/null -w "%{http_code}" "$url")
                 if [ "$response" -ne 200 ]; then
-                  echo "**********Validation failed, try again**********"
+                  echo "**********Validation failed, status code: $response, try again**********"
                   response_retry=$(curl -s -o /dev/null -w "%{http_code}" "$url")
                   if [ "$response_retry" -eq 200 ]; then
                     echo "*****Retry successful*****"
@@ -96,7 +94,7 @@ jobs:
                 url=$link_head$(echo "$real_path" | sed 's|.*/docs||')
                 response=$(curl -I -L -s -o /dev/null -w "%{http_code}" "$url")
                 if [ "$response" -ne 200 ]; then
-                  echo "**********Validation failed, try again**********"
+                  echo "**********Validation failed, status code: $response try again**********"
                   response_retry=$(curl -s -o /dev/null -w "%{http_code}" "$url")
                   if [ "$response_retry" -eq 200 ]; then
                     echo "*****Retry successful*****"
@@ -105,12 +103,12 @@ jobs:
                     url_dev=$branch$(echo "$real_path" | sed 's|.*/docs||')
                     response=$(curl -I -L -s -o /dev/null -w "%{http_code}" "$url_dev")
                     if [ "$response" -ne 200 ]; then
-                      echo "**********Validation failed, try again**********"
+                      echo "**********Validation failed, status code: $response_retry, try again**********"
                       response_retry=$(curl -s -o /dev/null -w "%{http_code}" "$url_dev")
                       if [ "$response_retry" -eq 200 ]; then
                         echo "*****Retry successful*****"
                       else
-                        echo "Invalid path from ${{github.workspace}}/$refer_path: $png_path"
+                        echo "Invalid path from ${{github.workspace}}/$refer_path: $png_path status code: $response_retry"
                         echo "$png_line"
                         fail="TRUE"
                       fi
