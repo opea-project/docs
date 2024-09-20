@@ -55,6 +55,7 @@ content:
 #	$(Q)rsync $(RSYNC_OPTS) ../docs/* $(SOURCEDIR)
 	$(Q)find $(SOURCEDIR) -type f -empty -name "README.md" -delete
 	$(Q)scripts/fix-github-md-refs.sh $(SOURCEDIR)
+	$(Q)scripts/maketoc.sh $(SOURCEDIR)
 
 
 html: content
