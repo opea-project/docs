@@ -48,10 +48,27 @@ jobs:
           for link in "${urls_line[@]}"; do
             url=$(echo "$link"|cut -d '(' -f2 | cut -d ')' -f1|sed 's/\.git$//')
             path=$(echo "$link"|cut -d':' -f1 | cut -d'/' -f2-)
-            do_retry=$(curl -s -o /dev/null -w "%{http_code}" "$url")
-            if [ "$do_retry" -eq 200 ]; then
-              echo "$url Retry successful"
-            else
+            # do_retry=$(curl -s -o /dev/null -w "%{http_code}" "$url")
+            # if [ "$do_retry" -eq 200 ]; then
+            #   echo "$url Retry successful"
+            # else
+            #   echo "Invalid link from ${{github.workspace}}/$path: $url status code: $do_retry"
+            #   fail="TRUE"
+            # fi
+            attempt_num=1
+            while [ $attempt_num -le 5 ]; do
+              do_retry=$(curl -s -o /dev/null -w "%{http_code}" "$url")
+              if [ "$do_retry" -eq 200 ]; then
+                  echo "$url Retry successful"
+                  break
+              else
+                  echo "$url Validation failed, retrying..."
+                  ((attempt_num++))
+                  sleep 3
+              fi
+            done
+
+            if [ $attempt_num -gt 5 ]; then
               echo "Invalid link from ${{github.workspace}}/$path: $url status code: $do_retry"
               fail="TRUE"
             fi
