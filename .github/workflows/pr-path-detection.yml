@@ -64,7 +64,7 @@ jobs:
               else
                   echo "$url Validation failed, retrying..."
                   ((attempt_num++))
-                  sleep 3
+                  sleep 10
               fi
             done
 
