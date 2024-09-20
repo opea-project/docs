@@ -37,6 +37,8 @@ jobs:
                   if [ "$response_retry" -eq 200 ]; then
                     echo "*****Retry successful*****"
                   else
+                    retry=$(curl -s -o /dev/null -w "%{http_code}" "$url")
+                    echo $retry
                     echo "Invalid link from ${{github.workspace}}/$path: $url status code: $response_retry"
                     fail="TRUE"
                   fi
