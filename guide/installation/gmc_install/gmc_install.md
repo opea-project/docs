@@ -11,7 +11,7 @@ GMC can be used to compose and adjust GenAI pipelines dynamically on Kubernetes.
 **Prerequisites**
 
 - For the ChatQnA example ensure your cluster has a running Kubernetes cluster with at least 16 CPUs, 32GB of memory, and 100GB of disk space. To install a Kubernetes cluster refer to:
-["Kubernetes installation"](../k8s_install/) 
+["Kubernetes installation"](../k8s_install/README.md) 
 
 **Download the GMC github repository**
 
