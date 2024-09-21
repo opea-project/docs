@@ -110,7 +110,7 @@ html_context = {
    'docs_title': docs_title,
    'is_release': is_release,
    'versions': ( ("latest", "/latest/"),
-                 # ("1.0", "/1.0/"),   # No doc versions yet...
+                 ("1.0", "/1.0/"),
                )
     }
 

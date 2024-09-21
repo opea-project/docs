@@ -21,16 +21,12 @@ mdfiles=`grep -ril --include="*.md" 'github.com/opea-project.*\/[^\)]*'`
 # subsequent path to the md file  \1 is repo \3 is file path \4 is an optional #xxx target
 
 #sed -i 's/(https:\/\/github.com\/opea-project\/\([^\/]*\)\/\(blob\|tree\)\/main\/\([^)]*\.md\)/(\/\1\/\3/g' $mdfiles
-sed -i  's/(https:\/\/github.com\/opea-project\/\([^\/]*\)\/\(blob\|tree\)\/main\/\([^#)]*\)\(#[^)]*\)*)/(\/\1\/\3\/README.md\4)/g' $mdfiles
+#sed -i  's/(https:\/\/github.com\/opea-project\/\([^\/]*\)\/\(blob\|tree\)\/main\/\([^#)]*\)\(#[^)]*\)*)/(\/\1\/\3\/README.md\4)/g' $mdfiles
+sed -i  's/(https:\/\/github.com\/opea-project\/\([^\/]*\)\/\(blob\|tree\)\/main\/\([^#)]*\.md\)\(#[^)]*\)*)/(\/\1\/\3\4)/g' $mdfiles
 
-# That sed script might have introduced an error of "xxx.md/README.md", so
-# clean that up just in case (keep the xxx.md)
+# After that, inks to the docs repo such as [blah](docs/...) should have the repo name removed since docs repo is the build root
 
-sed -i 's/\(\/[^\.]*\.md\)\/README\.md/\1/g' $mdfiles
-
-# links to the docs repo such as (docs/...) should have the repo name removed since docs repo is the build root
-
-sed -i 's/(\/docs\//(\//g' $mdfiles
+sed -i 's/](\/docs\//](\//g' $mdfiles
 
 # links to a folder should instead be to the folder's README.md
 # Not automating this for now since there are valid folder references
