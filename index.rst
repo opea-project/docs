@@ -25,7 +25,7 @@ Source code for the OPEA Project is maintained in the
            <p>Learn about the OPEA architecture, features, and benefits.</p>
        </li>
        <li class="grid-item">
-           <a href="getting-started/index.html">
+           <a href="getting-started/README.html">
                <span class="grid-icon fa fa-map-signs"></span>
                <h2>Getting Started</h2>
            </a>
@@ -68,7 +68,7 @@ Source code for the OPEA Project is maintained in the
 
    Documentation Home <self>
    introduction/index
-   getting-started/index
+   getting-started/README
    examples/index
    microservices/index
    deploy/index
