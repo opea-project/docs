@@ -72,8 +72,8 @@ docker pull opea/chatqna:latest
 docker pull opea/chatqna-ui:latest
 In following cases, you will need to build docker image from source by yourself.
 
-   -Failed to download the docker image.
-   -Use the latest or special version.
+1. Failed to download the docker image.
+2. Use the latest or special version.
 
 Please refer to the 'Build Docker Images' in Guide.
 
