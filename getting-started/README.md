@@ -54,7 +54,6 @@ source ./docker_compose/nvidia/gpu/set_env.sh
 
 ### Deploy ChatQnA Megaservice and Microservices
 Select the compose.yaml file that matches your hardware.
-CPU example:
 ```
 #xeon
 cd docker_compose/intel/cpu/xeon/
@@ -68,14 +67,14 @@ Now we can start the services
 docker compose up -d
 ```
 It will automatically download the docker image on docker hub:
-docker pull opea/chatqna:latest
-docker pull opea/chatqna-ui:latest
+- docker pull opea/chatqna:latest
+- docker pull opea/chatqna-ui:latest
 In following cases, you will need to build docker image from source by yourself.
 
 1. Failed to download the docker image.
 2. Use the latest or special version.
 
-Please refer to the 'Build Docker Images' in Guide.
+Please refer to the ['Build Docker Images'](/examples/ChatQnA/deploy) section from the file that matches your hardware.
 
 ### Interact with ChatQnA Megaservice and Microservice 
 ```
@@ -89,10 +88,10 @@ This command will provide the response as a stream of text. You can modify the m
 
 ### What’s Next:
 
-1. Try  [GenAIExamples](https://opea-project.github.io/latest/examples/index.html) in-detail starting with [ChatQnA](https://opea-project.github.io/latest/examples/ChatQnA/ChatQnA_Guide.html) Example
+1. Try  [GenAIExamples](/examples/index.rst) in-detail starting with [ChatQnA](/examples/ChatQnA/ChatQnA_Guide.html) example.
  
-2. Try [GenAIComps](https://opea-project.github.io/latest/microservices/index.html) to build microservices
+2. Try [GenAIComps](/microservices/index.rst) to build microservices.
  
-3. Interested in contributing to OPEA? Refer to [OPEA Community](https://opea-project.github.io/latest/community/index.html) and [Contribution Guides](https://opea-project.github.io/latest/community/index.html#contributing-guides)
+3. Interested in contributing to OPEA? Refer to [OPEA Community](/community/index.rst) and [Contribution Guides](/community/index.rst#contributing-guides).
  
 
