@@ -69,6 +69,7 @@ docker compose up -d
 It will automatically download the docker image on docker hub:
 - docker pull opea/chatqna:latest
 - docker pull opea/chatqna-ui:latest
+
 In following cases, you will need to build docker image from source by yourself.
 
 1. Failed to download the docker image.
@@ -88,7 +89,7 @@ This command will provide the response as a stream of text. You can modify the m
 
 ### What’s Next:
 
-1. Try  [GenAIExamples](/examples/index.rst) in-detail starting with [ChatQnA](/examples/ChatQnA/ChatQnA_Guide.html) example.
+1. Try  [GenAIExamples](/examples/index.rst) in-detail starting with [ChatQnA](/examples/ChatQnA/ChatQnA_Guide.rst) example.
  
 2. Try [GenAIComps](/microservices/index.rst) to build microservices.
  
