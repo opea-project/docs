@@ -18,29 +18,36 @@ To illustrate, here's a simplified visual guide on deploying a ChatQnA GenAIExam
 
 ![Getting started with OPEA](assets/getting_started.gif)
 
-## Setup ChatQna Parameters
+## Setup ChatQnA Parameters
 To deploy ChatQnA services, follow these steps:
+
+```
+git clone https://github.com/opea-project/GenAIExamples.git
+cd GenAIExamples/ChatQnA
+```
 
 ### Set the required environment variables:
 ```
-    # Example: host_ip="192.168.1.1"
-	export host_ip="External_Public_IP"
-	# Example: no_proxy="localhost, 127.0.0.1, 192.168.1.1"
-	export no_proxy="Your_No_Proxy"
-    export HUGGINGFACEHUB_API_TOKEN="Your_Huggingface_API_Token"
-	If you are in a proxy environment, also set the proxy-related environment variables:
-	export http_proxy="Your_HTTP_Proxy"
-    export https_proxy="Your_HTTPs_Proxy"
+# Example: host_ip="192.168.1.1"
+export host_ip="External_Public_IP"
+# Example: no_proxy="localhost, 127.0.0.1, 192.168.1.1"
+export no_proxy="Your_No_Proxy"
+export HUGGINGFACEHUB_API_TOKEN="Your_Huggingface_API_Token"
 ```
 
-Set up other use case specific environment variables:
-Notice that you can only choose one command below to set up envs according to your hardware. Other that the port numbers may be set incorrectly.
+If you are in a proxy environment, also set the proxy-related environment variables:
+```
+export http_proxy="Your_HTTP_Proxy"
+export https_proxy="Your_HTTPs_Proxy"
+```
+
+Set up other specific use-case environment variables by choosing one of these options, according to your hardware:
 
 ```
-# on Gaudi
-source ./docker_compose/intel/hpu/gaudi/set_env.sh
 # on Xeon
 source ./docker_compose/intel/cpu/xeon/set_env.sh
+# on Gaudi
+source ./docker_compose/intel/hpu/gaudi/set_env.sh
 # on Nvidia GPU
 source ./docker_compose/nvidia/gpu/set_env.sh
 ```
@@ -52,17 +59,22 @@ CPU example:
 #xeon
 cd docker_compose/intel/cpu/xeon/
 #gaudi
-# cd docker_compose/intel/hpu/gaudi/
+cd docker_compose/intel/hpu/gaudi/
 #nvidia
-# cd docker_compose/nvidia/gpu/
+cd docker_compose/nvidia/gpu/
+```
+Now we can start the services
+```
 docker compose up -d
 ```
 It will automatically download the docker image on docker hub:
 docker pull opea/chatqna:latest
 docker pull opea/chatqna-ui:latest
-In following cases, you could build docker image from source by yourself.
-•	Failed to download the docker image.
-•	Use the latest or special version.
+In following cases, you will need to build docker image from source by yourself.
+
+   -Failed to download the docker image.
+   -Use the latest or special version.
+
 Please refer to the 'Build Docker Images' in Guide.
 
 ### Interact with ChatQnA Megaservice and Microservice 
@@ -73,5 +85,14 @@ curl http://${host_ip}:8888/v1/chatqna \
         "messages": "What is the revenue of Nike in 2023?"
     }'
 ```
+This command will provide the response as a stream of text. You can modify the message parameter in the curl command and interact with the ChatQnA service.
 
+### What’s Next:
+
+1. Try  [GenAIExamples](https://opea-project.github.io/latest/examples/index.html) in-detail starting with [ChatQnA](https://opea-project.github.io/latest/examples/ChatQnA/ChatQnA_Guide.html) Example
+ 
+2. Try [GenAIComps](https://opea-project.github.io/latest/microservices/index.html) to build microservices
+ 
+3. Interested in contributing to OPEA? Refer to [OPEA Community](https://opea-project.github.io/latest/community/index.html) and [Contribution Guides](https://opea-project.github.io/latest/community/index.html#contributing-guides)
+ 
 
