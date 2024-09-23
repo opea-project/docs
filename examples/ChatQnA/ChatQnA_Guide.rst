@@ -111,7 +111,7 @@ The architecture follows a series of steps to process user queries and generate 
    chatbot's answer.
 
 Expected Output
-+==============
+===============
 
 TBD
 
@@ -206,30 +206,10 @@ The gateway serves as the interface for users to access. The gateway routes inco
 Deployment
 **********
 
-From the below deployment options, choose the one that best fits your requirements:
+See the :ref:`chatqna-example-deployment` that includes both single-node and
+orchestrated multi-node configurations, and choose the one that best fits your
+requirements.
 
-Single Node
-===========
-
-.. toctree::
-   :maxdepth: 1
-   
-   Xeon Scalable Processor <deploy/xeon>
-   Gaudi AI Accelerator <deploy/gaudi>
-   Nvidia GPU <deploy/nvidia>
-   AI PC <deploy/aipc>
-   
-Kubernetes
-==========
-
-* Xeon & Gaudi with GMC
-* Xeon & Gaudi without GMC
-* Using Helm Charts
-
-Cloud Native
-============
-
-* Red Hat OpenShift Container Platform (RHOCP)
 
 Troubleshooting
 ***************
