@@ -164,7 +164,7 @@ docker pull opea/reranking-tei:latest
 :::
 ::::
 
-#### Build/Pull Docker with vLLM or TGI
+#### Build/Pull LLM Image with vLLM or TGI
 ::::{tab-set}
 :::{tab-item} vllm: Build
 :sync: vllm: Build
