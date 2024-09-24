@@ -75,7 +75,9 @@ It will automatically download the needed docker images from docker hub:
 
 In the following cases, you will need to build the docker image from source by yourself.
 
-- The docker image failed to download.
+- The docker image failed to download. (You may want to first check the
+  [Docker Images](https://github.com/opea-project/GenAIExamples/blob/main/docker_images_list.md)
+  list and verify that the docker image you're downloading exists on dockerhub.)
 - You want to use a different version than latest.
 
 Refer to the {ref}`ChatQnA Example Deployment Options <chatqna-example-deployment>` section for building from source instructions matching your hardware.
@@ -93,7 +95,5 @@ This command will provide the response as a stream of text. You can modify the `
 ## What’s Next
 
 - Try  [GenAIExamples](/examples/index.rst) in-detail starting with [ChatQnA](/examples/ChatQnA/ChatQnA_Guide.rst) example.
-
 - Try [GenAIComps](/microservices/index.rst) to build microservices.
-
 - Interested in contributing to OPEA? Refer to [OPEA Community](/community/index.rst) and [Contribution Guides](/community/index.rst#contributing-guides).
