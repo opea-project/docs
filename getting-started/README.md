@@ -4,17 +4,19 @@
 
 To get started with OPEA you need the right hardware and basic software setup.
 
-Hardware Requirements: For the hardware configuration, If you need Hardware Access visit the Intel Tiber Developer Cloud to select from options such as Xeon or Gaudi processors that meet the necessary specifications.
-Software Requirements: Please refer to the Support Matrix[ Hyper link needed]  to ensure you have the required software components in place.
+- Hardware Requirements: For the hardware configuration, If you need Hardware Access visit the Intel Tiber Developer Cloud to select from options such as Xeon or Gaudi processors that meet the necessary specifications.
+
+- Software Requirements: Refer to the [Support Matrix](https://github.com/opea-project/GenAIExamples/blob/main/README.md#getting-started) to ensure you have the required software components in place.
 
 ## Understanding OPEA's Core Components
 
 Before moving forward, it's important to familiarize yourself with two key elements of OPEA: GenAIComps and GenAIExamples.
-1.	GenAIComps: GenAIComps is a collection of microservice components that form a service-based toolkit. This includes a variety of services such as llm (language learning models), embedding, and reranking, among others.
-2.	GenAIExamples: While GenAIComps offers a range of microservices, GenAIExamples provides practical, deployable solutions to help users implement these services effectively. Examples include ChatQnA and DocSum, which leverage the microservices for specific applications. 
+
+- GenAIComps is a collection of microservice components that form a service-based toolkit. This includes a variety of services such as llm (language learning models), embedding, and reranking, among others.
+- While GenAIComps offers a range of microservices, GenAIExamples provides practical, deployable solutions to help users implement these services effectively. Examples include ChatQnA and DocSum, which leverage the microservices for specific applications.
 
 ## Visual Guide to Deployment
-To illustrate, here's a simplified visual guide on deploying a ChatQnA GenAIExample, showcasing how you can set up this solution in just a few steps. 
+To illustrate, here's a simplified visual guide on deploying a ChatQnA GenAIExample, showcasing how you can set up this solution in just a few steps.
 
 ![Getting started with OPEA](assets/getting_started.gif)
 
@@ -52,8 +54,8 @@ source ./docker_compose/intel/hpu/gaudi/set_env.sh
 source ./docker_compose/nvidia/gpu/set_env.sh
 ```
 
-### Deploy ChatQnA Megaservice and Microservices
-Select the compose.yaml file that matches your hardware.
+## Deploy ChatQnA Megaservice and Microservices
+Select the directory containing the `compose.yaml` file that matches your hardware.
 ```
 #xeon
 cd docker_compose/intel/cpu/xeon/
@@ -66,18 +68,21 @@ Now we can start the services
 ```
 docker compose up -d
 ```
-It will automatically download the docker image on docker hub:
+It will automatically download the needed docker images from docker hub:
+
 - docker pull opea/chatqna:latest
 - docker pull opea/chatqna-ui:latest
 
-In following cases, you will need to build docker image from source by yourself.
+In the following cases, you will need to build the docker image from source by yourself.
 
-1. Failed to download the docker image.
-2. Use the latest or special version.
+- The docker image failed to download. (You may want to first check the
+  [Docker Images](https://github.com/opea-project/GenAIExamples/blob/main/docker_images_list.md)
+  list and verify that the docker image you're downloading exists on dockerhub.)
+- You want to use a different version than latest.
 
-Please refer to the ['Build Docker Images'](/examples/ChatQnA/deploy) section from the file that matches your hardware.
+Refer to the {ref}`ChatQnA Example Deployment Options <chatqna-example-deployment>` section for building from source instructions matching your hardware.
 
-### Interact with ChatQnA Megaservice and Microservice 
+## Interact with ChatQnA Megaservice and Microservice
 ```
 curl http://${host_ip}:8888/v1/chatqna \
     -H "Content-Type: application/json" \
@@ -85,14 +90,10 @@ curl http://${host_ip}:8888/v1/chatqna \
         "messages": "What is the revenue of Nike in 2023?"
     }'
 ```
-This command will provide the response as a stream of text. You can modify the message parameter in the curl command and interact with the ChatQnA service.
+This command will provide the response as a stream of text. You can modify the `message` parameter in the `curl` command and interact with the ChatQnA service.
 
-### What’s Next:
+## What’s Next
 
-1. Try  [GenAIExamples](/examples/index.rst) in-detail starting with [ChatQnA](/examples/ChatQnA/ChatQnA_Guide.rst) example.
- 
-2. Try [GenAIComps](/microservices/index.rst) to build microservices.
- 
-3. Interested in contributing to OPEA? Refer to [OPEA Community](/community/index.rst) and [Contribution Guides](/community/index.rst#contributing-guides).
- 
-
+- Try  [GenAIExamples](/examples/index.rst) in-detail starting with [ChatQnA](/examples/ChatQnA/ChatQnA_Guide.rst) example.
+- Try [GenAIComps](/microservices/index.rst) to build microservices.
+- Interested in contributing to OPEA? Refer to [OPEA Community](/community/index.rst) and [Contribution Guides](/community/index.rst#contributing-guides).
