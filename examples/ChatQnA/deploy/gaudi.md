@@ -86,25 +86,35 @@ export https_proxy=${your_http_proxy}
 
 ## Prepare (Building / Pulling) Docker images
 
-This step will involve building/pulling ( maybe in future) relevant docker
-images with step-by-step process along with sanity check in the end. For
+This step will involve building/pulling relevant docker
+images with a step-by-step process along with sanity checks. For
 ChatQnA, the following docker images will be needed: embedding, retriever,
 rerank, LLM and dataprep. Additionally, you will need to build docker images for
-ChatQnA megaservice, and UI (conversational React UI is optional). In total,
-there are 8 required and an optional docker images.
+the ChatQnA megaservice and UI (conversational React UI is optional). In total,
+there are 8 required and 1 optional docker images.
 
 The docker images needed to setup the example needs to be build local, however
 the images will be pushed to docker hub soon by Intel.
 
 ### Build/Pull Microservice images
 
-From within the `GenAIComps` folder
+From within the `GenAIComps` folder:
 
-#### Build Dataprep Image
+#### Build/Pull Dataprep Image
+::::{tab-set}
 
+:::{tab-item} Build
+:sync: Build
 ```bash
 docker build --no-cache -t opea/dataprep-redis:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/dataprep/redis/langchain/Dockerfile .
 ```
+:::
+:::{tab-item} Pull
+:sync: Pull
+```bash
+docker pull opea/dataprep-redis:latest
+```
+::::
 
 #### Build Embedding Image
 
