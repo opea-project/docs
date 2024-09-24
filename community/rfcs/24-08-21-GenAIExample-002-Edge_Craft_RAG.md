@@ -110,24 +110,43 @@ The EC-RAG pipeline will expose 3 types of REST API endpoint:
 
 ```json
 {
-    "name": "test1",
+    "name": "rag_demo",
     "node_parser" : {
-        "chunk_size": 30,
-        "chunk_overlap": 10,
-        "parser_type": "simple"
+        "chunk_size": 250,
+        "chunk_overlap": 48,
+        "type": "simple"
     },
     "indexer": {
-        "indexer_type": "vector",
-        "embedding_model": {
+        "type": "faiss_vector",
+        "model": {
             "model_id": "BAAI/bge-small-en-v1.5",
-            "model_path": "./bge_ov",
-            "device": "cpu"
+            "model_path": "./bge_ov_embedding",
+            "device": "auto"
         }
     },
-    "retriever": "vectorsimilarity",
-
-    // ... More to be added ...
-
+    "retriever": {
+        "type": "vectorsimilarity",
+        "top_k": 30
+    },
+    "postprocessors": [
+        {
+            "type": "reranker",
+            "rerank_top_n": 5,
+            "model": {
+                "model_id": "BAAI/bge-reranker-large",
+                "model_path": "./bge_ov_reranker",
+                "device": "auto"
+            }
+        }
+    ],
+    "generator": {
+        "model": {
+            "model_id": "qwen2-7b-instruct",
+            "model_path": "./qwen2-7b-instruct/INT4_compressed_weights",
+            "device": "auto"
+        },
+        "prompt_path" : "./data/default_prompt.txt"
+    },
     "active": "True"
 }
 ```
