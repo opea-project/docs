@@ -102,7 +102,6 @@ From within the `GenAIComps` folder:
 
 #### Build/Pull Dataprep Image
 ::::{tab-set}
-
 :::{tab-item} Build
 :sync: Build
 ```bash
@@ -114,56 +113,106 @@ docker build --no-cache -t opea/dataprep-redis:latest --build-arg https_proxy=$h
 ```bash
 docker pull opea/dataprep-redis:latest
 ```
+:::
 ::::
 
-#### Build Embedding Image
-
+#### Build/Pull Embedding Image
+::::{tab-set}
+:::{tab-item} Build
+:sync: Build
 ```bash
 docker build --no-cache -t opea/embedding-tei:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/embeddings/tei/langchain/Dockerfile .
 ```
+:::
+:::{tab-item} Pull
+:sync: Pull
+```bash
+docker pull opea/embedding-tei:latest
+```
+:::
+::::
 
-#### Build Retriever Image
-
+#### Build/Pull Retriever Image
+::::{tab-set}
+:::{tab-item} Build
+:sync: Build
 ```bash
 docker build --no-cache -t opea/retriever-redis:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/retrievers/redis/langchain/Dockerfile .
 ```
+:::
+:::{tab-item} Pull
+:sync: Pull
+```bash
+docker pull opea/retriever-redis:latest
+```
+:::
+::::
 
-#### Build Rerank Image
-
+#### Build/Pull Rerank Image
+::::{tab-set}
+:::{tab-item} Build
+:sync: Build
 ```bash
 docker build --no-cache -t opea/reranking-tei:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/reranks/tei/Dockerfile .
 ```
+:::
+:::{tab-item} Pull
+:sync: Pull
+```bash
+docker pull opea/reranking-tei:latest
+```
+:::
+::::
 
-#### Build docker
-
+#### Build/Pull Docker with vLLM or TGI
 ::::{tab-set}
-
-:::{tab-item} vllm
-:sync: vllm
+:::{tab-item} vllm: Build
+:sync: vllm: Build
 
 Build vLLM docker image with hpu support
-```
+```bash
 docker build --no-cache -t opea/llm-vllm-hpu:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/llms/text-generation/vllm/langchain/dependency/Dockerfile.intel_hpu .
 ```
 
 Build vLLM Microservice image
-```
+```bash
 docker build --no-cache -t opea/llm-vllm:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/llms/text-generation/vllm/langchain/Dockerfile .
 cd ..
 ```
 :::
-:::{tab-item} TGI
-:sync: TGI
+:::{tab-item} vllm: Pull
+:sync: vllm: Pull
+
+Pull vLLM docker image with hpu support
+```bash
+docker pull opea/llm-vllm-hpu:latest
+```
+
+Pull vLLM Microservice image
+```bash
+docker pull opea/llm-vllm:latest
+```
+:::
+:::{tab-item} TGI: Build
+:sync: TGI: Build
 
 ```bash
 docker build --no-cache -t opea/llm-tgi:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/llms/text-generation/tgi/Dockerfile .
 ```
 :::
+:::{tab-item} TGI: Pull
+:sync: TGI: Pull
+
+```bash
+docker pull opea/llm-tgi:latest
+```
+:::
 ::::
 
-### Build TEI Gaudi Image
-
-Since a TEI Gaudi Docker image hasn't been published, we'll need to build it from the [tei-gaudi](https://github.com/huggingface/tei-gaudi) repository.
+### Build/Pull TEI Gaudi Image
+:::{tab-item} TEI Gaudi: Build
+:sync: TEI: Build
+The TEI Gaudi Docker image can be built from the [tei-gaudi](https://github.com/huggingface/tei-gaudi) repository.
 
 ```bash
 git clone https://github.com/huggingface/tei-gaudi
@@ -171,8 +220,16 @@ cd tei-gaudi/
 docker build --no-cache -f Dockerfile-hpu -t opea/tei-gaudi:latest .
 cd ..
 ```
+:::
+:::{tab-item} TEI Gaudi: Pull
+:sync: TEI: Pull
+```bash
+docker pull opea/tei-gaudi:latest
+```
+:::
+::::
 
-### Build Mega Service images
+### Build/Pull Mega Service images
 
 The Megaservice is a pipeline that channels data through different
 microservices, each performing varied tasks. We define the different
@@ -182,6 +239,9 @@ microservice which will in turn passes data to the reranking microservice and so
 on. You can also add newer or remove some microservices and customize the
 megaservice to suit the needs.
 
+::::{tab-set}
+:::{tab-item} Build
+:sync: Build
 Build the megaservice image for this use case
 
 ```
@@ -195,37 +255,78 @@ cd ChatQnA
 docker build --no-cache -t opea/chatqna:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f Dockerfile .
 cd ../..
 ```
+:::
+:::{tab-item} Pull
+:sync: Pull
+Pull the megaservice image for this use case
 
-### Build Other Service images
+```bash
+docker pull opea/chatqna:latest
+```
+:::
+::::
 
-If you want to enable guardrails microservice in the pipeline, please use the below command instead:
+### Build/Pull Other Service images
 
+If you want to enable guardrails microservice in the pipeline, please use one of the below commands instead:
+
+::::{tab-set}
+:::{tab-item} Build
+:sync: Build
 ```bash
 cd GenAIExamples/ChatQnA/
 docker build --no-cache -t opea/chatqna-guardrails:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f Dockerfile.guardrails .
 cd ../..
 ```
+:::
+:::{tab-item} Pull
+:sync: Pull
+```bash
+docker pull opea/chatqna-guardrails:latest
+```
+:::
+::::
 
 ### Build the UI Image
 
 As mentioned, you can build 2 modes of UI
 
 *Basic UI*
-
+::::{tab-set}
+:::{tab-item} Build
+:sync: Build
 ```bash
 cd GenAIExamples/ChatQnA/ui/
 docker build --no-cache -t opea/chatqna-ui:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f ./docker/Dockerfile .
 cd ../../..
 ```
+:::
+:::{tab-item} Pull
+:sync: Pull
+```bash
+docker pull opea/chatqna-ui:latest
+```
+:::
+::::
 
 *Conversation UI*
 If you want a conversational experience with chatqna megaservice.
-
+::::{tab-set}
+:::{tab-item} Build
+:sync: Build
 ```bash
 cd GenAIExamples/ChatQnA/ui/
 docker build --no-cache -t opea/chatqna-conversation-ui:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f ./docker/Dockerfile.react .
 cd ../../..
 ```
+:::
+:::{tab-item} Pull
+:sync: Pull
+```bash
+docker pull opea/chatqna-conversation-ui:latest
+```
+:::
+::::
 
 ### Sanity Check
 Check if you have the below set of docker images, before moving on to the next step:
@@ -241,7 +342,7 @@ Check if you have the below set of docker images, before moving on to the next s
 * opea/tei-gaudi:latest
 * opea/chatqna:latest or opea/chatqna-guardrails:latest
 * opea/chatqna:latest
-* opea/chatqna-ui:latest
+* opea/chatqna-ui:latest or opea/chatqna-conversation-ui:latest
 * opea/vllm:latest
 * opea/llm-vllm:latest
 
@@ -976,47 +1077,6 @@ docker compose -f ./docker_compose/intel/hpu/gaudi/compose.yaml logs
 ```
 :::
 ::::
-
-## Launch UI
-
-### Basic UI
-
-To access the frontend, open the following URL in your browser: http://{host_ip}:5173. By default, the UI runs on port 5173 internally. If you prefer to use a different host port to access the frontend, you can modify the port mapping in the compose.yaml file as shown below:
-```
-  chaqna-gaudi-ui-server:
-    image: opea/chatqna-ui:latest
-    ...
-    ports:
-      - "80:5173"
-```
-
-### Conversational UI
-
-To access the Conversational UI (react based) frontend, modify the UI service in the compose.yaml file. Replace chaqna-gaudi-ui-server service with the chatqna-gaudi-conversation-ui-server service as per the config below:
-```
-chaqna-gaudi-conversation-ui-server:
-  image: opea/chatqna-conversation-ui:latest
-  container_name: chatqna-gaudi-conversation-ui-server
-  environment:
-    - APP_BACKEND_SERVICE_ENDPOINT=${BACKEND_SERVICE_ENDPOINT}
-    - APP_DATA_PREP_SERVICE_URL=${DATAPREP_SERVICE_ENDPOINT}
-  ports:
-    - "5174:80"
-  depends_on:
-    - chaqna-gaudi-backend-server
-  ipc: host
-  restart: always
-```
-
-Once the services are up, open the following URL in your browser: http://{host_ip}:5174. By default, the UI runs on port 80 internally. If you prefer to use a different host port to access the frontend, you can modify the port mapping in the compose.yaml file as shown below:
-
-```
-  chaqna-gaudi-conversation-ui-server:
-    image: opea/chatqna-conversation-ui:latest
-    ...
-    ports:
-      - "80:80"
-```
 
 ### Stop the services
 
