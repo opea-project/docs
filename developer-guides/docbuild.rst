@@ -15,33 +15,60 @@ Documentation Overview
 **********************
 
 OPEA project content is written using combination of markdown (``.md``) and
-reStructuredText (``.rst``) markup languages (with Sphinx extensions), and
-processed using Sphinx to create a formatted stand-alone website. Developers can
-view this content either in its raw form as .rst markup files, or you can
-generate the HTML content and view it with a web browser directly on your
-workstation. The best reading experience is by viewing the generated HTML at
+reStructuredText (``.rst``) markup languages (with Sphinx extensions such as
+`Myst <https://myst-parser.readthedocs.io/en/latest/index.html>`_), and
+processed using Sphinx to create a formatted stand-alone website. 
+The best reading experience is by viewing the generated HTML at
 https://opea-project.github.io.
+While working on new content or editing existing content, developers can
+generate the HTML content locally and view it with a web browser.
 
 You can read details about `markdown`_, `reStructuredText`_, and `Sphinx`_ from
 their respective websites.
 
-The project's documentation contains the following items:
-
-* ReStructuredText and markdown source files used to generate documentation found at the
-  https://opea-project.github.io website. All of the documentation sources
-  are found in the ``github.com/opea-project`` repos, rooted in the ``docs`` repo.
-  There's also documentation in the repos where the project's code is
-  maintained: ``GenAIComps``, ``GenAIEval``, ``GenAIExamples``, and ``GenAIInfra``.
+The project's documentation is a collection of ReStructuredText and markdown
+source files used to generate documentation found at the
+https://opea-project.github.io website. All of the documentation sources are
+found in the ``github.com/opea-project`` project repos, organized and rooted in
+the ``docs`` repo.  Much of the detailed documentation lives in the repos where
+the project's code is maintained: ``GenAIComps``, ``GenAIEval``,
+``GenAIExamples``, and ``GenAIInfra``. The documentation generation process
+collects all the needed files from all these repos into one building area to
+create the final generated HTML.
 
 .. graphviz:: images/doc-gen-flow.dot
    :align: center
    :caption: Documentation Generation Flow
 
+Some content is manipulated or generated during the doc build process:
+
+- Because markdown doesn't directly support cross-repo document linking, we use
+  full URLs to link to the markdown files in other project repos, for example a
+  link to a document in the GenAIInfra repo from a document in the GenAIExamples
+  repo would look like this:
+
+  ```
+  See [GMC Install](https://github.com/opea-project/GenAIInfra/tree/main/microservices-connector/README.md).
+  ```
+
+  That link works when reading the markdown file in the github.com repo, but
+  should be changed to reference the generated HTML file in the github.io
+  rendering.
+
+- When new examples appear in the GenAIExamples repo, the indexing page that
+  lists all the examples is updated automatically by generating it at doc build
+  time by scanning the directory structure.  The list of microservices is also
+  self-updated when new microservices are added to the GenAIComps/comps
+  directory.
+
+- References in markdown files to markdown files (.md file extension) are
+  converted to the corresponding generated HTML files by Sphinx using the Myst and
+  sphinx-md extensions.
 
 Set Up the Documentation Working Folders
 ****************************************
 
-You'll need ``git`` installed to get the working folders set up:
+To begin, you'll need ``git`` installed to get the working folders set up:
 
 * For an Ubuntu development system use:
 
@@ -50,7 +77,7 @@ You'll need ``git`` installed to get the working folders set up:
      sudo apt install git
 
 Here's the recommended folder setup for documentation contributions and
-generation, a parent folder called ``opea-project`` holds six locally
+generation, a parent folder called ``opea-project`` holds five locally
 cloned repos from the opea-project.  You can use a different name for the parent
 folder but the doc build process assumes the repo names are as shown here:
 
@@ -62,11 +89,9 @@ folder but the doc build process assumes the repo names are as shown here:
    ├── GenAIEval
    ├── GenAIExamples
    ├── GenAIInfra
-   ├── opea-project.github.io
 
 The parent ``opea-project`` folder is there to organize the cloned repos
-from the project.  If you have repo publishing rights, we'll also be cloning the
-publishing repo opea-project.github.io later in these steps.
+from the project.
 
 In the following steps, you'll create a fork of all the upstream OPEA project
 repos needed to build the documentation to your personal GitHub account, clone
@@ -81,8 +106,8 @@ structure:
       :align: center
       :class: drop-shadow
 
-#. At a command prompt, create a working folder on your development computer and
-   clone your personal ``docs`` repository:
+#. At a command prompt, create the top working folder on your development
+   computer and clone your personal ``docs`` repository there:
 
    .. code-block:: bash
 
@@ -97,21 +122,23 @@ structure:
       cd docs
       git remote add upstream https://github.com/opea-project/docs.git
 
-   After that, you'll have ``origin`` pointing to your cloned personal repo and
-   ``upstream`` pointing to the project repo.
+   After that, you'll have ``origin`` pointing to your cloned personal ``docs``
+   repo and ``upstream`` pointing to the project ``docs`` repo.
 
-#. Do the same steps (fork to your personal account, clone to your local
-   computer, and setup the git upstream remote) for the other repos containing
-   project documentation, replacing the docs.git repo name in the previous step
+#. Return to the parent directory with ``cd ..``
+
+#. Now do the same steps (fork to your personal account, clone to your local
+   computer, and setup the git upstream remote) for the other four repos
+   replacing the docs.git repo name in the previous step
    with the appropriate repo name in this list:
 
-   * GenAIComps
-   * GenAIEval
-   * GenAIExamples
-   * GenAIInfra
+   * ``GenAIComps``
+   * ``GenAIEval``
+   * ``GenAIExamples``
+   * ``GenAIInfra``
 
 
-#. If you haven't done so already, be sure to configure git with your name
+#. If you haven't done so already, configure git with your name
    and email address for the ``Signed-off-by`` line in your commit messages:
 
    .. code-block:: bash
@@ -122,7 +149,8 @@ structure:
 Install the Documentation Tools
 *******************************
 
-Our documentation processing has been tested to run with Python 3.8.10 and
+Our documentation processing has been tested to run on Ubuntu (both natively and
+in Windows Subsystem for Windows (wsl) with Python 3.8.10 and
 later, and these other tools:
 
 * sphinx                    version: 7.3.0
@@ -130,13 +158,17 @@ later, and these other tools:
 * sphinx-rtd-theme          version: 2.0.0
 * sphinx-tabs               version: 3.4.5
 * myst-parser               version: 3.0.1
+* sphinx-md                 version: 0.0.3
 * sphinxcontrib-mermaid     version: 0.9.2
 * pymarkdownlnt             version: 0.9.21
 
-Depending on your Linux version, install the needed tools.  You should consider
-using the `Python virtual environment`_
-tools to maintain your Python environment from being changed by other work on
-your computer.
+Depending on your Linux version, install the needed tools.
+
+.. important::
+
+   You should consider using the `Python virtual environment`_ tools
+   to maintain your Python environment from being changed by other work on your
+   computer.
 
 .. _Python virtual environment: https://https://docs.python.org/3/library/venv.html
 
@@ -203,8 +235,8 @@ Sphinx supports easy customization of the generated HTML documentation
 appearance through the use of themes.  The ``sphinx-rtd-theme`` (Read The Docs)
 theme is installed as part of the ``requirements.txt`` list above.  Tweaks to
 the standard ``read-the-docs`` appearance are added by using CSS and JavaScript
-customization found in ``doc/_static``, and theme template overrides found in
-``doc/_templates``. If you change to another theme, you'll need to tweak
+customization found in ``doc/sphinx/_static``, and theme template overrides found in
+``doc/sphinx/_templates``. If you change to another theme, you'll need to tweak
 these customizations, not something for the faint of heart.
 
 The Sphinx build system creates document cache information that attempts to
@@ -216,12 +248,20 @@ environment and a ``make html`` again generally fixes these issues.
 Run the Documentation Processors
 ********************************
 
-The ``docs`` folder (with all cloned sibling repos) have all the doc source files,
+The ``docs`` folder (with all the cloned sibling repos) have all the doc source files,
 images, extra tools, and ``Makefile`` for generating a local copy of the OPEA
 technical documentation. It's best to start with a clean doc-build environment
 so use ``make clean`` to remove the ``_build`` working folder if it exists.  The
 ``Makefile`` creates the ``_build`` folder (if it doesn't exist) and copies all
 needed files from these cloned repos into the ``_build/rst`` working folder.
+
+Normally you'd have each repo checked out at the main branch before you run the
+``make html`` step.  The doc build process uses the five repo's contents to
+create the HTML site. If you're working on changes to documentation in a repo
+and have those changes on a branch other than main, you can still generate the
+documentation with that branch's changes -- this is how you can verify your
+changes will not generate errors when your branch with changes is merged with
+the main branch.
 
 .. code-block:: bash
 
@@ -229,26 +269,32 @@ needed files from these cloned repos into the ``_build/rst`` working folder.
    make clean
    make html
 
-Depending on your development system, it will take less a minute to collect and
+Depending on your development system, it will take about a minute to collect and
 generate the HTML content.  When done, you can view the HTML output in
 ``~/opea-project/docs/_build/html/index.html``.
 
 As a convenience, there's a make target that will ``cd`` to the ``_build/html``
-folder and run a local Python web server:
+folder and run a local Python web server on port 8000:
 
 .. code-block:: bash
 
    make server
 
-and use your web browser to open the URL:  ``http://localhost:8000``.  When
+Use your web browser to open the URL:  ``http://localhost:8000`` and wander
+around your local site and view the results of your changes.  When
 done, press :kbd:`ctrl-C` in your command-prompt window to stop the web server.
+
+If things look good, you'd proceed to using git (``git add .``) to add and commit
+(``git commit -s``) your changes, push those changes to your personal forked
+repo (``git push origin <branchname>``) and submit a PR using the GitHub web
+interface.
 
 Publish Content
 ***************
 
-If you have merge rights to the opea-project repo called
-``opea-project.github.io``, you can update the public project documentation
-found at https://opea-project.github.io.
+If you have merge rights to the opea-project ``opea-project.github.io`` repo,
+you can update the public project documentation found at
+https://opea-project.github.io.
 
 You'll need to do a one-time clone of the upstream repo (we publish
 directly to the upstream repo rather than to a personal forked copy):
@@ -269,10 +315,10 @@ This uses git commands to synchronize the new content with what's
 already published and will delete files in the publishing repo's
 **latest** folder that are no longer needed. New or changed files from
 the newly-generated HTML content are pushed to the GitHub pages
-publishing repo.  The public site at https://opea-project.github.io will
-be automatically updated by the `GitHub pages system
-<https://guides.github.com/features/pages/>`_, typically within a few
-minutes.
+publishing repo (``opea-project.github.io.git``.  The public site at
+https://opea-project.github.io will be automatically updated by the
+`GitHub pages system <https://guides.github.com/features/pages/>`_,
+typically within a few minutes.
 
 Document Versioning
 *******************
@@ -290,8 +336,7 @@ specifically something like this:
       'docs_title': docs_title,
       'is_release': is_release,
       'versions': ( ("latest", "/latest/"),
-                    ("0.8", "/0.8/"),
-                    ("0.7", "/0.7/"),
+                    ("1.0", "/1.0/"),
                   )
        }
 
@@ -304,12 +349,12 @@ version from an older one, without going to ``latest`` first.
 By default, documentation build and publishing both assume we're generating
 documentation for the main branch and publishing to the ``/latest/`` area on
 https://opea-project.github.io. When we're generating the documentation for a
-tagged version (e.g., 0.8), check out that version of **all** the component
+tagged version (e.g., 1.0), check out that version of **all** the component
 repos, and add some extra flags to the ``make`` commands:
 
 .. code-block:: bash
 
-   version=0.8
+   version=1.0
    for d in docs GenAIComps GenAIExamples GenAIEval GenAIInfra ; do
     cd ~/opea-project/$d
     git checkout $version
@@ -355,7 +400,7 @@ a heading level problem on lines 5 and 111 in
 
 If you do a ``make html`` without first doing a ``make clean``, there may be
 files left behind from a previous build that can cause some unexpected messages
-to be reported.
+to be reported. If things look suspicious, do a ``make clean;make html`` again.
 
 If all messages were filtered away,
 the build process will report as successful, reporting:
@@ -369,8 +414,15 @@ The output from the Sphinx build is processed by the Python script
 configuration files in the ``.known-issues`` folder.  (This
 filtering is done as part of the ``Makefile``.)
 
-You can modify the filtering by adding or editing a conf file in the
+The filtering tool matches and removes whole line and multi-line patterns to
+remove them.  Anything left behind is considered a message that should be
+reported.  You can modify the filtering by adding or editing a conf file in the
 ``.known-issues`` folder, following the examples found there.
+
+Multi-line patterns can get rather complex. We're not using any multi-line patterns in
+the OPEA project. You can see complex examples in other open source projects
+using this filtering script, such as pattern files in
+`Project ACRN .known-issues <https://github.com/projectacrn/acrn-hypervisor/tree/master/doc/.known-issues>`_.
 
 .. _reStructuredText: https://sphinx-doc.org/rest.html
 .. _markdown: https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax
