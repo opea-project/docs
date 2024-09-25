@@ -17,7 +17,6 @@ Documentation Guides
 ********************
 
 .. toctree::
-   :maxdepth: 1
 
    doc_guidelines
    graphviz

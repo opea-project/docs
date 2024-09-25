@@ -7,6 +7,8 @@ These instructions walk you through generating the OPEA project documentation
 and publishing it to https://opea-project.github.io.  You can also use these
 instructions to generate the OPEA documentation on your local system.
 
+.. rst-class:: rst-columns
+
 .. contents::
    :local:
    :depth: 1
@@ -60,6 +62,11 @@ Some content is manipulated or generated during the doc build process:
   time by scanning the directory structure.  The list of microservices is also
   self-updated when new microservices are added to the GenAIComps/comps
   directory.
+
+- The CODEOWNERS files in the repos, containing the list of responsible
+  reviewers for those repos, are processed into a nice looking table included in
+  the ``community/codeowners.md`` document.  That way the list of project code
+  owners is kept in sync with what's in the CODEOWNERS files used by GitHub.
 
 - References in markdown files to markdown files (.md file extension) are
   converted to the corresponding generated HTML files by Sphinx using the Myst and
