@@ -20,23 +20,28 @@ mdfiles=`grep -ril --include="*.md" 'github.com/opea-project.*\/[^\)]*'`
 # fix references to opea-project/tree/main/.../*.md or blob/.../*.md to be to the repo name and
 # subsequent path to the md file  \1 is repo \3 is file path \4 is an optional #xxx target
 
-#sed -i 's/(https:\/\/github.com\/opea-project\/\([^\/]*\)\/\(blob\|tree\)\/main\/\([^)]*\.md\)/(\/\1\/\3/g' $mdfiles
-#sed -i  's/(https:\/\/github.com\/opea-project\/\([^\/]*\)\/\(blob\|tree\)\/main\/\([^#)]*\)\(#[^)]*\)*)/(\/\1\/\3\/README.md\4)/g' $mdfiles
 sed -i  's/(https:\/\/github.com\/opea-project\/\([^\/]*\)\/\(blob\|tree\)\/main\/\([^#)]*\.md\)\(#[^)]*\)*)/(\/\1\/\3\4)/g' $mdfiles
 
-# After that, inks to the docs repo such as [blah](docs/...) should have the repo name removed since docs repo is the build root
+# After that, links to the docs repo such as [blah](docs/...) should have the repo name removed since docs repo is the build root
 
 sed -i 's/](\/docs\//](\//g' $mdfiles
 
+# Fix relative links with a heading target with numbers or leading non-alpha
+# characters such as [section](#222-heading-title).  On github.com, that link to
+# a heading such as "### 2.2.2 Heading Title" would work, but the id built with
+# Sphinx does not have leading numbers on is and would instead be to
+# #heading-title
+
+mdfiles=`find -name '*.md'`
+sed -i -E 's/(]\([^#]*#)[-0-9]+/\1/g' $mdfiles
+
 # links to a folder should instead be to the folder's README.md
 # Not automating this for now since there are valid folder references
-# sed -i 's/\(\/[a-zA-z]*\))/\1\/README.md)/g' $files
+# The markdown sources need to be explicit about this:
+#   if the link it to a folder, leave it and the link will open in github.com
+#   if the link is to a .md file, the previous sed will catch it.
 
-# fix tagging on code blocks, for myst parser (vs. GFM syntax)
-# with myst_fence_as_directive = ["mermaid"] we don't need to do this any mre
-# sed -i 's/^```mermaid/```{mermaid}/' `grep -ril --include="*.md" '\`\`\`mermaid'`
-
-# fix references to opea-project/blob/main/... to use the special role # :{repo}_raw:`{path to file}`
+# fix references to opea-project/blob/main/... to use the special role :repo_raw:`{path to file}`
 # alas, using sphinx roles doesn't work in markdown files, so leave them alone
 # mdfiles=`grep -ril --include="*.md" '(https:\/\/github.com\/opea-project\/[^\/]*\/blob\/main\/[^\)]*)'`
 # sed -i # 's/(https:\/\/github.com\/opea-project\/\([^\/]*\)\/blob\/main\/\([^)]*\)/(:\1_blob:`\2`/g' $mdfiles
