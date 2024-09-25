@@ -10,10 +10,16 @@ digraph docgen {
    conf [shape="rectangle" label="conf.py\nconfiguration"]
    rtd [shape="rectangle" label="read-the-docs\ntheme"]
    html [shape="rectangle" label="HTML\nweb site"]
-   sphinx[shape="ellipse" label="sphinx +\ndocutils"]
+   includes [shape="rectangle" label="includes"]
+   sphinx[shape="ellipse" label="sphinx +\nMyst Parser +\ndocutils"]
+   prepare[shape="ellipse" label="fix\ncross-repo\nlinks"]
+   scan[shape="ellipse" label="scan\nrepo dirs"]
    images -> sphinx
+   scan -> includes
+   includes -> sphinx
    rst -> sphinx
-   md -> sphinx
+   md -> prepare
+   prepare -> sphinx
    conf -> sphinx
    rtd -> sphinx
    sphinx -> html

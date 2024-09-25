@@ -3,20 +3,20 @@
 Documentation Guidelines
 ########################
 
-OPEA Project content is written using the `markdown`_ (``.md``) with `MyST extensions`_ and `reStructuredText`_ markup
-language (``.rst``) with `Sphinx extensions`_, and processed
+OPEA Project content is written using the `markdown`_ (``.md``) with `MyST extensions`_
+and `reStructuredText`_ markup language (``.rst``) with `Sphinx extensions`_, and processed
 using `Sphinx`_ to create a formatted stand-alone website.  Developers can
-view this content either in its raw form as ``.md`` and ``.rst`` markup files, or (with
-Sphinx installed) they can build the documentation using the Makefile
-(on Linux systems) to generate the HTML content. The HTML content can then be
-viewed using a web browser. These ``.md`` and ``.rst`` files are maintained in
-the project's GitHub repos and processed to create the
-`OPEA Project documentation`_ website.
+view this content either in its raw form as ``.md`` and ``.rst`` markup files, or
+build the documentation locally following the :ref:`opea_doc_generation` instructions.
+The HTML content can then be viewed using a web browser. These ``.md`` and
+``.rst`` files are maintained in the project's GitHub repos and processed to
+create the `OPEA Project documentation`_ website.
 
 .. note:: While GitHub supports viewing `.md` and `.rst` content with your browser on the
    `github.com` site, markdown and reST extensions are not recognized there, so the
    best viewing experience is through the `OPEA Project documentation`_ github.io
-   website.
+   website. The github.io site also provides navigation and searching that makes
+   it easier to find and read what you're looking for.
 
 You can read details about `reStructuredText`_ and `Sphinx extensions`_, and
 `markdown`_ and `MyST extensions`_ from their respective websites.
@@ -31,14 +31,15 @@ You can read details about `reStructuredText`_ and `Sphinx extensions`_, and
 
 This document provides a quick reference for commonly used markdown and reST
 with MyST and Sphinx-defined directives and roles used to create the documentation
-you're reading.
+you're reading. It also provides best-known-methods for working with a mixture
+of reStructuredText and markdown.
 
 Markdown vs. RestructuredText
 *****************************
 
 Both markdown and ReStructureText (reST) let you create individual documentation files that
 GitHub can render when viewing them in your browser on github.com. Markdown is
-popular because of it's familarity with developers and is the default markup
+popular because of it's familiarity with developers and is the default markup
 language for StackOverflow, Reddit, GitHub, and others.  ReStructuredText came
 from the Python community in 2001 and became noticed outside that
 community with the release of Sphinx in 2008.  These days, reST is supported by GitHub
@@ -47,7 +48,7 @@ OpenCV and LLVM/Clang.
 
 ReStructuredText is more fully-featured, much more standardized and uniform, and
 has built-in support for extensions.  The markdown language has no standard way
-to implement complete documentation systems and doesnt have a standard extension
+to implement complete documentation systems and doesn't have a standard extension
 mechanism, which leads to many different "flavors" of markdown. If you stick to
 the core and common markdown syntax (headings, paragraphs, lists, and such),
 using markdown is just fine.  However, slipping in raw HTML to do formatting
@@ -59,15 +60,15 @@ markdown content within the OPEA project.
 
 Within the OPEA documentation, we use both markdown and reST files for the
 documentation "leaves".  We rely on reST for the documentation organization trunk and
-branches, through the use of the reST toctree directives.
+branches, through the use of the reST ``toctree`` directives.
 
 Documentation Organization
 **************************
 
 Documentation is maintained and updated the same as the project's code within
-the opea-project GitHub repos. There are many ``README.md`` files within the various
+the opea-project GitHub repos. There are many ``README.md`` and other markdown files within the various
 repos along with the other files for those components. This is good because it
-keeps the relevent documentation and code for that component together.
+keeps the relevant documentation and code for that component together.
 
 We use the ``docs`` repo to organize the presentation of all these ``README.md``
 files, along with other project related documents that are maintained in the
@@ -79,6 +80,9 @@ directive to point to other documents that may include additional ``toctree``
 directives of their own, ultimately collecting all the content into an
 organizational structure you can navigate.
 
+Ultimately every document file (``.md`` and ``.rst``) in the project must appear
+in the ``toctree`` hierarchy. An orphan document file will be flagged by Sphinx
+as not included in a toctree directive.
 
 Headings
 ********
@@ -156,7 +160,8 @@ Headings
         intervening H2 ``##``. You may skip heading levels on the way back up,
         for example, from an H4 ``####`` back up to an H2 ``##`` as appropriate.
 
-
+      Sphinx will complain if it finds multiple H1 headings or if you skip a
+      heading level.
 
 
 Content Highlighting
@@ -180,12 +185,12 @@ Some common reST and markdown inline markup samples:
 
    .. group-tab:: markdown
 
-      * one back quote: ```text``` for `inline code` samples.
+      * one back quote: ```text``` for ``inline code`` samples.
 
 For inline markup, the characters between
 the beginning and ending characters must not start or end with a space,
 so ``*this is italics*``, (*this is italics*)  while ``* this isn't*``
-(* this isn't*).
+(* this isn't*) because of that extra space after the first asterisk.
 
 If an asterisk or back quote appears in running text and could be confused
 with inline markup delimiters, you can eliminate the confusion by adding a
@@ -203,16 +208,46 @@ should be indented at the same level as the preceding paragraph (and not
 indented itself).
 
 For numbered lists
-start with a ``1.`` or ``a)`` for example, and continue with autonumbering by
-using a ``#`` sign and a ``.`` or ``)`` as used in the first list item.
+start with a ``1.`` or ``a.`` for example, and continue with autonumbering by
+using a ``#`` sign and a ``.`` as used in the first list item.
 Indent continuation lines with spaces to align with the text of first
 list item:
+
+It's important to maintain the indentation of content under a list so in the
+generated HTML, the content looks like it's part of that list and not a new
+paragraph outside of that list.
+
+For example, compare this:
+
+-----
+
+* Here's a bullet list item
+
+Here's a paragraph that should be part of that first bullet list item's content.
+
+* Here's a second bullet list item
+
+-----
+
+Notice how that middle paragraph is out-dented from the bullet list compared
+with this next example where it's not (yes, it's subtle):
+
+-----
+
+* Here's a bullet list item
+
+  Here's a paragraph that does look like it's part of that first bullet list item's content because it's indented in the source.
+
+* Here's a second bullet list item
+
+-----
+
 
 .. code-block:: rest
 
    * This is a bulleted list.
    * It has two items, the second
-     item and has more than one line of reST text.  Additional lines
+     item and has more than one line of text.  Additional lines
      are indented to the first character of the
      text of the bullet list.
 
@@ -220,9 +255,9 @@ list item:
       it would be a continuation of the previous list (or paragraph).
    #. It has two items too.
 
-   a) This is a numbered list using alphabetic list headings
-   #) It has three items (and uses autonumbering for the rest of the list)
-   #) Here's the third item.  Use consistent punctuation on the list
+   a. This is a numbered list using alphabetic list headings
+   #. It has three items (and uses autonumbering for the rest of the list)
+   #. Here's the third item.  Use consistent punctuation on the list
       number.
 
    #. This is an autonumbered list (default is to use numbers starting
@@ -234,74 +269,87 @@ list item:
    #. And a second item back in the containing list.  No blank line
       needed, but it wouldn't hurt for readability.
 
-Definition lists (with one or more terms and their definition) are a
-convenient way to document a word or phrase with an explanation.  For example,
-this reST content:
+.. tabs::
 
-.. code-block:: rest
+   .. group-tab:: reST
 
-   The Makefile has targets that include:
+      Definition lists (with one or more terms and their definition) are a
+      convenient way to document a word or phrase with an explanation.  For example,
+      this reST content:
 
-   ``html``
-      Build the HTML output for the project
+      .. code-block:: rest
 
-   ``clean``
-      Remove all generated output, restoring the folders to a
-      clean state.
+         The Makefile has targets that include:
 
-Would be rendered as:
+         ``html``
+            Build the HTML output for the project
 
-   The Makefile has targets that include:
+         ``clean``
+            Remove all generated output, restoring the folders to a
+            clean state.
 
-   html
-      Build the HTML output for the project
+      Would be rendered as:
 
-   clean
-      Remove all generated output, restoring the folders to a
-      clean state.
+         The Makefile has targets that include:
+
+         html
+            Build the HTML output for the project
+
+         clean
+            Remove all generated output, restoring the folders to a
+            clean state.
+
+   .. group-tab:: markdown
+
+         Definition lists aren't directly supported by markdown.
 
 Multi-Column Lists
 ******************
 
-In reST, if you have a long bullet list of items, where each item is short, you can
-indicate that the list items should be rendered in multiple columns with a
-special ``.. rst-class:: rst-columns`` directive.  The directive will apply to
-the next non-comment element (for example, paragraph) or to content indented under
-the directive. For example, this unordered list::
+.. tabs::
 
-   .. rst-class:: rst-columns
+   .. group-tab:: reST
 
-   * A list of
-   * short items
-   * that should be
-   * displayed
-   * horizontally
-   * so it doesn't
-   * use up so much
-   * space on
-   * the page
+      In reST, if you have a long bullet list of items, where each item is short, you can
+      indicate that the list items should be rendered in multiple columns with a
+      special ``.. rst-class:: rst-columns`` directive.  The directive will apply to
+      the next non-comment element (for example, paragraph) or to content indented under
+      the directive. For example, this unordered list::
 
-would be rendered as:
+         .. rst-class:: rst-columns
 
-.. rst-class:: rst-columns
+         * A list of
+         * short items
+         * that should be
+         * displayed
+         * horizontally
+         * so it doesn't
+         * use up so much
+         * space on
+         * the page
 
-   * A list of
-   * short items
-   * that should be
-   * displayed
-   * horizontally
-   * so it doesn't
-   * use up so much
-   * space on
-   * the page
+      would be rendered as:
 
-A maximum of three columns will be displayed if you use ``rst-columns``
-(or ``rst-columns3``), and two columns for ``rst-columns2``. The number
-of columns displayed can be reduced based on the available width of the
-display window, reducing to one column on narrow (phone) screens if necessary.
+      .. rst-class:: rst-columns
 
-.. note:: We've deprecated use of the ``hlist`` directive because it
-   misbehaves on smaller screens.
+         * A list of
+         * short items
+         * that should be
+         * displayed
+         * horizontally
+         * so it doesn't
+         * use up so much
+         * space on
+         * the page
+
+      A maximum of three columns will be displayed if you use ``rst-columns``
+      (or ``rst-columns3``), and two columns for ``rst-columns2``. The number
+      of columns displayed can be reduced based on the available width of the
+      display window, reducing to one column on narrow (phone) screens if necessary.
+
+   .. group-tab:: markdown
+
+         Multi-column lists aren't directly supported by markdown.
 
 Tables
 ******
@@ -311,7 +359,8 @@ There are a few ways to create tables, each with their limitations or quirks.
 <http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#grid-tables>`_
 offer the most capability for defining merged rows and columns (where content
 spans multiple rows or columns, but are hard to maintain because the grid
-characters must be aligned throughout the table::
+characters must be aligned throughout the table.  They are supported in both
+reST and markdown::
 
    +------------------------+------------+----------+----------+
    | Header row, column 1   | Header 2   | Header 3 | Header 4 |
@@ -341,46 +390,69 @@ This example would render as:
 | body row 4             | ...        | ...      | too      |
 +------------------------+------------+----------+----------+
 
-For reST, `List tables
-<http://docutils.sourceforge.net/docs/ref/rst/directives.html#list-table>`_
-are much easier to maintain, but don't support row or column spans::
+.. tabs::
 
-   .. list-table:: Table title
-      :widths: 15 20 40
-      :header-rows: 1
+   .. group-tab:: reST
 
-      * - Heading 1
-        - Heading 2
-        - Heading 3
-      * - body row 1, column 1
-        - body row 1, column 2
-        - body row 1, column 3
-      * - body row 2, column 1
-        - body row 2, column 2
-        - body row 2, column 3
+      For reST, `List tables <http://docutils.sourceforge.net/docs/ref/rst/directives.html#list-table>`_
+      are much easier to maintain, but don't support row or column spans::
 
-This example would render as:
+         .. list-table:: Table title
+            :widths: 15 20 40
+            :header-rows: 1
 
-.. list-table:: Table title
-   :widths: 15 20 40
-   :header-rows: 1
+            * - Heading 1
+              - Heading 2
+              - Heading 3
+            * - body row 1, column 1
+              - body row 1, column 2
+              - body row 1, column 3
+            * - body row 2, column 1
+              - body row 2, column 2
+              - body row 2, column 3
 
-   * - Heading 1
-     - Heading 2
-     - Heading 3
-   * - body row 1, column 1
-     - body row 1, column 2
-     - body row 1, column 3
-   * - body row 2, column 1
-     - body row 2, column 2
-     - body row 2, column 3
+      This example would render as:
 
-The ``:widths:`` parameter lets you define relative column widths.  The
-default is equal column widths. If you have a three-column table and you
-want the first column to be half as wide as the other two equal-width
-columns, you can specify ``:widths: 1 2 2``.  If you'd like the browser
-to set the column widths automatically based on the column contents, you
-can use ``:widths: auto``.
+      .. list-table:: Table title
+         :widths: 15 20 40
+         :header-rows: 1
+
+         * - Heading 1
+           - Heading 2
+           - Heading 3
+         * - body row 1, column 1
+           - body row 1, column 2
+           - body row 1, column 3
+         * - body row 2, column 1
+           - body row 2, column 2
+           - body row 2, column 3
+
+      The ``:widths:`` parameter lets you define relative column widths.  The
+      default is equal column widths. If you have a three-column table and you
+      want the first column to be half as wide as the other two equal-width
+      columns, you can specify ``:widths: 1 2 2``.  If you'd like the browser
+      to set the column widths automatically based on the column contents, you
+      can use ``:widths: auto``.
+
+   .. group-tab:: markdown
+
+      Markdown also supports a more free-form table syntax where the rigid box
+      alignment is greatly simplified as explained in
+      `markdown tables <https://www.markdownguide.org/extended-syntax/#tables>`_.
+      Use three or more hyphens ``---`` to denote each column's header, and use
+      pipes ``|`` to separate each column.  For compatibility you should also
+      add a pipe on both ends of the row::
+
+         | heading 1 | heading 2 | heading 3 |
+         |---|---|---|
+         |row 1 column 1 | row 1 column 2 | yes, it's row 1 column 3|
+         |row 2 col 1 | row 2 column 2 | row 2 col 3 |
+
+      That would be rendered as:
+
+      .. include:: mdtable.txt
+         :parser: myst_parser.sphinx_
+
 
 File Names and Commands
 ***********************
@@ -512,11 +584,55 @@ Internal Cross-Reference Linking
       ``:ref:`alternate text <doc_guidelines>``` (renders as
       :ref:`alternate text <doc_guidelines>`).
 
+      Linking from a reST document to a markdown document is done using the reST
+      ``:doc:`` role, and using the path to the markdown file leaving off the
+      ``.md`` file extension.  For example::
+
+         Refer to the :doc:`/GenAIExamples/supported_examples` list for details.
+
+      Note that all the markdown files from all the repos are available with
+      this syntax because we copy all those files into the doc building folder
+      under a top-level directory with that repo's name.  Markdown files in the
+      docs repo don't use the ``docs`` repo name as the path root but use ``/``
+      instead.  So to link to the contribution guide markdown file found in the
+      docs repo community directory you would use ``:doc:`Contribution Guide
+      </community/CONTRIBUTING>```. Notice you can change the link text using
+      the normal reST role syntax shown here.
+
    .. group-tab:: markdown
 
-      TODO
+      Markdown supports linking to other documents using the ``[link text](link path)``.
+      For example to link to a document within the same repo, a relative path is
+      used::
 
+          Refer to [Kubernetes deployment](./kubernetes/intel/README_gmc.md)
 
+      That reference is rendered as a reference to the README_gmc.html found in
+      the directory ``kubernetes/intel`` relative to the document doing the
+      linking.
+
+      References to documents in other repos within the OPEA project are made
+      using an URL to the document in the github.com repo as it would be found
+      in a web browser.  For example, from a markdown document in the
+      GenAIExamples repo referencing a document in the GenAIInfra repo::
+
+         Refer to the [DocSum helm chart](https://github.com/opea-project/GenAIInfra/tree/main/helm-charts/docsum/README.md)
+         for instructions on deploying DocSum into Kubernetes on Xeon & Gaudi.
+
+      That reference would be rendered into a reference to the
+      https://opea-project.github.io/GenAIInfra/helm-charts/docsum/README.html
+      document within the github.io website.
+
+      Markdown supports linking to a reST document by using the Myst syntax that
+      mimics the way reST documents link to each other using the ``:ref:`` role
+      and using the label at the beginning of the reST document.  For example::
+
+         {ref}`ChatQnA Example Deployment Options <chatqna-example-deployment>`
+
+      The ChatQnA example deployment options document found at
+      ``examples/ChatQnA/deploy/index.rst`` has that
+      ``chatqna-example-deployment`` label at the top we can
+      reference instead of knowing the path to the document.
 
 Non-ASCII Characters
 ********************
@@ -575,11 +691,11 @@ markdown content by using an ``include`` directive.
          ``:parser: myst_parser.sphinx_`` if the included file is markdown.
 
       \:start-after\: text
-         Only the content after the first occurance of the specified ``text`` in
+         Only the content after the first occurrence of the specified ``text`` in
          the external file will be included.
 
       \:end-before\:
-         Only the content before the first occurance of the specified ``text``
+         Only the content before the first occurrence of the specified ``text``
          in the external file will be included.
 
       These and other options described in the `docutils include directive <https://docutils.sourceforge.io/docs/ref/rst/directives.html#including-an-external-document-fragment>`_
@@ -824,7 +940,7 @@ Drawings
       text description language to render drawings.  For more information, see
       :ref:`graphviz-examples`.
 
-      We'v ealso included an extension providing ``mermaid`` support that also enables
+      We've also included an extension providing ``mermaid`` support that also enables
       that text description language to render drawings using::
 
          .. mermaid::
@@ -877,7 +993,7 @@ Drawings
 Alternative Tabbed Content
 **************************
 
-In ResST, instead of creating multiple documents with common material except for some
+In reST, instead of creating multiple documents with common material except for some
 specific sections, you can write one document and provide alternative content
 to the reader via a tabbed interface. When the reader clicks a tab, the
 content for that tab is displayed. For example::
