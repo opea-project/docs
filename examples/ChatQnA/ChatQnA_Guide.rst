@@ -200,21 +200,25 @@ The gateway serves as the interface for users to access. The gateway routes inco
         Z[Gateway]
     end
 
-A GenAI application or pipeline in OPEA  typically consists of a collection of microservices to create a megaservice, accessed via a gateway. A microservice is a component designed to perform a specific function or task. Microservices are building blocks, offering the fundamental services. Microservices promote modularity, flexibility, and scalability in the system. A megaservice is a higher-level architectural construct composed of one or more microservices, providing the capability to assemble end-to-end applications.
-The gateway serves as the interface for users to access. The gateway routes incoming requests to the appropriate microservices within the megaservice architecture. See `GenAI Components <https://github.com/opea-project/GenAIComps>`_ for more information.
 
 Deployment
 **********
 
 See the :ref:`chatqna-example-deployment` that includes both single-node and
 orchestrated multi-node configurations, and choose the one that best fits your
-requirements.
+requirements.  Here are quick references to the single-node deployment options:
+
+* `Xeon Scalable Processor <deploy/xeon>`_
+* `Gaudi AI Accelerator <deploy/gaudi>`_
+* `Nvidia GPU <deploy/nvidia>`_
+* `AI PC <deploy/aipc>`_
+
 
 
 Troubleshooting
 ***************
 
-TDB.
+TBD.
 
 Monitoring
 **********
@@ -325,7 +329,7 @@ To set up the Grafana dashboard, follow these steps:
    wget https://dl.grafana.com/oss/release/grafana-11.0.0.linux-amd64.tar.gz
    tar -zxvf grafana-11.0.0.linux-amd64.tar.gz
 
-For adddiitonal instructions, see the complete `Grafana installation instructions  <https://grafana.com/docs/grafana/latest/setup-grafana/installation/>`_.
+For additional instructions, see the complete `Grafana installation instructions  <https://grafana.com/docs/grafana/latest/setup-grafana/installation/>`_.
 
 2. Run the Grafana server:
    Change the directory to the Grafana folder:
