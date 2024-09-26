@@ -86,8 +86,8 @@ there are 8 required and an optional docker images.
 :::{tab-item} Pull
 :sync: Pull
 
-Ifyou decide to pull the docker containers and not build them locally, 
-we can proceed to the next step where all the necessary containers will 
+If you decide to pull the docker containers and not build them locally, 
+you can proceed to the next step where all the necessary containers will 
 be pulled in from dockerhub.
 
 :::
