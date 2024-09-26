@@ -55,12 +55,6 @@ git clone https://github.com/opea-project/GenAIComps.git
 git clone https://github.com/opea-project/GenAIExamples.git
 ```
 
-Checkout the release tag
-```
-cd GenAIComps
-git checkout tags/v1.0
-```
-
 The examples utilize model weights from HuggingFace and langchain.
 
 Setup your [HuggingFace](https://huggingface.co/) account and generate
@@ -87,132 +81,86 @@ export https_proxy=${your_http_proxy}
 ## Prepare (Building / Pulling) Docker images
 
 This step will involve building/pulling relevant docker
-images with a step-by-step process along with sanity checks. For
+images with step-by-step process along with sanity check in the end. For
 ChatQnA, the following docker images will be needed: embedding, retriever,
 rerank, LLM and dataprep. Additionally, you will need to build docker images for
-the ChatQnA megaservice and UI (conversational React UI is optional). In total,
-there are 8 required and 1 optional docker images.
-
-The docker images needed to setup the example needs to be build local, however
-the images will be pushed to docker hub soon by Intel.
+ChatQnA megaservice, and UI (conversational React UI is optional). In total,
+there are 8 required and an optional docker images.
 
 ### Build/Pull Microservice images
-
-From within the `GenAIComps` folder:
-
-#### Build/Pull Dataprep Image
 ::::{tab-set}
+:::{tab-item} Pull
+:sync: Pull
+
+To pull pre-built docker images on Docker Hub, proceed to the next step. To customize 
+your application, you can choose to build individual docker images for the microservices 
+before proceeding.
+:::
 :::{tab-item} Build
 :sync: Build
+
+From within the `GenAIComps` folder, checkout the release tag.
+```
+cd GenAIComps
+git checkout tags/v1.0
+```
+:::
+::::
+
+#### Build Dataprep Image
+
 ```bash
 docker build --no-cache -t opea/dataprep-redis:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/dataprep/redis/langchain/Dockerfile .
 ```
-:::
-:::{tab-item} Pull
-:sync: Pull
-```bash
-docker pull opea/dataprep-redis:latest
-```
-:::
-::::
 
-#### Build/Pull Embedding Image
-::::{tab-set}
-:::{tab-item} Build
-:sync: Build
+#### Build Embedding Image
+
 ```bash
 docker build --no-cache -t opea/embedding-tei:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/embeddings/tei/langchain/Dockerfile .
 ```
-:::
-:::{tab-item} Pull
-:sync: Pull
-```bash
-docker pull opea/embedding-tei:latest
-```
-:::
-::::
 
-#### Build/Pull Retriever Image
-::::{tab-set}
-:::{tab-item} Build
-:sync: Build
+#### Build Retriever Image
+
 ```bash
 docker build --no-cache -t opea/retriever-redis:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/retrievers/redis/langchain/Dockerfile .
 ```
-:::
-:::{tab-item} Pull
-:sync: Pull
-```bash
-docker pull opea/retriever-redis:latest
-```
-:::
-::::
 
-#### Build/Pull Rerank Image
-::::{tab-set}
-:::{tab-item} Build
-:sync: Build
+#### Build Rerank Image
+
 ```bash
 docker build --no-cache -t opea/reranking-tei:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/reranks/tei/Dockerfile .
 ```
-:::
-:::{tab-item} Pull
-:sync: Pull
-```bash
-docker pull opea/reranking-tei:latest
-```
-:::
-::::
 
-#### Build/Pull LLM Image with vLLM or TGI
+#### Build docker
+
 ::::{tab-set}
-:::{tab-item} vllm: Build
-:sync: vllm: Build
+
+:::{tab-item} vllm
+:sync: vllm
 
 Build vLLM docker image with hpu support
-```bash
+```
 docker build --no-cache -t opea/llm-vllm-hpu:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/llms/text-generation/vllm/langchain/dependency/Dockerfile.intel_hpu .
 ```
 
 Build vLLM Microservice image
-```bash
+```
 docker build --no-cache -t opea/llm-vllm:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/llms/text-generation/vllm/langchain/Dockerfile .
 cd ..
 ```
 :::
-:::{tab-item} vllm: Pull
-:sync: vllm: Pull
-
-Pull vLLM docker image with hpu support
-```bash
-docker pull opea/llm-vllm-hpu:latest
-```
-
-Pull vLLM Microservice image
-```bash
-docker pull opea/llm-vllm:latest
-```
-:::
-:::{tab-item} TGI: Build
-:sync: TGI: Build
+:::{tab-item} TGI
+:sync: TGI
 
 ```bash
 docker build --no-cache -t opea/llm-tgi:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/llms/text-generation/tgi/Dockerfile .
 ```
 :::
-:::{tab-item} TGI: Pull
-:sync: TGI: Pull
-
-```bash
-docker pull opea/llm-tgi:latest
-```
-:::
 ::::
 
-### Build/Pull TEI Gaudi Image
-:::{tab-item} TEI Gaudi: Build
-:sync: TEI: Build
-The TEI Gaudi Docker image can be built from the [tei-gaudi](https://github.com/huggingface/tei-gaudi) repository.
+### Build TEI Gaudi Image
+
+Since a TEI Gaudi Docker image hasn't been published, we'll need to build it from the [tei-gaudi](https://github.com/huggingface/tei-gaudi) repository.
 
 ```bash
 git clone https://github.com/huggingface/tei-gaudi
@@ -220,16 +168,8 @@ cd tei-gaudi/
 docker build --no-cache -f Dockerfile-hpu -t opea/tei-gaudi:latest .
 cd ..
 ```
-:::
-:::{tab-item} TEI Gaudi: Pull
-:sync: TEI: Pull
-```bash
-docker pull opea/tei-gaudi:latest
-```
-:::
-::::
 
-### Build/Pull Mega Service images
+### Build Mega Service images
 
 The Megaservice is a pipeline that channels data through different
 microservices, each performing varied tasks. We define the different
@@ -239,9 +179,6 @@ microservice which will in turn passes data to the reranking microservice and so
 on. You can also add newer or remove some microservices and customize the
 megaservice to suit the needs.
 
-::::{tab-set}
-:::{tab-item} Build
-:sync: Build
 Build the megaservice image for this use case
 
 ```
@@ -255,78 +192,37 @@ cd ChatQnA
 docker build --no-cache -t opea/chatqna:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f Dockerfile .
 cd ../..
 ```
-:::
-:::{tab-item} Pull
-:sync: Pull
-Pull the megaservice image for this use case
 
-```bash
-docker pull opea/chatqna:latest
-```
-:::
-::::
+### Build Other Service images
 
-### Build/Pull Other Service images
+If you want to enable guardrails microservice in the pipeline, please use the below command instead:
 
-If you want to enable guardrails microservice in the pipeline, please use one of the below commands instead:
-
-::::{tab-set}
-:::{tab-item} Build
-:sync: Build
 ```bash
 cd GenAIExamples/ChatQnA/
 docker build --no-cache -t opea/chatqna-guardrails:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f Dockerfile.guardrails .
 cd ../..
 ```
-:::
-:::{tab-item} Pull
-:sync: Pull
-```bash
-docker pull opea/chatqna-guardrails:latest
-```
-:::
-::::
 
 ### Build the UI Image
 
 As mentioned, you can build 2 modes of UI
 
 *Basic UI*
-::::{tab-set}
-:::{tab-item} Build
-:sync: Build
+
 ```bash
 cd GenAIExamples/ChatQnA/ui/
 docker build --no-cache -t opea/chatqna-ui:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f ./docker/Dockerfile .
 cd ../../..
 ```
-:::
-:::{tab-item} Pull
-:sync: Pull
-```bash
-docker pull opea/chatqna-ui:latest
-```
-:::
-::::
 
 *Conversation UI*
 If you want a conversational experience with chatqna megaservice.
-::::{tab-set}
-:::{tab-item} Build
-:sync: Build
+
 ```bash
 cd GenAIExamples/ChatQnA/ui/
 docker build --no-cache -t opea/chatqna-conversation-ui:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f ./docker/Dockerfile.react .
 cd ../../..
 ```
-:::
-:::{tab-item} Pull
-:sync: Pull
-```bash
-docker pull opea/chatqna-conversation-ui:latest
-```
-:::
-::::
 
 ### Sanity Check
 Check if you have the below set of docker images, before moving on to the next step:
@@ -342,7 +238,7 @@ Check if you have the below set of docker images, before moving on to the next s
 * opea/tei-gaudi:latest
 * opea/chatqna:latest or opea/chatqna-guardrails:latest
 * opea/chatqna:latest
-* opea/chatqna-ui:latest or opea/chatqna-conversation-ui:latest
+* opea/chatqna-ui:latest
 * opea/vllm:latest
 * opea/llm-vllm:latest
 
@@ -361,6 +257,8 @@ Check if you have the below set of docker images, before moving on to the next s
 :::
 ::::
 
+:::
+::::
 
 ## Use Case Setup
 
@@ -403,71 +301,11 @@ environment variable or `compose.yaml` file.
 
 Set the necessary environment variables to setup the use case case
 
-> Note: Replace `host_ip` with your external IP address. Do **NOT** use localhost
-> for the below set of environment variables
-
-### Dataprep
-
-    export DATAPREP_SERVICE_ENDPOINT="http://${host_ip}:6007/v1/dataprep"
-    export DATAPREP_GET_FILE_ENDPOINT="http://${host_ip}:6007/v1/dataprep/get_file"
-    export DATAPREP_DELETE_FILE_ENDPOINT="http://${host_ip}:6007/v1/dataprep/delete_file"
-
-### VectorDB
-
-    export REDIS_URL="redis://${host_ip}:6379"
-    export INDEX_NAME="rag-redis"
-
-### Embedding Service
-
-    export EMBEDDING_MODEL_ID="BAAI/bge-base-en-v1.5"
-    export EMBEDDING_SERVICE_HOST_IP=${host_ip}
-    export RETRIEVER_SERVICE_HOST_IP=${host_ip}
-    export TEI_EMBEDDING_ENDPOINT="http://${host_ip}:8090"
-    export tei_embedding_devices=all
-
-### Reranking Service
-
-    export RERANK_MODEL_ID="BAAI/bge-reranker-base"
-    export TEI_RERANKING_ENDPOINT="http://${host_ip}:8808"
-    export RERANK_SERVICE_HOST_IP=${host_ip}
-
-### LLM Service
-
-::::{tab-set}
-:::{tab-item} vllm
-:sync: vllm
-
-    export LLM_MODEL_ID="Intel/neural-chat-7b-v3-3"
-    export LLM_SERVICE_HOST_IP=${host_ip}
-    export LLM_SERVICE_PORT=9000
-    export vLLM_LLM_ENDPOINT="http://${host_ip}:8007"
-
-:::
-:::{tab-item} TGI
-:sync: TGI
-
-    export LLM_MODEL_ID="Intel/neural-chat-7b-v3-3"
-    export LLM_SERVICE_HOST_IP=${host_ip}
-    export LLM_SERVICE_PORT=9000
-    export TGI_LLM_ENDPOINT="http://${host_ip}:8005"
-:::
-::::
-
-    export llm_service_devices=all
-
-### Megaservice
-
-    export MEGA_SERVICE_HOST_IP=${host_ip}
-    export BACKEND_SERVICE_ENDPOINT="http://${host_ip}:8888/v1/chatqna"
-
-### Guardrails (optional)
-If guardrails microservice is enabled in the pipeline, the below environment variables are necessary to be set.
 ```
-export GURADRAILS_MODEL_ID="meta-llama/Meta-Llama-Guard-2-8B"
-export SAFETY_GUARD_MODEL_ID="meta-llama/Meta-Llama-Guard-2-8B"
-export SAFETY_GUARD_ENDPOINT="http://${host_ip}:8088"
-export GUARDRAIL_SERVICE_HOST_IP=${host_ip}
+cd GenAIExamples/ChatQnA/docker_compose/intel/hpu/gaudi/
+source ./set_env.sh
 ```
+
 ## Deploy the use case
 
 In this tutorial, we will be deploying via docker compose with the provided
@@ -612,8 +450,13 @@ commands. The dataprep microservice extracts the texts from variety of data
 sources, chunks the data, embeds each chunk using embedding microservice and
 store the embedded vectors in the redis vector database.
 
-Local File `nke-10k-2023.pdf` Upload:
+Update Knowledge Base via Local File [nke-10k-2023.pdf](https://github.com/opea-project/GenAIComps/blob/main/comps/retrievers/redis/data/nke-10k-2023.pdf). Click [here](https://raw.githubusercontent.com/opea-project/GenAIComps/main/comps/retrievers/redis/data/nke-10k-2023.pdf) to download the file via any web browser or run this command to get the file on a terminal:
 
+```bash
+wget https://raw.githubusercontent.com/opea-project/GenAIComps/main/comps/retrievers/redis/data/nke-10k-2023.pdf
+```
+
+To upload the file:
 ```
 curl -X POST "http://${host_ip}:6007/v1/dataprep" \
      -H "Content-Type: multipart/form-data" \
@@ -779,7 +622,22 @@ Here is the output:
 You may notice reranking microservice are with state ('ID' and other meta data),
 while reranking service are not.
 
-### LLM Service
+### vLLM and TGI Service
+
+In first startup, this service will take more time to download the model files. 
+After it's finished, the service will be ready.
+
+Try the command below to check whether the LLM serving is ready.
+
+```
+docker logs ${CONTAINER_ID} | grep Connected
+```
+
+If the service is ready, you will get the response like below.
+
+```
+2024-09-03T02:47:53.402023Z  INFO text_generation_router::server: router/src/server.rs:2311: Connected
+```
 
 ::::{tab-set}
 
@@ -828,31 +686,35 @@ TGI service generate text for the input prompt. Here is the expected result from
 ::::
 
 
-If you get
-
-```
-curl: (7) Failed to connect to 100.81.104.168 port 8008 after 0 ms: Connection refused
-
-```
-
-and the log shows model warm up, please wait for a while and try it later.
-
-```
-2024-06-05T05:45:27.707509646Z 2024-06-05T05:45:27.707361Z  WARN text_generation_router: router/src/main.rs:357: `--revision` is not set
-2024-06-05T05:45:27.707539740Z 2024-06-05T05:45:27.707379Z  WARN text_generation_router: router/src/main.rs:358: We strongly advise to set it to a known supported commit.
-2024-06-05T05:45:27.852525522Z 2024-06-05T05:45:27.852437Z  INFO text_generation_router: router/src/main.rs:379: Serving revision bdd31cf498d13782cc7497cba5896996ce429f91 of model Intel/neural-chat-7b-v3-3
-2024-06-05T05:45:27.867833811Z 2024-06-05T05:45:27.867759Z  INFO text_generation_router: router/src/main.rs:221: Warming up model
-
-```
-
 ### LLM Microservice
 
+This service depends on the above LLM backend service startup. Give it a couple minutes to be ready on the first startup.
+
+::::{tab-set}
+:::{tab-item} vllm
+:sync: vllm
+```
+curl http://${host_ip}:9000/v1/chat/completions \
+ -X POST \
+ -d '{"query":"What is Deep Learning?","max_tokens":17,"top_p":1,"temperature":0.7,\
+ "frequency_penalty":0,"presence_penalty":0, "streaming":true}' \
+ -H 'Content-Type: application/json'
+```
+For parameters in vLLM modes, can refer to [LangChain VLLMOpenAI API](https://huggingface.co/docs/huggingface_hub/package_reference/inference_client#huggingface_hub.InferenceClient.text_generation)
+
+:::
+:::{tab-item} TGI
+:sync: TGI
 ```
 curl http://${host_ip}:9000/v1/chat/completions \
   -X POST \
   -d '{"query":"What is Deep Learning?","max_new_tokens":17,"top_k":10,"top_p":0.95,"typical_p":0.95,"temperature":0.01,"repetition_penalty":1.03,"streaming":true}' \
   -H 'Content-Type: application/json'
 ```
+
+For parameters in TGI modes, please refer to [HuggingFace InferenceClient API](https://huggingface.co/docs/huggingface_hub/package_reference/inference_client#huggingface_hub.InferenceClient.text_generation) (except we rename "max_new_tokens" to "max_tokens".)
+:::
+::::
 
 You will get generated text from LLM:
 
@@ -881,7 +743,6 @@ data: [DONE]
 
 ```
 curl http://${host_ip}:8888/v1/chatqna -H "Content-Type: application/json" -d '{
-     "model": "Intel/neural-chat-7b-v3-3",
      "messages": "What is the revenue of Nike in 2023?"
      }'
 ```
@@ -1078,6 +939,47 @@ docker compose -f ./docker_compose/intel/hpu/gaudi/compose.yaml logs
 :::
 ::::
 
+## Launch UI
+
+### Basic UI
+
+To access the frontend, open the following URL in your browser: http://{host_ip}:5173. By default, the UI runs on port 5173 internally. If you prefer to use a different host port to access the frontend, you can modify the port mapping in the compose.yaml file as shown below:
+```
+  chaqna-gaudi-ui-server:
+    image: opea/chatqna-ui:latest
+    ...
+    ports:
+      - "80:5173"
+```
+
+### Conversational UI
+
+To access the Conversational UI (react based) frontend, modify the UI service in the compose.yaml file. Replace chaqna-gaudi-ui-server service with the chatqna-gaudi-conversation-ui-server service as per the config below:
+```
+chaqna-gaudi-conversation-ui-server:
+  image: opea/chatqna-conversation-ui:latest
+  container_name: chatqna-gaudi-conversation-ui-server
+  environment:
+    - APP_BACKEND_SERVICE_ENDPOINT=${BACKEND_SERVICE_ENDPOINT}
+    - APP_DATA_PREP_SERVICE_URL=${DATAPREP_SERVICE_ENDPOINT}
+  ports:
+    - "5174:80"
+  depends_on:
+    - chaqna-gaudi-backend-server
+  ipc: host
+  restart: always
+```
+
+Once the services are up, open the following URL in your browser: http://{host_ip}:5174. By default, the UI runs on port 80 internally. If you prefer to use a different host port to access the frontend, you can modify the port mapping in the compose.yaml file as shown below:
+
+```
+  chaqna-gaudi-conversation-ui-server:
+    image: opea/chatqna-conversation-ui:latest
+    ...
+    ports:
+      - "80:80"
+```
+
 ### Stop the services
 
 Once you are done with the entire pipeline and wish to stop and remove all the containers, use the command below:
@@ -1098,4 +1000,3 @@ docker compose -f compose.yaml down
 ```
 :::
 ::::
-
