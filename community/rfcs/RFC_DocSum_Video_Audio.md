@@ -23,38 +23,8 @@ Key motivations include:
 
 ### Design Proposal
 
-The proposed design for the video and audio summary features involves the following components:
-
-#### 1. Video and Audio Ingestion and Preprocessing:
-- **Media Upload**: Users can upload video and audio files in various formats.
-- **Audio Extraction Microservice**: Extract audio from video files for transcription.
-
-    Signature of audio extraction microservice:
-    ```python
-    @traceable(run_type="tool")
-    @register_statistics(names=["opea_service@audio_extraction"])
-    def audio_extraction(input: VideoDoc) -> AudioDoc:
-    ```
-
-#### 2. Transcription:
-- **Audio-to-Text Transcription**: Use the Audio-Speech-Recognition microservice from OPEA, which aims to generate a transcript for an input audio using an audio-to-text model (Whisper).
-
-    Transcript generation microservice:
-    - opea/whisper:latest
-    - opea/asr:latest
-
-#### 3. Summarization:
-- **Text Summarization**: Apply existing text summarization techniques to the generated transcripts.
-- **Audio Summarization**: Use audio summarization techniques that extract the Transcription, then use text summarization steps.
-- **Visual Summarization**: Use visual summarization techniques that extract the AudioDoc and then use Audio Summarization to create Transcription, then use text summarization steps.
-
-#### 4. Integration and Output:
-- **Summary Generation**: Combine text, audio, and visual summaries to create comprehensive document summaries from different document formats.
-- **User Interface**: Update the user interface to upload video and audio documents to summarize alongside text.
-
-### Workflow of the deployed Document Summarization Service
+#### Workflow of the deployed Document Summarization Service
 The workflow of the Document Summarization Service, from user's input query to the application's output response, is as follows:
-
 
 ```mermaid
 flowchart LR
@@ -75,25 +45,36 @@ flowchart LR
     end
 ```
 
+The proposed design for the video and audio summary features involves the following components:
 
-```mermaid
-flowchart LR
-    subgraph DocSum
-        direction LR
-        A[User] <--> |Input query| B[DocSum Gateway]
-        B <--> |Post| Megaservice
-        subgraph Megaservice["Megaservice"]
-            direction TB
-            C([ Microservice - Video-to-AudioDoc : will be implemented]) -. D([ Microservice - Audio-to-Text Transcription : opea/whisper <br>7066]) -. E([ Microservice : llm-docsum-tgi <br>9000]) -. Post .-> F{{TGI Service<br>8008}}
-        end
-        Megaservice --> |Output| G[Response]
-    end
-    subgraph Legend
-        X([Micsrservice])
-        Y{{Service from industry peers}}
-        Z[Gateway]
-    end
-```
+#### 1. DocSum Gateway:
+- **User Interface**: Update the user interface to upload video and audio documents to summarize alongside text.
+
+#### 2. Text Transcription, Video and Audio Ingestion and Preprocessing:
+- **Media Upload**: Users can upload video and audio files in various formats.
+- **Audio Extraction Microservice**: Extract audio from video files for transcription.
+
+    Signature of audio extraction microservice:
+    ```python
+    @traceable(run_type="tool")
+    @register_statistics(names=["opea_service@audio_extraction"])
+    def audio_extraction(input: VideoDoc) -> AudioDoc:
+    ```
+- **Audio-to-Text Transcription**: Use the Audio-Speech-Recognition microservice from OPEA, which aims to generate a transcript for an input audio using an audio-to-text model (Whisper).
+
+    Transcript generation microservice:
+    - opea/whisper:latest
+    - opea/asr:latest
+
+- **Text Transcription:** Apply existing text summarization techniques that does not requires any data preprocessing.
+
+#### 3. Summarization:
+- **Text Summarization**: Apply existing text summarization techniques to the generated transcripts.
+- **Audio Summarization**: Use audio summarization techniques that extract the Transcription, then use text summarization steps.
+- **Visual Summarization**: Use visual summarization techniques that extract the AudioDoc and then use Audio Summarization to create Transcription, then use text summarization steps.
+
+#### 4. Integration and Output:
+- **Summary Generation**: Combine text, audio, and visual summaries to create comprehensive document summaries from different document formats.
 
 
 
