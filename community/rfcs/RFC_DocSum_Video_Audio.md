@@ -23,8 +23,8 @@ Key motivations include:
 
 ### Design Proposal
 
-#### Workflow of the deployed Document Summarization Service
-The workflow of the Document Summarization Service, from user's input query to the application's output response, is as follows:
+#### Workflow of the Deployed Document Summarization Service
+The workflow of the Document Summarization Service, from the user's input query to the application's output response, is as follows:
 
 ```mermaid
 flowchart LR
@@ -34,12 +34,12 @@ flowchart LR
         B <--> |Post| Megaservice
         subgraph Megaservice["Megaservice"]
             direction TB
-            C([ Microservice - Video-to-AudioDoc : Will be implemented]) -. Post .-> D([Microservice - Audio-to-Text Transcription : opea/whisper <br>7066]) -. Post .-> E([ Microservice : llm-docsum-tgi <br>9000]) -. Post .-> F{{TGI Service<br>8008}}
+            C([Microservice - Video-to-AudioDoc : Will be implemented]) -. Post .-> D([Microservice - Audio-to-Text Transcription : opea/whisper <br>7066]) -. Post .-> E([Microservice : llm-docsum-tgi <br>9000]) -. Post .-> F{{TGI Service<br>8008}}
         end
         Megaservice --> |Output| G[Response]
     end
     subgraph Legend
-        X([Micsrservice])
+        X([Microservice])
         Y{{Service from industry peers}}
         Z[Gateway]
     end
@@ -48,10 +48,9 @@ flowchart LR
 The proposed design for the video and audio summary features involves the following components:
 
 #### 1. DocSum Gateway:
-- **User Interface**: Update the user interface to upload video and audio documents to summarize alongside text.
+- **User Interface**: Update the user interface to upload video and audio files in various formats to summarize alongside text.
 
-#### 2. Text Transcription, Video and Audio Ingestion and Preprocessing:
-- **Media Upload**: Users can upload video and audio files in various formats.
+#### 2. Text Transcription, Video, and Audio Ingestion and Preprocessing:
 - **Audio Extraction Microservice**: Extract audio from video files for transcription.
 
     Signature of audio extraction microservice:
@@ -66,7 +65,7 @@ The proposed design for the video and audio summary features involves the follow
     - opea/whisper:latest
     - opea/asr:latest
 
-- **Text Transcription:** Apply existing text summarization techniques that does not requires any data preprocessing.
+- **Text Transcription**: Apply existing text summarization techniques that do not require any data preprocessing.
 
 #### 3. Summarization:
 - **Text Summarization**: Apply existing text summarization techniques to the generated transcripts.
@@ -75,8 +74,6 @@ The proposed design for the video and audio summary features involves the follow
 
 #### 4. Integration and Output:
 - **Summary Generation**: Combine text, audio, and visual summaries to create comprehensive document summaries from different document formats.
-
-
 
 ### Use-case Stories
 
@@ -88,7 +85,7 @@ The proposed design for the video and audio summary features involves the follow
 #### 2. Educational Content:
 **Scenario**: An online education platform offers video lectures on various subjects. Students often need to review these lectures for exams.
 
-**Solution**: The video summary feature can create summaries of video lectures, providing students with a quick overview of the main topics covered. This helps students to revise efficiently and focus on important concepts.
+**Solution**: The video summary feature can create summaries of video lectures, providing students with a quick overview of the main topicscovered. This helps students to revise efficiently and focus on important concepts.
 
 #### 3. Marketing and Advertising:
 **Scenario**: A marketing team produces promotional videos for their products. They need to analyze the effectiveness of these videos.
