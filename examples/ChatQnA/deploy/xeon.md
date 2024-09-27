@@ -81,17 +81,17 @@ there are 8 required and an optional docker images.
 
 ### Build/Pull Microservice images
 
-::::{tab-set}
+::::::{tab-set}
 
-:::{tab-item} Pull
+:::::{tab-item} Pull
 :sync: Pull
 
 If you decide to pull the docker containers and not build them locally, 
 you can proceed to the next step where all the necessary containers will 
 be pulled in from dockerhub.
 
-:::
-:::{tab-item} Build
+:::::
+:::::{tab-item} Build
 :sync: Build
 
 From within the `GenAIComps` folder, checkout the release tag.
@@ -240,8 +240,8 @@ Check if you have the below set of docker images, before moving on to the next s
 :::
 ::::
 
-:::
-::::
+:::::
+::::::
 
 ## Use Case Setup
 
