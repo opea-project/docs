@@ -8,8 +8,12 @@ To get started with OPEA you need the right hardware and basic software setup.
 
 - Software Requirements: Refer to the [Support Matrix](https://github.com/opea-project/GenAIExamples/blob/main/README.md#getting-started) to ensure you have the required software components in place.
 
-Note : If you are deploying it on cloud, say AWS, select a VM instance from R7iz or m7i family of instances with base OS as Ubuntu. Refer to the `Note` section under [Deploy ChatQnA Service](https://github.com/opea-project/GenAIExamples/tree/main/ChatQnA#deploy-chatqna-service) for installing docker on a clean machine. 
-
+Note : If you are deploying it on cloud, say AWS, select a VM instance from R7iz or m7i family of instances with base OS as Ubuntu 22.04 (AWS ami id : ami-05134c8ef96964280). Use the command below to install docker on a clean machine.
+```
+wget https://raw.githubusercontent.com/opea-project/GenAIExamples/refs/heads/main/ChatQnA/docker_compose/install_docker.sh
+chmod +x install_docker.sh
+./install_docker.sh
+```
 ## Understanding OPEA's Core Components
 
 Before moving forward, it's important to familiarize yourself with two key elements of OPEA: GenAIComps and GenAIExamples.
