@@ -22,6 +22,7 @@ Key motivations include:
 4. **Competitive Advantage**: Offering video and audio summarization can differentiate the application from other text-only summarization tools.
 
 ### Design Proposal
+
 The proposed design for the video and audio summary features involves the following components:
 
 #### 1. Video and Audio Ingestion and Preprocessing:
@@ -44,11 +45,58 @@ The proposed design for the video and audio summary features involves the follow
 
 #### 3. Summarization:
 - **Text Summarization**: Apply existing text summarization techniques to the generated transcripts.
-- **Visual Summarization**: Use visual summarization techniques that extract the AudioDoc and Transcription, then use text summarization steps.
+- **Audio Summarization**: Use audio summarization techniques that extract the Transcription, then use text summarization steps.
+- **Visual Summarization**: Use visual summarization techniques that extract the AudioDoc and then use Audio Summarization to create Transcription, then use text summarization steps.
 
 #### 4. Integration and Output:
-- **Summary Generation**: Combine text and visual summaries to create comprehensive video and audio summaries.
-- **User Interface**: Update the user interface to display video and audio summaries alongside text summaries.
+- **Summary Generation**: Combine text, audio, and visual summaries to create comprehensive document summaries from different document formats.
+- **User Interface**: Update the user interface to upload video and audio documents to summarize alongside text.
+
+### Workflow of the deployed Document Summarization Service
+The workflow of the Document Summarization Service, from user's input query to the application's output response, is as follows:
+
+```mermaid
+flowchart LR
+    subgraph DocSum
+        direction LR
+        A[User] <--> |Input query| B[DocSum Gateway]
+        B <--> |Post| Megaservice
+        subgraph Megaservice["Megaservice"]
+            direction TB
+            C([ Microservice - Video-to-AudioDoc : will be implemented]) -. D([ Microservice - Audio-to-Text Transcription : opea/whisper <br>7066]) -. E([ Microservice : llm-docsum-tgi <br>9000]) -. Post .-> G{{TGI Service<br>8008}}
+        end
+        Megaservice --> |Output| H[Response]
+    end
+    subgraph Legend
+        X([Micsrservice])
+        Y{{Service from industry peers}}
+        Z[Gateway]
+    end
+```
+
+```mermaid
+flowchart LR
+    subgraph DocSum
+        direction LR
+        A[User] <--> |Input query| B[DocSum Gateway]
+        B <--> |Post| Megaservice
+        subgraph Megaservice["Megaservice"]
+            direction TB
+            subgraph Megaservice["Data Preprocessing"]
+              C([ Microservice - Video-to-AudioDoc : will be implemented]) -. D([ Microservice - Audio-to-Text Transcription : opea/whisper <br>7066]) 
+            
+            Post .-> E([ Microservice : llm-docsum-tgi <br>9000]) -. Post .-> G{{TGI Service<br>8008}}
+        end
+        Megaservice --> |Output| H[Response]
+    end
+    subgraph Legend
+        X([Micsrservice])
+        Y{{Service from industry peers}}
+        Z[Gateway]
+    end
+```
+
+
 
 ### Use-case Stories
 
@@ -77,4 +125,4 @@ The proposed design for the video and audio summary features involves the follow
 
 **Solution**: The audio summary feature can generate concise summaries of podcast episodes, highlighting key points and important segments. Employees can quickly review the summaries to understand the podcast content without listening to the entire episode.
 
-By implementing the video and audio summary features, the Document Summarization Application will become a more powerful and versatile tool, capable of handling both text and multimedia content.
+By implementing the video and audio summary features, the Document Summarization Application will become a more powerful and versatile tool, capable of handling both text and multimedia content. This enhancement will significantly improve user experience, efficiency, and applicability across various domains.
