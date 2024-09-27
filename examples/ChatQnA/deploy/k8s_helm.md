@@ -7,14 +7,13 @@ be covering one option of doing it for convenience : we will be showcasing  how
 to build an e2e chatQnA with Redis VectorDB and neural-chat-7b-v3-3 model,
 deployed on a Kubernetes cluster. For more information on how to setup a Xeon based Kubernetes cluster along with the development pre-requisites,
 please follow the instructions here (*** ### Kubernetes Cluster and Development Environment***). 
-For a quick introduction on Helm Charts, visit the helm section in  (**getting started**)
+For a quick introduction on Helm Charts, visit the helm section in  [Getting Started with Kubernetes for ChatQnA](./k8s_getting_started.md)
 
 ## Overview
 
 There are several ways to setup a ChatQnA use case. Here in this tutorial, we
 will walk through how to enable the below list of microservices from OPEA
 GenAIComps to deploy a multi-node TGI megaservice solution.
-> **Note:** ChatQnA can also be deployed on a single node using Kubernetes, provided that all pods are configured to run on the same node.
 
 1. Data Prep
 2. Embedding
@@ -22,14 +21,16 @@ GenAIComps to deploy a multi-node TGI megaservice solution.
 4. Reranking
 5. LLM with TGI
 
+> **Note:** ChatQnA can also be deployed on a single node using Kubernetes, provided that all pods are configured to run on the same node.
+
 ## Prerequisites
 
 ### Install Helm
 First, ensure that Helm (version >= 3.15) is installed on your system. Helm is an essential tool for managing Kubernetes applications. It simplifies the deployment and management of Kubernetes applications using Helm charts. 
-For detailed installation instructions, please refer to the [Helm Installation Guide](https://helm.sh/docs/intro/install/)
+For detailed installation instructions, refer to the [Helm Installation Guide](https://helm.sh/docs/intro/install/)
 
 ### Clone Repository 
-First step is to clone the GenAIInfra which is the containerization and cloud native suite for OPEA, including artifacts to deploy ChatQnA in a cloud native way.
+Next step is to clone the GenAIInfra which is the containerization and cloud native suite for OPEA, including artifacts to deploy ChatQnA in a cloud native way.
 
 ```bash
 git clone https://github.com/opea-project/GenAIInfra.git
@@ -51,12 +52,12 @@ export HF_TOKEN="Your_Huggingface_API_Token"
 ```
 
 ### Proxy Settings
-Make sure to setup Proxies if you are behind a firewall.
+
 For services requiring internet access, such as the LLM microservice, embedding service, reranking service, and other backend services, proxy settings can be essential. These settings ensure services can download necessary content from the internet, especially when behind a corporate firewall.
 Proxy can be set in the `values.yaml` file, like so:
 Open the `values.yaml` file using an editor
 ```bash
-vi GenAIInfra/helm-charts/chatqna/values.yaml
+vi chatqna/values.yaml
 ```
 Update the following section and save file:
 ```yaml
