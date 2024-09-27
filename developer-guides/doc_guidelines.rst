@@ -34,6 +34,12 @@ with MyST and Sphinx-defined directives and roles used to create the documentati
 you're reading. It also provides best-known-methods for working with a mixture
 of reStructuredText and markdown.
 
+.. rst-class:: rst-columns
+
+.. contents::
+   :local:
+   :depth: 1
+
 Markdown vs. RestructuredText
 *****************************
 
@@ -652,6 +658,7 @@ We've kept the substitutions list small but you can add others as needed by
 submitting a change to the ``substitutions.txt`` file.
 
 Include Content from Other Files
+********************************
 
 You can directly incorporate a document fragment from another file into your reST or
 markdown content by using an ``include`` directive.
@@ -700,6 +707,18 @@ markdown content by using an ``include`` directive.
 
       These and other options described in the `docutils include directive <https://docutils.sourceforge.io/docs/ref/rst/directives.html#including-an-external-document-fragment>`_
       documentation.
+
+      As a practical example, here's how you could include markdown content into
+      a reST document, and have that included content interpreted as markdown.
+      Note that Sphinx will complain if it finds a .md or .rst file that's not
+      included in a toctree directive, it's bese to us a .txt extension for
+      included files::
+
+         .. include:: mdtable.txt
+            :parser: myst_parser.sphinx_
+
+      That's how we showed how a more free-form markdown table syntax would be
+      rendered in another part of this document.
 
    .. group-tab:: markdown
 
@@ -848,7 +867,10 @@ Code and Command Examples
             "age": 25
          }
 
-      TODO: add the list of supported languages.
+      Commonly used languages are: ``bash``, ``console``, ``none``, ``json``,
+      ``python``, ``markdown``, and ``rest``.  See this
+      `complete list of Pygments lexer languages <https://pygments.org/docs/lexers>`_
+      for more (use the "Short name" shown).
 
 Images
 ******
@@ -993,78 +1015,126 @@ Drawings
 Alternative Tabbed Content
 **************************
 
-In reST, instead of creating multiple documents with common material except for some
-specific sections, you can write one document and provide alternative content
-to the reader via a tabbed interface. When the reader clicks a tab, the
-content for that tab is displayed. For example::
-
-   .. tabs::
-
-      .. tab:: Apples
-
-         Apples are green, or sometimes red.
-
-      .. tab:: Pears
-
-         Pears are green.
-
-      .. tab:: Oranges
-
-         Oranges are orange.
-
-will display as:
-
 .. tabs::
 
-   .. tab:: Apples
+   .. group-tab:: reST
 
-      Apples are green, or sometimes red.
+      In reST, instead of creating multiple documents with common material except for some
+      specific sections, you can write one document and provide alternative content
+      to the reader via a tabbed interface. When the reader clicks a tab, the
+      content for that tab is displayed. For example::
 
-   .. tab:: Pears
+         .. tabs::
 
-      Pears are green.
+            .. tab:: Apples
 
-   .. tab:: Oranges
+               Apples are green, or sometimes red.
 
-      Oranges are orange.
+            .. tab:: Pears
 
-Tabs can also be grouped so that changing the current tab in one area
-changes all tabs with the same name throughout the page.  For example:
+               Pears are green.
 
-.. tabs::
+            .. tab:: Oranges
 
-   .. group-tab:: Linux
+               Oranges are orange.
 
-      Linux Line 1
+      will display as:
 
-   .. group-tab:: macOS
+      .. tabs::
 
-      macOS Line 1
+         .. tab:: Apples
 
-   .. group-tab:: Windows
+            Apples are green, or sometimes red.
 
-      Windows Line 1
+         .. tab:: Pears
 
-.. tabs::
+            Pears are green.
 
-   .. group-tab:: Linux
+         .. tab:: Oranges
 
-      Linux Line 2
+            Oranges are orange.
 
-   .. group-tab:: macOS
+      Tabs can also be grouped so that changing the current tab in one area
+      changes all tabs with the same name throughout the page.  For example:
 
-      macOS Line 2
+      .. tabs::
 
-   .. group-tab:: Windows
+         .. group-tab:: Linux
 
-      Windows Line 2
+            Linux Line 1
 
-In this latter case, we're using a ``.. group-tab::`` directive instead of
-a ``.. tab::`` directive.  Under the hood, we're using the `sphinx-tabs
-<https://github.com/djungelorm/sphinx-tabs>`_ extension that's included
-in the OPEA docs (requirements.txt)  setup.  Within a tab, you can have most
-any content *other than a heading* (code-blocks, ordered and unordered
-lists, pictures, paragraphs, and such).
+         .. group-tab:: macOS
+
+            macOS Line 1
+
+         .. group-tab:: Windows
+
+            Windows Line 1
+
+      .. tabs::
+
+         .. group-tab:: Linux
+
+            Linux Line 2
+
+         .. group-tab:: macOS
+
+            macOS Line 2
+
+         .. group-tab:: Windows
+
+            Windows Line 2
+
+      In this latter case, we're using a ``.. group-tab::`` directive instead of
+      a ``.. tab::`` directive.  Under the hood, we're using the `sphinx-tabs
+      <https://github.com/djungelorm/sphinx-tabs>`_ extension that's included
+      in the OPEA docs (requirements.txt)  setup.  Within a tab, you can have most
+      any content *other than a heading* (code-blocks, ordered and unordered
+      lists, pictures, paragraphs, and such).
+
+   .. group-tab:: markdown
+
+      While markdown does not have native support for tabbed alternatives, we do
+      support this in the OPEA markdown documentation with the Myst Parser
+      extension::
+
+         ::::{tab-set}
+
+         :::{tab-item} Linux
+         :sync: Linux
+
+         This content will show on the Linux tab
+         :::
+         :::{tab-item} macOS
+         :sync: macOS
+
+         This content will show on the macOS tab
+         :::
+         :::{tab-item} Windows
+         :sync: Windows
+
+         This content will show on the Windows tab
+         :::
+         ::::
+
+      Each ``tab-set`` used a ``tab-item`` for each tabbed alternative. Adding
+      the ``:sync: <tabname>`` option causes all ``tab-set`` that share that
+      ``tab-item`` name to be synchronized through the document (all the tabs
+      will change to the selected tab).
+
+      Note the use of three colons as the fence instead of the normal use of
+      three backticks.  This allows use of three backtics within a tab for
+      denoting a code block.  Also note how nested colon fences are used with
+      four colons for the ``tab-set``, and that each colon
+      fence must be terminated with a matching colon fence because indenting is
+      not used for content within the fenced area (normal for markdown).
+
+      Here's what that would look like with two sets of tabbed alternative
+      content:
+
+      .. include:: tabbed-alternative.txt
+         :parser: myst_parser.sphinx_
+
 
 Instruction Steps
 *****************

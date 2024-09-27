@@ -1,17 +1,18 @@
 /* -- Extra CSS styles for OPEA content (RTD theme) ----------------------- */
 
-/* make the page width fill the window */
+/* make the page width use more of the availalbe window */
 .wy-nav-content {
    max-width: 1100px;
 }
 
-/* (temporarily) add an under development tagline to the bread crumb) */
+/* (temporarily) add an under development tagline to the bread crumb
 .wy-breadcrumbs::after {
    content: " (Content is under construction)";
    background-color: #FFFACD;
    color: red;
    font-weight: bold;
 }
+*/
 
 /* pygments tweak for white-on-black console */
 
@@ -92,7 +93,6 @@ div:not(.admonition) > p + ul, div:not(.admonition) > p + ol {
 
 /* add some space before the figure caption */
 p.caption  {
-#    border-top: 1px solid;
     margin-top: 1em;
 }
 
@@ -123,7 +123,7 @@ table {
     text-align: center;
 }
 
-/*  make .. hlist:: tables fill the page */
+/*  make .. hlist:: tables fill the page (not really used) */
 table.hlist {
     width: 95% !important;
 }
@@ -216,15 +216,6 @@ kbd
     font-size: 1.1rem;
 }
 
-/* tweek for images in the home-page grid */
-
-/*
-.grid-item img {
-    /* max-width: 50%;
-    max-height: 50%;
-    margin-bottom: 0.7rem;
-} */
-
 
 .grid-item a:hover {
     background-color: #FFB500;
@@ -249,6 +240,7 @@ kbd
 /* add a class for multi-column support
  * in docs to replace use of .hlist with
  * a .. rst-class:: rst-columns
+ * default is 3 columns but you can choose 2
  */
 
 .rst-columns2 {
@@ -262,7 +254,7 @@ kbd
    margin-bottom: 1em;
 }
 
-/* numbered "h2" steps */
+/* numbered "h2" steps with an outdented big grey circle */
 
 body {
    counter-reset: step-count;
@@ -290,7 +282,9 @@ section.numbered-step h2::before {
   font-weight: bold;
 }
 
-/* add icon on external links */
+/* add icon on external links, I sometimes have second thoughts about this.
+ * it makes it easy to see which links are internal vs. external, but it
+ * sometimes looks messy. */
 a.reference.external::after {
    font-family: 'FontAwesome';
    font-size: 80%;
