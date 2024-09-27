@@ -8,6 +8,7 @@ To get started with OPEA you need the right hardware and basic software setup.
 
 - Software Requirements: Refer to the [Support Matrix](https://github.com/opea-project/GenAIExamples/blob/main/README.md#getting-started) to ensure you have the required software components in place.
 
+Note : If you are deploying it on cloud, say AWS, select a VM instance from R7iz or m7i family of instances with base OS as Ubuntu. Refer to [this](placeholder) section on installing docker on a clean machine. 
 ## Understanding OPEA's Core Components
 
 Before moving forward, it's important to familiarize yourself with two key elements of OPEA: GenAIComps and GenAIExamples.
