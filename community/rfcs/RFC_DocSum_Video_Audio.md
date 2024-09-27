@@ -63,31 +63,9 @@ flowchart LR
         B <--> |Post| Megaservice
         subgraph Megaservice["Megaservice"]
             direction TB
-            C([ Microservice - Video-to-AudioDoc : will be implemented]) -. D([ Microservice - Audio-to-Text Transcription : opea/whisper <br>7066]) -. E([ Microservice : llm-docsum-tgi <br>9000]) -. Post .-> G{{TGI Service<br>8008}}
+            C([ Microservice - Video-to-AudioDoc : will be implemented]) -. D([ Microservice - Audio-to-Text Transcription : opea/whisper <br>7066]) -. E([ Microservice : llm-docsum-tgi <br>9000]) -. Post .-> F{{TGI Service<br>8008}}
         end
-        Megaservice --> |Output| H[Response]
-    end
-    subgraph Legend
-        X([Micsrservice])
-        Y{{Service from industry peers}}
-        Z[Gateway]
-    end
-```
-
-```mermaid
-flowchart LR
-    subgraph DocSum
-        direction LR
-        A[User] <--> |Input query| B[DocSum Gateway]
-        B <--> |Post| Megaservice
-        subgraph Megaservice["Megaservice"]
-            direction TB
-            subgraph Megaservice["Data Preprocessing"]
-              C([ Microservice - Video-to-AudioDoc : will be implemented]) -. D([ Microservice - Audio-to-Text Transcription : opea/whisper <br>7066]) 
-            
-            Post .-> E([ Microservice : llm-docsum-tgi <br>9000]) -. Post .-> G{{TGI Service<br>8008}}
-        end
-        Megaservice --> |Output| H[Response]
+        Megaservice --> |Output| G[Response]
     end
     subgraph Legend
         X([Micsrservice])
