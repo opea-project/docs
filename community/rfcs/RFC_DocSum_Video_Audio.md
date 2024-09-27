@@ -64,9 +64,9 @@ flowchart LR
         B <--> |Post| Megaservice
         subgraph Megaservice["Megaservice"]
             direction TB
-            C([ Microservice : llm-docsum-tgi <br>9000]) -. Post .-> D{{TGI Service<br>8008}}
+            C([ Microservice : llm-docsum-tgi <br>9000]) -. Post .-> D([ Microservice : llm-docsum-tgi <br>9000]) -. Post .-> E{{TGI Service<br>8008}}
         end
-        Megaservice --> |Output| E[Response]
+        Megaservice --> |Output| F[Response]
     end
     subgraph Legend
         X([Micsrservice])
