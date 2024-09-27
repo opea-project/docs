@@ -64,7 +64,7 @@ flowchart LR
         B <--> |Post| Megaservice
         subgraph Megaservice["Megaservice"]
             direction TB
-            C([ Microservice : llm-docsum-tgi <br>9000]) -. Post .-> D([ Microservice : llm-docsum-tgi <br>9000]) -. Post .-> E{{TGI Service<br>8008}}
+            C([ Microservice - Video-to-AudioDoc : will be implemented]) -. Post .-> D([ Microservice : llm-docsum-tgi <br>9000]) -. Post .-> E{{TGI Service<br>8008}}
         end
         Megaservice --> |Output| F[Response]
     end
