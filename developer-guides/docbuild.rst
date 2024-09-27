@@ -296,6 +296,37 @@ If things look good, you'd proceed to using git (``git add .``) to add and commi
 repo (``git push origin <branchname>``) and submit a PR using the GitHub web
 interface.
 
+.. _docbuild-troubleshooting:
+
+Doc Build Troubleshooting
+*************************
+
+It's worth mentioning again, all ``.md`` and ``.rst`` documents must appear in
+the toctree hierarchy. When a new document is added it might cause the doc build to fail
+because that new document is not found in any of the toctree directives. Some
+doc additions are automatically incorporated through the use of the ``:glob:``
+pattern that pick up file names that match the pattern. Some toctree directives
+use an explicit list of documents that must be updated if a new document is
+added. The ``index.rst`` file in the directory where the new document was added
+(or in parent directory) would be the first place to check if the doc build
+complains that a document is not listed in a toctree.
+
+The :ref:`GenAIExamples` and :ref:`GenAIMicroservices` documents hierarchy are a
+special case.  Both of these documents are augmented at build time by a script
+(:docs_blob:`scripts/maketoc.sh`) that creates headings and toctree references
+(using ``:glob:``) to pick up all documents found in the ``GenAIExamples`` and
+``GenAIComps/comps`` directories.  As new examples or microservice components are
+added, the doc build scripts should automatically incorporate those new
+documents.
+
+Sphinx (and the Myst parser extension) may warn about issues with markdown
+syntax or structure.  Some of these warnings, though reported as errors, are not
+fatal for the doc build.  It's best to address these warnings and errors in the
+offending source file and build the docs again.  (This might mean making changes
+to documents in other OPEA project repos, submitting a PR, and getting that
+approved and merged.)
+
+
 Publish Content
 ***************
 

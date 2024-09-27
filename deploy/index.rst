@@ -10,6 +10,7 @@ can deploy to their own cloud.
 We're building this documentation from content in the
 :GenAIInfra_blob:`GenAIInfra<README.md>` GitHub repository.
 
+.. rst-class:: rst-columns
 
 .. toctree::
    :maxdepth: 1
@@ -21,6 +22,8 @@ We're building this documentation from content in the
 Installation Guides
 *******************
 
+.. rst-class:: rst-columns
+
 .. toctree::
    :maxdepth: 1
    :glob:
@@ -30,6 +33,8 @@ Installation Guides
 
 Authentication and Authorization
 ********************************
+
+.. rst-class:: rst-columns
 
 .. toctree::
    :maxdepth: 1
@@ -41,16 +46,22 @@ Authentication and Authorization
 Helm Charts
 ***********
 
+.. rst-class:: rst-columns
+
 .. toctree::
    :maxdepth: 1
    :glob:
 
    /GenAIInfra/helm-charts/README
    /GenAIInfra/helm-charts/*
+   /GenAIInfra/helm-charts/common/*
+   /GenAIInfra/helm-charts/common/**/*
    /GenAIInfra/helm-charts/**/*
 
 Kubernetes Addons
 *****************
+
+.. rst-class:: rst-columns
 
 .. toctree::
    :maxdepth: 1
@@ -63,6 +74,8 @@ Kubernetes Addons
 Microservices Connector
 ***********************
 
+.. rst-class:: rst-columns
+
 .. toctree::
    :maxdepth: 1
    :glob:
@@ -74,6 +87,8 @@ Microservices Connector
 Pipeline Proxy
 **************
 
+.. rst-class:: rst-columns
+
 .. toctree::
    :maxdepth: 1
    :glob:
@@ -84,6 +99,8 @@ Pipeline Proxy
 
 Scripts
 *******
+
+.. rst-class:: rst-columns
 
 .. toctree::
    :maxdepth: 1

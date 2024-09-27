@@ -49,13 +49,9 @@ Contributing Guides
 .. toctree::
    :maxdepth: 1
 
-   ../README
    CONTRIBUTING
    codeowner
    SECURITY
-   ../developer-guides/doc_guidelines
-   ../developer-guides/docbuild
-   ../developer-guides/graphviz
 
 Roadmaps
 ********
