@@ -88,7 +88,11 @@ organizational structure you can navigate.
 
 Ultimately every document file (``.md`` and ``.rst``) in the project must appear
 in the ``toctree`` hierarchy. An orphan document file will be flagged by Sphinx
-as not included in a toctree directive.
+as not included in a toctree directive. ReST documents that are intentionally
+left out of the toctree can be tagged with a ``:orphan:`` roll at the top of the
+file (sometimes done on README.rst files we don't need in the generated HTML.
+
+See :ref:`docbuild-troubleshooting` for more information.
 
 Headings
 ********
@@ -711,7 +715,7 @@ markdown content by using an ``include`` directive.
       As a practical example, here's how you could include markdown content into
       a reST document, and have that included content interpreted as markdown.
       Note that Sphinx will complain if it finds a .md or .rst file that's not
-      included in a toctree directive, it's bese to us a .txt extension for
+      included in a toctree directive, it's best to us a .txt extension for
       included files::
 
          .. include:: mdtable.txt
