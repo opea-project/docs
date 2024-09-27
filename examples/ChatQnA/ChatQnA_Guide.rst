@@ -208,10 +208,10 @@ See the :ref:`chatqna-example-deployment` that includes both single-node and
 orchestrated multi-node configurations, and choose the one that best fits your
 requirements.  Here are quick references to the single-node deployment options:
 
-* `Xeon Scalable Processor <deploy/xeon>`_
-* `Gaudi AI Accelerator <deploy/gaudi>`_
-* `Nvidia GPU <deploy/nvidia>`_
-* `AI PC <deploy/aipc>`_
+* :doc:`Xeon Scalable Processor <deploy/xeon>`
+* :doc:`Gaudi AI Accelerator <deploy/gaudi>`
+* :doc:`Nvidia GPU <deploy/nvidia>`
+* :doc:`AI PC <deploy/aipc>`
 
 
 
