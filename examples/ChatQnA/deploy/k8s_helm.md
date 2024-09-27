@@ -78,6 +78,7 @@ This use case employs a tailored combination of Helm charts and `values.yaml` co
 |Reranking            |   TEI        | BAAI/bge-reranker-base   | OPEA Microservice |
 |LLM                  |   TGI        |Intel/neural-chat-7b-v3-3 |OPEA Microservice |
 |UI                   |              | NA                       | Gateway Service |
+
 Tools and models mentioned in the table are configurable either through the
 environment variable or `values.yaml` 
 
