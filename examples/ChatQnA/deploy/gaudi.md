@@ -6,9 +6,8 @@ slice-n-dice ways to enable RAG with vectordb and LLM models, but here we will
 be covering one option of doing it for convenience : we will be showcasing how
 to build an e2e chatQnA with Redis VectorDB and neural-chat-7b-v3-3 model,
 deployed on Intel® Tiber™ Developer Cloud (ITDC). For more information on how to setup ITDC instance to proceed,
-Please follow the instructions here (*** getting started section***). If you do
-not have an ITDC instance or the hardware is not supported in the ITDC yet, you can still run this on-prem. To run this on-prem, make sure that all the
-(***system level requriements***)  are addressed such as docker versions, driver version etc.
+Please follow the instructions [here](https://opea-project.github.io/latest/getting-started/README.html). If you do
+not have an ITDC instance or the hardware is not supported in the ITDC yet, you can still run this on-prem.
 
 ## Overview
 
