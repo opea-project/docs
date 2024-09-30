@@ -257,9 +257,6 @@ Check if you have the below set of docker images, before moving on to the next s
 :::
 ::::
 
-:::
-::::
-
 ## Use Case Setup
 
 As mentioned the use case will use the following combination of the GenAIComps
