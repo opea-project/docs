@@ -5,7 +5,7 @@ example with OPEA comps to deploy using Ollama. There are several
 slice-n-dice ways to enable RAG with vectordb and LLM models, but here we will
 be covering one option of doing it for convenience : we will be showcasing  how
 to build an e2e chatQnA with Redis VectorDB and the llama-3 model,
-deployed on the client CPU. 
+deployed on the client CPU.  
 ## Overview
 
 There are several ways to setup a ChatQnA use case. Here in this tutorial, we
