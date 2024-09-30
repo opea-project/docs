@@ -34,7 +34,7 @@ flowchart LR
         B <--> |Post| Megaservice
         subgraph Megaservice["Megaservice"]
             direction TB
-            C([Microservice - Video-to-AudioDoc : Will be implemented]) -. Post .-> D([Microservice - Audio-to-Text Transcription : opea/whisper <br>7066]) -. Post .-> E([Microservice : llm-docsum-tgi <br>9000]) -. Post .-> F{{TGI Service<br>8008}}
+            C([Microservice - Video-to-AudioDoc : Will be implemented]) -. Post .-> D([Microservice - Audio-to-Text Transcription : opea/asr <br>9099]) -. Post .-> E([Microservice : llm-docsum-tgi <br>9000]) -. Post .-> F{{TGI Service<br>8008}}
         end
         Megaservice --> |Output| G[Response]
     end
