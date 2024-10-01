@@ -4,7 +4,7 @@
 
 To get started with OPEA you need the right hardware and basic software setup.
 
-- Hardware Requirements: For the hardware configuration, If you need Hardware Access visit the Intel Tiber Developer Cloud to select from options such as Xeon or Gaudi processors that meet the necessary specifications.
+- Hardware Requirements: For the hardware configuration, If you need Hardware Access visit the [Intel Tiber Developer Cloud](https://cloud.intel.com) to select from options such as Xeon or Gaudi processors that meet the necessary specifications.
 
 - Software Requirements: Refer to the [Support Matrix](https://github.com/opea-project/GenAIExamples/blob/main/README.md#getting-started) to ensure you have the required software components in place.
 
