@@ -6,3 +6,4 @@ myst-parser>=3.0
 sphinx-md==0.0.3
 sphinxcontrib-mermaid
 pymarkdownlnt
+sphinx-design
