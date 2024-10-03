@@ -2,9 +2,7 @@
 
 ## Author(s)
 
-[Mustafa Cetin](https://github.com/MSCetin37)
-[Melanie Buehler](https://github.com/mhbuehler)
-[Dina Jones](https://github.com/dmsuehir)
+[Melanie Buehler](https://github.com/mhbuehler), [Mustafa Cetin](https://github.com/MSCetin37), [Dina Jones](https://github.com/dmsuehir)
 
 ## Status
 
@@ -23,7 +21,8 @@ As the [Multimodal RAG RFC](https://github.com/opea-project/docs/blob/01597aabea
 explains, enterprises use multimodal data and the proposed enhancement will increase the variety of use cases that the
 MultimodalQnA example will be able to support.
 
-<!-- TODO: Update use cases -->
+> TODO: Update use cases
+
 Expanding on the types of supported data types will enable use cases such as:
 1. QnA with all of your media using voice only (query and output) 
 1. QnA with speech audio files (e.g. podcasts) 
@@ -60,7 +59,7 @@ and text. Spoken audio files can be translated to text with using the whisper mo
 audio use the whisper model to generate transcripts for the video. This means that although the user will be able to
 upload several different forms of media, once it gets to the embedding model it is all images and text.
 
-<!-- TODO: Document specific component changes and add diagram -->
+> TODO: Document specific component changes and add diagram
 
 ### User Query
 
@@ -74,25 +73,21 @@ The [ASR microservice](https://github.com/opea-project/GenAIComps/blob/main/comp
 whisper convert speech to text provides a clear line of sight for adding support for spoken audio queries. Once the
 audio has been converted to text, submitting the query would be no different hwo the text queries work today.
 
-<!-- 
-TODO: 
 
-- Investigate how image/text queries would work
-- Also, how does supporting different data types affect the gateway?
-- Diagram
--->
+> TODO: 
+> - Investigate how image/text queries would work
+> - Also, how does supporting different data types affect the gateway?
+> - Diagram
 
 
 ### UI
 
-<!-- TODO: UI considerations and design -->
+> TODO: UI considerations and design
 
 ## Alternatives Considered
 
-<!-- 
-TODO: Write up alternate options like creating a seperate examples so that the MultimodalQnA megaservice doesn't get too overloaded.
-Also, alternative UI designs?
--->
+> TODO: Write up alternate options like creating a seperate examples so that the MultimodalQnA megaservice doesn't get too overloaded.
+> Also, alternative UI designs?
 
 ## Compatibility
 
