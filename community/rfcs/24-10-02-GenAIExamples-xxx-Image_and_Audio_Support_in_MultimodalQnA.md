@@ -37,6 +37,14 @@ There are two phases in the MultimodalQnA example that need to be considered:
 * Data ingestion and prep
 * User query
 
+Both of these phases are affected by the enhancements in this RFC. The design for expanding the types of multimodal data
+for [data ingestion](#data-ingestion-and-prep) and [user queries](#user-query) are outlined in the next couple of
+sections.
+
+There is also a Gradio user interface (UI) that allows the user to both upload data for ingestion and submit queries
+based on the context in the database. The introduction of different data types will affect the UI design, and the
+proposed changes are discussed in the [UI section](#ui) below.
+
 ### Data Ingestion and Prep
 
 In the data ingestion and prep phase, a collection of data is built up to context for the subsequent queries. From a
@@ -79,10 +87,9 @@ audio has been converted to text, submitting the query would be no different hwo
 > - Also, how does supporting different data types affect the gateway?
 > - Diagram
 
-
 ### UI
 
-> TODO: UI considerations and design
+> TODO: UI considerations, design, and mock up
 
 ## Alternatives Considered
 
