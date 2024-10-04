@@ -21,15 +21,11 @@ As the [Multimodal RAG RFC](https://github.com/opea-project/docs/blob/01597aabea
 explains, enterprises use multimodal data and the proposed enhancement will increase the variety of use cases that the
 MultimodalQnA example will be able to support.
 
-> TODO: Update use cases
-
 Expanding on the types of supported data types will enable use cases such as:
-1. QnA with all of your media using voice only (query and output) 
-1. QnA with speech audio files (e.g. podcasts) 
-1. QnA with labeled images (e.g. medical use case) 
-1. QnA with multimodal PDFs 
-1. Trimodal QnA with image, audio, and text 
-1. Support for slides
+1. **Voice Query and Response**: A user wants to query and chat with a multimodal data store using speech as input and get responses returned as speech audio output. Supporting this use case would make the application more accessible to those who cannot see or read and safer for those who are driving a vehicle.
+1. **QnA with Speech Audio Files**: A user wants to query and chat with a collection of audio files, such as a podcast library.
+1. **QnA with Captioned/Labeled Images**: A user would like to populate the database with images that have labels, such as "normal" and “abnormal” radiology images, or user-provided captions, like radiologist's notes, and then query with a new image to find similar ones. After retrieving the most similar image, the system could predict the new image's label (i.e. assist with diagnosis).
+1. **QnA with Multimodal PDFs**: A user wants to query and chat with the contents of one or more PDF files, like books, journal articles, business reports, or travel brochures. The PDFs could contain images with or without captions and charts that include titles and descriptions. 
 
 ## Design Proposal
 
