@@ -55,15 +55,25 @@ user's perspective, they will be able to upload:
 
 The [BridgeTower model](https://huggingface.co/BridgeTower/bridgetower-large-itm-mlm-gaudi) which is already utilized
 by MultimodalQnA merges visual and text data into a unified semantic space. As it works today, the videos being ingested
-are preprocessed into a list of frames and their corresponding transcript or captions that were generated based on the
+are preprocessed into a list of frames with their corresponding transcript or captions that were generated based on the
 video. Those frames and their metadata are stored in the vector store, which is used as context for the user's queries.
 The addition of image and text are analogous to the video frames and transcripts. With some changes to data prep, the
-image and text data could be added to the vector store. Similarly, PDF files can be though of as another form of images
+image and text data could be added to the vector store. Similarly, PDF files can be thought of as another form of images
 and text. Spoken audio files can be translated to text with using the whisper model, similar to how videos with spoken
 audio use the whisper model to generate transcripts for the video. This means that although the user will be able to
 upload several different forms of media, once it gets to the embedding model it is all images and text.
 
+Data prep endpoints:
+
+| Endpoint | Data type | Description |
+|----------|-----------|-------------|
+| `6007: /v1/videos_with_transcripts` | Videos with transcripts | Gets video files with their corresponding transcript file (.vtt), and then extracts frames and saves annotations. The data and metadata are prepared for ingestion and then added to the Redis vector store. |
+| `6007:/v1/generate_transcripts` | Videos with spoken audio | This extracts the audio from the video and then generates a transcript (.vtt) using the whisper model. The data and metadata are prepared for ingestion and then added to the Redis vector store. |
+| `6007:/v1/generate_captions` | Videos without spoken audio (i.e. background music, silent movie) | Extracts frames from the video and uses the LVM microservice to generate captions for the frames. The data and metadata are prepared for ingestion and then added to the Redis vector store. |
+| ... | | |
+
 > TODO: Document specific component changes and add diagram
+
 
 ### User Query
 
