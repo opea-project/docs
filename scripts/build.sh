@@ -36,3 +36,23 @@ cd docs
 make clean
 make html
 echo "Build online doc done!"
+
+echo "update github.io"
+
+RELEASE_FOLDER=../release_doc
+rm -rf ${RELEASE_FOLDER}
+# git clone -b main --single-branch https://github.com/opea-project/opea-project.github.io.git ${RELEASE_FOLDER}
+git clone -b main --single-branch https://github.com/NeoZhangJianyu/opea-project.github.io.git ${RELEASE_FOLDER}
+
+
+
+BUILDDIR=_build
+PUBLISHDIR=${RELEASE_FOLDER}/latest
+
+cp -r ${BUILDDIR}/html/*  ${PUBLISHDIR}
+cp scripts/publish-README.md ${PUBLISHDIR}/../README.md
+bash scripts/publish-redirect.sh ${PUBLISHDIR}/../index.html latest/index.html
+sed 's/<head>/<head>\n  <base href="https:\/\/opea-project.github.io\/latest\/">/' ${BUILDDIR}/html/404.html > ${PUBLISHDIR}/../404.html
+
+echo "CP html to ${PUBLISHDIR}"
+
