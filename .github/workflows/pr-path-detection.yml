@@ -143,7 +143,7 @@ jobs:
                   fi
                 fi
               else
-                echo "$check_path does not exist"
+                echo "$check_path does not exist $png_line"
                 fail="TRUE"
               fi
             done
