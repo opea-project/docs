@@ -112,7 +112,28 @@ dictionary in order to comprehend data type and handle multiple items (image and
 
 ### UI
 
-> TODO: UI considerations, design, and mock up
+The existing UI shows two modes of video upload capability - with transcripts and with captions, on different interface tabs - and a main chat tab holding the text QnA conversation, a video clip area populated from the first response of a chat session, a small text box for queries, a submit button, and a clear button. Our proposed changes to the UI aim to achieve three goals:
+* Change the existing design as little as possible
+* Visually organize and emphasize the enhanced multimodal query and upload options
+* Streamline some of the titles and text headings
+
+We list each proposed change in detail below and then provide mockups of the new screens.
+
+#### UI Changes
+1. Modify the main chat screen with a dynamic media display area capable of supporting video, image, or audio results and resetting the type when the session is cleared.
+1. Modify the query text box to allow multimodal file uploads in addition to text (likely with the gradio MultimodalTextBox element), expanding the query input to accept images and audio in addition to text.
+1. Simplify the tab titles and screen headings for increased clarity.
+1. Combine the two modes of video upload into one tab with radio buttons that enable the user to choose the correct ingestion endpoint for their videos.
+1. Add a new tab for image uploads with radio buttons allowing the user to choose between caption generation and custom label/caption, as well as a text box for uploading a custom label/caption.
+1. Add a new audio upload tab with radio buttons allowing the user to choose between transcript generation and custom label/caption, as well as a text box for uploading a custom label/caption.
+1. Add a new tab for PDF uploads, which currently is envisioned as one endpoint without any input options.
+
+#### UI Mockups
+![Proposed Chat Screen](assets/multimodal_enhanced_chat_ui.png)
+![Proposed Video Upload Screen](assets/multimodal_enhanced_video_ui.png)
+![Proposed Image Upload Screen](assets/multimodal_enhanced_image_ui.png)
+![Proposed Audio Upload Screen](assets/multimodal_enhanced_audio_ui.png)
+![Proposed PDF Upload Screen](assets/multimodal_enhanced_pdf_ui.png)
 
 ## Alternatives Considered
 
