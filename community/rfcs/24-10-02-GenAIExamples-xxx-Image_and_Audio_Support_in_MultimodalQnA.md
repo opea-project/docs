@@ -63,14 +63,15 @@ and text. Spoken audio files can be translated to text with using the whisper mo
 audio use the whisper model to generate transcripts for the video. This means that although the user will be able to
 upload several different forms of media, once it gets to the embedding model it is all images and text.
 
-Data prep endpoints:
+The table below lists the endpoints for the multimodal data prep microservice that will be changing with this proposal.
 
 | Endpoint | Data type | Description |
 |----------|-----------|-------------|
-| `6007: /v1/videos_with_transcripts` | Videos with transcripts | Gets video files with their corresponding transcript file (.vtt), and then extracts frames and saves annotations. The data and metadata are prepared for ingestion and then added to the Redis vector store. |
-| `6007:/v1/generate_transcripts` | Videos with spoken audio | This extracts the audio from the video and then generates a transcript (.vtt) using the whisper model. The data and metadata are prepared for ingestion and then added to the Redis vector store. |
-| `6007:/v1/generate_captions` | Videos without spoken audio (i.e. background music, silent movie) | Extracts frames from the video and uses the LVM microservice to generate captions for the frames. The data and metadata are prepared for ingestion and then added to the Redis vector store. |
-| ... | | |
+| `6007:/v1/videos_with_transcripts` becomes `6007:/v1/ingest_with_transcripts` | Videos with transcripts and images with text | For video with transcripts, gets the video file with their corresponding transcript file (.vtt), and then extracts frames and saves annotations. The image with text would be treated like a single frame with transcript. The data and metadata are prepared for ingestion and then added to the Redis vector store. |
+| `6007:/v1/generate_transcripts` | Videos with spoken audio and audio only | For videos with spoken audio, data prep extracts the audio from the video and then generates a transcript (.vtt) using the whisper model. For audio only, the transcript would also be generated using the whisper model. The data and metadata are prepared for ingestion and then added to the Redis vector store. |
+| `6007:/v1/generate_captions` | Videos without spoken audio (i.e. background music, silent movie) and images without text | For videos, data prep extracts frames from the video and uses the LVM microservice to generate captions for the frames. An image will be treated similarly to a video frame, and the LVM will be used to generate a caption for the image. The data and metadata are prepared for ingestion and then added to the Redis vector store. |
+| `6007:/v1/dataprep/get_videos` becomes `6007:/v1/dataprep/get_mm_data` |  Multimodal | Lists names of uploaded multimodal data. |
+| `6007:/v1/dataprep/delete_videos` becomes `6007:/v1/dataprep/delete_mm_data` |  Multimodal | Deletes all the uploaded multimodal data. |
 
 > TODO: Document specific component changes and add diagram
 
@@ -85,7 +86,23 @@ the user's perspective, the query can be:
 
 The [ASR microservice](https://github.com/opea-project/GenAIComps/blob/main/comps/asr/whisper/README.md) which uses the
 whisper convert speech to text provides a clear line of sight for adding support for spoken audio queries. Once the
-audio has been converted to text, submitting the query would be no different hwo the text queries work today.
+audio has been converted to text, submitting the query would be no different how the text queries work today.
+
+Changes to the user query flow will involve the following components:
+* The multimodal gateway
+* The embedding mircoservice
+
+The details explaining the specific changes to these components are explained in the sections below.
+
+### MultimodalGateway
+
+Currently, the [MultimodalGateway](https://github.com/opea-project/GenAIComps/blob/main/comps/cores/mega/gateway.py#L688)
+class analyzes the input message from the request coming in to determine if it's a first query or a follow up query.
+Initial queries have a single prompt string, whereas follow up queries have a list of prompts and images.
+
+When introducing different types of data for user queries, we will need to change the inital query from a string to a
+dictionary in order to comprehend data type and handle multiple items (image and text).
+
 
 
 > TODO: 
