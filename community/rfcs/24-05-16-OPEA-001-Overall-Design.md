@@ -38,7 +38,7 @@ This RFC is used to present the OPEA overall design philosophy, including overal
 
 The proposed overall architecture is
 
-![OPEA Architecture](opea_architecture.png "OPEA Architecture")
+![OPEA Architecture](opea_architecture.png)
 
 1. GenAIComps
 
@@ -58,7 +58,7 @@ The proposed overall architecture is
 
 The proposed OPEA workflow is
 
-![OPEA Workflow](opea_workflow.png "OPEA Workflow")
+![OPEA Workflow](opea_workflow.png)
 
 1. Microservice
 
