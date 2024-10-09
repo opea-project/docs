@@ -39,7 +39,9 @@ sections.
 
 There is also a Gradio user interface (UI) that allows the user to both upload data for ingestion and submit queries
 based on the context in the database. The introduction of different data types will affect the UI design, and the
-proposed changes are discussed in the [UI section](#ui) below.
+proposed changes are discussed in the [UI section](#ui).
+
+![MultimodalQnA diagram with proposed enhancement](assets/multimodal_enhanced_diagram.png)
 
 ### Data Ingestion and Prep
 
@@ -73,9 +75,6 @@ The table below lists the endpoints for the multimodal data prep microservice th
 | `6007:/v1/dataprep/get_videos` becomes `6007:/v1/dataprep/get_mm_data` |  Multimodal | Lists names of uploaded multimodal data. |
 | `6007:/v1/dataprep/delete_videos` becomes `6007:/v1/dataprep/delete_mm_data` |  Multimodal | Deletes all the uploaded multimodal data. |
 
-> TODO: Document specific component changes and add diagram
-
-
 ### User Query
 
 After the vector database has been populated, the user can then submit a query to the MultimodalQnA megaservice. From
@@ -89,26 +88,34 @@ whisper convert speech to text provides a clear line of sight for adding support
 audio has been converted to text, submitting the query would be no different how the text queries work today.
 
 Changes to the user query flow will involve the following components:
-* The multimodal gateway
+* The MultimodalQnA gateway
 * The embedding mircoservice
 
 The details explaining the specific changes to these components are explained in the sections below.
 
-### MultimodalGateway
+#### MultimodalQnAGateway
 
-Currently, the [MultimodalGateway](https://github.com/opea-project/GenAIComps/blob/main/comps/cores/mega/gateway.py#L688)
+Currently, the [MultimodalQnAGateway](https://github.com/opea-project/GenAIComps/blob/main/comps/cores/mega/gateway.py#L688)
 class analyzes the input message from the request coming in to determine if it's a first query or a follow up query.
 Initial queries have a single prompt string, whereas follow up queries have a list of prompts and images.
 
 When introducing different types of data for user queries, we will need to change the inital query from a string to a
 dictionary in order to comprehend data type and handle multiple items (image and text).
 
+#### Embedding Microservice
 
+The [embedding microservice endpoint](https://github.com/opea-project/GenAIComps/blob/main/comps/embeddings/multimodal/multimodal_langchain/mm_embedding_mmei.py#L41)
+gets input as a [`MultimodalDoc`](https://github.com/opea-project/GenAIComps/blob/main/comps/cores/proto/docarray.py#L66-L70).
+The `MultimodalDoc` is a union of: `TextDoc`, `ImageDoc`, and `TextImageDoc`. In order to accomodate audio input, we
+will add `Base64ByteStrDoc` to the union.
+
+If the embedding service gets a `Base64ByteStrDoc` as input, it will assume that this is audio only input, and then use
+the [ASR microservice](https://github.com/opea-project/GenAIComps/blob/main/comps/asr/whisper/README.md) microservice to
+convert the audio to text using the whisper model. After getting the text, the rest of the embedding micorservice flow
+would work the same as if we had a text query.
 
 > TODO: 
 > - Investigate how image/text queries would work
-> - Also, how does supporting different data types affect the gateway?
-> - Diagram
 
 ### UI
 
@@ -137,8 +144,10 @@ We list each proposed change in detail below and then provide mockups of the new
 
 ## Alternatives Considered
 
-> TODO: Write up alternate options like creating a seperate examples so that the MultimodalQnA megaservice doesn't get too overloaded.
-> Also, alternative UI designs?
+The following alternatives can be considered:
+* Instead of having the embedding microservice use the ASR microservice, it could directly use the whisper model
+  (similar to how the multimodal data prep uses the whisper model to transcribe video audio). Using the whisper model
+  directly instead of going through ASR would reduce the number of running containers/services.
 
 ## Compatibility
 
