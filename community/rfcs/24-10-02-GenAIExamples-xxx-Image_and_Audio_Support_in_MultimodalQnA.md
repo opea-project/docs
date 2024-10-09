@@ -69,11 +69,13 @@ The table below lists the endpoints for the multimodal data prep microservice th
 
 | Endpoint | Data type | Description |
 |----------|-----------|-------------|
-| `6007:/v1/videos_with_transcripts` becomes `6007:/v1/ingest_with_transcripts` | Videos with transcripts and images with text | For video with transcripts, gets the video file with their corresponding transcript file (.vtt), and then extracts frames and saves annotations. The image with text would be treated like a single frame with transcript. The data and metadata are prepared for ingestion and then added to the Redis vector store. |
+| `6007:/v1/videos_with_transcripts` becomes `6007:/v1/ingest_with_text` | Videos with transcripts and images with text | For video with transcripts, gets the video file with their corresponding transcript file (.vtt), and then extracts frames and saves annotations. The image with text would be treated like a single frame with transcript. The data and metadata are prepared for ingestion and then added to the Redis vector store. |
 | `6007:/v1/generate_transcripts` | Videos with spoken audio and audio only | For videos with spoken audio, data prep extracts the audio from the video and then generates a transcript (.vtt) using the whisper model. For audio only, the transcript would also be generated using the whisper model. The data and metadata are prepared for ingestion and then added to the Redis vector store. |
 | `6007:/v1/generate_captions` | Videos without spoken audio (i.e. background music, silent movie) and images without text | For videos, data prep extracts frames from the video and uses the LVM microservice to generate captions for the frames. An image will be treated similarly to a video frame, and the LVM will be used to generate a caption for the image. The data and metadata are prepared for ingestion and then added to the Redis vector store. |
-| `6007:/v1/dataprep/get_videos` becomes `6007:/v1/dataprep/get_mm_data` |  Multimodal | Lists names of uploaded multimodal data. |
-| `6007:/v1/dataprep/delete_videos` becomes `6007:/v1/dataprep/delete_mm_data` |  Multimodal | Deletes all the uploaded multimodal data. |
+| `6007:/v1/dataprep/get_videos` becomes `6007:/v1/dataprep/get_files` |  Multimodal | Lists names of uploaded files. |
+| `6007:/v1/dataprep/delete_videos` becomes `6007:/v1/dataprep/delete_files` |  Multimodal | Deletes all the uploaded files. |
+
+<!-- TODO: Currently, does the 'delete' have an option to do it for a single video, or is it always deleting all videos? -->
 
 ### User Query
 
