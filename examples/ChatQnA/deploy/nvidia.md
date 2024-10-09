@@ -5,9 +5,7 @@ example with OPEA comps to deploy using TGI service. There are several
 slice-n-dice ways to enable RAG with vectordb and LLM models, but here we will
 be covering one option of doing it for convenience : we will be showcasing  how
 to build an e2e chatQnA with Redis VectorDB and neural-chat-7b-v3-3 model,
-deployed on on-prem. If you do not have an IDC instance you can skip 
-the step and make sure that all the (***system level validation***) metrics are addressed such as docker versions.
-
+deployed on on-prem.
 ## Overview
 
 There are several ways to setup a ChatQnA use case. Here in this tutorial, we
