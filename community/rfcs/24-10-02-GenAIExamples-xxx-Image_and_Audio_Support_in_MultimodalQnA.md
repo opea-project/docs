@@ -116,8 +116,7 @@ the [ASR microservice](https://github.com/opea-project/GenAIComps/blob/main/comp
 convert the audio to text using the whisper model. After getting the text, the rest of the embedding micorservice flow
 would work the same as if we had a text query.
 
-> TODO: 
-> - Investigate how image/text queries would work
+<!-- TODO: Investigate how image/text queries would work -->
 
 ### UI
 
@@ -150,22 +149,63 @@ The following alternatives can be considered:
 * Instead of having the embedding microservice use the ASR microservice, it could directly use the whisper model
   (similar to how the multimodal data prep uses the whisper model to transcribe video audio). Using the whisper model
   directly instead of going through ASR would reduce the number of running containers/services.
+* In data prep, we could have separate endpoints for different type of media. For example, instead of having
+  `/v1/ingest_with_text`, we could break that out into `/v1/videos_with_transcript` and `/v1/images_with_text`
+  separately.
 
 ## Compatibility
 
-list possible incompatible interface or workflow changes if exists.
+Interface changes are being made to the following components:
+* MultimodalQnA gateway
+* Embeddings multimodal langchain
+* Dataprep multimodal redis langchain
+
+> TODO: Check if any other examples use these components, otherwise add a note here saying that the changes won't
+> affect other examples.
 
 ## Miscellaneous
 
+<!--
 List other information user and developer may care about, such as:
 
 - Performance Impact, such as speed, memory, accuracy.
 - Engineering Impact, such as binary size, startup time, build time, test times.
 - Security Impact, such as code vulnerability.
 - TODO List or staging plan.
-
-<!--
-TODO:
-- List considerations like the number of containers, how many HPUs will be needed before/after the the change, etc
-- Development phases
 -->
+
+It should be considered that the addition of [ASR](https://github.com/opea-project/GenAIComps/tree/main/comps/asr/whisper)
+adds another microservice to MultimodalQnA. This means that the `compose.yaml` files will need to start 2 more
+containers (`opea/asr` and `opea/whisper`) and when using Gaudi, the whisper service container will use 1 HPU. If this
+is deemed too expensive, the embedding service can use the whipser model directly (without ASR), however this may mean
+that the speech-to-text translation is done using CPU, since the embedding service in the Gaudi example currently runs
+using CPU.
+
+We have planned the following development phases based on the priority of the features and their development effort:
+
+* Phase 1
+  * Data prep and ingestion:
+    * Accept image only
+    * Accept image and text
+    * Accept speech audio only
+  * Query enhancements:
+    * Accept speech audio only
+  * Other enhancements:
+    * Allow the user to choose the embedding model and LVM when starting the services <!-- TODO: this needs investigation, does it not already work with env vars? -->
+* Phase 2
+  * Data prep and ingestion:
+    * Accept image and text as a PDF
+  * Query enhancements:
+    * Accept image and text
+    * Accept image and speech audio
+* Phase 3
+  * Data prep and ingestion:
+    * Accept image and speech audio
+  * Other enhancements:
+    * Support for spoken audio responses (text-to-speech)
+* Future ideas:
+  * Data prep and ingestion:
+    * Accept non-speech audio
+    * Accept Powerpoint slides and other file types
+  * Query enhancements:
+    * Accept speech audio and non-speech audio
