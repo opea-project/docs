@@ -146,9 +146,12 @@ We list each proposed change in detail below and then provide mockups of the new
 ## Alternatives Considered
 
 The following alternatives can be considered:
-* Instead of having the embedding microservice use the ASR microservice, it could directly use the whisper model
-  (similar to how the multimodal data prep uses the whisper model to transcribe video audio). Using the whisper model
-  directly instead of going through ASR would reduce the number of running containers/services.
+* In order to use the ASR microservice would add 2 more containers (`opea/asr` and `opea/whisper`/`opea/whisper-gaudi`)
+  to the `compose.yaml` file, and when using Gaudi, the whipser service container would use 1 HPU. Instead of having the
+  embedding microservice use ASR, it could directly use the whisper model (similar to how the multimodal data prep uses
+  the whisper model to transcribe video audio). However, using the whisper model directly from a container running on
+  CPU (like the embedding service or data prep) means that we aren't getting the performance benefits of Gaudi when
+  converting speech-to-text with the whisper model.
 * In data prep, we could have separate endpoints for different type of media. For example, instead of having
   `/v1/ingest_with_text`, we could break that out into `/v1/videos_with_transcript` and `/v1/images_with_text`
   separately.
@@ -174,12 +177,7 @@ List other information user and developer may care about, such as:
 - TODO List or staging plan.
 -->
 
-It should be considered that the addition of [ASR](https://github.com/opea-project/GenAIComps/tree/main/comps/asr/whisper)
-adds another microservice to MultimodalQnA. This means that the `compose.yaml` files will need to start 2 more
-containers (`opea/asr` and `opea/whisper`) and when using Gaudi, the whisper service container will use 1 HPU. If this
-is deemed too expensive, the embedding service can use the whipser model directly (without ASR), however this may mean
-that the speech-to-text translation is done using CPU, since the embedding service in the Gaudi example currently runs
-using CPU.
+### Development Phases
 
 We have planned the following development phases based on the priority of the features and their development effort:
 
