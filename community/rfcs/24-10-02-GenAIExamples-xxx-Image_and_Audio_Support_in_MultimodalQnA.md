@@ -12,7 +12,7 @@ Under review
 
 The [MultimodalQnA](https://github.com/opea-project/GenAIExamples/tree/main/MultimodalQnA) megaservice in
 [GenAIExamples](https://github.com/opea-project/GenAIExamples) currently supports text queries with a response based on
-the context derived from collection of videos. This RFC expands upon that and proposes the addition of images, images
+the context derived from a collection of videos. This RFC expands upon that and proposes the addition of images, images
 with text, and audio data types for both the ingested data and the user query.
 
 ## Motivation
@@ -45,8 +45,8 @@ proposed changes are discussed in the [UI section](#ui).
 
 ### Data Ingestion and Prep
 
-In the data ingestion and prep phase, a collection of data is built up to context for the subsequent queries. From a
-user's perspective, they will be able to upload:
+In the data ingestion and prep phase, a collection of multimodal data is uploaded to a vector database to be retrieved
+and used as context for the subsequent queries. From a user's perspective, they will be able to upload:
 * Videos with spoken audio (already supported)
 * Videos without spoken audio (already supported)
 * Videos with transcriptions (already supported)
@@ -58,10 +58,10 @@ user's perspective, they will be able to upload:
 The [BridgeTower model](https://huggingface.co/BridgeTower/bridgetower-large-itm-mlm-gaudi) which is already utilized
 by MultimodalQnA merges visual and text data into a unified semantic space. As it works today, the videos being ingested
 are preprocessed into a list of frames with their corresponding transcript or captions that were generated based on the
-video. Those frames and their metadata are stored in the vector store, which is used as context for the user's queries.
+video. Those frames and their metadata are stored in the vector store, which is used in a RAG pipeline as context for the user's queries.
 The addition of image and text are analogous to the video frames and transcripts. With some changes to data prep, the
 image and text data could be added to the vector store. Similarly, PDF files can be thought of as another form of images
-and text. Spoken audio files can be translated to text with using the whisper model, similar to how videos with spoken
+and text. Spoken audio files can be translated to text using the whisper model, similar to how videos with spoken
 audio use the whisper model to generate transcripts for the video. This means that although the user will be able to
 upload several different forms of media, once it gets to the embedding model it is all images and text.
 
@@ -87,26 +87,28 @@ the user's perspective, the query can be:
 
 The response from the query is:
 * Text (already supported)
+* Video clip (already supported)
+* Single image frame (proposed)
 * Spoken audio file (proposed)
 
 The [ASR microservice](https://github.com/opea-project/GenAIComps/blob/main/comps/asr/whisper/README.md) which uses the
-whisper convert speech to text provides a clear line of sight for adding support for spoken audio queries. Once the
-audio has been converted to text, submitting the query would be no different how the text queries work today.
+whisper model, converts speech to text and provides a clear line of sight for adding support for spoken audio queries. Once the
+audio has been converted to text, submitting the query would be no different than how the text queries work today.
 
 The [TTS microservice](https://github.com/opea-project/GenAIComps/tree/main/comps/tts/speecht5) provides the capability
-to translate text to speech, which would allow us to provide a spoken audio file response.
+to translate text to speech, which would allow the megaservice to return a spoken audio file response.
 
 Changes to the user query flow will involve the following components:
 * The [MultimodalQnA gateway](#multimodalqnagateway)
-* The [embedding mircoservice](#embedding-microservice)
+* The [embedding microservice](#embedding-microservice)
 
-The details explaining the specific changes to these components are explained in the sections below.
+The details explaining the specific changes to these components are given in the sections below.
 
 The option for providing a spoken response could be provided as a flag when starting the megaservice, simliar to how
 ChatQnA is able to start with or without reranking, or with or without guardrails. If the MultimodalQnA megaservice is
 started with the spoken responses feature, then an additional node for TTS would be added to the DAG. To enable this
 option, we would be adding a boolean python argument to the [`MultimodalQnaService` class](https://github.com/opea-project/GenAIExamples/blob/main/MultimodalQnA/multimodalqna.py#L18),
-a second Dockerfile that uses that speech response flag in its entrypoint, and another docker componse yaml file that
+a second Dockerfile that uses that speech response flag in its entrypoint, and another docker compose yaml file that
 starts the `tts-service` and `speecht5-service` containers.
 
 #### MultimodalQnAGateway
@@ -116,7 +118,7 @@ class analyzes the input message from the request coming in to determine if it's
 Initial queries have a single prompt string, whereas follow up queries have a list of prompts and images.
 
 When introducing different types of data for user queries, we will need to change the inital query from a string to a
-dictionary in order to comprehend data type and handle multiple items (image and text).
+dictionary in order to comprehend data type and handle multiple items (image, text, audio).
 
 #### Embedding Microservice
 
@@ -126,31 +128,42 @@ The `MultimodalDoc` is a union of: `TextDoc`, `ImageDoc`, and `TextImageDoc`. In
 will add `Base64ByteStrDoc` to the union.
 
 If the embedding service gets a `Base64ByteStrDoc` as input, it will assume that this is audio only input, and then use
-the [ASR microservice](https://github.com/opea-project/GenAIComps/blob/main/comps/asr/whisper/README.md) microservice to
-convert the audio to text using the whisper model. After getting the text, the rest of the embedding micorservice flow
-would work the same as if we had a text query.
+the [ASR microservice](https://github.com/opea-project/GenAIComps/blob/main/comps/asr/whisper/README.md) to
+convert the audio to text using the whisper model. After getting the text, the rest of the embedding microservice flow
+would work the same as it would for a text query.
 
 <!-- TODO: Investigate how image/text queries would work -->
 
 ### UI
 
-The existing UI shows two modes of video upload capability - with transcripts and with captions, on different interface tabs - and a main chat tab holding the text QnA conversation, a video clip area populated from the first response of a chat session, a small text box for queries, a submit button, and a clear button. Our proposed changes to the UI aim to achieve three goals:
+The existing UI shows two modes of video upload capability - with transcripts and with captions, on different interface
+tabs - and a main chat tab holding the text QnA conversation, a video clip area populated from the first response of a
+chat session, a small text box for queries, a submit button, and a clear button. Our proposed changes to the UI aim to
+achieve three goals:
 * Change the existing design as little as possible
-* Visually organize and emphasize the enhanced multimodal query and upload options
+* Visually organize and emphasize the enhanced multimodal options for file upload, query input, and query response
 * Streamline some of the titles and text headings
 
 We list each proposed change in detail below and then provide mockups of the new screens.
 
 #### UI Changes
-1. Modify the main chat screen with a dynamic media display area capable of supporting video, image, or audio results and adjusting automatically when a new type is returned by the server.
-1. Modify the query text box to allow multimodal file uploads in addition to text (likely with the gradio MultimodalTextBox element), expanding the query input to accept images and audio in addition to text.
-1. Simplify the tab titles and screen headings for increased clarity.
-1. Combine the two modes of video upload into one tab with radio buttons that enable the user to choose the correct ingestion endpoint for their videos.
-1. Add a new tab for image uploads with radio buttons allowing the user to choose between caption generation and custom label/caption, as well as a text box for uploading a custom label/caption.
-1. Add a new audio upload tab allowing the user to post audio files. The system will assume that the audio contains speech and generate a transcript by default, but this could be expanded to accommodate non-speech audio and/or optional custom labels in the future.
+
+1. Modify the main chat screen with a dynamic media display area capable of supporting video, image, or audio results
+and adjusting automatically when a new type is returned by the gateway.
+1. Modify the query text box to allow multimodal file uploads in addition to text (likely with the Gradio
+MultimodalTextBox element), expanding the query input to accept images and audio in addition to text.
+1. Simplify the tab titles and screen headings for improved clarity.
+1. Combine the two modes of video upload into one tab with radio buttons that enable users to choose the correct
+ingestion endpoint for their videos.
+1. Add a new tab for image uploads with radio buttons allowing users to choose between caption generation and custom
+label or caption, as well as a text box for uploading a custom label or caption.
+1. Add a new audio upload tab allowing the user to post audio files. The system will assume that the audio contains
+speech and generate a transcript by default, but this could be expanded to accommodate non-speech audio and/or optional
+custom labels or captions in the future.
 1. Add a new tab for PDF uploads, which currently is envisioned as one endpoint without any input options.
 
 #### UI Mockups
+
 ![Proposed Chat Screen](assets/multimodal_enhanced_chat_ui.png)
 ![Proposed Video Upload Screen](assets/multimodal_enhanced_video_ui.png)
 ![Proposed Image Upload Screen](assets/multimodal_enhanced_image_ui.png)
@@ -160,15 +173,18 @@ We list each proposed change in detail below and then provide mockups of the new
 ## Alternatives Considered
 
 The following alternatives can be considered:
-* In order to use the ASR microservice would add 2 more containers (`opea/asr` and `opea/whisper`/`opea/whisper-gaudi`)
-  to the `compose.yaml` file, and when using Gaudi, the whipser service container would use 1 HPU. Instead of having the
+* We are proposing to use the ASR microservice, which would add two more containers (`opea/asr` and `opea/whisper`/`opea/whisper-gaudi`)
+  to the `compose.yaml` file, and when using Gaudi, the whisper service container would use one HPU. Instead of having the
   embedding microservice use ASR, it could directly use the whisper model (similar to how the multimodal data prep uses
   the whisper model to transcribe video audio). However, using the whisper model directly from a container running on
   CPU (like the embedding service or data prep) means that we aren't getting the performance benefits of Gaudi when
   converting speech-to-text with the whisper model.
-* In data prep, we could have separate endpoints for different type of media. For example, instead of having
+* In data prep, we could have separate endpoints for different types of media. For example, instead of having
   `/v1/ingest_with_text`, we could break that out into `/v1/videos_with_transcript` and `/v1/images_with_text`
   separately.
+* Instead of different UI screens for the different types of data ingestion (video, image, audio, etc.), there could be one
+  unified "Upload Documents" screen. This would result in a longer page with multiple sections for the different file types
+  and would benefit users who prefer having to scroll over having to click.
 
 ## Compatibility
 
