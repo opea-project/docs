@@ -21,11 +21,17 @@ for repo_name in GenAIComps GenAIEval GenAIExamples GenAIInfra opea-project.gith
   fi
 
   if [ ! -d ${repo_name} ]; then
-    #URL=https://github.com/opea-project/${repo_name}.git
-    URL=https://github.com/NeoZhangJianyu/${repo_name}.git
+    URL=https://github.com/opea-project/${repo_name}.git
 
-    echo "clone $URL"
+    echo "git clone $URL"
     git clone $URL
+    retval=$?
+    if [ $retval -ne 0 ]; then
+      echo "git clone ${repo_name} is wrong, try again!"
+      rm -rf ${repo_name}
+      exit 1
+    fi
+    sleep 10
   else
     echo "found existed repo folder ${repo_name}, skip to clone"
   fi
@@ -39,11 +45,9 @@ echo "Build online doc done!"
 
 echo "update github.io"
 
-RELEASE_FOLDER=../release_doc
+RELEASE_FOLDER=../opea-project.github.io
 rm -rf ${RELEASE_FOLDER}
-# git clone -b main --single-branch https://github.com/opea-project/opea-project.github.io.git ${RELEASE_FOLDER}
-git clone -b main --single-branch https://github.com/NeoZhangJianyu/opea-project.github.io.git ${RELEASE_FOLDER}
-
+git clone -b main --single-branch https://github.com/opea-project/opea-project.github.io.git ${RELEASE_FOLDER}
 
 
 BUILDDIR=_build
