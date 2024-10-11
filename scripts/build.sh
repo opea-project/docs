@@ -46,10 +46,6 @@ echo "Build online doc done!"
 echo "update github.io"
 
 RELEASE_FOLDER=../opea-project.github.io
-rm -rf ${RELEASE_FOLDER}
-git clone -b main --single-branch https://github.com/opea-project/opea-project.github.io.git ${RELEASE_FOLDER}
-
-
 BUILDDIR=_build
 PUBLISHDIR=${RELEASE_FOLDER}/latest
 
