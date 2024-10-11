@@ -85,15 +85,29 @@ the user's perspective, the query can be:
 * Spoken audio files (proposed)
 * Image and text (proposed)
 
+The response from the query is:
+* Text (already supported)
+* Spoken audio file (proposed)
+
 The [ASR microservice](https://github.com/opea-project/GenAIComps/blob/main/comps/asr/whisper/README.md) which uses the
 whisper convert speech to text provides a clear line of sight for adding support for spoken audio queries. Once the
 audio has been converted to text, submitting the query would be no different how the text queries work today.
 
+The [TTS microservice](https://github.com/opea-project/GenAIComps/tree/main/comps/tts/speecht5) provides the capability
+to translate text to speech, which would allow us to provide a spoken audio file response.
+
 Changes to the user query flow will involve the following components:
-* The MultimodalQnA gateway
-* The embedding mircoservice
+* The [MultimodalQnA gateway](#multimodalqnagateway)
+* The [embedding mircoservice](#embedding-microservice)
 
 The details explaining the specific changes to these components are explained in the sections below.
+
+The option for providing a spoken response could be provided as a flag when starting the megaservice, simliar to how
+ChatQnA is able to start with or without reranking, or with or without guardrails. If the MultimodalQnA megaservice is
+started with the spoken responses feature, then an additional node for TTS would be added to the DAG. To enable this
+option, we would be adding a boolean python argument to the [`MultimodalQnaService` class](https://github.com/opea-project/GenAIExamples/blob/main/MultimodalQnA/multimodalqna.py#L18),
+a second Dockerfile that uses that speech response flag in its entrypoint, and another docker componse yaml file that
+starts the `tts-service` and `speecht5-service` containers.
 
 #### MultimodalQnAGateway
 
