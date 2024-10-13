@@ -23,3 +23,15 @@ body:
         - Yes
         - No
         - Unknown
+
+  - type: dropdown
+    id: section
+    attributes:
+      label: What section of the docs is the problem on?
+      multiple: true
+      options:
+        - GenAI Examples
+        - GenAI Microservices
+        - Deploying GenAI
+        - Evaluating GenAI
+        - Others (Please let us know in description)
