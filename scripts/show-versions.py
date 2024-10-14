@@ -7,7 +7,7 @@
 
 import os.path
 import sys
-import pkg_resources
+import requirements
 import subprocess
 
 class color:
@@ -28,15 +28,14 @@ print ("doc build tool versions found on your system per " + reqfile + "...\n")
 
 rf = open(reqfile, "r")
 
-for reqs in pkg_resources.parse_requirements(rf):
+for req in requirements.parse(rf):
     try:
-        ver = pkg_resources.get_distribution(reqs.project_name).version
-        print ("  " + reqs.project_name.ljust(25," ") + " version: " + ver)
-        if not reqs.__contains__(ver):
+        print("  {} version: {}".format(req.name.ljust(25," "), req.specs))
+        if len(req.specs) == 0:
             print (color.RED + color.BOLD + "   >>> Warning: Expected version " +
-                    reqs.__str__() + " Python module from scripts/requirements.text." + color.END)
+                    req.name + " Python module from scripts/requirements.text." + color.END)
     except:
-        print (color.RED + color.BOLD + reqs.project_name + " is missing." + color.END +
+        print (color.RED + color.BOLD + req.name + " is missing." + color.END +
                 " (Hint: install all dependencies with " + color.YELLOW +
                 "\"pip3 install --user -r scripts/requirements.txt\"" + color.END + ")")
 

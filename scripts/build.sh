@@ -12,7 +12,7 @@ pwd
 source $ENV_NAME/bin/activate
 
 #clone repos
-for repo_name in GenAIComps GenAIEval GenAIExamples GenAIInfra opea-project.github.io; do
+for repo_name in docs GenAIComps GenAIEval GenAIExamples GenAIInfra opea-project.github.io; do
   echo "prepare for $repo_name"
 
   if [[ "$1" == "f" ]]; then
@@ -22,7 +22,6 @@ for repo_name in GenAIComps GenAIEval GenAIExamples GenAIInfra opea-project.gith
 
   if [ ! -d ${repo_name} ]; then
     URL=https://github.com/opea-project/${repo_name}.git
-
     echo "git clone $URL"
     git clone $URL
     retval=$?
@@ -33,7 +32,7 @@ for repo_name in GenAIComps GenAIEval GenAIExamples GenAIInfra opea-project.gith
     fi
     sleep 10
   else
-    echo "found existed repo folder ${repo_name}, skip to clone"
+    echo "repo ${repo_name} exists, skipping cloning"
   fi
 done
 
@@ -41,18 +40,28 @@ echo "Build HTML"
 cd docs
 make clean
 make html
-echo "Build online doc done!"
 
-echo "update github.io"
+if [ ! -d _build/html ]; then
+  echo "Build online doc is wrong!"
+  exit 1
+else
+  echo "Build online doc done!"
+fi
+
+echo "Update github.io"
 
 RELEASE_FOLDER=../opea-project.github.io
 BUILDDIR=_build
 PUBLISHDIR=${RELEASE_FOLDER}/latest
 
+echo "Clear all content in ${PUBLISHDIR}"
+rm -rf ${PUBLISHDIR}/*
+
+echo "Copy html content to ${PUBLISHDIR}"
 cp -r ${BUILDDIR}/html/*  ${PUBLISHDIR}
 cp scripts/publish-README.md ${PUBLISHDIR}/../README.md
 bash scripts/publish-redirect.sh ${PUBLISHDIR}/../index.html latest/index.html
 sed 's/<head>/<head>\n  <base href="https:\/\/opea-project.github.io\/latest\/">/' ${BUILDDIR}/html/404.html > ${PUBLISHDIR}/../404.html
 
-echo "CP html to ${PUBLISHDIR}"
+echo "Copied html content to ${PUBLISHDIR}"
 
