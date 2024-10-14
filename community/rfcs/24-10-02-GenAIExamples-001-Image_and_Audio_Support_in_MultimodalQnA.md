@@ -1,4 +1,4 @@
-# 24-10-02-GenAIExamples-xxx-Image_and_Audio_Support_in_MultimodalQnA
+# 24-10-02-GenAIExamples-001-Image_and_Audio_Support_in_MultimodalQnA
 
 ## Author(s)
 
@@ -61,7 +61,9 @@ are preprocessed into a list of frames with their corresponding transcript or ca
 video. Those frames and their metadata are stored in the vector store, which is used in a RAG pipeline as context for the user's queries.
 The addition of image and text are analogous to the video frames and transcripts. With some changes to data prep, the
 image and text data could be added to the vector store. Similarly, PDF files can be thought of as another form of images
-and text. Spoken audio files can be translated to text using the whisper model, similar to how videos with spoken
+and text which can be processed with a library such as [PyMuPDF (fitz)](https://pymupdf.readthedocs.io/). There is already
+an example of such PDF processing in [this dataprep microservice](https://github.com/opea-project/GenAIComps/tree/main/comps/dataprep/milvus/langchain)
+which may be reusable. Spoken audio files can be translated to text using the whisper model, similar to how videos with spoken
 audio use the whisper model to generate transcripts for the video. This means that although the user will be able to
 upload several different forms of media, once it gets to the embedding model it is all images and text.
 
@@ -72,10 +74,9 @@ The table below lists the endpoints for the multimodal data prep microservice th
 | `6007:/v1/videos_with_transcripts` becomes `6007:/v1/ingest_with_text` | Videos with transcripts and images with text | For video with transcripts, gets the video file with their corresponding transcript file (.vtt), and then extracts frames and saves annotations. The image with text would be treated like a single frame with transcript. The data and metadata are prepared for ingestion and then added to the Redis vector store. |
 | `6007:/v1/generate_transcripts` | Videos with spoken audio and audio only | For videos with spoken audio, data prep extracts the audio from the video and then generates a transcript (.vtt) using the whisper model. For audio only, the transcript would also be generated using the whisper model. The data and metadata are prepared for ingestion and then added to the Redis vector store. |
 | `6007:/v1/generate_captions` | Videos without spoken audio (i.e. background music, silent movie) and images without text | For videos, data prep extracts frames from the video and uses the LVM microservice to generate captions for the frames. An image will be treated similarly to a video frame, and the LVM will be used to generate a caption for the image. The data and metadata are prepared for ingestion and then added to the Redis vector store. |
+| `6007:/v1/ingest_pdf` | PDF files | Ingests a PDF and then uses these [utils](https://github.com/opea-project/GenAIComps/blob/main/comps/dataprep/utils.py) to extract chunks of text, images, and tables. The data and metadata are prepared for ingestion and then added to the Redis vector store. |
 | `6007:/v1/dataprep/get_videos` becomes `6007:/v1/dataprep/get_files` |  Multimodal | Lists names of uploaded files. |
 | `6007:/v1/dataprep/delete_videos` becomes `6007:/v1/dataprep/delete_files` |  Multimodal | Deletes all the uploaded files. |
-
-<!-- TODO: Currently, does the 'delete' have an option to do it for a single video, or is it always deleting all videos? -->
 
 ### User Query
 
