@@ -172,6 +172,16 @@ custom labels or captions in the future.
 ![Proposed Audio Upload Screen](assets/multimodal_enhanced_audio_ui.png)
 ![Proposed PDF Upload Screen](assets/multimodal_enhanced_pdf_ui.png)
 
+### Other Enhancements
+
+We are proposing an enhancement that allows the user to select the LVM model and Bridgetower model. To do this, 
+we will enable the functionality for users to overwrite the dockerfile entry point in such a way that enables a 
+user to pass in and change values of default script arguments for the respective python script. Users can change 
+and interact with these arguments in the `set_env.sh` with environment variables such as `LVM_MODEL` before being 
+officially passed in and overwritten into the [dockerfile](https://github.com/opea-project/GenAIComps/blob/main/comps/lvms/llava/dependency/Dockerfile#L22) entry point when building compose.yaml. The purpose of 
+this change is to allow users to utilize more script arguments that currently are hard set to their default values 
+when a container is built.
+
 ## Alternatives Considered
 
 The following alternatives can be considered:
