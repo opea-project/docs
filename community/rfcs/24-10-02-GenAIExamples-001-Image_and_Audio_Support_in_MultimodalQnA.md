@@ -67,7 +67,8 @@ which may be reusable. Spoken audio files can be translated to text using the wh
 audio use the whisper model to generate transcripts for the video. This means that although the user will be able to
 upload several different forms of media, once it gets to the embedding model it is all images and text.
 
-The table below lists the endpoints for the multimodal data prep microservice that will be changing with this proposal.
+The table below lists the endpoints for the multimodal redis langchain data prep microservice that will be changing with
+this proposal.
 
 | Endpoint | Data type | Description |
 |----------|-----------|-------------|
@@ -183,6 +184,13 @@ The following alternatives can be considered:
 * In data prep, we could have separate endpoints for different types of media. For example, instead of having
   `/v1/ingest_with_text`, we could break that out into `/v1/videos_with_transcript` and `/v1/images_with_text`
   separately.
+* Instead of renaming endpoints in the multimodal redis langchain data prep (like `/v1/dataprep/get_videos` renamed to
+  `/v1/dataprep/get_files` and`/v1/dataprep/delete_videos` renamed to `/v1/dataprep/delete_files`), we could leave the
+  existing endpoint paths as is, and then add on `get_files` and `delete_files`. This would help to preserve some
+  backwards compatibility for any applications outside of GenAIExamples who may be using those endpoints. If we decide
+  to do it this way, we could add comments in the code and documentation about the eventual deprecation of
+  `delete_videos` and `get_videos` if the end goals is to keep only the more general `get_files` and `delete_files`
+  endpoint paths.
 * Instead of different UI screens for the different types of data ingestion (video, image, audio, etc.), there could be one
   unified "Upload Documents" screen. This would result in a longer page with multiple sections for the different file types
   and would benefit users who prefer having to scroll over having to click.
@@ -194,8 +202,11 @@ Interface changes are being made to the following components:
 * Embeddings multimodal langchain
 * Dataprep multimodal redis langchain
 
-> TODO: Check if any other examples use these components, otherwise add a note here saying that the changes won't
-> affect other examples.
+At the time that this RFC is written, there aren't any other megaservices in GenAIExamples that are using the
+[Embeddings multimodal langchain](https://github.com/opea-project/GenAIComps/blob/main/comps/embeddings/multimodal/README.md)
+or the [Dataprep multimodal redis langchain](https://github.com/opea-project/GenAIComps/blob/main/comps/dataprep/multimodal/redis/langchain/README.md)
+microservices. During implementation, we will do another search of the repo to make sure that other megaservices are not
+affected by our changes, and if they are we will make changes accordingly.
 
 ## Miscellaneous
 
