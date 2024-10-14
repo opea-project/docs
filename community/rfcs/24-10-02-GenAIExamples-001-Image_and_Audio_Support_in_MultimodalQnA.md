@@ -171,6 +171,10 @@ custom labels or captions in the future.
 ![Proposed Audio Upload Screen](assets/multimodal_enhanced_audio_ui.png)
 ![Proposed PDF Upload Screen](assets/multimodal_enhanced_pdf_ui.png)
 
+### Other Enhancements
+
+We will enable the functionality for users to overwrite the dockerfile entry point for an associated container in such a way that a user can set and change values passed in for arguments for that script. We will add more environment variables in `set_env.sh` such as `LVM_MODEL` and `BF16` and enable users to set and change those values in that script before being officially overwritten when building compose.yaml. The purpose of this change is to allow users to utilize more script arguments that currently are hard set to their default values when a container is built.
+
 ## Alternatives Considered
 
 The following alternatives can be considered:
