@@ -1,11 +1,11 @@
-# Multi-node on-prem deployment with  TGI on Xeon Scalable processors on a K8s cluster using Helm Charts
+# Multi-node on-prem deployment with TGI on Xeon Scalable processors on a K8s cluster using Helm Charts
 
 This deployment section covers multi-node on-prem deployment of the ChatQnA
 example with OPEA comps to deploy using the TGI service. There are several
 slice-n-dice ways to enable RAG with vectordb and LLM models, but here we will
 be covering one option of doing it for convenience : we will be showcasing  how
 to build an e2e chatQnA with Redis VectorDB and neural-chat-7b-v3-3 model,
-deployed on a Kubernetes cluster. For more information on how to setup a Xeon based Kubernetes cluster along with the development pre-requisites,
+deployed on a Kubernetes cluster using Helm. For more information on how to setup a Xeon based Kubernetes cluster along with the development pre-requisites,
 please follow the instructions here (*** ### Kubernetes Cluster and Development Environment***). 
 For a quick introduction on Helm Charts, visit the helm section in  [Getting Started with Kubernetes for ChatQnA](./k8s_getting_started.md)
 
@@ -115,7 +115,7 @@ export RERANKER_MODELNAME="BAAI/bge-reranker-base"
 ```
 
 ## Deploy the use case
-In this tutorial, we will be deploying using Helm with the provided chart. The Helm install commands will initiate all the aforementioned services as Kubernetes pods.
+The `helm install` command will initiate all the aforementioned services such as Kubernetes pods.
 
 ```bash
 helm install chatqna chatqna \
@@ -159,7 +159,8 @@ chatqna-tgi-675c4d79f6-cf4pq               1/1     Running            0         
 
 
 ```
-> **Note:** Use `kubectl get pods -o wide` to check the nodes that the respective pods are running on
+> [!NOTE] 
+> Use `kubectl get pods -o wide` to check the nodes that the respective pods are running on
 
 
 When issues are encountered with a pod in the Kubernetes deployment, there are two primary commands to diagnose and potentially resolve problems:
@@ -187,7 +188,7 @@ the microservices deployed
 Before starting the validation of microservices, check the network configuration of services using:
 ```bash
     kubectl get svc
-   ```
+```
    This command will display a list of services along with their network-related details such as cluster IP and ports. 
  ```
  NAME                      TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)             AGE
