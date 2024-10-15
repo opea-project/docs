@@ -1,27 +1,25 @@
-## RFC Title
+# 24-08-20-OPEA-001-AI Gateway API
 
 AI Gateway API
 
-## RFC Content
-
-### Author
+## Author
 
 [daixiang0](https://github.com/daixiang0), [zhixie](https://github.com/zhxie), [gyohuangxin](https://github.com/gyohuangxin), [Forrest-zhao](https://github.com/Forrest-zhao), [ruijin-intel](https://github.com/ruijin-intel)
 
-### Status
+## Status
 
 Under Review
 
-### Objective
+## Objective
 
 Design the API for AI Gateway.
 
-### Motivation
+## Motivation
 
 - Introduce gateway to do mTLS, traffic control, observability and so on
 - Introduce AI Gateway API to use existing gateway sloutions rather than implement our own one.
 
-### Design Proposal
+## Design Proposal
 
 The AI gateway is at the front of all microservices:
 
@@ -34,7 +32,7 @@ graph TD;
     A-->B(Any microservice);
 ```
 
-#### API overall
+### API overall
 
 To make the most of current resources, we choose to follow [Kubernetes Gateway API](https://gateway-api.sigs.k8s.io/) since it is the gateway API standard that all gateways support.
 
@@ -43,7 +41,7 @@ Since AI specific features of Kubernetes Gateway API are still [under discussion
 - **Kubernetes Gateway API** for features it already supports
 - **Extension API for** all other features
 
-#### API workflow
+### API workflow
 
 ```mermaid
 graph LR;
@@ -52,7 +50,7 @@ graph LR;
 
 AI Gateway is not a brand-new gateway implementation, only does one thing: Convert.
 
-#### Extension API
+### Extension API
 
 ```yaml
 apiVersion: extension.gateway.opea.dev/v1
@@ -74,7 +72,7 @@ spec:
 - name: the name of extension feature, support multiple extensions
 - config: the content of extension config, following specified gateway API
 
-#### Extension API example
+### Extension API example
 
 ```yaml
 

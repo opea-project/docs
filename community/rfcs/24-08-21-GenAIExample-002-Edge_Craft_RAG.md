@@ -1,25 +1,23 @@
-# Edge Craft RAG
+# 24-08-21-GenAIExample-002-Edge Craft RAG
 
 This RFC describes a solution of a tunable RAG for edge scenarios.
 
-## RFC Content
-
-### Author
+## Author
 
 [myqi](https://github.com/myqi)
 
-### Status
+## Status
 
 Under Review
 
-### Objective
+## Objective
 
-Edge industry users are facing obstacles to build an "out-of-the-box" RAG 
+Edge industry users are facing obstacles to build an "out-of-the-box" RAG
 application to meet both quality and performance requirements. Total Cost of
 Ownership(TCO) and pipeline optimization techniques are the two main reasons
 to block this process.
 
-#### Total Cost of Ownership
+### Total Cost of Ownership
 
 The HW requirement of a typical edge use case is a single host with one of the
 following combinations:
@@ -28,12 +26,12 @@ following combinations:
 - Intel(R) Core(TM) Processor + Intel(R) Arc(TM) A-Series Graphics
 - Intel(R) Xeon(R) Processor + Intel(R) Arc(TM) A-Series Graphics
 
-The scenarios with these hardware options block the edge users from using large 
+The scenarios with these hardware options block the edge users from using large
 parameter size LLMs on-prem as well as sophisticated RAG pipeline for their data.
 Thus, the RAG pipeline at edge needs to be highly curated for underlying hardwares
 and suitable models accordingly.
 
-#### RAG Pipeline Optimization Techniques
+### RAG Pipeline Optimization Techniques
 
 Tuning RAG pipeline is a systematic problem. First, the quality depends on the
 result of each stage in the pipeline as well as the end-to-end outcome. Second,
@@ -43,7 +41,7 @@ relevant to the query. Third, the optimization techniques may not intuitively
 reflect to metrics improvements. E.g., recrusive retrieval may contribute to
 improving the recall and context relevancy, or may not.
 
-### Motivation
+## Motivation
 
 Edge Craft RAG (EC-RAG) is a customizable, tunable and production-ready
 Retrieval-Augmented Generation system for edge solutions. It is designed to
@@ -57,7 +55,7 @@ overhead of inter-service communication on a single host. Meanwhile, the inferen
 stages like embedding, reranking and generation are optimized for Intel(R) Iris(R)
 Xe Graphics and Intel(R) Arc(TM) A-Series Graphics.
 
-### Design Proposal
+## Design Proposal
 
 EC-RAG is composed of the following components:
 - UI for doc loading and interactive chatbot.
@@ -80,7 +78,7 @@ The EC-RAG pipeline will expose 3 types of REST API endpoint:
 - **/v1/settings** for configuration
 - **/v1/chatqna** for inferencing
 
-#### /v1/data
+### /v1/data
 
 | Description   | Action | Endpoint      | Data Schema        |
 | ------------- | ------ | ------------- | ------------------ |
@@ -88,7 +86,7 @@ The EC-RAG pipeline will expose 3 types of REST API endpoint:
 | List files	| GET	 | /v1/data	     |                    |
 | Remove	    | DELETE | /v1/data/{id} |	                  |
 
-#### /v1/settings/pipelines
+### /v1/settings/pipelines
 
 | Description        | Action | Endpoint                      | Data Schema        |
 | ------------------ | ------ | ----------------------------- | ------------------ |
@@ -106,7 +104,7 @@ The EC-RAG pipeline will expose 3 types of REST API endpoint:
 | Update models   | PATCH  | /v1/settings/models/{id}   | Model object    |
 | Remove a model  | DELETE | /v1/settings/models/{id}   |                 |
 
-### Pipeline configuration example
+## Pipeline configuration example
 
 ```json
 {
@@ -151,7 +149,7 @@ The EC-RAG pipeline will expose 3 types of REST API endpoint:
 }
 ```
 
-#### UI
+### UI
 
 The EC-RAG UI is gradio. The user is able to select the models as well as input
 parameters in different stages for the pipeline. The chatbox is also integrated
@@ -163,17 +161,17 @@ EC-RAG UI - Model Condiguration
 EC-RAG UI - Chatbot with settings
 ![EC-RAG UI Chatbot](Edge_Craft_RAG_screenshot_2.png)
 
-### Compatibility
+## Compatibility
 
 EC-RAG megaservice and microservice are compatible with the existing OPEA
 GenAIExamples and GenAIComps repos. The EC-RAG leverages the LLM microservice
 and the VectorDB microservice from GenAIComps.
 
-### Miscellaneous
+## Miscellaneous
 
 The EC-RAG will be developed in 2 phases.
 
-#### Phase 1
+### Phase 1
 
 The UI, gateway, and EC-RAG pipeline will be finished without Vector DB as
 persistent DB. Instead, FAISS will be used for vector search and keep vector
@@ -183,7 +181,7 @@ In this phase, the LLM inferencing will happen in the pipeline until the LLM
 serving microservice supports Intel(R) Iris(R) Xe Graphics and Intel(R) Arc(TM)
 A-Series Graphics.
 
-#### Phase 2
+### Phase 2
 
 The vector DB will be enabled in this phase as well as LLM inferencing on
 Intel(R) Iris(R) Xe Graphics and Intel(R) Arc(TM) A-Series Graphics.
