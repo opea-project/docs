@@ -86,8 +86,8 @@ there are 8 required and an optional docker images.
 :::::{tab-item} Pull
 :sync: Pull
 
-If you decide to pull the docker containers and not build them locally, 
-you can proceed to the next step where all the necessary containers will 
+If you decide to pull the docker containers and not build them locally,
+you can proceed to the next step where all the necessary containers will
 be pulled in from dockerhub.
 
 :::::
@@ -588,7 +588,7 @@ while reranking service are not.
 
 ### vLLM and TGI Service
 
-In first startup, this service will take more time to download the model files. 
+In first startup, this service will take more time to download the model files.
 After it's finished, the service will be ready.
 
 Try the command below to check whether the LLM serving is ready.
@@ -649,11 +649,9 @@ TGI service generate text for the input prompt. Here is the expected result from
 ::::
 
 
-```
-
 ### LLM Microservice
 
-This service depends on above LLM backend service startup. It will be ready after long time, 
+This service depends on above LLM backend service startup. It will be ready after long time,
 to wait for them being ready in first startup.
 
 ::::{tab-set}
@@ -685,8 +683,6 @@ curl http://${host_ip}:9000/v1/chat/completions\
 For parameters in TGI modes, please refer to [HuggingFace InferenceClient API](https://huggingface.co/docs/huggingface_hub/package_reference/inference_client#huggingface_hub.InferenceClient.text_generation) (except we rename "max_new_tokens" to "max_tokens".)
 :::
 ::::
-
-
 
 
 You will get generated text from LLM:
