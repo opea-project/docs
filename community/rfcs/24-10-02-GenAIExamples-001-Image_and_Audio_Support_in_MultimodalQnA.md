@@ -2,7 +2,7 @@
 
 ## Author(s)
 
-[Melanie Buehler](https://github.com/mhbuehler), [Mustafa Cetin](https://github.com/MSCetin37), [Dina Jones](https://github.com/dmsuehir)
+[Melanie Buehler](https://github.com/mhbuehler), [Mustafa Cetin](https://github.com/MSCetin37), [Dina Jones](https://github.com/dmsuehir), [Omar Khleif](https://github.com/okhleif-IL)
 
 ## Status
 
@@ -58,9 +58,11 @@ and used as context for the subsequent queries. From a user's perspective, they 
 The [BridgeTower model](https://huggingface.co/BridgeTower/bridgetower-large-itm-mlm-gaudi) which is already utilized
 by MultimodalQnA merges visual and text data into a unified semantic space. As it works today, the videos being ingested
 are preprocessed into a list of frames with their corresponding transcript or captions that were generated based on the
-video. Those frames and their metadata are stored in the vector store, which is used in a RAG pipeline as context for the user's queries.
-The addition of image and text are analogous to the video frames and transcripts. With some changes to data prep, the
-image and text data could be added to the vector store. Similarly, PDF files can be thought of as another form of images
+video. Those frames and their metadata are stored in the vector store, which is used in a RAG pipeline as context for
+the user's queries. The addition of image and text are analogous to the video frames and transcripts, and the
+[CV2 VideoCapture](https://docs.opencv.org/3.4/d8/dfe/classcv_1_1VideoCapture.html#a949d90b766ba42a6a93fe23a67785951)
+library, which is already used by the multimodal data prep code works for both video and images files. The existing video
+ingestion endpoints can be updated to also handle image ingestion. Similarly, PDF files can be thought of as another form of images
 and text which can be processed with a library such as [PyMuPDF (fitz)](https://pymupdf.readthedocs.io/). There is already
 an example of such PDF processing in [this dataprep microservice](https://github.com/opea-project/GenAIComps/tree/main/comps/dataprep/milvus/langchain)
 which may be reusable. Spoken audio files can be translated to text using the whisper model, similar to how videos with spoken
@@ -134,8 +136,6 @@ the [ASR microservice](https://github.com/opea-project/GenAIComps/blob/main/comp
 convert the audio to text using the whisper model. After getting the text, the rest of the embedding microservice flow
 would work the same as it would for a text query.
 
-<!-- TODO: Investigate how image/text queries would work -->
-
 ### UI
 
 The existing UI shows two modes of video upload capability - with transcripts and with captions, on different interface
@@ -174,13 +174,15 @@ custom labels or captions in the future.
 
 ### Other Enhancements
 
-We are proposing an enhancement that allows the user to select the LVM model and Bridgetower model. To do this, 
-we will enable the functionality for users to overwrite the dockerfile entry point in such a way that enables a 
+#### Model Selection
+
+We are proposing an enhancement that allows the user to select the LVM model and embedding model. To do this, 
+we will enable the functionality for users to specify the container's entry point in such a way that enables a 
 user to pass in and change values of default script arguments for the respective python script. Users can change 
 and interact with these arguments in the `set_env.sh` with environment variables such as `LVM_MODEL` before being 
-officially passed in and overwritten into the [dockerfile](https://github.com/opea-project/GenAIComps/blob/main/comps/lvms/llava/dependency/Dockerfile#L22) entry point when building compose.yaml. The purpose of 
-this change is to allow users to utilize more script arguments that currently are hard set to their default values 
-when a container is built.
+officially passed in and overwritten into the [dockerfile](https://github.com/opea-project/GenAIComps/blob/main/comps/lvms/llava/dependency/Dockerfile#L22)
+entry point when building compose.yaml. The purpose of this change is to allow users to utilize more script arguments
+that currently are hard set to their default values when a container is built.
 
 ## Alternatives Considered
 
@@ -220,15 +222,6 @@ affected by our changes, and if they are we will make changes accordingly.
 
 ## Miscellaneous
 
-<!--
-List other information user and developer may care about, such as:
-
-- Performance Impact, such as speed, memory, accuracy.
-- Engineering Impact, such as binary size, startup time, build time, test times.
-- Security Impact, such as code vulnerability.
-- TODO List or staging plan.
--->
-
 ### Development Phases
 
 We have planned the following development phases based on the priority of the features and their development effort:
@@ -241,7 +234,7 @@ We have planned the following development phases based on the priority of the fe
   * Query enhancements:
     * Accept speech audio only
   * Other enhancements:
-    * Allow the user to choose the embedding model and LVM when starting the services <!-- TODO: this needs investigation, does it not already work with env vars? -->
+    * Allow the user to choose the embedding model and LVM when starting the services
 * Phase 2
   * Data prep and ingestion:
     * Accept image and text as a PDF
