@@ -1,6 +1,6 @@
 .. _OPEA_API:
 
-OPEA API Service Spec (v0.9)
+OPEA API Service Spec (v1.0)
 ############################
 
 Authors:
