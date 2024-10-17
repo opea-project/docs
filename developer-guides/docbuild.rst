@@ -177,7 +177,7 @@ Depending on your Linux version, install the needed tools.
    to maintain your Python environment from being changed by other work on your
    computer.
 
-.. _Python virtual environment: https://https://docs.python.org/3/library/venv.html
+.. _Python virtual environment: https://docs.python.org/3/library/venv.html
 
 For Ubuntu, use:
 
@@ -462,6 +462,6 @@ the OPEA project. You can see complex examples in other open source projects
 using this filtering script, such as pattern files in
 `Project ACRN .known-issues <https://github.com/projectacrn/acrn-hypervisor/tree/master/doc/.known-issues>`_.
 
-.. _reStructuredText: https://sphinx-doc.org/rest.html
+.. _reStructuredText: https://www.sphinx-doc.org/rest.html
 .. _markdown: https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax
-.. _Sphinx: https://sphinx-doc.org/
+.. _Sphinx: https://www.sphinx-doc.org/
