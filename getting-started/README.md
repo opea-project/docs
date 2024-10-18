@@ -87,12 +87,14 @@ In the following cases, you will need to build the docker image from source by y
 Refer to the {ref}`ChatQnA Example Deployment Options <chatqna-example-deployment>` section for building from source instructions matching your hardware.
 
 ## Interact with ChatQnA Megaservice and Microservice
-Before interact ChatQnA Service, make sure the TGI/vLLM service is ready (which takes up to 2 minutes to start).
+Before interact ChatQnA Service, make sure the TGI service is ready (which takes up to 2 minutes to start).
 ```
 docker ps
 # expected: all images's status are up
-# TGI example
+# TGI example on on Xeon and Nvidia GPU
 docker logs tgi-service | grep Connected
+# TGI example on on Gaudi
+docker logs tgi-gaudi-service | grep Connected
 # execpted output: ... INFO text_generation_router::server: router/src/server.rs:2311: Connected
 ```
 ```
