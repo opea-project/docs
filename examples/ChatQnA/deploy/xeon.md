@@ -5,10 +5,8 @@ example with OPEA comps to deploy using vLLM or TGI service. There are several
 slice-n-dice ways to enable RAG with vectordb and LLM models, but here we will
 be covering one option of doing it for convenience : we will be showcasing  how
 to build an e2e chatQnA with Redis VectorDB and neural-chat-7b-v3-3 model,
-deployed on IDC. For more information on how to setup IDC instance to proceed,
-Please follow the instructions here (*** getting started section***). If you do
-not have an IDC instance you can skip the step and make sure that all the
-(***system level validation***) metrics are addressed such as docker versions.
+deployed on IDC. To quickly learn about OPEA in just 5 minutes and set up the required hardware and software, please follow the instructions in the
+[Getting Started](https://opea-project.github.io/latest/getting-started/README.html) section.
 
 ## Overview
 
