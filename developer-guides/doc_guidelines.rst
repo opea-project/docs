@@ -630,7 +630,7 @@ Internal Cross-Reference Linking
          for instructions on deploying DocSum into Kubernetes on Xeon & Gaudi.
 
       That reference would be rendered into a reference to the
-      https://opea-project.github.io/GenAIInfra/helm-charts/docsum/README.html
+      https://opea-project.github.io/latest/GenAIInfra/helm-charts/docsum/README.html
       document within the github.io website.
 
       Markdown supports linking to a reST document by using the Myst syntax that
