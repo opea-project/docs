@@ -33,7 +33,6 @@ To deploy ChatQnA services, follow these steps:
 git clone https://github.com/opea-project/GenAIExamples.git
 cd GenAIExamples/ChatQnA
 ```
-
 ### Set the required environment variables:
 ```
 # Example: host_ip="192.168.1.1"
@@ -42,7 +41,6 @@ export host_ip="External_Public_IP"
 export no_proxy="Your_No_Proxy"
 export HUGGINGFACEHUB_API_TOKEN="Your_Huggingface_API_Token"
 ```
-
 If you are in a proxy environment, also set the proxy-related environment variables:
 ```
 export http_proxy="Your_HTTP_Proxy"
@@ -89,6 +87,16 @@ In the following cases, you will need to build the docker image from source by y
 Refer to the {ref}`ChatQnA Example Deployment Options <chatqna-example-deployment>` section for building from source instructions matching your hardware.
 
 ## Interact with ChatQnA Megaservice and Microservice
+Before interact ChatQnA Service, make sure the TGI service is ready (which takes up to 2 minutes to start).
+```
+docker ps
+# expected: all images's status are up
+# TGI example on on Xeon and Nvidia GPU
+docker logs tgi-service | grep Connected
+# TGI example on on Gaudi
+docker logs tgi-gaudi-service | grep Connected
+# execpted output: ... INFO text_generation_router::server: router/src/server.rs:2311: Connected
+```
 ```
 curl http://${host_ip}:8888/v1/chatqna \
     -H "Content-Type: application/json" \
