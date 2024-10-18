@@ -36,17 +36,17 @@ fundamental necessary components used to build examples you find in
 GenAIExamples and deploy them as microservices.
 
 ```
+mkdir ~/OPEA -p
+cd ~/OPEA
 git clone https://github.com/opea-project/GenAIComps.git
 git clone https://github.com/opea-project/GenAIExamples.git
 ```
 
 Checkout the release tag
 ```
-cd GenAIComps
+cd ~/OPEA/GenAIComps
 git checkout tags/v1.0
 ```
-
-The examples utilize model weights from Ollama and langchain.
 
 Setup your [HuggingFace](https://huggingface.co/) account and generate
 [user access token](https://huggingface.co/docs/transformers.js/en/guides/private#step-1-generating-a-user-access-token).
@@ -69,6 +69,103 @@ export http_proxy=${your_http_proxy}
 export https_proxy=${your_http_proxy}
 ```
 
+The examples utilize model weights from Ollama and langchain.
+
+### Set Up Ollama LLM Service
+We use [Ollama](https://ollama.com/) as our LLM service for AIPC.
+
+Please follow the instructions to set up Ollama on your PC. This will set the entrypoint needed for the Ollama to suit the ChatQnA examples.
+
+#### Install Ollama Service
+
+Install Ollama service with one command:
+
+```
+curl -fsSL https://ollama.com/install.sh | sh
+```
+
+#### Set Ollama Service Configuration
+
+Ollama Service Configuration file is /etc/systemd/system/ollama.service. Edit the file to set OLLAMA_HOST environment.
+Replace **<host_ip>** with your host IPV4 (please use external public IP). For example the host_ip is 10.132.x.y, then `Environment="OLLAMA_HOST=10.132.x.y:11434"'.
+
+```
+Environment="OLLAMA_HOST=host_ip:11434"
+```
+
+#### Set https_proxy environment for Ollama
+
+If your system access network through proxy, add https_proxy in Ollama Service Configuration file
+
+```
+Environment="https_proxy=Your_HTTPS_Proxy"
+```
+
+#### Restart Ollama services
+
+```
+$ sudo systemctl daemon-reload
+$ sudo systemctl restart ollama.service
+```
+
+#### Check the service started
+
+```
+netstat -tuln | grep  11434
+```
+
+The output are:
+
+```
+tcp        0      0 10.132.x.y:11434      0.0.0.0:*               LISTEN
+```
+
+#### Pull Ollama LLM model
+
+Run the command to download LLM models. The <host_ip> is the one set in [Ollama Service Configuration](#Set-Ollama-Service-Configuration)
+
+```
+export host_ip=<host_ip>
+export OLLAMA_HOST=http://${host_ip}:11434
+ollama pull llama3.2
+```
+
+After downloaded the models, you can list the models by `ollama list`.
+
+The output should be similar to the following:
+
+```
+NAME            ID                SIZE      MODIFIED
+llama3.2:latest   a80c4f17acd5    2.0 GB    2 minutes ago
+```
+
+### Consume Ollama LLM Service
+
+Access ollama service to verify that the ollama is functioning correctly.
+
+```bash
+curl http://${host_ip}:11434/api/generate -d '{"model": "llama3.2", "prompt":"What is Deep Learning?"}'
+```
+
+The outputs are similar to these:
+
+```
+{"model":"llama3.2","created_at":"2024-10-12T12:55:28.098813868Z","response":"Deep","done":false}
+{"model":"llama3.2","created_at":"2024-10-12T12:55:28.124514468Z","response":" learning","done":false}
+{"model":"llama3.2","created_at":"2024-10-12T12:55:28.149754216Z","response":" is","done":false}
+{"model":"llama3.2","created_at":"2024-10-12T12:55:28.180420784Z","response":" a","done":false}
+{"model":"llama3.2","created_at":"2024-10-12T12:55:28.229185873Z","response":" subset","done":false}
+{"model":"llama3.2","created_at":"2024-10-12T12:55:28.263956118Z","response":" of","done":false}
+{"model":"llama3.2","created_at":"2024-10-12T12:55:28.289097354Z","response":" machine","done":false}
+{"model":"llama3.2","created_at":"2024-10-12T12:55:28.316838918Z","response":" learning","done":false}
+{"model":"llama3.2","created_at":"2024-10-12T12:55:28.342309506Z","response":" that","done":false}
+{"model":"llama3.2","created_at":"2024-10-12T12:55:28.367221264Z","response":" involves","done":false}
+{"model":"llama3.2","created_at":"2024-10-12T12:55:28.39205893Z","response":" the","done":false}
+{"model":"llama3.2","created_at":"2024-10-12T12:55:28.417933974Z","response":" use","done":false}
+{"model":"llama3.2","created_at":"2024-10-12T12:55:28.443110388Z","response":" of","done":false}
+...
+```
+
 ## Prepare (Building / Pulling) Docker images
 
 This step will involve building/pulling ( maybe in future) relevant docker
@@ -88,6 +185,7 @@ From within the `GenAIComps` folder
 #### Build Dataprep Image
 
 ```
+cd ~/OPEA/GenAIComps
 docker build --no-cache -t opea/dataprep-redis:latest --build-arg https_proxy=$https_proxy \
   --build-arg http_proxy=$http_proxy -f comps/dataprep/redis/langchain/Dockerfile .
 ```
@@ -120,10 +218,6 @@ docker build --no-cache -t opea/reranking-tei:latest --build-arg https_proxy=$ht
 :::{tab-item} Ollama
 :sync: Ollama
 
-We set up the Ollama LLM service with one command
-```bash
-curl -fsSL https://ollama.com/install.sh | sh
-```
 
 Next, we'll build the Ollama microservice docker. This will set the entry point
 needed for Ollama to suit the ChatQnA examples
@@ -132,36 +226,8 @@ docker build --no-cache -t opea/llm-ollama:latest --build-arg https_proxy=$https
    --build-arg http_proxy=$http_proxy -f comps/llms/text-generation/ollama/langchain/Dockerfile .
 ```
 
-Set Ollama Service Configuration
-
-Ollama Service Configuration file is `/etc/systemd/system/ollama.service`.
-Edit the file to set OLLAMA_HOST environment (Replace **${host_ip}** with your host IPV4).
-```
-Environment="OLLAMA_HOST=${host_ip}:11434"
-```
-Set https_proxy environment for Ollama if your system access network through proxy.
-```
-Environment="https_proxy=http://proxy.example.com:8080"
-```
-Restart Ollama services
-```
-sudo systemctl daemon-reload
-sudo systemctl restart ollama.service
-```
-
-Pull LLM model
-
-```bash
-export OLLAMA_HOST=http://${host_ip}:11434
-ollama pull llama3
-ollama list
-
-NAME            ID              SIZE    MODIFIED
-llama3:latest   365c0bd3c000    4.7 GB  5 days ago
-```
 :::
 ::::
-
 
 
 ### Build Mega Service images
@@ -177,8 +243,7 @@ megaservice to suit the needs.
 Build the megaservice image for this use case
 
 ```
-cd ..
-cd GenAIExamples/ChatQnA
+cd ~/OPEA/GenAIExamples/ChatQnA
 git checkout tags/v1.0
 ```
 
@@ -196,7 +261,7 @@ As mentioned, you can build 2 modes of UI
 *Basic UI*
 
 ```
-cd GenAIExamples/ChatQnA/ui/
+cd ~/OPEA/GenAIExamples/ChatQnA/ui/
 docker build --no-cache -t opea/chatqna-ui:latest --build-arg https_proxy=$https_proxy \
   --build-arg http_proxy=$http_proxy -f ./docker/Dockerfile .
 ```
@@ -205,7 +270,7 @@ docker build --no-cache -t opea/chatqna-ui:latest --build-arg https_proxy=$https
 If you want a conversational experience with chatqna megaservice.
 
 ```
-cd GenAIExamples/ChatQnA/ui/
+cd ~/OPEA/GenAIExamples/ChatQnA/ui/
 docker build --no-cache -t opea/chatqna-conversation-ui:latest --build-arg https_proxy=$https_proxy \
   --build-arg http_proxy=$http_proxy -f ./docker/Dockerfile.react .
 ```
@@ -376,13 +441,19 @@ This section will walk you through what are the different ways to interact with
 the microservices deployed
 
 ### Dataprep Microservice（Optional）
-
 If you want to add/update the default knowledge base, you can use the following
 commands. The dataprep microservice extracts the texts from variety of data
 sources, chunks the data, embeds each chunk using embedding microservice and
 store the embedded vectors in the redis vector database.
 
-Local File `nke-10k-2023.pdf` Upload:
+Download pdf file:
+
+```
+wget https://raw.githubusercontent.com/opea-project/GenAIComps/main/comps/retrievers/redis/data/nke-10k-2023.pdf
+```
+
+Local File `nke-10k-2023.pdf` Upload with dataprep:
+This command updates a knowledge base by uploading a local file for processing.
 
 ```
 curl -X POST "http://${host_ip}:6007/v1/dataprep" \
@@ -390,10 +461,7 @@ curl -X POST "http://${host_ip}:6007/v1/dataprep" \
      -F "files=@./nke-10k-2023.pdf"
 ```
 
-This command updates a knowledge base by uploading a local file for processing.
-Update the file path according to your environment.
-
-Add Knowledge Base via HTTP Links:
+Alternatively, you can add knowledge base via HTTP Links:
 
 ```
 curl -X POST "http://${host_ip}:6007/v1/dataprep" \
