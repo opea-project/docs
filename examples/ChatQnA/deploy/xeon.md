@@ -36,13 +36,16 @@ are interested to use.
 
 ## Prerequisites
 
-First step is to clone the GenAIExamples and GenAIComps. GenAIComps are
-fundamental necessary components used to build examples you find in
-GenAIExamples and deploy them as microservices.
+First step is to clone the GenAIExamples. GenAIComps are
+fundamental components used to build examples you find in
+GenAIExamples and deploy them as microservices. We can skip cloning 
+GenAIComps if we are pulling in docker containers instead of building them.
 
 ```
-git clone https://github.com/opea-project/GenAIComps.git
 git clone https://github.com/opea-project/GenAIExamples.git
+cd GenAIExamples
+git checkout tags/v1.0
+cd ..
 ```
 
 The examples utilize model weights from HuggingFace and langchain.
@@ -94,6 +97,7 @@ be pulled in from dockerhub.
 
 From within the `GenAIComps` folder, checkout the release tag.
 ```
+git clone https://github.com/opea-project/GenAIComps.git
 cd GenAIComps
 git checkout tags/v1.0
 ```
@@ -176,7 +180,6 @@ Build the megaservice image for this use case
 ```
 cd ..
 cd GenAIExamples/ChatQnA
-git checkout tags/v1.0
 ```
 
 ```
