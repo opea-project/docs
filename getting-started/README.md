@@ -1,110 +1,125 @@
 # Getting Started with OPEA
+This document specifically details the steps for deploying services on IBM Cloud, providing a tailored guide to help you leverage IBM's cloud infrastructure to deploy the ChatQnA application from OPEA GenAI Examples. For additional deployment targets, see the [ChatQnA Sample Guide](https://opea-project.github.io/latest/examples/ChatQnA/ChatQnA_Guide.html)
 
-## Prerequisites
-
-To get started with OPEA you need the right hardware and basic software setup.
-
-- Hardware Requirements: For the hardware configuration, If you need Hardware Access visit the [Intel Tiber Developer Cloud](https://cloud.intel.com) to select from options such as Xeon or Gaudi processors that meet the necessary specifications.
-
-- Software Requirements: Refer to the [Support Matrix](https://github.com/opea-project/GenAIExamples/blob/main/README.md#getting-started) to ensure you have the required software components in place.
-
-Note : If you are deploying it on cloud, say AWS, select a VM instance from R7iz or m7i family of instances with base OS as Ubuntu 22.04 (AWS ami id : ami-05134c8ef96964280). Use the command below to install docker on a clean machine.
-```
-wget https://raw.githubusercontent.com/opea-project/GenAIExamples/refs/heads/main/ChatQnA/docker_compose/install_docker.sh
-chmod +x install_docker.sh
-./install_docker.sh
-```
 ## Understanding OPEA's Core Components
 
 Before moving forward, it's important to familiarize yourself with two key elements of OPEA: GenAIComps and GenAIExamples.
 
-- GenAIComps is a collection of microservice components that form a service-based toolkit. This includes a variety of services such as llm (language learning models), embedding, and reranking, among others.
+- GenAIComps is a collection of microservice components that form a service-based toolkit. This includes a variety of services such as llm (large language models), embedding, and reranking, among others.
 - While GenAIComps offers a range of microservices, GenAIExamples provides practical, deployable solutions to help users implement these services effectively. Examples include ChatQnA and DocSum, which leverage the microservices for specific applications.
 
-## Visual Guide to Deployment
-To illustrate, here's a simplified visual guide on deploying a ChatQnA GenAIExample, showcasing how you can set up this solution in just a few steps.
 
-![Getting started with OPEA](assets/getting_started.gif)
+## Prerequisites
 
-## Setup ChatQnA Parameters
-To deploy ChatQnA services, follow these steps:
 
+## Create and Configure a Virtual Server
+1.  Navigate to [IBM Cloud](https://cloud.ibm.com). - Click the **Create resource** button at the top right of the screen. Select **Compute** from the options available and select `Virtual Server for VPC`
+
+2. Select a location for the instance. Assign a name to it.
+
+3. Under Stock Images, select Ubuntu 24.04 (`ibm-ubuntu-24-04-6-minimal-amd64-1`)
+
+4. Select a virtual server.
+> **Note:** We recommend selecting a 3-series instance with an Intel(R) 4th Gen Xeon(C) Scalable Processor, such as `bx3d-16x80` or above. For more information on virtual servers on IBM cloud visit [Intel® solutions on IBM Cloud®](https://www.ibm.com/cloud/intel).
+
+5. Add an SSH key to the instance, if necessary, create one first.
+
+6. Click on `Create virtual server`.
+
+7. Once the instance is running, create and attach a `Floating IP` to the instance. For more information visit [this](https://cloud.ibm.com/docs/vpc?topic=vpc-fip-working&interface=ui) site
+
+8. `ssh` into the instance using the floating IP (`ssh -i <key> ubuntu@<floating-ip>`)
+
+
+
+## Deploy the ChatQnA Solution
+Use the command below to install docker on a clean virtual machine
+```bash
+wget https://raw.githubusercontent.com/opea-project/GenAIExamples/refs/heads/main/ChatQnA/docker_compose/install_docker.sh
+chmod +x install_docker.sh
+./install_docker.sh
 ```
+Configure Docker to run as a non-root user by following these [instructions](https://docs.docker.com/engine/install/linux-postinstall/)
+
+Clone the repo and navigate to ChatQnA
+
+```bash
 git clone https://github.com/opea-project/GenAIExamples.git
 cd GenAIExamples/ChatQnA
 ```
-### Set the required environment variables:
-```
-# Example: host_ip="192.168.1.1"
-export host_ip="External_Public_IP"
-# Example: no_proxy="localhost, 127.0.0.1, 192.168.1.1"
-export no_proxy="Your_No_Proxy"
+Set the required environment variables:
+```bash
+export host_ip="localhost"
 export HUGGINGFACEHUB_API_TOKEN="Your_Huggingface_API_Token"
 ```
-If you are in a proxy environment, also set the proxy-related environment variables:
-```
-export http_proxy="Your_HTTP_Proxy"
-export https_proxy="Your_HTTPs_Proxy"
-```
 
-Set up other specific use-case environment variables by choosing one of these options, according to your hardware:
-
-```
-# on Xeon
-source ./docker_compose/intel/cpu/xeon/set_env.sh
-# on Gaudi
-source ./docker_compose/intel/hpu/gaudi/set_env.sh
-# on Nvidia GPU
-source ./docker_compose/nvidia/gpu/set_env.sh
-```
-
-## Deploy ChatQnA Megaservice and Microservices
-Select the directory containing the `compose.yaml` file that matches your hardware.
-```
-#xeon
+Set up other specific use-case environment variables:
+```bash
 cd docker_compose/intel/cpu/xeon/
-#gaudi
-cd docker_compose/intel/hpu/gaudi/
-#nvidia
-cd docker_compose/nvidia/gpu/
+source set_env.sh
 ```
 Now we can start the services
-```
+```bash
 docker compose up -d
 ```
-It will automatically download the needed docker images from docker hub:
+It takes a few minutes for the services to start. Check the logs for the services to ensure that ChatQnA is running.
+For example to check the logs for the `tgi-service`:
 
-- docker pull opea/chatqna:latest
-- docker pull opea/chatqna-ui:latest
-
-In the following cases, you will need to build the docker image from source by yourself.
-
-- The docker image failed to download. (You may want to first check the
-  [Docker Images](https://github.com/opea-project/GenAIExamples/blob/main/docker_images_list.md)
-  list and verify that the docker image you're downloading exists on dockerhub.)
-- You want to use a different version than latest.
-
-Refer to the {ref}`ChatQnA Example Deployment Options <chatqna-example-deployment>` section for building from source instructions matching your hardware.
-
-## Interact with ChatQnA Megaservice and Microservice
-Before interact ChatQnA Service, make sure the TGI service is ready (which takes up to 2 minutes to start).
+```bash
+docker compose logs tgi-service | grep Connected
 ```
-docker ps
-# expected: all images's status are up
-# TGI example on on Xeon and Nvidia GPU
-docker logs tgi-service | grep Connected
-# TGI example on on Gaudi
-docker logs tgi-gaudi-service | grep Connected
-# execpted output: ... INFO text_generation_router::server: router/src/server.rs:2311: Connected
+The output shows `Connected` as shown:
 ```
+tgi-service | 2024-10-18T22:41:18.973042Z INFO text_generation_router::server: router/src/server.rs:2311: Connected
 ```
+
+Run `docker ps -a` as an additional check to verify that all the services are running as shown:
+
+```
+| CONTAINER ID | IMAGE                                                                  | COMMAND                | CREATED      | STATUS      | PORTS                                                                                    | NAMES                        |
+|--------------|------------------------------------------------------------------------|------------------------|--------------|-------------|------------------------------------------------------------------------------------------|------------------------------|
+| 3a65ff9e16bd | opea/nginx:latest                                                      | `/docker-entrypoint.\…`| 14 hours ago | Up 14 hours | 0.0.0.0:80->80/tcp, :::80->80/tcp                                                        | chatqna-xeon-nginx-server    |
+| 7563b2ee1cd9 | opea/chatqna-ui:latest                                                 | `docker-entrypoint.s\…`| 14 hours ago | Up 14 hours | 0.0.0.0:5173->5173/tcp, :::5173->5173/tcp                                                | chatqna-xeon-ui-server       |
+| 9ea57a660cd6 | opea/chatqna:latest                                                    | `python chatqna.py`    | 14 hours ago | Up 14 hours | 0.0.0.0:8888->8888/tcp, :::8888->8888/tcp                                                | chatqna-xeon-backend-server  |
+| 451bacaac3e6 | opea/retriever-redis:latest                                            | `python retriever_re\…`| 14 hours ago | Up 14 hours | 0.0.0.0:7000->7000/tcp, :::7000->7000/tcp                                                | retriever-redis-server       |
+| c1f952ef5c08 | opea/dataprep-redis:latest                                             | `python prepare_doc_\…`| 14 hours ago | Up 14 hours | 0.0.0.0:6007->6007/tcp, :::6007->6007/tcp                                                | dataprep-redis-server        |
+| 2a874ed8ce6f | redis/redis-stack:7.2.0-v9                                             | `/entrypoint.sh`       | 14 hours ago | Up 14 hours | 0.0.0.0:6379->6379/tcp, :::6379->6379/tcp, 0.0.0.0:8001->8001/tcp, :::8001->8001/tcp     | redis-vector-db              |
+| ac7b62306eb8 | ghcr.io/huggingface/text-embeddings-inference:cpu-1.5                  | `text-embeddings-rou\…`| 14 hours ago | Up 14 hours | 0.0.0.0:8808->80/tcp, [::]:8808->80/tcp                                                  | tei-reranking-server         |
+| 521cc7faa00e | ghcr.io/huggingface/text-generation-inference:sha-e4201f4-intel-cpu    | `text-generation-lau\…`| 14 hours ago | Up 14 hours | 0.0.0.0:9009->80/tcp, [::]:9009->80/tcp                                                  | tgi-service                  |
+| 9faf553d3939 | ghcr.io/huggingface/text-embeddings-inference:cpu-1.5                  | `text-embeddings-rou\…`| 14 hours ago | Up 14 hours | 0.0.0.0:6006->80/tcp, [::]:6006->80/tcp                                                  | tei-embedding-server         |
+
+```
+
+### Interact with ChatQnA
+
+You can interact with ChatQnA via a browser interface:
+* Under `Infrastructure` in the left pane, go to `Network/Security groups/<Your Security Group>/Rules`
+* Select `Create`
+* Enable inbound traffic for port 80
+* To view the ChatQnA interface, open a browser and navigate to the UI by inserting your externally facing IP address in the following: `http://{external_public_ip}:80'.
+
+For more information on editing inbound/outbound rules, click [here](https://cloud.ibm.com/docs/vpc?topic=vpc-updating-the-default-security-group&interface=ui)
+
+A snapshot of the interface looks as follows:
+
+![Chat Interface](assets/chat_ui_response.png)
+
+
+> **Note:** this example leverages the Nike 2023 Annual report for its RAG based content. See the [ChatQnA Sample Guide](https://opea-project.github.io/latest/examples/ChatQnA/ChatQnA_Guide.html)
+to learn how you can customize the example with your own content. 
+
+To interact with the ChatQnA application via a `curl` command:
+
+```bash
 curl http://${host_ip}:8888/v1/chatqna \
     -H "Content-Type: application/json" \
     -d '{
         "messages": "What is the revenue of Nike in 2023?"
     }'
 ```
-This command will provide the response as a stream of text. You can modify the `message` parameter in the `curl` command and interact with the ChatQnA service.
+ChatQnA provides the answer to your query as a text stream.
+
+Modify the `message` parameter in the `curl` command to continue interacting with ChatQnA.
 
 ## What’s Next
 
