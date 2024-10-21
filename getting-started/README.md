@@ -88,6 +88,9 @@ A snapshot of the interface looks as follows:
 ![Chat Interface](assets/chat_ui_response.png)
 
 
+> **Note:** this example leverages the Nike 2023 Annual report for its RAG based content. See the [ChatQnA Sample Guide](https://opea-project.github.io/latest/examples/ChatQnA/ChatQnA_Guide.html)
+to learn how you can customize the example with your own content. 
+
 To interact with the ChatQnA application via a `curl` command:
 
 ```bash
