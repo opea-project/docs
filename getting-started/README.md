@@ -76,17 +76,17 @@ tgi-service | 2024-10-18T22:41:18.973042Z INFO text_generation_router::server: r
 Run `docker ps -a` as an additional check to verify that all the services are running as shown:
 
 ```
-| CONTAINER ID | IMAGE                                                                 | COMMAND                        | CREATED      | STATUS      | PORTS                                           | NAMES                            |
-|--------------|----------------------------------------------------------------------|--------------------------------|--------------|-------------|------------------------------------------------|----------------------------------|
-| 3a65ff9e16bd | opea/nginx:latest                                                    | "/docker-entrypoint.…"         | 14 hours ago | Up 14 hours | 0.0.0.0:80->80/tcp, :::80->80/tcp              | chatqna-xeon-nginx-server       |
-| 7563b2ee1cd9 | opea/chatqna-ui:latest                                               | "docker-entrypoint.s…"         | 14 hours ago | Up 14 hours | 0.0.0.0:5173->5173/tcp, :::5173->5173/tcp      | chatqna-xeon-ui-server         |
-| 9ea57a660cd6 | opea/chatqna:latest                                                  | "python chatqna.py"            | 14 hours ago | Up 14 hours | 0.0.0.0:8888->8888/tcp, :::8888->8888/tcp      | chatqna-xeon-backend-server    |
-| 451bacaac3e6 | opea/retriever-redis:latest                                          | "python retriever_re…"         | 14 hours ago | Up 14 hours | 0.0.0.0:7000->7000/tcp, :::7000->7000/tcp      | retriever-redis-server         |
-| c1f952ef5c08 | opea/dataprep-redis:latest                                           | "python prepare_doc_…"         | 14 hours ago | Up 14 hours | 0.0.0.0:6007->6007/tcp, :::6007->6007/tcp      | dataprep-redis-server          |
-| 2a874ed8ce6f | redis/redis-stack:7.2.0-v9                                           | "/entrypoint.sh"               | 14 hours ago | Up 14 hours | 0.0.0.0:6379->6379/tcp, :::6379->6379/tcp, 0.0.0.0:8001->8001/tcp, :::8001->8001/tcp | redis-vector-db               |
-| ac7b62306eb8 | ghcr.io/huggingface/text-embeddings-inference:cpu-1.5                | "text-embeddings-rou…"         | 14 hours ago | Up 14 hours | 0.0.0.0:8808->80/tcp, [::]:8808->80/tcp        | tei-reranking-server           |
-| 521cc7faa00e | ghcr.io/huggingface/text-generation-inference:sha-e4201f4-intel-cpu | "text-generation-lau…"         | 14 hours ago | Up 14 hours | 0.0.0.0:9009->80/tcp, [::]:9009->80/tcp        | tgi-service                    |
-| 9faf553d3939 | ghcr.io/huggingface/text-embeddings-inference:cpu-1.5                | "text-embeddings-rou…"         | 14 hours ago | Up 14 hours | 0.0.0.0:6006->80/tcp, [::]:6006->80/tcp        | tei-embedding-server           |
+| CONTAINER ID | IMAGE                                                                  | COMMAND                | CREATED      | STATUS      | PORTS                                                                                    | NAMES                        |
+|--------------|------------------------------------------------------------------------|------------------------|--------------|-------------|------------------------------------------------------------------------------------------|------------------------------|
+| 3a65ff9e16bd | opea/nginx:latest                                                      | `/docker-entrypoint.\…`| 14 hours ago | Up 14 hours | 0.0.0.0:80->80/tcp, :::80->80/tcp                                                        | chatqna-xeon-nginx-server    |
+| 7563b2ee1cd9 | opea/chatqna-ui:latest                                                 | `docker-entrypoint.s\…`| 14 hours ago | Up 14 hours | 0.0.0.0:5173->5173/tcp, :::5173->5173/tcp                                                | chatqna-xeon-ui-server       |
+| 9ea57a660cd6 | opea/chatqna:latest                                                    | `python chatqna.py`    | 14 hours ago | Up 14 hours | 0.0.0.0:8888->8888/tcp, :::8888->8888/tcp                                                | chatqna-xeon-backend-server  |
+| 451bacaac3e6 | opea/retriever-redis:latest                                            | `python retriever_re\…`| 14 hours ago | Up 14 hours | 0.0.0.0:7000->7000/tcp, :::7000->7000/tcp                                                | retriever-redis-server       |
+| c1f952ef5c08 | opea/dataprep-redis:latest                                             | `python prepare_doc_\…`| 14 hours ago | Up 14 hours | 0.0.0.0:6007->6007/tcp, :::6007->6007/tcp                                                | dataprep-redis-server        |
+| 2a874ed8ce6f | redis/redis-stack:7.2.0-v9                                             | `/entrypoint.sh`       | 14 hours ago | Up 14 hours | 0.0.0.0:6379->6379/tcp, :::6379->6379/tcp, 0.0.0.0:8001->8001/tcp, :::8001->8001/tcp     | redis-vector-db              |
+| ac7b62306eb8 | ghcr.io/huggingface/text-embeddings-inference:cpu-1.5                  | `text-embeddings-rou\…`| 14 hours ago | Up 14 hours | 0.0.0.0:8808->80/tcp, [::]:8808->80/tcp                                                  | tei-reranking-server         |
+| 521cc7faa00e | ghcr.io/huggingface/text-generation-inference:sha-e4201f4-intel-cpu    | `text-generation-lau\…`| 14 hours ago | Up 14 hours | 0.0.0.0:9009->80/tcp, [::]:9009->80/tcp                                                  | tgi-service                  |
+| 9faf553d3939 | ghcr.io/huggingface/text-embeddings-inference:cpu-1.5                  | `text-embeddings-rou\…`| 14 hours ago | Up 14 hours | 0.0.0.0:6006->80/tcp, [::]:6006->80/tcp                                                  | tei-embedding-server         |
 
 ```
 
