@@ -78,7 +78,17 @@ docker compose up -d
 
 Будь ласка, зверніться до розділу ['Збірка образів докерів'](/examples/ChatQnA/deploy) з файлу, який відповідає вашому апаратному забезпеченню.
 
-### Взаємодія з мегасервісом і мікросервісом ChatQnA 
+### Взаємодія з мегасервісом і мікросервісом ChatQnA
+Перш ніж взаємодіяти зі службою ChatQnA, переконайтеся, що служба TGI готова (її запуск займає до 2 хвилин).
+```
+docker ps
+# expected: all images's status are up
+# TGI example on on Xeon and Nvidia GPU
+docker logs tgi-service | grep Connected
+# TGI example on on Gaudi
+docker logs tgi-gaudi-service | grep Connected
+# execpted output: ... INFO text_generation_router::server: router/src/server.rs:2311: Connected
+```
 ```
 curl http://${host_ip}:8888/v1/chatqna \
     -H "Content-Type: application/json" \
