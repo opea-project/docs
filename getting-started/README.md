@@ -79,7 +79,7 @@ You can interact with ChatQnA via a browser interface:
 * Under `Infrastructure` in the left pane, go to `Network/Security groups/<Your Security Group>/Rules`
 * Select `Create`
 * Enable inbound traffic for port 80
-* Open a browser and navigate [http://{external_public_ip}:80](http://{external_public_ip}:80") to view the ChatQnA interface.
+* Open a browser and navigate `http://{external_public_ip}:80` to view the ChatQnA interface.
 
 For more information on editing inbound/outbound rules, click [here](https://cloud.ibm.com/docs/vpc?topic=vpc-updating-the-default-security-group&interface=ui)
 
