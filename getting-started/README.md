@@ -5,7 +5,7 @@ This document specifically details the steps for deploying services on IBM Cloud
 
 Before moving forward, it's important to familiarize yourself with two key elements of OPEA: GenAIComps and GenAIExamples.
 
-- GenAIComps is a collection of microservice components that form a service-based toolkit. This includes a variety of services such as llm (language learning models), embedding, and reranking, among others.
+- GenAIComps is a collection of microservice components that form a service-based toolkit. This includes a variety of services such as llm (large language models), embedding, and reranking, among others.
 - While GenAIComps offers a range of microservices, GenAIExamples provides practical, deployable solutions to help users implement these services effectively. Examples include ChatQnA and DocSum, which leverage the microservices for specific applications.
 
 
@@ -22,9 +22,9 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 4. Select a virtual server.
 > **Note:** We recommend selecting a 3-series instance with an Intel(R) 4th Gen Xeon(C) Scalable Processor, such as `bx3d-16x80` or above. For more information on virtual servers on IBM cloud visit [Intel® solutions on IBM Cloud®](https://www.ibm.com/cloud/intel).
 
-5. Create or add an ssh key for the instance.
+5. Add an SSH key to the instance, if necessary, create one first.
 
-6. Click on `Create virtual server` at the bottom right.
+6. Click on `Create virtual server`.
 
 7. Once the instance is running, create and attach a `Floating IP` to the instance. For more information visit [this](https://cloud.ibm.com/docs/vpc?topic=vpc-fip-working&interface=ui) site
 
@@ -73,13 +73,30 @@ The output shows `Connected` as shown:
 tgi-service | 2024-10-18T22:41:18.973042Z INFO text_generation_router::server: router/src/server.rs:2311: Connected
 ```
 
+Run `docker ps -a` as an additional check to verify that all the services are running as shown:
+
+```
+| CONTAINER ID | IMAGE                                                                 | COMMAND                        | CREATED      | STATUS      | PORTS                                           | NAMES                            |
+|--------------|----------------------------------------------------------------------|--------------------------------|--------------|-------------|------------------------------------------------|----------------------------------|
+| 3a65ff9e16bd | opea/nginx:latest                                                    | "/docker-entrypoint.…"         | 14 hours ago | Up 14 hours | 0.0.0.0:80->80/tcp, :::80->80/tcp              | chatqna-xeon-nginx-server       |
+| 7563b2ee1cd9 | opea/chatqna-ui:latest                                               | "docker-entrypoint.s…"         | 14 hours ago | Up 14 hours | 0.0.0.0:5173->5173/tcp, :::5173->5173/tcp      | chatqna-xeon-ui-server         |
+| 9ea57a660cd6 | opea/chatqna:latest                                                  | "python chatqna.py"            | 14 hours ago | Up 14 hours | 0.0.0.0:8888->8888/tcp, :::8888->8888/tcp      | chatqna-xeon-backend-server    |
+| 451bacaac3e6 | opea/retriever-redis:latest                                          | "python retriever_re…"         | 14 hours ago | Up 14 hours | 0.0.0.0:7000->7000/tcp, :::7000->7000/tcp      | retriever-redis-server         |
+| c1f952ef5c08 | opea/dataprep-redis:latest                                           | "python prepare_doc_…"         | 14 hours ago | Up 14 hours | 0.0.0.0:6007->6007/tcp, :::6007->6007/tcp      | dataprep-redis-server          |
+| 2a874ed8ce6f | redis/redis-stack:7.2.0-v9                                           | "/entrypoint.sh"               | 14 hours ago | Up 14 hours | 0.0.0.0:6379->6379/tcp, :::6379->6379/tcp, 0.0.0.0:8001->8001/tcp, :::8001->8001/tcp | redis-vector-db               |
+| ac7b62306eb8 | ghcr.io/huggingface/text-embeddings-inference:cpu-1.5                | "text-embeddings-rou…"         | 14 hours ago | Up 14 hours | 0.0.0.0:8808->80/tcp, [::]:8808->80/tcp        | tei-reranking-server           |
+| 521cc7faa00e | ghcr.io/huggingface/text-generation-inference:sha-e4201f4-intel-cpu | "text-generation-lau…"         | 14 hours ago | Up 14 hours | 0.0.0.0:9009->80/tcp, [::]:9009->80/tcp        | tgi-service                    |
+| 9faf553d3939 | ghcr.io/huggingface/text-embeddings-inference:cpu-1.5                | "text-embeddings-rou…"         | 14 hours ago | Up 14 hours | 0.0.0.0:6006->80/tcp, [::]:6006->80/tcp        | tei-embedding-server           |
+
+```
+
 ### Interact with ChatQnA
 
 You can interact with ChatQnA via a browser interface:
 * Under `Infrastructure` in the left pane, go to `Network/Security groups/<Your Security Group>/Rules`
 * Select `Create`
 * Enable inbound traffic for port 80
-* Open a browser and navigate `http://{external_public_ip}:80` to view the ChatQnA interface.
+* To view the ChatQnA interface, open a browser and navigate to the UI by inserting your externally facing IP address in the following: `http://{external_public_ip}:80'.
 
 For more information on editing inbound/outbound rules, click [here](https://cloud.ibm.com/docs/vpc?topic=vpc-updating-the-default-security-group&interface=ui)
 
