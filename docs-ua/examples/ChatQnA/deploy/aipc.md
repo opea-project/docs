@@ -72,21 +72,21 @@ export no_proxy=${your_no_proxy},$host_ip
 export http_proxy=${your_http_proxy}
 export https_proxy=${your_http_proxy}
 ```
-The examples utilize model weights from Ollama and langchain.
+У прикладах використовуються модельні ваги від Ollama та langchain.
 
-### Set Up Ollama LLM Service
-We use [Ollama](https://ollama.com/) as our LLM service for AIPC.
-Please follow the instructions to set up Ollama on your PC. This will set the entrypoint needed for the Ollama to suit the ChatQnA examples.
+### Встановлення сервісу LLM Ollama
+Ми використовуємо [Ollama](https://ollama.com/) як наш сервіс LLM для AIPC.
+Будь ласка, дотримуйтесь інструкцій, щоб налаштувати Ollama на вашому комп'ютері. Це дозволить встановити точку входу, необхідну для того, щоб Ollama відповідала прикладам ChatQnA.
 
-#### Install Ollama Service
-Install Ollama service with one command:
+#### Ынсталяцыя сервысу Ollama
+Встановіть сервіс Ollama однією командою:
 ```
 curl -fsSL https://ollama.com/install.sh | sh
 ```
 
-#### Set Ollama Service Configuration
-Ollama Service Configuration file is /etc/systemd/system/ollama.service. Edit the file to set OLLAMA_HOST environment.
-Replace **<host_ip>** with your host IPV4 (please use external public IP). For example the host_ip is 10.132.x.y, then `Environment="OLLAMA_HOST=10.132.x.y:11434"'.
+#### Встановленя конфыгурації сервісу Ollama
+Файл конфігурації служби Ollama знаходиться в /etc/systemd/system/ollama.service. Відредагуйте файл, щоб встановити середовище OLLAMA_HOST.
+Замініть **<host_ip>** на IPV4 вашого хосту (будь ласка, використовуйте зовнішній публічний IP). Наприклад, host_ip 10.132.x.y, тоді `Environment=«OLLAMA_HOST=10.132.x.y:11434»'.
 ```
 Environment="OLLAMA_HOST=host_ip:11434"
 ```
@@ -97,13 +97,13 @@ If your system access network through proxy, add https_proxy in Ollama Service C
 Environment="https_proxy=Your_HTTPS_Proxy"
 ```
 
-#### Restart Ollama services
+#### Перезагрузка сервісу Ollama
 ```
 $ sudo systemctl daemon-reload
 $ sudo systemctl restart ollama.service
 ```
 
-#### Check the service started
+#### Перевірка старта сервіса
 ```
 netstat -tuln | grep  11434
 ```
@@ -113,25 +113,25 @@ tcp        0      0 10.132.x.y:11434      0.0.0.0:*               LISTEN
 ```
 
 #### Pull Ollama LLM model
-Run the command to download LLM models. The <host_ip> is the one set in [Ollama Service Configuration](#Set-Ollama-Service-Configuration)
+Запустіть команду для завантаження моделей LLM. В якості <host_ip> буде використано той, що вказано у файлі [Ollama Service Configuration](#Set-Ollama-Service-Configuration)
 ```
 export host_ip=<host_ip>
 export OLLAMA_HOST=http://${host_ip}:11434
 ollama pull llama3.2
 ```
-After downloaded the models, you can list the models by `ollama list`.
-The output should be similar to the following:
+Після завантаження моделей ви можете перерахувати їх за допомогою `ollama list`.
+Виведення має бути подібним до наведеного нижче:
 ```
 NAME            ID                SIZE      MODIFIED
 llama3.2:latest   a80c4f17acd5    2.0 GB    2 minutes ago
 ```
 
 ### Consume Ollama LLM Service
-Access ollama service to verify that the ollama is functioning correctly.
+Увійдіть до служби ollama, щоб перевірити, чи правильно працює ollama.
 ```bash
 curl http://${host_ip}:11434/api/generate -d '{"model": "llama3.2", "prompt":"What is Deep Learning?"}'
 ```
-The outputs are similar to these:
+Результати подібні до цих:
 ```
 {"model":"llama3.2","created_at":"2024-10-12T12:55:28.098813868Z","response":"Deep","done":false}
 {"model":"llama3.2","created_at":"2024-10-12T12:55:28.124514468Z","response":" learning","done":false}
@@ -401,7 +401,7 @@ curl -X POST "http://${host_ip}:6007/v1/dataprep/get_file" \
 
 #### Видалити посилання
 ```
-# The dataprep service will add a .txt postfix for link file
+# Служба dataprep додасть постфікс .txt до файлу посилання
 
 curl -X POST "http://${host_ip}:6007/v1/dataprep/delete_file" \
      -d '{"file_path": "https://opea.dev.txt"}' \
