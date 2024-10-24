@@ -7,6 +7,8 @@ These instructions walk you through generating the OPEA project documentation
 and publishing it to https://opea-project.github.io.  You can also use these
 instructions to generate the OPEA documentation on your local system.
 
+.. rst-class:: rst-columns
+
 .. contents::
    :local:
    :depth: 1
@@ -60,6 +62,11 @@ Some content is manipulated or generated during the doc build process:
   time by scanning the directory structure.  The list of microservices is also
   self-updated when new microservices are added to the GenAIComps/comps
   directory.
+
+- The CODEOWNERS files in the repos, containing the list of responsible
+  reviewers for those repos, are processed into a nice looking table included in
+  the ``community/codeowners.md`` document.  That way the list of project code
+  owners is kept in sync with what's in the CODEOWNERS files used by GitHub.
 
 - References in markdown files to markdown files (.md file extension) are
   converted to the corresponding generated HTML files by Sphinx using the Myst and
@@ -170,7 +177,7 @@ Depending on your Linux version, install the needed tools.
    to maintain your Python environment from being changed by other work on your
    computer.
 
-.. _Python virtual environment: https://https://docs.python.org/3/library/venv.html
+.. _Python virtual environment: https://docs.python.org/3/library/venv.html
 
 For Ubuntu, use:
 
@@ -288,6 +295,37 @@ If things look good, you'd proceed to using git (``git add .``) to add and commi
 (``git commit -s``) your changes, push those changes to your personal forked
 repo (``git push origin <branchname>``) and submit a PR using the GitHub web
 interface.
+
+.. _docbuild-troubleshooting:
+
+Doc Build Troubleshooting
+*************************
+
+It's worth mentioning again, all ``.md`` and ``.rst`` documents must appear in
+the toctree hierarchy. When a new document is added it might cause the doc build to fail
+because that new document is not found in any of the toctree directives. Some
+doc additions are automatically incorporated through the use of the ``:glob:``
+pattern that pick up file names that match the pattern. Some toctree directives
+use an explicit list of documents that must be updated if a new document is
+added. The ``index.rst`` file in the directory where the new document was added
+(or in parent directory) would be the first place to check if the doc build
+complains that a document is not listed in a toctree.
+
+The :ref:`GenAIExamples` and :ref:`GenAIMicroservices` documents hierarchy are a
+special case.  Both of these documents are augmented at build time by a script
+(:docs_blob:`scripts/maketoc.sh`) that creates headings and toctree references
+(using ``:glob:``) to pick up all documents found in the ``GenAIExamples`` and
+``GenAIComps/comps`` directories.  As new examples or microservice components are
+added, the doc build scripts should automatically incorporate those new
+documents.
+
+Sphinx (and the Myst parser extension) may warn about issues with markdown
+syntax or structure.  Some of these warnings, though reported as errors, are not
+fatal for the doc build.  It's best to address these warnings and errors in the
+offending source file and build the docs again.  (This might mean making changes
+to documents in other OPEA project repos, submitting a PR, and getting that
+approved and merged.)
+
 
 Publish Content
 ***************
@@ -424,6 +462,6 @@ the OPEA project. You can see complex examples in other open source projects
 using this filtering script, such as pattern files in
 `Project ACRN .known-issues <https://github.com/projectacrn/acrn-hypervisor/tree/master/doc/.known-issues>`_.
 
-.. _reStructuredText: https://sphinx-doc.org/rest.html
+.. _reStructuredText: https://www.sphinx-doc.org/rest.html
 .. _markdown: https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax
-.. _Sphinx: https://sphinx-doc.org/
+.. _Sphinx: https://www.sphinx-doc.org/

@@ -370,7 +370,7 @@ The OPEA projects use GitHub Action for CI test.
 - End to End Test, the PR must pass all end to end tests.
 
 #### Pull Request Review
-You can add reviewers from [the code owners list](../codeowner.md) to your PR.
+You can add reviewers from [the code owners list](./codeowner.md) to your PR.
 
 ## Support
 

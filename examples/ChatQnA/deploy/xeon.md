@@ -5,10 +5,8 @@ example with OPEA comps to deploy using vLLM or TGI service. There are several
 slice-n-dice ways to enable RAG with vectordb and LLM models, but here we will
 be covering one option of doing it for convenience : we will be showcasing  how
 to build an e2e chatQnA with Redis VectorDB and neural-chat-7b-v3-3 model,
-deployed on IDC. For more information on how to setup IDC instance to proceed,
-Please follow the instructions here (*** getting started section***). If you do
-not have an IDC instance you can skip the step and make sure that all the
-(***system level validation***) metrics are addressed such as docker versions.
+deployed on IDC. To quickly learn about OPEA in just 5 minutes and set up the required hardware and software, please follow the instructions in the
+[Getting Started](https://opea-project.github.io/latest/getting-started/README.html) section.
 
 ## Overview
 
@@ -47,12 +45,6 @@ git clone https://github.com/opea-project/GenAIComps.git
 git clone https://github.com/opea-project/GenAIExamples.git
 ```
 
-Checkout the release tag
-```
-cd GenAIComps
-git checkout tags/v1.0
-```
-
 The examples utilize model weights from HuggingFace and langchain.
 
 Setup your [HuggingFace](https://huggingface.co/) account and generate
@@ -78,19 +70,33 @@ export https_proxy=${your_http_proxy}
 
 ## Prepare (Building / Pulling) Docker images
 
-This step will involve building/pulling ( maybe in future) relevant docker
+This step will involve building/pulling  relevant docker
 images with step-by-step process along with sanity check in the end. For
 ChatQnA, the following docker images will be needed: embedding, retriever,
 rerank, LLM and dataprep. Additionally, you will need to build docker images for
 ChatQnA megaservice, and UI (conversational React UI is optional). In total,
 there are 8 required and an optional docker images.
 
-The docker images needed to setup the example needs to be build local, however
-the images will be pushed to docker hub soon by Intel.
-
 ### Build/Pull Microservice images
 
-From within the `GenAIComps` folder
+::::::{tab-set}
+
+:::::{tab-item} Pull
+:sync: Pull
+
+If you decide to pull the docker containers and not build them locally,
+you can proceed to the next step where all the necessary containers will
+be pulled in from dockerhub.
+
+:::::
+:::::{tab-item} Build
+:sync: Build
+
+From within the `GenAIComps` folder, checkout the release tag.
+```
+cd GenAIComps
+git checkout tags/v1.0
+```
 
 #### Build Dataprep Image
 
@@ -190,6 +196,7 @@ As mentioned, you can build 2 modes of UI
 cd GenAIExamples/ChatQnA/ui/
 docker build --no-cache -t opea/chatqna-ui:latest --build-arg https_proxy=$https_proxy \
   --build-arg http_proxy=$http_proxy -f ./docker/Dockerfile .
+cd ../../..
 ```
 
 *Conversation UI*
@@ -199,6 +206,7 @@ If you want a conversational experience with chatqna megaservice.
 cd GenAIExamples/ChatQnA/ui/
 docker build --no-cache -t opea/chatqna-conversation-ui:latest --build-arg https_proxy=$https_proxy \
   --build-arg http_proxy=$http_proxy -f ./docker/Dockerfile.react .
+cd ../../..
 ```
 
 ### Sanity Check
@@ -230,6 +238,8 @@ Check if you have the below set of docker images, before moving on to the next s
 :::
 ::::
 
+:::::
+::::::
 
 ## Use Case Setup
 
@@ -272,58 +282,10 @@ environment variable or `compose.yaml` file.
 
 Set the necessary environment variables to setup the use case case
 
-> Note: Replace `host_ip` with your external IP address. Do **NOT** use localhost
-> for the below set of environment variables
-
-### Dataprep
-
-    export DATAPREP_SERVICE_ENDPOINT="http://${host_ip}:6007/v1/dataprep"
-    export DATAPREP_GET_FILE_ENDPOINT="http://${host_ip}:6007/v1/dataprep/get_file"
-    export DATAPREP_DELETE_FILE_ENDPOINT="http://${host_ip}:6007/v1/dataprep/delete_file"
-
-### VectorDB
-
-    export REDIS_URL="redis://${host_ip}:6379"
-    export INDEX_NAME="rag-redis"
-
-### Embedding Service
-
-    export EMBEDDING_MODEL_ID="BAAI/bge-base-en-v1.5"
-    export EMBEDDING_SERVICE_HOST_IP=${host_ip}
-    export RETRIEVER_SERVICE_HOST_IP=${host_ip}
-    export TEI_EMBEDDING_ENDPOINT="http://${host_ip}:6006"
-
-### Reranking Service
-
-    export RERANK_MODEL_ID="BAAI/bge-reranker-base"
-    export TEI_RERANKING_ENDPOINT="http://${host_ip}:8808"
-    export RERANK_SERVICE_HOST_IP=${host_ip}
-
-### LLM Service
-
-::::{tab-set}
-:::{tab-item} vllm
-:sync: vllm
-
-    export LLM_MODEL_ID="Intel/neural-chat-7b-v3-3"
-    export LLM_SERVICE_HOST_IP=${host_ip}
-    export LLM_SERVICE_PORT=9000
-    export vLLM_LLM_ENDPOINT="http://${host_ip}:9009"
-:::
-:::{tab-item} TGI
-:sync: TGI
-
-    export LLM_MODEL_ID="Intel/neural-chat-7b-v3-3"
-    export LLM_SERVICE_HOST_IP=${host_ip}
-    export LLM_SERVICE_PORT=9000
-    export TGI_LLM_ENDPOINT="http://${host_ip}:9009"
-:::
-::::
-
-### Megaservice
-
-    export MEGA_SERVICE_HOST_IP=${host_ip}
-    export BACKEND_SERVICE_ENDPOINT="http://${host_ip}:8888/v1/chatqna"
+```
+cd GenAIExamples/ChatQnA/docker_compose/intel/cpu/xeon/
+source ./set_env.sh
+```
 
 ## Deploy the use case
 
@@ -448,7 +410,13 @@ commands. The dataprep microservice extracts the texts from variety of data
 sources, chunks the data, embeds each chunk using embedding microservice and
 store the embedded vectors in the redis vector database.
 
-Local File `nke-10k-2023.pdf` Upload:
+Update Knowledge Base via Local File [nke-10k-2023.pdf](https://github.com/opea-project/GenAIComps/blob/main/comps/retrievers/redis/data/nke-10k-2023.pdf). Or click [here](https://raw.githubusercontent.com/opea-project/GenAIComps/main/comps/retrievers/redis/data/nke-10k-2023.pdf) to download the file via any web browser. Or run this command to get the file on a terminal.
+
+```
+wget https://raw.githubusercontent.com/opea-project/GenAIComps/main/comps/retrievers/redis/data/nke-10k-2023.pdf
+```
+
+Upload:
 
 ```
 curl -X POST "http://${host_ip}:6007/v1/dataprep" \
@@ -618,6 +586,21 @@ while reranking service are not.
 
 ### vLLM and TGI Service
 
+In first startup, this service will take more time to download the model files.
+After it's finished, the service will be ready.
+
+Try the command below to check whether the LLM serving is ready.
+
+```
+docker logs ${CONTAINER_ID} | grep Connected
+```
+
+If the service is ready, you will get the response like below.
+
+```
+2024-09-03T02:47:53.402023Z  INFO text_generation_router::server: router/src/server.rs:2311: Connected
+```
+
 ::::{tab-set}
 
 :::{tab-item} vllm
@@ -664,24 +647,28 @@ TGI service generate text for the input prompt. Here is the expected result from
 ::::
 
 
-If you get
-
-```
-curl: (7) Failed to connect to 100.81.104.168 port 8008 after 0 ms: Connection refused
-
-```
-
-and the log shows model warm up, please wait for a while and try it later.
-
-```
-2024-06-05T05:45:27.707509646Z 2024-06-05T05:45:27.707361Z  WARN text_generation_router: router/src/main.rs:357: `--revision` is not set
-2024-06-05T05:45:27.707539740Z 2024-06-05T05:45:27.707379Z  WARN text_generation_router: router/src/main.rs:358: We strongly advise to set it to a known supported commit.
-2024-06-05T05:45:27.852525522Z 2024-06-05T05:45:27.852437Z  INFO text_generation_router: router/src/main.rs:379: Serving revision bdd31cf498d13782cc7497cba5896996ce429f91 of model Intel/neural-chat-7b-v3-3
-2024-06-05T05:45:27.867833811Z 2024-06-05T05:45:27.867759Z  INFO text_generation_router: router/src/main.rs:221: Warming up model
-
-```
-
 ### LLM Microservice
+
+This service depends on above LLM backend service startup. It will be ready after long time,
+to wait for them being ready in first startup.
+
+::::{tab-set}
+
+:::{tab-item} vllm
+:sync: vllm
+
+```
+curl http://${host_ip}:9000/v1/chat/completions \
+ -X POST \
+ -d '{"query":"What is Deep Learning?","max_tokens":17,"top_p":1,"temperature":0.7,\
+ "frequency_penalty":0,"presence_penalty":0, "streaming":true}' \
+ -H 'Content-Type: application/json'
+```
+For parameters in vLLM modes, can refer to [LangChain VLLMOpenAI API](https://huggingface.co/docs/huggingface_hub/package_reference/inference_client#huggingface_hub.InferenceClient.text_generation)
+
+:::
+:::{tab-item} TGI
+:sync: TGI
 
 ```
 curl http://${host_ip}:9000/v1/chat/completions\
@@ -691,6 +678,10 @@ curl http://${host_ip}:9000/v1/chat/completions\
   -H 'Content-Type: application/json'
 
 ```
+For parameters in TGI modes, please refer to [HuggingFace InferenceClient API](https://huggingface.co/docs/huggingface_hub/package_reference/inference_client#huggingface_hub.InferenceClient.text_generation) (except we rename "max_new_tokens" to "max_tokens".)
+:::
+::::
+
 
 You will get generated text from LLM:
 
@@ -719,7 +710,6 @@ data: [DONE]
 
 ```
 curl http://${host_ip}:8888/v1/chatqna -H "Content-Type: application/json" -d '{
-     "model": "Intel/neural-chat-7b-v3-3",
      "messages": "What is the revenue of Nike in 2023?"
      }'
 
