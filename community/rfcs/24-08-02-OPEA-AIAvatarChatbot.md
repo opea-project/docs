@@ -6,6 +6,8 @@ Code contributions:
 "animation" component: https://github.com/opea-project/GenAIComps/tree/main/comps/animation/wav2lip  
 "AvatarChatbot" examples: https://github.com/opea-project/GenAIExamples/tree/main/AvatarChatbot
 
+YouTube tech-talk video: https://youtu.be/OjaElyUB8Z0?si=6-IdxwTg0YFMraFl
+
 ## Author
 <!-- List all contributors of this RFC. -->
 [ctao456](https://github.com/ctao456), [alexsin368](https://github.com/alexsin368), [YuningQiu](https://github.com/YuningQiu), [louie-tsai](https://github.com/louie-tsai)
