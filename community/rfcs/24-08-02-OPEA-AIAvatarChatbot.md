@@ -1,6 +1,6 @@
 # 24-08-02-OPEA-AIAvatarChatbot
 
-A RAG-Powered Human-Like AI Avatar Audio Chatbot integrated with OPEA AudioQnA  
+A Human-Like AI Avatar Audio Chatbot integrated with OPEA AudioQnA  
 
 Code contributions:  
 "animation" component: https://github.com/opea-project/GenAIComps/tree/main/comps/animation/wav2lip  
