@@ -87,15 +87,18 @@ ChatQnA megaservice, and UI (conversational React UI is optional). In total,
 there are 8 required and an optional docker images.
 
 ### Build/Pull Microservice images
-::::{tab-set}
-:::{tab-item} Pull
+
+::::::{tab-set}
+
+:::::{tab-item} Pull
 :sync: Pull
 
-To pull pre-built docker images on Docker Hub, proceed to the next step. To customize 
-your application, you can choose to build individual docker images for the microservices 
-before proceeding.
-:::
-:::{tab-item} Build
+If you decide to pull the docker containers and not build them locally,
+you can proceed to the next step where all the necessary containers will
+be pulled in from dockerhub.
+
+:::::
+:::::{tab-item} Build
 :sync: Build
 
 From within the `GenAIComps` folder, checkout the release tag.
@@ -103,8 +106,6 @@ From within the `GenAIComps` folder, checkout the release tag.
 cd GenAIComps
 git checkout tags/v1.0
 ```
-:::
-::::
 
 #### Build Dataprep Image
 
@@ -130,7 +131,7 @@ docker build --no-cache -t opea/retriever-redis:latest --build-arg https_proxy=$
 docker build --no-cache -t opea/reranking-tei:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/reranks/tei/Dockerfile .
 ```
 
-#### Build docker
+#### Build LLM Image
 
 ::::{tab-set}
 
@@ -240,7 +241,6 @@ Check if you have the below set of docker images, before moving on to the next s
 * opea/chatqna-ui:latest
 * opea/vllm:latest
 * opea/llm-vllm:latest
-
 :::
 :::{tab-item} TGI
 :sync: TGI
@@ -255,6 +255,9 @@ Check if you have the below set of docker images, before moving on to the next s
 * opea/llm-tgi:latest
 :::
 ::::
+
+:::::
+::::::
 
 ## Use Case Setup
 
