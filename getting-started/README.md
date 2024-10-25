@@ -1,5 +1,7 @@
 # Getting Started with OPEA
-This document specifically details the steps for deploying services on IBM Cloud, providing a tailored guide to help you leverage IBM's cloud infrastructure to deploy the ChatQnA application from OPEA GenAI Examples. For additional deployment targets, see the [ChatQnA Sample Guide](https://opea-project.github.io/latest/examples/ChatQnA/ChatQnA_Guide.html)
+In this document, we provide a tailored guide to deploying the ChatQnA application in OPEA GenAI Examples across multiple cloud platforms, including IBM Cloud, Amazon Web Services (AWS), and others, 
+
+enabling you to choose the best fit for your specific needs and requirements. For additional deployment targets, see the [ChatQnA Sample Guide](https://opea-project.github.io/latest/examples/ChatQnA/ChatQnA_Guide.html)
 
 ## Understanding OPEA's Core Components
 
@@ -11,8 +13,43 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 
 ## Prerequisites
 
-
 ## Create and Configure a Virtual Server
+
+::::{tab-set}
+
+:sync-group: Cloud Service Providers
+
+ 
+
+:::{tab-item} AWS
+
+:sync: AWS
+
+1. Navigate to [AWS console](https://console.aws.amazon.com/console/home) – Search EC2 in the search bar and select it. Click the `Launch Instance` button highlighted in orange. 
+
+2. Provide a name to the VM. 
+
+3. In Quick Start, select the base OS as Ubuntu (ami-id : ami-04dd23e62ed049936). 
+
+4. Select an Instance type that is based on Intel hardware. 
+>**Note**: We recommend selecting a m7i.4xlarge or larger instance with an Intel(R) 4th Gen Xeon(C) Scalable Processor. For more information on virtual servers on AWS visit [here](https://aws.amazon.com/intel/). 
+
+5. Next, create a new key pair, give it a name or select one from the existing key pairs. 
+
+
+6. Under Network settings select an existing security group. If there is none, create a new one allowing SSH,  and HTTP traffic . 
+
+
+7. Configure the storage to 100 GiB and click `Launch Instance`. 
+
+8. Click on the connect button on the top right and connect using your preferred method. 
+
+:::
+
+:::{tab-item} IBM Cloud
+
+:sync: IBM Cloud
+
 1.  Navigate to [IBM Cloud](https://cloud.ibm.com). - Click the **Create resource** button at the top right of the screen. Select **Compute** from the options available and select `Virtual Server for VPC`
 
 2. Select a location for the instance. Assign a name to it.
@@ -30,6 +67,10 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 
 8. `ssh` into the instance using the floating IP (`ssh -i <key> ubuntu@<floating-ip>`)
 
+
+:::
+
+::::
 
 
 ## Deploy the ChatQnA Solution
@@ -62,11 +103,12 @@ Now we can start the services
 ```bash
 docker compose up -d
 ```
-It takes a few minutes for the services to start. Check the logs for the services to ensure that ChatQnA is running.
+>**Note**: It takes a few minutes for the services to start. Check the logs for the services to ensure that ChatQnA is running before proceeding further.
+
 For example to check the logs for the `tgi-service`:
 
 ```bash
-docker compose logs tgi-service | grep Connected
+docker container logs tgi-service | grep Connected
 ```
 The output shows `Connected` as shown:
 ```
@@ -92,6 +134,33 @@ Run `docker ps -a` as an additional check to verify that all the services are ru
 
 ### Interact with ChatQnA
 
+
+::::{tab-set}
+
+:sync-group: Cloud Service Providers
+
+:::{tab-item} AWS
+
+:sync: AWS
+
+You can interact with ChatQnA via a browser interface: 
+
+* To view the ChatQnA interface, open a browser and navigate to the UI by inserting your public facing IP address in the following: `http://{public_ip}:80’. 
+
+>**Note**: If you are having issue accessing the UI, you need to add an inbound rule in the security group. 
+
+* Look up Security Groups in the search bar and select the security group used when creating the instance. 
+* Click on the Edit inbound rules on the right side of the window. 
+* Select Add rule at the bottom, and create a rule with type as Custom TCP , port range as 80 and source as 0.0.0.0/0 
+
+For more information on editing inbound/outbound rules, click [here](https://docs.aws.amazon.com/finspace/latest/userguide/step5-config-inbound-rule.html) 
+
+:::
+
+:::{tab-item} IBM Cloud
+
+:sync: IBM Cloud
+
 You can interact with ChatQnA via a browser interface:
 * Under `Infrastructure` in the left pane, go to `Network/Security groups/<Your Security Group>/Rules`
 * Select `Create`
@@ -99,6 +168,11 @@ You can interact with ChatQnA via a browser interface:
 * To view the ChatQnA interface, open a browser and navigate to the UI by inserting your externally facing IP address in the following: `http://{external_public_ip}:80'.
 
 For more information on editing inbound/outbound rules, click [here](https://cloud.ibm.com/docs/vpc?topic=vpc-updating-the-default-security-group&interface=ui)
+
+:::
+
+::::
+
 
 A snapshot of the interface looks as follows:
 
