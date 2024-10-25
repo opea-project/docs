@@ -67,7 +67,7 @@ Related works include [Nvidia Audio2Face](https://docs.nvidia.com/ace/latest/mod
 
 ![avatar chatbot design](assets/avatar_design.png)
 
-Currently, the RAG feature using the `embedding` and `dataprep` microservices is missing in the above design, including uploading relevant documents/weblinks, storing them in the database, and retrieving them for the LLM model. These features will be added in v0.2.  
+Currently, the RAG feature using the `embedding`, `retrieval`, `reranking` and `dataprep` microservices and VectorDB is missing in the above design, including uploading relevant documents/weblinks, storing them in the database, and retrieving them for the LLM model. These features will be added in v0.2.  
 
 Flowchart: AvatarChatbot Megaservice  
 <!-- Insert Mermaid flowchart here -->
@@ -228,7 +228,8 @@ On Gaudi 2:
 ~5 seconds for AudioQnA on Gaudi, 
 ~10-40 seconds for AvatarAnimation on Gaudi, depending on:  
 1) Whether the input is an image or a multi-frame, fixed-fps video
-1) LipSync Animation DL model used: Wav2Lip_only or Wav2Lip+GFPGAN or SadTalker  
-2) Resolution and FPS rate of the resulting mp4 video
+2) The `max_tokens` parameter used in LLM text generation
+3) LipSync Animation DL model used: Wav2Lip_only or Wav2Lip+GFPGAN or SadTalker  
+4) Resolution and FPS rate of the resulting mp4 video
 
 All latency reportings are as of 10/24/2024.
