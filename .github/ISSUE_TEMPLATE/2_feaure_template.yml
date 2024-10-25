@@ -1,0 +1,37 @@
+# Copyright (C) 2024 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
+name: Request Feature
+description: Used to request feature
+title: "[Feature]"
+body:
+  - type: markdown
+    id: description
+    attributes:
+      label: Feature Description
+      description: Describe the current problem? And why is this important?
+      value: |
+        Thanks for taking the time to fill out this feature request.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: current-issue
+    attributes:
+      label: Is this an issue in the latest version?
+      options:
+        - Yes
+        - No
+        - Unknown
+
+  - type: dropdown
+    id: section
+    attributes:
+      label: What section of the docs is the problem on?
+      multiple: true
+      options:
+        - GenAI Examples
+        - GenAI Microservices
+        - Deploying GenAI
+        - Evaluating GenAI
+        - Others (Please let us know in description)
