@@ -40,10 +40,6 @@ Following a discussion with Haystack's technical team, it was agreed that a Chat
 
     This component will receive an embedding and retrieve documents with similar emebddings using an OPEA retrieval microservice. 
 
-4. GenAIEval
-
-    The evaluation, benchmark, and scorecard suite for OPEA, targeting for performance on throughput and latency, accuracy on popular evaluation harness, safety, and hallucination.
-
 ## Alternatives Considered
 
 n/a
