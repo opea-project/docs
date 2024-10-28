@@ -130,21 +130,21 @@ Modify the `message` parameter in the `curl` command to continue interacting wit
 
 Have you ideas and skills to build out genAI components, microservices, and solutions? Would you like  to be a part of this  evolving technology in its early stages? Welcome! 
 * Register for our mailing list: 
-    * General: https://lists.lfaidata.foundation/g/OPEA-announce 
-    * Technical Discussions: https://lists.lfaidata.foundation/g/OPEA-technical-discuss
+    * [Mailing List](https://lists.lfaidata.foundation/g/OPEA-announce) 
+    * [Technical Discussions](https://lists.lfaidata.foundation/g/OPEA-technical-discuss)
 * Subscribe to the working group mailing lists that interest  you
-    * End user https://lists.lfaidata.foundation/g/OPEA-End-User 
-    * Evaluation https://lists.lfaidata.foundation/g/OPEA-Evaluation 
-    * Community https://lists.lfaidata.foundation/g/OPEA-Community 
-    * Research https://lists.lfaidata.foundation/g/OPEA-Research 
-    * Security https://lists.lfaidata.foundation/g/OPEA-Security 
-* Go to the Community Section of the OPEA repo for Contribution Guidelines and step by step instructions. 
+    * [End user](https://lists.lfaidata.foundation/g/OPEA-End-User) 
+    * [Evaluation](https://lists.lfaidata.foundation/g/OPEA-Evaluation) 
+    * [Community](https://lists.lfaidata.foundation/g/OPEA-Community) 
+    * [Research](https://lists.lfaidata.foundation/g/OPEA-Research) 
+    * [Security](https://lists.lfaidata.foundation/g/OPEA-Security) 
+* Go to the Community Section of the OPEA repo for [Contribution Guidelines](https://opea-project.github.io/latest/community/CONTRIBUTING.html) and step by step instructions. 
 * Attend any of our community events and hackathons. https://wiki.lfaidata.foundation/display/DL/OPEA+Community+Events 
 
 Current GenAI Examples
 - Simple chatbot that uses retrieval augmented generation (RAG) architecture. [ChatQnA](/examples/ChatQnA/ChatQnA_Guide.rst) 
-- Code generation, from enabling non-programmers to generate code to improving productivity with code completion of complex applications. [CodeGen]
-- Make your applications more flexible by porting to different languages. [CodeTrans](https://opea-project.github.io/latest/GenAIExamples/CodeGen/README.html)
+- Code generation, from enabling non-programmers to generate code to improving productivity with code completion of complex applications. [CodeGen](https://opea-project.github.io/latest/GenAIExamples/CodeGen/README.html)
+- Make your applications more flexible by porting to different languages. [CodeTrans](https://opea-project.github.io/latest/GenAIExamples/CodeTrans/README.html)
 - Create summaries of news articles, research papers, technical documents, etc. to streamline content systems. [DocSum](https://opea-project.github.io/latest/GenAIExamples/DocSum/README.html)
 - Mimic human behavior by iteratively searching, selecting, and synthesizing information across large bodies of content. [SearchQnA](https://opea-project.github.io/latest/GenAIExamples/SearchQnA/README.html)
 - Provide critical content to your customers by automatically generating Frequently Asked Questions (FAQ) resources. [FaqGen](https://opea-project.github.io/latest/GenAIExamples/FaqGen/README.html)
