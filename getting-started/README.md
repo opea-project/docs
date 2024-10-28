@@ -32,13 +32,12 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 3. In Quick Start, select the base OS as Ubuntu (ami-id : ami-04dd23e62ed049936). 
 
 4. Select an Instance type that is based on Intel hardware. 
+
 >**Note**: We recommend selecting a m7i.4xlarge or larger instance with an Intel(R) 4th Gen Xeon(C) Scalable Processor. For more information on virtual servers on AWS visit [here](https://aws.amazon.com/intel/). 
 
 5. Next, create a new key pair, give it a name or select one from the existing key pairs. 
 
-
-6. Under Network settings select an existing security group. If there is none, create a new one allowing SSH,  and HTTP traffic . 
-
+6. Under Network settings select an existing security group. If there is none, create a new one by selecting the Create security group radio button and select the Allow SSH traffic and Allow HTTP traffic check box. 
 
 7. Configure the storage to 100 GiB and click `Launch Instance`. 
 
@@ -57,6 +56,7 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 3. Under Stock Images, select Ubuntu 24.04 (`ibm-ubuntu-24-04-6-minimal-amd64-1`)
 
 4. Select a virtual server.
+
 > **Note:** We recommend selecting a 3-series instance with an Intel(R) 4th Gen Xeon(C) Scalable Processor, such as `bx3d-16x80` or above. For more information on virtual servers on IBM cloud visit [Intel® solutions on IBM Cloud®](https://www.ibm.com/cloud/intel).
 
 5. Add an SSH key to the instance, if necessary, create one first.
@@ -67,6 +67,28 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 
 8. `ssh` into the instance using the floating IP (`ssh -i <key> ubuntu@<floating-ip>`)
 
+
+:::
+
+:::{tab-item} GCP
+
+:sync: GCP
+
+1. Navigate to [GCP console](https://console.cloud.google.com/) – Click the `Create a VM` button. 
+
+2. Provide a name to the VM. 
+
+3. Select the base OS as Ubuntu 24.04 LTS from Marketplace . 
+
+4. Select an Instance type that is based on Intel hardware. 
+
+> **Note:**  We recommend selecting a c3-standard-22 or larger instance with an Intel(R) 4th Gen Xeon(C) Scalable Processor, and the minimum supported c3 instance type is c3-standard-8 with 32GB memory. For more information on virtual servers on GCP visit [here](https://cloud.google.com/intel). 
+
+5. Under Firewall settings select “Allow HTTP traffic” to access ChatQnA UI web portal. 
+
+6. Change the Boot disk to 100 GiB and click Create. 
+
+7. Use any preferred SSH method such as ”Open in browser window” to connect to the instance  
 
 :::
 
@@ -108,7 +130,7 @@ docker compose up -d
 For example to check the logs for the `tgi-service`:
 
 ```bash
-docker container logs tgi-service | grep Connected
+docker logs tgi-service | grep Connected
 ```
 The output shows `Connected` as shown:
 ```
@@ -171,6 +193,15 @@ For more information on editing inbound/outbound rules, click [here](https://clo
 
 :::
 
+:::{tab-item} GCP
+
+:sync: GCP
+
+You can interact with ChatQnA via a browser interface: 
+
+* To view the ChatQnA interface, open a browser and navigate to the UI by inserting your public facing IP address in the following: `http://{external_ip}:80’. 
+
+:::
 ::::
 
 
