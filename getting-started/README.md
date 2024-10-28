@@ -144,7 +144,8 @@ Run `docker ps -a` as an additional check to verify that all the services are ru
 
 You can interact with ChatQnA via a browser interface: 
 
-* To view the ChatQnA interface, open a browser and navigate to the UI by inserting your externally facing IP address in the following: `http://{public_ip}:80’. 
+* To view the ChatQnA interface, open a browser and navigate to the UI by inserting your public facing IP address in the following: `http://{public_ip}:80’. 
+
 >**Note**: If you are having issue accessing the UI, you need to add an inbound rule in the security group. 
 
 * Look up Security Groups in the search bar and select the security group used when creating the instance. 
