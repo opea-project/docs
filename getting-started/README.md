@@ -37,7 +37,8 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 5. Next, create a new key pair, give it a name or select one from the existing key pairs. 
 
 
-6. Under Network settings select an existing security group. If there is none, create a new one allowing SSH, HTTP and HTTPS traffic . 
+6. Under Network settings select an existing security group. If there is none, create a new one allowing SSH,  and HTTP traffic . 
+
 
 7. Configure the storage to 100 GiB and click `Launch Instance`. 
 
