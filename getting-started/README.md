@@ -33,7 +33,8 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 4. Select an Instance type that is based on Intel hardware. 
 >**Note**: We recommend selecting a m7i.4xlarge or larger instance with an Intel(R) 4th Gen Xeon(C) Scalable Processor. For more information on virtual servers on AWS visit [here](https://aws.amazon.com/intel/). 
 
-5. Next, create a new key pair by giving it a name or select one from the existing key pair. 
+5. Next, create a new key pair, give it a name or select one from the existing key pairs. 
+
 
 6. Under Network settings select an existing security group. If there is none, create a new one allowing SSH, HTTP and HTTPS traffic . 
 
