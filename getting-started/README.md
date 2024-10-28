@@ -17,12 +17,7 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 
 ::::{tab-set}
 
-:sync-group: Cloud Service Providers
-
- 
-
 :::{tab-item} AWS
-
 :sync: AWS
 
 1. Navigate to [AWS console](https://console.aws.amazon.com/console/home) – Search EC2 in the search bar and select it. Click the `Launch Instance` button highlighted in orange. 
@@ -44,9 +39,7 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 8. Click on the connect button on the top right and connect using your preferred method. 
 
 :::
-
 :::{tab-item} IBM Cloud
-
 :sync: IBM Cloud
 
 1.  Navigate to [IBM Cloud](https://cloud.ibm.com). - Click the **Create resource** button at the top right of the screen. Select **Compute** from the options available and select `Virtual Server for VPC`
@@ -69,9 +62,7 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 
 
 :::
-
 :::{tab-item} GCP
-
 :sync: GCP
 
 1. Navigate to [GCP console](https://console.cloud.google.com/) – Click the `Create a VM` button. 
@@ -91,7 +82,6 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 7. Use any preferred SSH method such as ”Open in browser window” to connect to the instance  
 
 :::
-
 ::::
 
 
@@ -159,10 +149,8 @@ Run `docker ps -a` as an additional check to verify that all the services are ru
 
 ::::{tab-set}
 
-:sync-group: Cloud Service Providers
 
 :::{tab-item} AWS
-
 :sync: AWS
 
 You can interact with ChatQnA via a browser interface: 
@@ -178,9 +166,7 @@ You can interact with ChatQnA via a browser interface:
 For more information on editing inbound/outbound rules, click [here](https://docs.aws.amazon.com/finspace/latest/userguide/step5-config-inbound-rule.html) 
 
 :::
-
 :::{tab-item} IBM Cloud
-
 :sync: IBM Cloud
 
 You can interact with ChatQnA via a browser interface:
@@ -192,9 +178,7 @@ You can interact with ChatQnA via a browser interface:
 For more information on editing inbound/outbound rules, click [here](https://cloud.ibm.com/docs/vpc?topic=vpc-updating-the-default-security-group&interface=ui)
 
 :::
-
 :::{tab-item} GCP
-
 :sync: GCP
 
 You can interact with ChatQnA via a browser interface: 
