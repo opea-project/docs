@@ -16,7 +16,6 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 ## Create and Configure a Virtual Server
 
 ::::{tab-set}
-:sync-group: cloudserviceproviders
 :::{tab-item} AWS
 :sync: AWS
 
