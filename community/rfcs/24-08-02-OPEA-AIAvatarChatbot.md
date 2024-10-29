@@ -6,6 +6,8 @@ Code contributions:
 "animation" component: https://github.com/opea-project/GenAIComps/tree/main/comps/animation/wav2lip  
 "AvatarChatbot" examples: https://github.com/opea-project/GenAIExamples/tree/main/AvatarChatbot
 
+Intel Developer Zone Article "Create an AI Avatar Talking Bot with PyTorch* and Open Platform for Enterprise AI (OPEA)": https://www.intel.com/content/www/us/en/developer/articles/technical/ai-avatar-talking-bot-with-pytorch-and-opea.html 
+ 
 YouTube tech-talk video: https://youtu.be/OjaElyUB8Z0?si=6-IdxwTg0YFMraFl
 
 ## Author
