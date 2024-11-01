@@ -34,7 +34,60 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 
 7. Configure the storage to 100 GiB and click `Launch Instance`. 
 
-8. Click on the connect button on the top right and connect using your preferred method. 
+8. Click on the connect button on the top right and connect using your preferred method.
+
+9. Look up Security Groups in the search bar and select the security group used when creating the instance. 
+
+10. Click on the Edit inbound rules on the right side of the window. 
+
+11. Select Add rule at the bottom, and create a rule with type as Custom TCP , port range as 80 and source as 0.0.0.0/0 . For more information on editing inbound/outbound rules, click [here](https://docs.aws.amazon.com/finspace/latest/userguide/step5-config-inbound-rule.html) 
+
+:::
+:::{tab-item} Azure
+:sync: Azure
+
+1. Navigate to [Microsoft Azure](https://portal.azure.com/) – Search Virtual Machines in the search bar and select it. Click the Create button and select Azure Virtual Machine. 
+
+2. Select an existing Resource group from the drop down or click Create new for Resource group and give it a name. Please refer to this [discussion](https://learn.microsoft.com/en-us/answers/questions/1520133/cannot-create-resource-groups) if you have an issue with creating a new resource group. 
+
+3. Provide a name to the VM and select the base OS as Ubuntu 24.04 LTS 
+
+4. Select x64 in VM architecture.  
+
+5. Select an Instance type that is based on Intel hardware. 
+
+>**Note**: We recommend selecting a Standard_D16ds_v5 instance or larger with an Intel(R) 3rd/4th  Gen Xeon(C) Scalable Processor. You can find this family of instance in (US) West US Region. For more information on virtual machines on Azure visit [here](https://azure.microsoft.com/en-us/partners/directory/intel-corporation). 
+
+6. Select Password as Authentication type and create username and password for your instance. 
+
+7. Choose the Allow selected ports in Inbound port rule section and select HTTP. 
+
+8. Click Next: Disk button and select OS disk size as 128GiB.  
+
+9. Click on Review + Create to launch the VM. 
+
+10. Click Go to resource -> Connect -> Connect -> SSH using Azure CLI. Accept the terms and then select "Configure + connect" 
+
+>**Note**: if you have issue to connect the instance with SSH, you could use Bastion with your username and password instead of SSH  
+:::
+:::{tab-item} GCP
+:sync: GCP
+
+1. Navigate to [GCP console](https://console.cloud.google.com/) – Click the `Create a VM` button. 
+
+2. Provide a name to the VM. 
+
+3. Select the base OS as Ubuntu 24.04 LTS from Marketplace . 
+
+4. Select an Instance type that is based on Intel hardware. 
+
+> **Note:**  We recommend selecting a c3-standard-22 or larger instance with an Intel(R) 4th Gen Xeon(C) Scalable Processor, and the minimum supported c3 instance type is c3-standard-8 with 32GB memory. For more information on virtual servers on GCP visit [here](https://cloud.google.com/intel). 
+
+5. Under Firewall settings select “Allow HTTP traffic” to access ChatQnA UI web portal. 
+
+6. Change the Boot disk to 100 GiB and click Create. 
+
+7. Use any preferred SSH method such as ”Open in browser window” to connect to the instance  
 
 :::
 :::{tab-item} IBM Cloud
@@ -56,29 +109,13 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 
 7. Once the instance is running, create and attach a `Floating IP` to the instance. For more information visit [this](https://cloud.ibm.com/docs/vpc?topic=vpc-fip-working&interface=ui) site
 
-8. `ssh` into the instance using the floating IP (`ssh -i <key> ubuntu@<floating-ip>`)
+8. Under `Infrastructure` in the left pane, go to `Network/Security groups/<Your Security Group>/Rules`
 
+9. Select `Create`
 
-:::
-:::{tab-item} GCP
-:sync: GCP
+10. Enable inbound traffic for port 80. For more information on editing inbound/outbound rules, click [here](https://cloud.ibm.com/docs/vpc?topic=vpc-updating-the-default-security-group&interface=ui)
 
-1. Navigate to [GCP console](https://console.cloud.google.com/) – Click the `Create a VM` button. 
-
-2. Provide a name to the VM. 
-
-3. Select the base OS as Ubuntu 24.04 LTS from Marketplace . 
-
-4. Select an Instance type that is based on Intel hardware. 
-
-> **Note:**  We recommend selecting a c3-standard-22 or larger instance with an Intel(R) 4th Gen Xeon(C) Scalable Processor, and the minimum supported c3 instance type is c3-standard-8 with 32GB memory. For more information on virtual servers on GCP visit [here](https://cloud.google.com/intel). 
-
-5. Under Firewall settings select “Allow HTTP traffic” to access ChatQnA UI web portal. 
-
-6. Change the Boot disk to 100 GiB and click Create. 
-
-7. Use any preferred SSH method such as ”Open in browser window” to connect to the instance  
-
+11. `ssh` into the instance using the floating IP (`ssh -i <key> ubuntu@<floating-ip>`)
 :::
 ::::
 
@@ -144,46 +181,9 @@ Run `docker ps -a` as an additional check to verify that all the services are ru
 
 ### Interact with ChatQnA
 
-
-::::{tab-set}
-:::{tab-item} AWS
-:sync: AWS
-
 You can interact with ChatQnA via a browser interface: 
 
 * To view the ChatQnA interface, open a browser and navigate to the UI by inserting your public facing IP address in the following: `http://{public_ip}:80’. 
-
->**Note**: If you are having issue accessing the UI, you need to add an inbound rule in the security group. 
-
-* Look up Security Groups in the search bar and select the security group used when creating the instance. 
-* Click on the Edit inbound rules on the right side of the window. 
-* Select Add rule at the bottom, and create a rule with type as Custom TCP , port range as 80 and source as 0.0.0.0/0 
-
-For more information on editing inbound/outbound rules, click [here](https://docs.aws.amazon.com/finspace/latest/userguide/step5-config-inbound-rule.html) 
-
-:::
-:::{tab-item} IBM Cloud
-:sync: IBM Cloud
-
-You can interact with ChatQnA via a browser interface:
-* Under `Infrastructure` in the left pane, go to `Network/Security groups/<Your Security Group>/Rules`
-* Select `Create`
-* Enable inbound traffic for port 80
-* To view the ChatQnA interface, open a browser and navigate to the UI by inserting your externally facing IP address in the following: `http://{external_public_ip}:80'.
-
-For more information on editing inbound/outbound rules, click [here](https://cloud.ibm.com/docs/vpc?topic=vpc-updating-the-default-security-group&interface=ui)
-
-:::
-:::{tab-item} GCP
-:sync: GCP
-
-You can interact with ChatQnA via a browser interface: 
-
-* To view the ChatQnA interface, open a browser and navigate to the UI by inserting your public facing IP address in the following: `http://{external_ip}:80’. 
-
-:::
-::::
-
 
 A snapshot of the interface looks as follows:
 
