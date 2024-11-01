@@ -46,7 +46,7 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 :::{tab-item} Azure
 :sync: Azure
 
-1. Navigate to [Microsoft Azure](https://portal.azure.com/) – Search Virtual Machines in the search bar and select it. Click the Create button and select Azure Virtual Machine. 
+1. Navigate to [Microsoft Azure](https://portal.azure.com/#home) – Search Virtual Machines in the search bar and select it. Click the Create button and select Azure Virtual Machine. 
 
 2. Select an existing Resource group from the drop down or click Create new for Resource group and give it a name. Please refer to this [discussion](https://learn.microsoft.com/en-us/answers/questions/1520133/cannot-create-resource-groups) if you have an issue with creating a new resource group. 
 
