@@ -14,19 +14,18 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 
 ## Create and Configure a Virtual Server
 
-::::{tab-set}
-:::{tab-item} AWS
-:sync: AWS
+::::{tab-set} :sync-group: cloudserviceproviders
+:::{tab-item} AWS :sync: aws
 
-1. Navigate to [AWS console](https://console.aws.amazon.com/console/home) – Search EC2 in the search bar and select it. Click the `Launch Instance` button highlighted in orange. 
+1. Navigate to [AWS console](https://console.aws.amazon.com/console/home) – Search EC2 in the search bar and select it. Click the "Launch Instance" button highlighted in orange. 
 
 2. Provide a name to the VM. 
 
-3. In Quick Start, select the base OS as Ubuntu (ami-id : ami-04dd23e62ed049936). 
+3. In Quick Start, select the base OS as Ubuntu (`ami-id : ami-04dd23e62ed049936`). 
 
 4. Select an Instance type that is based on Intel hardware. 
 
->**Note**: We recommend selecting a m7i.4xlarge or larger instance with an Intel(R) 4th Gen Xeon(C) Scalable Processor. For more information on virtual servers on AWS visit [here](https://aws.amazon.com/intel/). 
+>**Note**: We recommend selecting a `m7i.4xlarge` or larger instance with an Intel(R) 4th Gen Xeon(C) Scalable Processor. For more information on virtual servers on AWS visit [here](https://aws.amazon.com/intel/). 
 
 5. Next, create a new key pair, give it a name or select one from the existing key pairs. 
 
@@ -34,13 +33,63 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 
 7. Configure the storage to 100 GiB and click `Launch Instance`. 
 
-8. Click on the connect button on the top right and connect using your preferred method. 
+8. Click on the "connect" button on the top right and connect using your preferred method.
+
+9. Look up Security Groups in the search bar and select the security group used when creating the instance. 
+
+10. Click on the Edit inbound rules on the right side of the window. 
+
+11.  Select Add rule at the bottom, and create a rule with type as Custom TCP , port range as 80 and source as 0.0.0.0/0 . Learn more about [editing inbound/outbound rules](https://docs.aws.amazon.com/finspace/latest/userguide/step5-config-inbound-rule.html)
 
 :::
-:::{tab-item} IBM Cloud
-:sync: IBM Cloud
+:::{tab-item} Azure :sync: azure
 
-1.  Navigate to [IBM Cloud](https://cloud.ibm.com). - Click the **Create resource** button at the top right of the screen. Select **Compute** from the options available and select `Virtual Server for VPC`
+1. Navigate to [Microsoft Azure](portal.azure.com) – Select the "Skip" button on the bottom right to land on the service offerings page. Search for "Virtual Machines" in the search bar and select it. Click the "Create" button and select "Azure Virtual Machine".
+
+2. Select an existing "Resource group" from the drop down or click "Create" for a new Resource group and give it a name. If you have issues refer to [cannot create resource groups](https://learn.microsoft.com/en-us/answers/questions/1520133/cannot-create-resource-groups). 
+
+3. Provide a name to the VM and select the base OS as `Ubuntu 24.04 LTS`
+
+4. Select x64 in VM architecture.  
+
+5. Select an Instance type that is based on Intel hardware. 
+
+>**Note**: We recommend selecting a `Standard_D16ds_v5` instance or larger with an Intel(R) 3rd/4th  Gen Xeon(C) Scalable Processor. You can find this family of instances in the (US) West US Region. Visit for more information [virtual machines on Azure](https://azure.microsoft.com/en-us/partners/directory/intel-corporation).  
+
+6. Select Password as Authentication type and create username and password for your instance. 
+
+7. Choose the Allow selected ports in Inbound port rule section and select HTTP. 
+
+8. Click "Next: Disk" button and select OS disk size as 128GiB.  
+
+9. Click on "Review + Create" to launch the VM. 
+
+10. Click Go to resource -> Connect -> Connect -> SSH using Azure CLI. Accept the terms and then select "Configure + connect" 
+
+>**Note**: If you have issues connecting to the instance with SSH, you could use instead Bastion with your username and password.  
+:::
+:::{tab-item} GCP :sync: gcp
+
+1. Navigate to [GCP console](https://console.cloud.google.com/) – Click the "Create a VM" button. 
+
+2. Provide a name to the VM. 
+
+3. Select the base OS as `Ubuntu 24.04 LTS` from Marketplace . 
+
+4. Select an Instance type that is based on Intel hardware. 
+
+> **Note:**   We recommend selecting a `c3-standard-22` or larger instance with an Intel(R) 4th Gen Xeon(C) Scalable Processor, and the minimum supported c3 instance type is c3-standard-8 with 32GB memory. For more information, visit [virtual servers on GCP](https://cloud.google.com/intel).  
+
+5. Under Firewall settings select “Allow HTTP traffic” to access ChatQnA UI web portal. 
+
+6. Change the Boot disk to 100 GiB and click "Create". 
+
+7. Use any preferred SSH method such as "Open in browser window" to connect to the instance.  
+
+:::
+:::{tab-item} IBM Cloud :sync: ibmcloud
+
+1.  Navigate to [IBM Cloud](https://cloud.ibm.com). - Click the **Create resource** button at the top right of the screen. Select **Compute** from the options available and select "Virtual Server for VPC"
 
 2. Select a location for the instance. Assign a name to it.
 
@@ -52,35 +101,18 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 
 5. Add an SSH key to the instance, if necessary, create one first.
 
-6. Click on `Create virtual server`.
+6. Click on "Create virtual server".
 
-7. Once the instance is running, create and attach a `Floating IP` to the instance. For more information visit [this](https://cloud.ibm.com/docs/vpc?topic=vpc-fip-working&interface=ui) site
+7. Once the instance is running, create and attach a "Floating IP" to the instance. For more information visit [this](https://cloud.ibm.com/docs/vpc?topic=vpc-fip-working&interface=ui) site
 
-8. `ssh` into the instance using the floating IP (`ssh -i <key> ubuntu@<floating-ip>`)
+8. Under "Infrastructure" in the left pane, go to Network/Security groups/<Your Security Group>/Rules
 
+9. Select "Create"
 
-:::
-:::{tab-item} GCP
-:sync: GCP
+10. Enable inbound traffic for port 80. For more information on editing inbound/outbound rules, click [here](https://cloud.ibm.com/docs/vpc?topic=vpc-updating-the-default-security-group&interface=ui)
 
-1. Navigate to [GCP console](https://console.cloud.google.com/) – Click the `Create a VM` button. 
-
-2. Provide a name to the VM. 
-
-3. Select the base OS as Ubuntu 24.04 LTS from Marketplace . 
-
-4. Select an Instance type that is based on Intel hardware. 
-
-> **Note:**  We recommend selecting a c3-standard-22 or larger instance with an Intel(R) 4th Gen Xeon(C) Scalable Processor, and the minimum supported c3 instance type is c3-standard-8 with 32GB memory. For more information on virtual servers on GCP visit [here](https://cloud.google.com/intel). 
-
-5. Under Firewall settings select “Allow HTTP traffic” to access ChatQnA UI web portal. 
-
-6. Change the Boot disk to 100 GiB and click Create. 
-
-7. Use any preferred SSH method such as ”Open in browser window” to connect to the instance  
-
-:::
-::::
+11. ssh into the instance using the floating IP (`ssh -i <key> ubuntu@<floating-ip>`)
+::: ::::
 
 
 ## Deploy the ChatQnA Solution
@@ -144,53 +176,23 @@ Run `docker ps -a` as an additional check to verify that all the services are ru
 
 ### Interact with ChatQnA
 
-
-::::{tab-set}
-:::{tab-item} AWS
-:sync: AWS
-
 You can interact with ChatQnA via a browser interface: 
 
 * To view the ChatQnA interface, open a browser and navigate to the UI by inserting your public facing IP address in the following: `http://{public_ip}:80’. 
 
->**Note**: If you are having issue accessing the UI, you need to add an inbound rule in the security group. 
-
-* Look up Security Groups in the search bar and select the security group used when creating the instance. 
-* Click on the Edit inbound rules on the right side of the window. 
-* Select Add rule at the bottom, and create a rule with type as Custom TCP , port range as 80 and source as 0.0.0.0/0 
-
-For more information on editing inbound/outbound rules, click [here](https://docs.aws.amazon.com/finspace/latest/userguide/step5-config-inbound-rule.html) 
-
-:::
-:::{tab-item} IBM Cloud
-:sync: IBM Cloud
-
-You can interact with ChatQnA via a browser interface:
-* Under `Infrastructure` in the left pane, go to `Network/Security groups/<Your Security Group>/Rules`
-* Select `Create`
-* Enable inbound traffic for port 80
-* To view the ChatQnA interface, open a browser and navigate to the UI by inserting your externally facing IP address in the following: `http://{external_public_ip}:80'.
-
-For more information on editing inbound/outbound rules, click [here](https://cloud.ibm.com/docs/vpc?topic=vpc-updating-the-default-security-group&interface=ui)
-
-:::
-:::{tab-item} GCP
-:sync: GCP
-
-You can interact with ChatQnA via a browser interface: 
-
-* To view the ChatQnA interface, open a browser and navigate to the UI by inserting your public facing IP address in the following: `http://{external_ip}:80’. 
-
-:::
-::::
-
+We can go ahead and ask a sample question, say 'What is OPEA?'.
 
 A snapshot of the interface looks as follows:
 
 ![Chat Interface](assets/chat_ui_response.png)
 
+Given that any information about OPEA was not in the training data for the model, we see the model hallucinating and coming up with a response. We can upload a document (PDF) with information and observe how the response changes.
 
-> **Note:** this example leverages the Nike 2023 Annual report for its RAG based content. See the [ChatQnA Sample Guide](https://opea-project.github.io/latest/examples/ChatQnA/ChatQnA_Guide.html)
+> **Note:** this example leverages the [OPEA document](assets/what_is_opea.pdf) for its RAG based content. You can download the [OPEA document](assets/what_is_opea.pdf) and upload it using the UI. 
+
+![Chat Interface with RAG](assets/chat_ui_response_rag.png)
+
+We observe that the response is relevant and is based on the PDF uploaded. See the [ChatQnA Sample Guide](https://opea-project.github.io/latest/examples/ChatQnA/ChatQnA_Guide.html)
 to learn how you can customize the example with your own content. 
 
 To interact with the ChatQnA application via a `curl` command:
