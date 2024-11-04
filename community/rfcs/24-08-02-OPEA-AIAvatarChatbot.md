@@ -1,7 +1,14 @@
 # 24-08-02-OPEA-AIAvatarChatbot
 
-A RAG-Powered Human-Like AI Avatar Audio Chatbot integrated with OPEA AudioQnA
-<!-- The short description of the feature you want to contribute -->
+A Human-Like AI Avatar Audio Chatbot integrated with OPEA AudioQnA  
+
+Code contributions:  
+"animation" component: https://github.com/opea-project/GenAIComps/tree/main/comps/animation/wav2lip  
+"AvatarChatbot" examples: https://github.com/opea-project/GenAIExamples/tree/main/AvatarChatbot
+
+Intel Developer Zone Article "Create an AI Avatar Talking Bot with PyTorch* and Open Platform for Enterprise AI (OPEA)": https://www.intel.com/content/www/us/en/developer/articles/technical/ai-avatar-talking-bot-with-pytorch-and-opea.html 
+ 
+YouTube tech-talk video: https://youtu.be/OjaElyUB8Z0?si=6-IdxwTg0YFMraFl
 
 ## Author
 <!-- List all contributors of this RFC. -->
@@ -9,9 +16,9 @@ A RAG-Powered Human-Like AI Avatar Audio Chatbot integrated with OPEA AudioQnA
 
 ## Status
 <!-- Change the PR status to Under Review | Rejected | Accepted. -->
-v0.1 - ASMO Team sharing on Fri 6/28/2024  
-[GenAIComps pr #400](https://github.com/opea-project/GenAIComps/pull/400) (Under Review)  
-[GenAIExamples pr #523](https://github.com/opea-project/GenAIExamples/pull/523) (Under Review)
+v0.1 - ASMO Team sharing on Thursday 10/24/2024  
+* [GenAIComps pr #775](https://github.com/opea-project/GenAIComps/pull/775) | <span style="color: green;">Merged</span>  
+* [GenAIExamples pr #923](https://github.com/opea-project/GenAIExamples/pull/923) | <span style="color: green;">Merged</span>
 
 ## Objective
 <!-- List what problem will this solve? What are the goals and non-goals of this RFC? -->
@@ -39,10 +46,10 @@ The chatbot will:
 * Use multimodal retrieval-augmented generation (RAG) to generate more accurate, in-domain responses, in v0.2
 
 New microservices include:
-* animation 
+* [animation](https://github.com/opea-project/GenAIComps/tree/main/comps/animation/wav2lip) 
 
 New megaservices include:
-* AvatarChatbot
+* [AvatarChatbot](https://github.com/opea-project/GenAIExamples/tree/main/AvatarChatbot)
 
 ## Motivation
 <!-- List why this problem is valuable to solve? Whether some related work exists? -->
@@ -60,9 +67,9 @@ Related works include [Nvidia Audio2Face](https://docs.nvidia.com/ace/latest/mod
 ### Avatar Chatbot design
 <!-- Removed PPT slides -->
 
-![avatar chatbot design](assets/design.png)
+![avatar chatbot design](assets/avatar_design.png)
 
-Currently, the RAG feature using the `embedding` and `dataprep` microservices is missing in the above design, including uploading relevant documents/weblinks, storing them in the database, and retrieving them for the LLM model. These features will be added in v0.2.  
+Currently, the RAG feature using the `embedding`, `retrieval`, `reranking` and `dataprep` microservices and VectorDB is missing in the above design, including uploading relevant documents/weblinks, storing them in the database, and retrieving them for the LLM model. These features will be added in v0.2.  
 
 Flowchart: AvatarChatbot Megaservice  
 <!-- Insert Mermaid flowchart here -->
@@ -217,13 +224,14 @@ End-to-End Inference Time for AvatarChatbot Megaservice (asr -> llm -> tts -> an
 
 On SPR:  
 ~30 seconds for AudioQnA on SPR,  
-~40-200 seconds for AvatarAnimation on SPR
+~30-200 seconds for AvatarAnimation on SPR
 
 On Gaudi 2:  
 ~5 seconds for AudioQnA on Gaudi, 
-~10-50 seconds for AvatarAnimation on Gaudi, depending on:  
+~10-40 seconds for AvatarAnimation on Gaudi, depending on:  
 1) Whether the input is an image or a multi-frame, fixed-fps video
-1) LipSync Animation DL model used: Wav2Lip_only or Wav2Lip+GFPGAN or SadTalker  
-2) Resolution and FPS rate of the resulting mp4 video
+2) The `max_tokens` parameter used in LLM text generation
+3) LipSync Animation DL model used: Wav2Lip_only or Wav2Lip+GFPGAN or SadTalker  
+4) Resolution and FPS rate of the resulting mp4 video
 
-All latency reportings are as of 8/2/2024.
+All latency reportings are as of 10/24/2024.
