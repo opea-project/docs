@@ -14,9 +14,8 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 
 ## Create and Configure a Virtual Server
 
-::::{tab-set}
-:::{tab-item} AWS
-:sync: AWS
+::::{tab-set} :sync-group: cloudserviceproviders
+:::{tab-item} AWS :sync: aws
 
 1. Navigate to [AWS console](https://console.aws.amazon.com/console/home) – Search EC2 in the search bar and select it. Click the `Launch Instance` button highlighted in orange. 
 
@@ -40,15 +39,14 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 
 10. Click on the Edit inbound rules on the right side of the window. 
 
-11. Select Add rule at the bottom, and create a rule with type as Custom TCP , port range as 80 and source as 0.0.0.0/0 . For more information on editing inbound/outbound rules, click [here](https://docs.aws.amazon.com/finspace/latest/userguide/step5-config-inbound-rule.html) 
+11.  Select Add rule at the bottom, and create a rule with type as Custom TCP , port range as 80 and source as 0.0.0.0/0 . Learn more about [editing inbound/outbound rules](https://docs.aws.amazon.com/finspace/latest/userguide/step5-config-inbound-rule.html)
 
 :::
-:::{tab-item} Azure
-:sync: Azure
+:::{tab-item} Azure :sync: azure
 
-1. Navigate to [Microsoft Azure](https://portal.azure.com/#home) – Search Virtual Machines in the search bar and select it. Click the Create button and select Azure Virtual Machine. 
+1. Navigate to [Microsoft Azure](https://portal.azure.com) – Select the "Skip" button on the bottom right to land on the service offerings page. Search for "Virtual Machines" in the search bar and select it. Click the "Create" button and select "Azure Virtual Machine".
 
-2. Select an existing Resource group from the drop down or click Create new for Resource group and give it a name. Please refer to this [discussion](https://learn.microsoft.com/en-us/answers/questions/1520133/cannot-create-resource-groups) if you have an issue with creating a new resource group. 
+2. Select an existing "Resource group" from the drop down or click "Create" for a new Resource group and give it a name. If you have issues refer to [cannot create resource groups](https://learn.microsoft.com/en-us/answers/questions/1520133/cannot-create-resource-groups). 
 
 3. Provide a name to the VM and select the base OS as Ubuntu 24.04 LTS 
 
@@ -56,7 +54,7 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 
 5. Select an Instance type that is based on Intel hardware. 
 
->**Note**: We recommend selecting a Standard_D16ds_v5 instance or larger with an Intel(R) 3rd/4th  Gen Xeon(C) Scalable Processor. You can find this family of instance in (US) West US Region. For more information on virtual machines on Azure visit [here](https://azure.microsoft.com/en-us/partners/directory/intel-corporation). 
+>**Note**: We recommend selecting a Standard_D16ds_v5 instance or larger with an Intel(R) 3rd/4th  Gen Xeon(C) Scalable Processor. You can find this family of instances in the (US) West US Region. Visit for more information [virtual machines on Azure](https://azure.microsoft.com/en-us/partners/directory/intel-corporation).  
 
 6. Select Password as Authentication type and create username and password for your instance. 
 
@@ -68,10 +66,9 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 
 10. Click Go to resource -> Connect -> Connect -> SSH using Azure CLI. Accept the terms and then select "Configure + connect" 
 
->**Note**: if you have issue to connect the instance with SSH, you could use Bastion with your username and password instead of SSH  
+>**Note**: If you have issues connecting to the instance with SSH, you could use instead Bastion with your username and password.  
 :::
-:::{tab-item} GCP
-:sync: GCP
+:::{tab-item} GCP :sync: gcp
 
 1. Navigate to [GCP console](https://console.cloud.google.com/) – Click the `Create a VM` button. 
 
@@ -87,11 +84,10 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 
 6. Change the Boot disk to 100 GiB and click Create. 
 
-7. Use any preferred SSH method such as ”Open in browser window” to connect to the instance  
+7. Use any preferred SSH method such as "Open in browser window" to connect to the instance.  
 
 :::
-:::{tab-item} IBM Cloud
-:sync: IBM Cloud
+:::{tab-item} IBM Cloud :sync: ibmcloud
 
 1.  Navigate to [IBM Cloud](https://cloud.ibm.com). - Click the **Create resource** button at the top right of the screen. Select **Compute** from the options available and select `Virtual Server for VPC`
 
@@ -116,8 +112,7 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 10. Enable inbound traffic for port 80. For more information on editing inbound/outbound rules, click [here](https://cloud.ibm.com/docs/vpc?topic=vpc-updating-the-default-security-group&interface=ui)
 
 11. `ssh` into the instance using the floating IP (`ssh -i <key> ubuntu@<floating-ip>`)
-:::
-::::
+::: ::::
 
 
 ## Deploy the ChatQnA Solution
@@ -185,12 +180,19 @@ You can interact with ChatQnA via a browser interface:
 
 * To view the ChatQnA interface, open a browser and navigate to the UI by inserting your public facing IP address in the following: `http://{public_ip}:80’. 
 
+We can go ahead and ask a sample question, say 'What is OPEA?'.
+
 A snapshot of the interface looks as follows:
 
 ![Chat Interface](assets/chat_ui_response.png)
 
+Given that any information about OPEA was not in the training data for the model, we see the model hallucinating and coming up with a response. We can upload a document (PDF) with information and observe how the response changes.
 
-> **Note:** this example leverages the Nike 2023 Annual report for its RAG based content. See the [ChatQnA Sample Guide](https://opea-project.github.io/latest/examples/ChatQnA/ChatQnA_Guide.html)
+> **Note:** this example leverages the [OPEA document](assets/what_is_opea.pdf) for its RAG based content. You can download the [OPEA document](assets/what_is_opea.pdf) and upload it using the UI. 
+
+![Chat Interface with RAG](assets/chat_ui_response_rag.png)
+
+We observe that the response is relavant and is based on the PDF uploaded.See the [ChatQnA Sample Guide](https://opea-project.github.io/latest/examples/ChatQnA/ChatQnA_Guide.html)
 to learn how you can customize the example with your own content. 
 
 To interact with the ChatQnA application via a `curl` command:
