@@ -78,7 +78,7 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 
 4. Select an Instance type that is based on Intel hardware. 
 
-> **Note:**  We recommend selecting a `c3-standard-22` or larger instance with an Intel(R) 4th Gen Xeon(C) Scalable Processor, and the minimum supported c3 instance type is c3-standard-8 with 32GB memory. For more information on virtual servers on GCP visit [here](https://cloud.google.com/intel). 
+> **Note:**   We recommend selecting a `c3-standard-22` or larger instance with an Intel(R) 4th Gen Xeon(C) Scalable Processor, and the minimum supported c3 instance type is c3-standard-8 with 32GB memory. For more information, visit [virtual servers on GCP](https://cloud.google.com/intel).  
 
 5. Under Firewall settings select “Allow HTTP traffic” to access ChatQnA UI web portal. 
 
@@ -192,7 +192,7 @@ Given that any information about OPEA was not in the training data for the model
 
 ![Chat Interface with RAG](assets/chat_ui_response_rag.png)
 
-We observe that the response is relavant and is based on the PDF uploaded.See the [ChatQnA Sample Guide](https://opea-project.github.io/latest/examples/ChatQnA/ChatQnA_Guide.html)
+We observe that the response is relevant and is based on the PDF uploaded. See the [ChatQnA Sample Guide](https://opea-project.github.io/latest/examples/ChatQnA/ChatQnA_Guide.html)
 to learn how you can customize the example with your own content. 
 
 To interact with the ChatQnA application via a `curl` command:
