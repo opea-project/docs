@@ -20,6 +20,7 @@ jobs:
 
       run: |
         git config --local --get remote.origin.url
+        ls
         mkdir opea
         mkdir opea/docs
         echo "mv docs' file/folder to opea/doc"
