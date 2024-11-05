@@ -1,4 +1,4 @@
-## Contributing to OPEA
+# Contributing to OPEA
 
 Welcome to the OPEA open-source community! We are thrilled to have you here and excited about the potential contributions you can bring to the OPEA platform. Whether you are fixing bugs, adding new GenAI components, improving documentation, or sharing your unique use cases, your contributions are invaluable.
 
@@ -8,7 +8,7 @@ Please check the [Contributing guidelines](https://github.com/opea-project/docs/
 
 Thank you for being a part of this journey. We can't wait to see what we can achieve together!
 
-## Additional Content
+# Additional Content
 
 - [Code of Conduct](https://github.com/opea-project/docs/tree/main/community/CODE_OF_CONDUCT.md)
 - [Security Policy](https://github.com/opea-project/docs/tree/main/community/SECURITY.md)
