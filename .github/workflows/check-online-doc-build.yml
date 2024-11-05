@@ -16,10 +16,9 @@ jobs:
       contents: write
     steps:
     - uses: actions/checkout@v4
-    - name: Prepare files
+    - name: Prepare files (ignore error)
       continue-on-error: true
       run: |
-        ls
         mkdir opea
         mkdir opea/docs
         echo "mv docs' file/folder to opea/doc"
@@ -30,4 +29,4 @@ jobs:
         git config --local --get remote.origin.url
         cd opea/docs
         echo "build online doc"
-        bash scripts/build.sh f
+        bash scripts/build.sh
