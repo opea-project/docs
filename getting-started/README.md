@@ -17,29 +17,48 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 :::{tab-item} Amazon Web Services
 :sync: AWS
 
-1. Navigate to [AWS console](https://console.aws.amazon.com/console/home) – Search EC2 in the search bar and select it. Click the "Launch Instance" button highlighted in orange.
+**Step 1: Create Your Virtual Server**
 
-2. Provide a name to the VM.
+1. Open the [AWS console](https://console.aws.amazon.com/console/home) and search for **EC2** in the search bar. 
 
-3. In Quick Start, select the base OS as Ubuntu (`ami-id : ami-04dd23e62ed049936`).
+2. Select **Launch instance** to start creating a virtual server.
 
-4. Select an Instance type that is based on Intel hardware.
+3. Under **Name and tags**, name your virtual server in the **Name** field.
 
->**Note**: We recommend selecting a `m7i.4xlarge` or larger instance with an Intel(R) 4th Gen Xeon(C) Scalable Processor. For more information on virtual servers on AWS visit [here](https://aws.amazon.com/intel/).
+4. Under **Quick Start**, choose Ubuntu (`ami-id : ami-04dd23e62ed049936`) as the base OS.
 
-5. Next, create a new key pair, give it a name or select one from the existing key pairs.
+5. In **Instance type**, select an instance for your Intel processor.
 
-6. Under Network settings select an existing security group. If there is none, create a new one by selecting the Create security group radio button and select the Allow SSH traffic and Allow HTTP traffic check box.
+   >**Note**: We recommend `m7i.4xlarge` or larger instance for an Intel® 4th Gen Xeon© Scalable Processor. For more information on virtual servers on AWS, visit the [AWS and Intel page](https://aws.amazon.com/intel/).
 
-7. Configure the storage to 100 GiB and click "Launch Instance".
+6. Create a new key pair for SSH access by naming it, or select an existing key pair from the dropdown list.
 
-8. Click on the "connect" button on the top right and connect using your preferred method.
+7. Under **Network Settings**:
 
-9. Look up Security Groups in the search bar and select the security group used when creating the instance.
+   -  Choose an existing security group, or
+   -  Select **Create security group** and enable **Allow SSH traffic** and **Allow HTTP traffic**.
 
-10. Click on the Edit inbound rules on the right side of the window.
+8. In **Storage**, set the size to 100 GiB.
 
-11.  Select Add rule at the bottom, and create a rule with type as Custom TCP , port range as 80 and source as 0.0.0.0/0 . Learn more about [editing inbound/outbound rules](https://docs.aws.amazon.com/finspace/latest/userguide/step5-config-inbound-rule.html)
+9. Select **Launch instance** to launch your virtual server. A **Success** banner confirms the launch.
+
+**Step 2: Connect and Configure Your Virtual Server**
+
+1. Select **Connect**, and connect using your preferred connection method.
+
+2. Search for **Security Groups** in the search bar and select the security group used when creating the instance.
+
+3. Select **Edit inbound rules** on the right side of the window.
+
+4. To add a rule, select **Add rule** and enter the following:
+
+   -  Type: Custom TCP
+   -  Port Range: 80
+   -  Source: 0.0.0.0/0 
+
+   >**Note**: To learn more, see [editing inbound or outbound rules](https://docs.aws.amazon.com/finspace/latest/userguide/step5-config-inbound-rule.html) from AWS documentation.
+
+5. Select **Save rules** to commit your changes.
 
 :::
 :::{tab-item} Google Cloud Platform
