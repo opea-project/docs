@@ -18,6 +18,7 @@ jobs:
     - uses: actions/checkout@v4
     - name: Prepare files (ignore error)
       continue-on-error: true
+      shell: bash
       run: |
         mkdir opea
         mkdir opea/docs
@@ -25,6 +26,7 @@ jobs:
         mv * opea/docs
 
     - name: Build Online Document
+      shell: bash
       run: |
         git config --local --get remote.origin.url
         cd opea/docs
