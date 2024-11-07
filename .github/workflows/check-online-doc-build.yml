@@ -23,7 +23,12 @@ jobs:
         mkdir opea
         mkdir opea/docs
         echo "mv docs' file/folder to opea/doc"
-        mv * opea/docs
+        ls -la
+        echo "2"
+        mv ./* opea/docs
+        ls -la
+        echo "3"
+        ls -la opea/docs
 
     - name: Build Online Document
       shell: bash
