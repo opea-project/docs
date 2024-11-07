@@ -19,6 +19,7 @@ jobs:
     - name: Prepare files (ignore error)
       continue-on-error: true
       shell: bash
+      exclude_assets: ''
       run: |
         mkdir opea
         mkdir opea/docs
