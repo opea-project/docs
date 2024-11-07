@@ -38,6 +38,7 @@ done
 
 echo "Build HTML"
 cd docs
+make -v
 make clean
 make html
 
