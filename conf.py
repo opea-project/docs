@@ -147,10 +147,6 @@ html_show_sourcelink = True
 # using the given strftime format.
 html_last_updated_fmt = '%b %d, %Y'
 
-suppress_warnings = [
-   'myst.directive_option',
-   'myst.xref_missing',
-]
 
 rst_epilog = """
 .. include:: /sphinx/substitutions.txt

@@ -7,7 +7,7 @@
 # the filtered output to stdout
 #
 # Only argument is the name of the log file saved by the build.
-echo "entry filter doc log"
+
 KI_SCRIPT=scripts/filter-known-issues.py
 CONFIG_DIR=known-issues/doc
 
@@ -32,10 +32,7 @@ else
 fi
 
 if [ -s "${LOG_FILE}" ]; then
-   echo "run $KI_SCRIPT"
-   ls -la
-   ls -la known-issues
-   python $KI_SCRIPT --config-dir ${CONFIG_DIR} ${LOG_FILE} -o ${BUILDDIR}/doc.warnings
+   python3 $KI_SCRIPT --config-dir ${CONFIG_DIR} ${LOG_FILE} > ${BUILDDIR}/doc.warnings 2>&1
    if [ -s ${BUILDDIR}/doc.warnings ]; then
 	   echo
 	   echo -e "${red}New errors/warnings found, please fix them:"

@@ -38,11 +38,9 @@ done
 
 echo "Build HTML"
 cd docs
-make -v
 make clean
 make html
 retval=$?
-ls -la _build
 echo "result = $retval"
 if [ $retval -ne 0 ]; then
   echo "make html is error"

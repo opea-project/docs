@@ -104,7 +104,6 @@ def config_import_path(path):
 
 
 def config_import(paths):
-    # print("config_import", paths)
     """
     Imports regular expresions from any file *.conf in the list of paths.
 
@@ -124,107 +123,133 @@ def config_import(paths):
         config_import_path(path)
 
 
-def print_error(f, str):
-    tmp = str.decode("utf-8")
-    # print("zjy", tmp)
-    f.write(tmp)
+arg_parser = argparse.ArgumentParser(
+    description=__doc__,
+    formatter_class=argparse.RawDescriptionHelpFormatter)
+arg_parser.add_argument("-v", "--verbosity", action="count", default=0,
+                        help="increase verbosity")
+arg_parser.add_argument("-q", "--quiet", action="count", default=0,
+                        help="decrease verbosity")
+arg_parser.add_argument("-e", "--errors", action="store", default=None,
+                        help="file where to store errors")
+arg_parser.add_argument("-w", "--warnings", action="store", default=None,
+                        help="file where to store warnings")
+arg_parser.add_argument("-c", "--config-dir", action="append", nargs="?",
+                        default=[".known-issues/"],
+                        help="configuration directory (multiple can be "
+                        "given; if none given, clears the current list) "
+                        "%(default)s")
+arg_parser.add_argument("FILENAMEs", nargs="+",
+                        help="files to filter")
+args = arg_parser.parse_args()
 
-def filter_log(args):
-    exclude_ranges = []
+logging.basicConfig(level=40 - 10 * (args.verbosity - args.quiet),
+                    format="%(levelname)s: %(message)s")
 
-    output_file = args.output
-    fout = open(output_file, "w")
+path = ".known-issues/"
+logging.debug("Reading configuration from directory `%s`", path)
+config_import(args.config_dir)
 
-    for filename in args.FILENAMEs:
-        if os.stat(filename).st_size == 0:
-            continue  # skip empty log files
-        try:
-            with open(filename, "r+b") as f:
-                logging.info("%s: filtering", filename)
-                # Yeah, this should be more protected in case of exception
-                # and such, but this is a short running program...
-                mm = mmap.mmap(f.fileno(), 0)
-                # print("exclude_regexs", exclude_regexs)
-                for ex, origin, flags in exclude_regexs:
-                    logging.info("%s: searching from %s: %s",
-                                filename, origin, ex.pattern)
-                    for m in re.finditer(ex.pattern, mm, re.MULTILINE):
-                        logging.info("%s: %s-%s: match from from %s %s",
-                                    filename, m.start(), m.end(), origin, flags)
-                        if 'warning' in flags:
-                            exclude_ranges.append((m.start(), m.end(), True))
-                        else:
-                            exclude_ranges.append((m.start(), m.end(), False))
+exclude_ranges = []
 
-                exclude_ranges = sorted(exclude_ranges, key=lambda r: r[0])
-                logging.warning(
-                    "%s: ranges excluded: %s",
-                    filename,
-                    exclude_ranges)
+if args.warnings:
+    warnings = open(args.warnings, "w")
+else:
+    warnings = None
+if args.errors:
+    errors = open(args.errors, "w")
+else:
+    errors = None
 
-                # Decide what to do with what has been filtered; warnings
-                # go to stderr and warnings file, errors to stdout, what
-                # is ignored is just dumped.
-                offset = 0
-                for b, e, warning in exclude_ranges:
-                    mm.seek(offset)
-                    if b > offset:
-                        # We have something not caught by a filter, an error
-                        logging.info("%s: error range (%d, %d), from %d %dB",
-                                    filename, offset, b, offset, b - offset)
-                        print_error(fout, mm.read(b - offset))
-                        mm.seek(b)
-                    if warning == True:		# A warning, print it
-                        mm.seek(b)
-                        logging.info("%s: warning range (%d, %d), from %d %dB",
-                                    filename, b, e, offset, e - b)
-                        print_error(fout, mm.read(e - b))
-                    else:				# Exclude, ignore it
-                        d = b - offset
-                        logging.info("%s: exclude range (%d, %d), from %d %dB",
-                                    filename, b, e, offset, d)
-                    offset = e
+
+def report_error(data):
+    sys.stdout.write(data)
+    if errors:
+        errors.write(data)
+
+
+def report_warning(data):
+    sys.stderr.write(data)
+    if warnings:
+        warnings.write(data)
+
+
+if args.warnings:
+    warnings = open(args.warnings, "w")
+else:
+    warnings = None
+if args.errors:
+    errors = open(args.errors, "w")
+else:
+    errors = None
+
+
+def report_error(data):
+    sys.stdout.write(data.decode('utf-8'))
+    if errors:
+        errors.write(data)
+
+
+def report_warning(data):
+    sys.stderr.write(data)
+    if warnings:
+        warnings.write(data)
+
+
+for filename in args.FILENAMEs:
+    if os.stat(filename).st_size == 0:
+        continue  # skip empty log files
+    try:
+        with open(filename, "r+b") as f:
+            logging.info("%s: filtering", filename)
+            # Yeah, this should be more protected in case of exception
+            # and such, but this is a short running program...
+            mm = mmap.mmap(f.fileno(), 0)
+            for ex, origin, flags in exclude_regexs:
+                logging.info("%s: searching from %s: %s",
+                             filename, origin, ex.pattern)
+                for m in re.finditer(ex.pattern, mm, re.MULTILINE):
+                    logging.info("%s: %s-%s: match from from %s %s",
+                                 filename, m.start(), m.end(), origin, flags)
+                    if 'warning' in flags:
+                        exclude_ranges.append((m.start(), m.end(), True))
+                    else:
+                        exclude_ranges.append((m.start(), m.end(), False))
+
+            exclude_ranges = sorted(exclude_ranges, key=lambda r: r[0])
+            logging.warning(
+                "%s: ranges excluded: %s",
+                filename,
+                exclude_ranges)
+
+            # Decide what to do with what has been filtered; warnings
+            # go to stderr and warnings file, errors to stdout, what
+            # is ignored is just dumped.
+            offset = 0
+            for b, e, warning in exclude_ranges:
                 mm.seek(offset)
-                if len(mm) != offset:
-                    logging.info("%s: error final range from %d %dB",
-                                filename, offset, len(mm))
-                    print_error(fout, mm.read(len(mm) - offset - 1))
-                del mm
-                f.close()
-        except Exception as e:
-            logging.error("%s: cannot load: %s", filename, e)
-            f.close()
-            raise
-
-
-if __name__=="__main__":
-    arg_parser = argparse.ArgumentParser(
-        description=__doc__,
-        formatter_class=argparse.RawDescriptionHelpFormatter)
-    arg_parser.add_argument("-v", "--verbosity", action="count", default=0,
-                            help="increase verbosity")
-    arg_parser.add_argument("-q", "--quiet", action="count", default=0,
-                            help="decrease verbosity")
-    arg_parser.add_argument("-e", "--errors", action="store", default=None,
-                            help="file where to store errors")
-    arg_parser.add_argument("-w", "--warnings", action="store", default=None,
-                            help="file where to store warnings")
-    arg_parser.add_argument("-c", "--config-dir", action="append", nargs="?",
-                            default=["known-issues/"],
-                            help="configuration directory (multiple can be "
-                            "given; if none given, clears the current list) "
-                            "%(default)s")
-    arg_parser.add_argument("FILENAMEs", nargs="+",
-                            help="files to filter")
-    arg_parser.add_argument("-o", "--output", action="store", default="_build/doc.warnings",
-                            help="file where to store warnings")
-    args = arg_parser.parse_args()
-
-    logging.basicConfig(level=40 - 10 * (args.verbosity - args.quiet),
-                        format="%(levelname)s: %(message)s")
-
-    path = args.config_dir
-    logging.debug("Reading configuration from directory `%s`", args.config_dir)
-    config_import(args.config_dir)
-    # print("exclude_regexs1", exclude_regexs)
-    filter_log(args)
+                if b > offset:
+                    # We have something not caught by a filter, an error
+                    logging.info("%s: error range (%d, %d), from %d %dB",
+                                 filename, offset, b, offset, b - offset)
+                    report_error(mm.read(b - offset))
+                    mm.seek(b)
+                if warning == True:		# A warning, print it
+                    mm.seek(b)
+                    logging.info("%s: warning range (%d, %d), from %d %dB",
+                                 filename, b, e, offset, e - b)
+                    report_warning(mm.read(e - b))
+                else:				# Exclude, ignore it
+                    d = b - offset
+                    logging.info("%s: exclude range (%d, %d), from %d %dB",
+                                 filename, b, e, offset, d)
+                offset = e
+            mm.seek(offset)
+            if len(mm) != offset:
+                logging.info("%s: error final range from %d %dB",
+                             filename, offset, len(mm))
+                report_error(mm.read(len(mm) - offset - 1))
+            del mm
+    except Exception as e:
+        logging.error("%s: cannot load: %s", filename, e)
+        raise
