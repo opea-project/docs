@@ -104,6 +104,7 @@ def config_import_path(path):
 
 
 def config_import(paths):
+    print("config_import", paths)
     """
     Imports regular expresions from any file *.conf in the list of paths.
 
@@ -225,5 +226,5 @@ if __name__=="__main__":
     path = ".known-issues/"
     logging.debug("Reading configuration from directory `%s`", path)
     config_import(args.config_dir)
-
+    print("exclude_regexs1", exclude_regexs)
     filter_log(args)
