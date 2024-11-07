@@ -40,8 +40,8 @@ echo "Build HTML"
 cd docs
 make -v
 make clean
-make -i html
-./scripts/filter-doc-log.sh _build/doc.log
+make html
+#./scripts/filter-doc-log.sh _build/doc.log
 
 retval=$?
 ls -la _build
