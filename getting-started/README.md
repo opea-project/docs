@@ -1,13 +1,12 @@
 # Getting Started with OPEA
-In this document, we provide a tailored guide to deploying the ChatQnA application in OPEA GenAI Examples across multiple cloud platforms, including IBM Cloud, Amazon Web Services (AWS), and others,  enabling you to choose the best fit for your specific needs and requirements. For additional deployment targets, see the [ChatQnA Sample Guide](https://opea-project.github.io/latest/examples/ChatQnA/ChatQnA_Guide.html).
-
+In this document, we provide a tailored guide to deploying the ChatQnA application in OPEA GenAI Examples across multiple cloud platforms, including Amazon Web Services (AWS), Google Cloud Platform (GCP), IBM Cloud, Microsoft Azure and Oracle Cloud Infrastructure, enabling you to choose the best fit for your specific needs and requirements. For additional deployment targets, see the [ChatQnA Sample Guide](https://opea-project.github.io/latest/examples/ChatQnA/ChatQnA_Guide.html).
 
 ## Understanding OPEA's Core Components
 
 Before moving forward, it's important to familiarize yourself with two key elements of OPEA: GenAIComps and GenAIExamples.
 
 - GenAIComps is a collection of microservice components that form a service-based toolkit. This includes a variety of services such as llm (large language models), embedding, and reranking, among others.
-- While GenAIComps offers a range of microservices, GenAIExamples provides practical, deployable solutions to help users implement these services effectively. Examples include ChatQnA and DocSum, which leverage the microservices for specific applications.
+- GenAIExamples provides practical and deployable solutions to help users implement these services effectively. Examples include ChatQnA and DocSum, which leverage the microservices for specific applications.
 
 
 ## Prerequisites
@@ -15,7 +14,7 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 ## Create and Configure a Virtual Server
 
 ::::{tab-set}
-:::{tab-item} AWS
+:::{tab-item} Amazon Web Services
 :sync: AWS
 
 1. Navigate to [AWS console](https://console.aws.amazon.com/console/home) – Search EC2 in the search bar and select it. Click the "Launch Instance" button highlighted in orange.
@@ -43,34 +42,7 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 11.  Select Add rule at the bottom, and create a rule with type as Custom TCP , port range as 80 and source as 0.0.0.0/0 . Learn more about [editing inbound/outbound rules](https://docs.aws.amazon.com/finspace/latest/userguide/step5-config-inbound-rule.html)
 
 :::
-:::{tab-item} Azure
-:sync: Azure
-
-1. Navigate to [Microsoft Azure](portal.azure.com) – Select the "Skip" button on the bottom right to land on the service offerings page. Search for "Virtual Machines" in the search bar and select it. Click the "Create" button and select "Azure Virtual Machine".
-
-2. Select an existing "Resource group" from the drop down or click "Create" for a new Resource group and give it a name. If you have issues refer to [cannot create resource groups](https://learn.microsoft.com/en-us/answers/questions/1520133/cannot-create-resource-groups).
-
-3. Provide a name to the VM and select the base OS as `Ubuntu 24.04 LTS`
-
-4. Select x64 in VM architecture.
-
-5. Select an Instance type that is based on Intel hardware.
-
->**Note**: We recommend selecting a `Standard_D16ds_v5` instance or larger with an Intel(R) 3rd/4th  Gen Xeon(C) Scalable Processor. You can find this family of instances in the (US) West US Region. Visit for more information [virtual machines on Azure](https://azure.microsoft.com/en-us/partners/directory/intel-corporation).
-
-6. Select Password as Authentication type and create username and password for your instance.
-
-7. Choose the Allow selected ports in Inbound port rule section and select HTTP.
-
-8. Click "Next: Disk" button and select OS disk size as 128GiB.
-
-9. Click on "Review + Create" to launch the VM.
-
-10. Click Go to resource -> Connect -> Connect -> SSH using Azure CLI. Accept the terms and then select "Configure + connect"
-
->**Note**: If you have issues connecting to the instance with SSH, you could use instead Bastion with your username and password.
-:::
-:::{tab-item} GCP
+:::{tab-item} Google Cloud Platform
 :sync: GCP
 
 1. Navigate to [GCP console](https://console.cloud.google.com/) – Click the "Create a VM" button.
@@ -116,12 +88,38 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 10. Enable inbound traffic for port 80. For more information on editing inbound/outbound rules, click [here](https://cloud.ibm.com/docs/vpc?topic=vpc-updating-the-default-security-group&interface=ui)
 
 11. ssh into the instance using the floating IP (`ssh -i <key> ubuntu@<floating-ip>`)
-
 :::
-:::{tab-item} OCI
+:::{tab-item} Microsoft Azure
+:sync: Azure
+
+1. Navigate to [Microsoft Azure](portal.azure.com) – Select the "Skip" button on the bottom right to land on the service offerings page. Search for "Virtual Machines" in the search bar and select it. Click the "Create" button and select "Azure Virtual Machine".
+
+2. Select an existing "Resource group" from the drop down or click "Create" for a new Resource group and give it a name. If you have issues refer to [cannot create resource groups](https://learn.microsoft.com/en-us/answers/questions/1520133/cannot-create-resource-groups).
+
+3. Provide a name to the VM and select the base OS as `Ubuntu 24.04 LTS`
+
+4. Select x64 in VM architecture.
+
+5. Select an Instance type that is based on Intel hardware.
+
+>**Note**: We recommend selecting a `Standard_D16ds_v5` instance or larger with an Intel(R) 3rd/4th  Gen Xeon(C) Scalable Processor. You can find this family of instances in the (US) West US Region. Visit for more information [virtual machines on Azure](https://azure.microsoft.com/en-us/partners/directory/intel-corporation).
+
+6. Select Password as Authentication type and create username and password for your instance.
+
+7. Choose the Allow selected ports in Inbound port rule section and select HTTP.
+
+8. Click "Next: Disk" button and select OS disk size as 128GiB.
+
+9. Click on "Review + Create" to launch the VM.
+
+10. Click Go to resource -> Connect -> Connect -> SSH using Azure CLI. Accept the terms and then select "Configure + connect"
+
+>**Note**: If you have issues connecting to the instance with SSH, you could use instead Bastion with your username and password.
+:::
+:::{tab-item} Oracle Cloud Infrastructure
 :sync: OCI
 
-1. Navigate to [Oracle Cloud Console](https://www.oracle.com/cloud/sign-in.html?redirect_uri=https%3A%2F%2Fcloud.oracle.com%2F) – Then navigate to [Compute Instances](https://cloud.oracle.com/compute/instances). Click the "Create Instance" button. 
+1. Login to [Oracle Cloud Console](https://www.oracle.com/cloud/sign-in.html?redirect_uri=https%3A%2F%2Fcloud.oracle.com%2F) – Then navigate to [Compute Instances](https://cloud.oracle.com/compute/instances). Click the "Create Instance" button. 
 
 2. Provide a name to the VM and select the placement in the availability domains. 
 
@@ -152,7 +150,7 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 
 
 ## Deploy the ChatQnA Solution
-Use the command below to install docker on a clean virtual machine
+Use the command below to install docker:
 ```bash
 wget https://raw.githubusercontent.com/opea-project/GenAIExamples/refs/heads/main/ChatQnA/docker_compose/install_docker.sh
 chmod +x install_docker.sh
@@ -188,7 +186,7 @@ For example to check the logs for the `tgi-service`:
 ```bash
 docker logs tgi-service | grep Connected
 ```
-The output shows `Connected` as shown:
+Proceed further **only after** the output shows `Connected` as shown:
 ```
 tgi-service | 2024-10-18T22:41:18.973042Z INFO text_generation_router::server: router/src/server.rs:2311: Connected
 ```
@@ -224,25 +222,12 @@ A snapshot of the interface looks as follows:
 
 Given that any information about OPEA was not in the training data for the model, we see the model hallucinating and coming up with a response. We can upload a document (PDF) with information and observe how the response changes.
 
-> **Note:** this example leverages the [OPEA document](assets/what_is_opea.pdf) for its RAG based content. You can download the [OPEA document](assets/what_is_opea.pdf) and upload it using the UI.
+> **Note:** this example leverages the OPEA document for its RAG based content. You can download the [OPEA document](assets/what_is_opea.pdf) and upload it using the UI.
 
 ![Chat Interface with RAG](assets/chat_ui_response_rag.png)
 
 We observe that the response is relevant and is based on the PDF uploaded. See the [ChatQnA Sample Guide](https://opea-project.github.io/latest/examples/ChatQnA/ChatQnA_Guide.html)
 to learn how you can customize the example with your own content.
-
-To interact with the ChatQnA application via a `curl` command:
-
-```bash
-curl http://${host_ip}:8888/v1/chatqna \
-    -H "Content-Type: application/json" \
-    -d '{
-        "messages": "What is the revenue of Nike in 2023?"
-    }'
-```
-ChatQnA provides the answer to your query as a text stream.
-
-Modify the `message` parameter in the `curl` command to continue interacting with ChatQnA.
 
 ## What’s Next
 
