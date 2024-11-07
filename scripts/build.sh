@@ -44,6 +44,7 @@ make -i html
 ./scripts/filter-doc-log.sh _build/doc.log
 
 retval=$?
+ls -la _build
 echo "result = $retval"
 if [ $retval -ne 0 ]; then
   echo "make html is error"
