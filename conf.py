@@ -148,7 +148,8 @@ html_show_sourcelink = True
 html_last_updated_fmt = '%b %d, %Y'
 
 suppress_warnings = [
-    'toc.not_readable',  # Suppress warnings about excluded toctree entries
+   'myst.directive_option',
+   'myst.xref_missing',
 ]
 
 rst_epilog = """
