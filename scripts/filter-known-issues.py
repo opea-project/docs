@@ -144,7 +144,7 @@ arg_parser.add_argument("-e", "--errors", action="store", default=None,
 arg_parser.add_argument("-w", "--warnings", action="store", default=None,
                         help="file where to store warnings")
 arg_parser.add_argument("-c", "--config-dir", action="append", nargs="?",
-                        default=[".known-issues/"],
+                        default=["known-issues/"],
                         help="configuration directory (multiple can be "
                         "given; if none given, clears the current list) "
                         "%(default)s")
@@ -157,6 +157,7 @@ logging.basicConfig(level=40 - 10 * (args.verbosity - args.quiet),
 
 path = "known-issues/"
 logging.debug("Reading configuration from directory `%s`", path)
+print('args.config_dir', args.config_dir)
 config_import(args.config_dir)
 
 exclude_ranges = []

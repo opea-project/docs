@@ -9,7 +9,7 @@
 # Only argument is the name of the log file saved by the build.
 
 KI_SCRIPT=scripts/filter-known-issues.py
-CONFIG_DIR=known-issues/doc
+CONFIG_DIR=known-issues/
 
 LOG_FILE=$1
 BUILDDIR=$(dirname $LOG_FILE)
