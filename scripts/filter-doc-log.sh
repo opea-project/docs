@@ -31,6 +31,10 @@ else
     green='\e[32m'
 fi
 
+pwd
+
+ls -la
+
 ls -la ${CONFIG_DIR}
 
 if [ -s "${LOG_FILE}" ]; then
