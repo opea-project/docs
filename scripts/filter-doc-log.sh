@@ -32,7 +32,9 @@ else
 fi
 
 if [ -s "${LOG_FILE}" ]; then
-   python3 $KI_SCRIPT --config-dir ${CONFIG_DIR} ${LOG_FILE} > ${BUILDDIR}/doc.warnings 2>&1
+   echo "run $KI_SCRIPT"
+   #python3 $KI_SCRIPT --config-dir ${CONFIG_DIR} ${LOG_FILE} > ${BUILDDIR}/doc.warnings 2>&1
+   $KI_SCRIPT --config-dir ${CONFIG_DIR} ${LOG_FILE} > ${BUILDDIR}/doc.warnings
    if [ -s ${BUILDDIR}/doc.warnings ]; then
 	   echo
 	   echo -e "${red}New errors/warnings found, please fix them:"
