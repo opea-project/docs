@@ -124,7 +124,6 @@ def config_import(paths):
 
 
 def print_error(f, str):
-
     tmp = str.decode("utf-8")
     print("zjy", tmp)
     f.write(tmp)
