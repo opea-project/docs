@@ -64,7 +64,7 @@ html: content
 	@echo zjy make html
 	$(Q)$(SPHINXBUILD) -t $(DOC_TAG) -b html -d $(BUILDDIR)/doctrees $(SOURCEDIR) $(BUILDDIR)/html $(SPHINXOPTS) $(OPTS)
 	#@echo zjy filter doc in log
-	#$(Q)./scripts/filter-doc-log.sh $(BUILDDIR)/doc.log
+	$(Q)./scripts/filter-doc-log.sh $(BUILDDIR)/doc.log
 	@echo zjy done
 singlehtml: content 
 	-$(Q)$(SPHINXBUILD) -t $(DOC_TAG) -b singlehtml -d $(BUILDDIR)/doctrees $(SOURCEDIR) $(BUILDDIR)/html $(SPHINXOPTS) $(OPTS) > $(BUILDDIR)/doc.log 2>&1
