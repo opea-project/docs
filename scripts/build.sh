@@ -41,6 +41,7 @@ cd docs
 make -v
 make clean
 make -i html
+./scripts/filter-doc-log.sh _build/doc.log
 
 retval=$?
 echo "result = $retval"
