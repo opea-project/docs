@@ -40,7 +40,7 @@ echo "Build HTML"
 cd docs
 make -v
 make clean
-make html
+make -i html
 
 retval=$?
 echo "result = $retval"
