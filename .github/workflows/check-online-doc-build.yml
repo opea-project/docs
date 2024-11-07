@@ -21,19 +21,19 @@ jobs:
       shell: bash
       run: |
         mkdir opea
-        mkdir opea/docs
-        echo "mv docs' file/folder to opea/doc"
-        ls -la
-        echo "2"
-        mv ./* opea/docs
-        ls -la
-        echo "3"
-        ls -la opea/docs
+        # mkdir opea/docs
+        # echo "mv docs' file/folder to opea/doc"
+        # ls -la
+        # echo "2"
+        # mv ./* opea/docs
+        # ls -la
+        # echo "3"
+        # ls -la opea/docs
 
     - name: Build Online Document
       shell: bash
       run: |
         git config --local --get remote.origin.url
-        cd opea/docs
+
         echo "build online doc"
         bash scripts/build.sh
