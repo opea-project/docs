@@ -31,12 +31,6 @@ else
     green='\e[32m'
 fi
 
-pwd
-
-ls -la
-
-ls -la ${CONFIG_DIR}
-
 if [ -s "${LOG_FILE}" ]; then
    python3 $KI_SCRIPT --config-dir ${CONFIG_DIR} ${LOG_FILE} > ${BUILDDIR}/doc.warnings 2>&1
    if [ -s ${BUILDDIR}/doc.warnings ]; then

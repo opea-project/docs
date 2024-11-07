@@ -16,20 +16,6 @@ jobs:
       contents: write
     steps:
     - uses: actions/checkout@v4
-    - name: Prepare files (ignore error)
-      continue-on-error: true
-      shell: bash
-      run: |
-        mkdir opea
-        # mkdir opea/docs
-        # echo "mv docs' file/folder to opea/doc"
-        # ls -la
-        # echo "2"
-        # mv ./* opea/docs
-        # ls -la
-        # echo "3"
-        # ls -la opea/docs
-
     - name: Build Online Document
       shell: bash
       run: |
