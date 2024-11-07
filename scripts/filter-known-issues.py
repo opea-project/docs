@@ -104,7 +104,7 @@ def config_import_path(path):
 
 
 def config_import(paths):
-    print("config_import", paths)
+    # print("config_import", paths)
     """
     Imports regular expresions from any file *.conf in the list of paths.
 
@@ -126,7 +126,7 @@ def config_import(paths):
 
 def print_error(f, str):
     tmp = str.decode("utf-8")
-    print("zjy", tmp)
+    # print("zjy", tmp)
     f.write(tmp)
 
 def filter_log(args):
@@ -144,7 +144,7 @@ def filter_log(args):
                 # Yeah, this should be more protected in case of exception
                 # and such, but this is a short running program...
                 mm = mmap.mmap(f.fileno(), 0)
-                print("exclude_regexs", exclude_regexs)
+                # print("exclude_regexs", exclude_regexs)
                 for ex, origin, flags in exclude_regexs:
                     logging.info("%s: searching from %s: %s",
                                 filename, origin, ex.pattern)
@@ -210,13 +210,13 @@ if __name__=="__main__":
     arg_parser.add_argument("-w", "--warnings", action="store", default=None,
                             help="file where to store warnings")
     arg_parser.add_argument("-c", "--config-dir", action="append", nargs="?",
-                            default=[".known-issues/"],
+                            default=["known-issues/"],
                             help="configuration directory (multiple can be "
                             "given; if none given, clears the current list) "
                             "%(default)s")
     arg_parser.add_argument("FILENAMEs", nargs="+",
                             help="files to filter")
-    arg_parser.add_argument("-o", "--output", action="store", default="doc.warnings",
+    arg_parser.add_argument("-o", "--output", action="store", default="_build/doc.warnings",
                             help="file where to store warnings")
     args = arg_parser.parse_args()
 
@@ -226,5 +226,5 @@ if __name__=="__main__":
     path = args.config_dir
     logging.debug("Reading configuration from directory `%s`", args.config_dir)
     config_import(args.config_dir)
-    print("exclude_regexs1", exclude_regexs)
+    # print("exclude_regexs1", exclude_regexs)
     filter_log(args)
