@@ -7,7 +7,7 @@
 # the filtered output to stdout
 #
 # Only argument is the name of the log file saved by the build.
-
+echo "entry filter doc log"
 KI_SCRIPT=scripts/filter-known-issues.py
 CONFIG_DIR=.known-issues/doc
 
@@ -41,7 +41,7 @@ if [ -s "${LOG_FILE}" ]; then
 	   echo
 	   cat ${BUILDDIR}/doc.warnings
 	   echo
-	   exit 1
+	   exit 2
    else
 	   echo -e "${green}No new errors/warnings."
 	   $TPUT sgr0
@@ -49,5 +49,5 @@ if [ -s "${LOG_FILE}" ]; then
 
 else
    echo "Error in $0: logfile \"${LOG_FILE}\" not found."
-   exit 1
+   exit 3
 fi
