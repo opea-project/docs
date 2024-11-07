@@ -155,9 +155,7 @@ args = arg_parser.parse_args()
 logging.basicConfig(level=40 - 10 * (args.verbosity - args.quiet),
                     format="%(levelname)s: %(message)s")
 
-path = ".known-issues/"
-logging.debug("Reading configuration from directory `%s`", path)
-print('args.config_dir', args.config_dir)
+logging.debug("Reading configuration from directory `%s`", args.config_dir)
 config_import(args.config_dir)
 
 exclude_ranges = []
