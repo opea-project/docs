@@ -33,6 +33,8 @@ fi
 
 if [ -s "${LOG_FILE}" ]; then
    echo "run $KI_SCRIPT"
+   ls -la
+   ls -la .known-issues
    $KI_SCRIPT --config-dir ${CONFIG_DIR} ${LOG_FILE} -o ${BUILDDIR}/doc.warnings
    if [ -s ${BUILDDIR}/doc.warnings ]; then
 	   echo
