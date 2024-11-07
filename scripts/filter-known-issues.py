@@ -223,8 +223,8 @@ if __name__=="__main__":
     logging.basicConfig(level=40 - 10 * (args.verbosity - args.quiet),
                         format="%(levelname)s: %(message)s")
 
-    path = ".known-issues/"
-    logging.debug("Reading configuration from directory `%s`", path)
+    path = args.config_dir
+    logging.debug("Reading configuration from directory `%s`", args.config_dir)
     config_import(args.config_dir)
     print("exclude_regexs1", exclude_regexs)
     filter_log(args)

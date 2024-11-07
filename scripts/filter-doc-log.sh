@@ -9,7 +9,7 @@
 # Only argument is the name of the log file saved by the build.
 echo "entry filter doc log"
 KI_SCRIPT=scripts/filter-known-issues.py
-CONFIG_DIR=.known-issues/doc
+CONFIG_DIR=known-issues/doc
 
 LOG_FILE=$1
 BUILDDIR=$(dirname $LOG_FILE)
@@ -34,7 +34,7 @@ fi
 if [ -s "${LOG_FILE}" ]; then
    echo "run $KI_SCRIPT"
    ls -la
-   ls -la .known-issues
+   ls -la known-issues
    $KI_SCRIPT --config-dir ${CONFIG_DIR} ${LOG_FILE} -o ${BUILDDIR}/doc.warnings
    if [ -s ${BUILDDIR}/doc.warnings ]; then
 	   echo
