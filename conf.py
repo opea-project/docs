@@ -114,6 +114,7 @@ html_context = {
                )
     }
 
+show_warning_types = True
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -146,6 +147,9 @@ html_show_sourcelink = True
 # using the given strftime format.
 html_last_updated_fmt = '%b %d, %Y'
 
+suppress_warnings = [
+    'toc.not_readable',  # Suppress warnings about excluded toctree entries
+]
 
 rst_epilog = """
 .. include:: /sphinx/substitutions.txt
