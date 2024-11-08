@@ -32,7 +32,7 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 
 6. Under Network settings select an existing security group. If there is none, create a new one by selecting the Create security group radio button and select the Allow SSH traffic and Allow HTTP traffic check box.
 
-7. Configure the storage to 100 GiB and click `Launch Instance`.
+7. Configure the storage to 100 GiB and click "Launch Instance".
 
 8. Click on the "connect" button on the top right and connect using your preferred method.
 
@@ -81,7 +81,7 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 
 4. Select an Instance type that is based on Intel hardware.
 
-> **Note:**   We recommend selecting a `c3-standard-22` or larger instance with an Intel(R) 4th Gen Xeon(C) Scalable Processor, and the minimum supported c3 instance type is c3-standard-8 with 32GB memory. For more information, visit [virtual servers on GCP](https://cloud.google.com/intel).
+> **Note:**   We recommend selecting a `c4-standard-32` or larger instance with an Intel(R) 4th Gen Xeon(C) Scalable Processor, and the minimum supported c3 instance type is c3-standard-8 with 32GB memory. For more information, visit [virtual servers on GCP](https://cloud.google.com/intel).
 
 5. Under Firewall settings select “Allow HTTP traffic” to access ChatQnA UI web portal.
 
@@ -93,7 +93,7 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 :::{tab-item} IBM Cloud
 :sync: IBM Cloud
 
-1.  Navigate to [IBM Cloud](https://cloud.ibm.com). - Click the **Create resource** button at the top right of the screen. Select **Compute** from the options available and select "Virtual Server for VPC"
+1. Navigate to [IBM Cloud](https://cloud.ibm.com). - Click the "Create resource" button at the top right of the screen. Select "Compute" from the options available and select "Virtual Server for VPC"
 
 2. Select a location for the instance. Assign a name to it.
 
@@ -116,6 +116,36 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 10. Enable inbound traffic for port 80. For more information on editing inbound/outbound rules, click [here](https://cloud.ibm.com/docs/vpc?topic=vpc-updating-the-default-security-group&interface=ui)
 
 11. ssh into the instance using the floating IP (`ssh -i <key> ubuntu@<floating-ip>`)
+
+:::
+:::{tab-item} OCI
+:sync: OCI
+
+1. Navigate to [Oracle Cloud Console](https://www.oracle.com/cloud/sign-in.html?redirect_uri=https%3A%2F%2Fcloud.oracle.com%2F) – Then navigate to [Compute Instances](https://cloud.oracle.com/compute/instances). Click the "Create Instance" button. 
+
+2. Provide a name to the VM and select the placement in the availability domains. 
+
+3. In Image and Shape section click "Change Image" > "Ubuntu" and then select `Canonical  Ubuntu 24.04`. Submit using the "Select  Image"  button at the bottom. 
+
+4. Click the "Change Shape"   >  "Bare Metal Machine"  then select the `BM.Standard3.64`. Submit using the "Select Shape" button at the bottom. 
+
+5. Select the VCN and the public subnet that the server needs to reside in.  If a new VCN/Subnet needs to be created then select the "Create new virtual cloud network"  and the "Create new public subnet" to create a subnet that is exposed to the internet.  
+
+6. Next, save a private key by or upload an existing public key. 
+
+7. Specify a boot volume size of 100 GiB with 30 VPU units of performance. 
+
+8. Click Create to launch the instance.  
+
+9. Note the public IP address of the machine once its launched. 
+
+10. Once the instance is launched, click on the subnet in the Primary VNIC section. Then click on the "Default Security List for vcn-xxxxxxxx-xxxx" , click on the "Add Ingress Rules".  Add the following information:
+    Source CIDR: 0.0.0.0/0  
+    Source Port Range : All 
+    Destination Port Range : 80 
+    Click on "Save"
+
+11. Connect using ssh (`ssh -i <private_key>  ubuntu@<public_ip_address>`).
 
 :::
 ::::
