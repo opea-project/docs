@@ -113,12 +113,21 @@ def config_import(paths):
     _paths = []
     # Go over the list, flush it if the user gave an empty path ("")
     for path in paths:
+        if not os.path.exists(path):
+            logging.debug("{} not exist".format(path))
+            continue
+
         if path == "" or path is None:
             logging.debug("flushing current config list: %s", _paths)
             _paths = []
         else:
             _paths.append(path)
     logging.debug("config list: %s", _paths)
+
+    if len(_paths)==0:
+        logging.debug("No available path")
+        assert(False)
+
     for path in _paths:
         config_import_path(path)
 
@@ -146,8 +155,7 @@ args = arg_parser.parse_args()
 logging.basicConfig(level=40 - 10 * (args.verbosity - args.quiet),
                     format="%(levelname)s: %(message)s")
 
-path = ".known-issues/"
-logging.debug("Reading configuration from directory `%s`", path)
+logging.debug("Reading configuration from directory `%s`", args.config_dir)
 config_import(args.config_dir)
 
 exclude_ranges = []
