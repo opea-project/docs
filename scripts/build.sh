@@ -40,8 +40,8 @@ echo "Build HTML"
 cd docs
 make clean
 make html
-
 retval=$?
+echo "result = $retval"
 if [ $retval -ne 0 ]; then
   echo "make html is error"
   exit 1
