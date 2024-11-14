@@ -4,6 +4,9 @@
 import os
 import sys
 from datetime import datetime
+import glob
+import shutil
+
 
 sys.path.insert(0, os.path.abspath('.'))
 
@@ -84,7 +87,7 @@ else:
         # Toc options
         'collapse_navigation': False,
         'sticky_navigation': True,
-        'navigation_depth': 3,
+        'navigation_depth': 4,
     }
 
 
@@ -114,6 +117,7 @@ html_context = {
                )
     }
 
+show_warning_types = True
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -130,10 +134,31 @@ numfig_format = {'figure': 'Figure %s', 'table': 'Table %s', 'code-block': 'Code
 # paths that contain custom static files (such as style sheets)
 html_static_path = ['sphinx/_static']
 
+def copy_images(src ,dst):
+   image_types = ["png", "svg"]
+   for image_type in image_types:
+      pattern = "{}/**/*.{}".format(src, image_type)
+      files = glob.glob(pattern, recursive = True)
+      for file in files:
+         sub_name = file.replace(src, '')
+         dst_filename = "{}{}".format(dst, sub_name)
+         folder = os.path.dirname(dst_filename)
+         if not os.path.exists(folder):
+            os.makedirs(folder)
+         shutil.copy(file, dst_filename)
+
+def copy_image_to_html(app, docname):
+   if app.builder.name == 'html':
+      if os.path.exists(app.srcdir) and os.path.exists(app.outdir):
+         copy_images(str(app.srcdir) ,str(app.outdir))
+      else:
+         print("No existed {} or {}".format(app.srcdir ,app.outdir))
+
 def setup(app):
 
    app.add_css_file("opea-custom.css")
    app.add_js_file("opea-custom.js")
+   app.connect('build-finished', copy_image_to_html)
 
 # Disable "Created using Sphinx" in the HTML footer. Default is True.
 html_show_sphinx = False
