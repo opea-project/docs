@@ -37,11 +37,13 @@ Below is the list of content we will be covering in this tutorial:
 
 The first step is to clone the GenAIExamples and GenAIComps. GenAIComps are
 fundamental necessary components used to build examples you find in
-GenAIExamples and deploy them as microservices.
+GenAIExamples and deploy them as microservices. Also set the `TAG` 
+environment variable with the version. 
 
 ```bash
 git clone https://github.com/opea-project/GenAIComps.git
 git clone https://github.com/opea-project/GenAIExamples.git
+export TAG=1.1
 ```
 
 The examples utilize model weights from HuggingFace and langchain.
@@ -97,13 +99,13 @@ be pulled in from dockerhub.
 From within the `GenAIComps` folder, checkout the release tag.
 ```
 cd GenAIComps
-git checkout tags/v1.1
+git checkout tags/v${TAG}
 ```
 
 #### Build LLM Image
 
 ```bash
-docker build --no-cache -t opea/llm-tgi:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/llms/text-generation/tgi/Dockerfile .
+docker build --no-cache -t opea/llm-tgi:${TAG} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/llms/text-generation/tgi/Dockerfile .
 ```
 
 ### Build Mega Service images
@@ -118,12 +120,12 @@ Build the megaservice image for this use case
 ```bash
 cd ..
 cd GenAIExamples
-git checkout tags/v1.1
+git checkout tags/v${TAG}
 cd CodeGen
 ```
 
 ```bash
-docker build --no-cache -t opea/codegen:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f Dockerfile .
+docker build --no-cache -t opea/codegen:${TAG} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f Dockerfile .
 cd ../..
 ```
 
@@ -135,7 +137,7 @@ You can build 2 modes of UI
 
 ```bash
 cd GenAIExamples/CodeGen/ui/
-docker build --no-cache -t opea/codegen-ui:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f ./docker/Dockerfile .
+docker build --no-cache -t opea/codegen-ui:${TAG} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f ./docker/Dockerfile .
 cd ../../..
 ```
 
@@ -144,17 +146,18 @@ If you want a React-based frontend.
 
 ```bash
 cd GenAIExamples/CodeGen/ui/
-docker build --no-cache -t opea/codegen-react-ui:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f ./docker/Dockerfile.react .
+docker build --no-cache -t opea/codegen-react-ui:${TAG} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f ./docker/Dockerfile.react .
 cd ../../..
 ```
 
 ### Sanity Check
-Check if you have the following set of docker images by running the command `docker images` before moving on to the next step:
+Check if you have the following set of docker images by running the command `docker images` before moving on to the next step. 
+The tags are based on what you set the environment variable `TAG` to. 
 
-* `opea/llm-tgi:latest`
-* `opea/codegen:latest`
-* `opea/codegen-ui:latest`
-* `opea/codegen-react-ui:latest` (optional)
+* `opea/llm-tgi:${TAG}`
+* `opea/codegen:${TAG}`
+* `opea/codegen-ui:${TAG}`
+* `opea/codegen-react-ui:${TAG}` (optional)
 
 :::::
 ::::::
@@ -223,9 +226,9 @@ You can do this with the `docker ps -a` command.
 
 ```
 CONTAINER ID   IMAGE                                                   COMMAND                  CREATED              STATUS              PORTS                                       NAMES
-bbd235074c3d   opea/codegen-ui:latest                                  "docker-entrypoint.s…"   About a minute ago   Up About a minute   0.0.0.0:5173->5173/tcp, :::5173->5173/tcp   codegen-gaudi-ui-server
-8d3872ca66fa   opea/codegen:latest                                     "python codegen.py"      About a minute ago   Up About a minute   0.0.0.0:7778->7778/tcp, :::7778->7778/tcp   codegen-gaudi-backend-server
-b9fc39f51cdb   opea/llm-tgi:latest                                     "bash entrypoint.sh"     About a minute ago   Up About a minute   0.0.0.0:9000->9000/tcp, :::9000->9000/tcp   llm-tgi-gaudi-server
+bbd235074c3d   opea/codegen-ui:${TAG}                                  "docker-entrypoint.s…"   About a minute ago   Up About a minute   0.0.0.0:5173->5173/tcp, :::5173->5173/tcp   codegen-gaudi-ui-server
+8d3872ca66fa   opea/codegen:${TAG}                                     "python codegen.py"      About a minute ago   Up About a minute   0.0.0.0:7778->7778/tcp, :::7778->7778/tcp   codegen-gaudi-backend-server
+b9fc39f51cdb   opea/llm-tgi:${TAG}                                     "bash entrypoint.sh"     About a minute ago   Up About a minute   0.0.0.0:9000->9000/tcp, :::9000->9000/tcp   llm-tgi-gaudi-server
 39994e007f15   ghcr.io/huggingface/tgi-gaudi:2.0.1                     "text-generation-lau…"   About a minute ago   Up About a minute   0.0.0.0:8028->80/tcp, :::8028->80/tcp       tgi-gaudi-server
 ```
 
