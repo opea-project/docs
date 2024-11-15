@@ -14,5 +14,4 @@ Single Node
    :glob:
 
     Xeon Scalable Processor <GenAIExamples/AgentQnA/docker_compose/intel/cpu/xeon/README>
-
-    Gaudi  <GenAIExamples/AgentQnA/docker_compose/intel/cpu/xeon/README>
+    Gaudi  <GenAIExamples/AgentQnA/docker_compose/intel/hpu/gaudi/README>
