@@ -142,7 +142,7 @@ docker build --no-cache -t opea/reranking-tei:${TAG} --build-arg https_proxy=$ht
 
 Build vLLM docker image with hpu support
 ```
-docker build --no-cache -t opea/llm-vllm-hpu:${TAG} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/llms/text-generation/vllm/langchain/dependency/Dockerfile.intel_hpu .
+bash ./comps/llms/text-generation/vllm/langchain/dependency/build_docker_vllm.sh hpu
 ```
 
 Build vLLM Microservice image
