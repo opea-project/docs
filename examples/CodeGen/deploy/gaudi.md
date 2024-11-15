@@ -1,4 +1,4 @@
-# Single node on-prem deployment with vLLM or TGI on Gaudi AI Accelerator
+# Single node on-prem deployment with TGI on Gaudi AI Accelerator
 
 This deployment section covers single-node on-prem deployment of the CodeGen
 example with OPEA comps to deploy using the TGI service. We will be showcasing how
