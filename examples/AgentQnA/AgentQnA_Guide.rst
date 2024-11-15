@@ -44,5 +44,5 @@ The worker agent uses the retrieval tool to generate answers to the queries post
 Deployment
 **********
 .. toctree::
-   :maxdepth: 1
-    deploy/index
+   
+   deploy/index
