@@ -2,8 +2,8 @@
 
 This deployment section covers single-node on-prem deployment of the CodeGen
 example with OPEA comps to deploy using the TGI service. We will be showcasing how
-to build an e2e CodeGen solution with the CodeLlama-7b-hf model,
-deployed on Intel® Tiber™ AI Cloud ([ITAC](https://www.intel.com/content/www/us/en/developer/tools/tiber/ai-cloud.html)). 
+to build an e2e CodeGen solution with the CodeLlama-7b-hf model, deployed on Intel® 
+Tiber™ AI Cloud ([ITAC](https://www.intel.com/content/www/us/en/developer/tools/tiber/ai-cloud.html)). 
 To quickly learn about OPEA in just 5 minutes and set up the required hardware and software, 
 please follow the instructions in the [Getting Started](https://opea-project.github.io/latest/getting-started/README.html) 
 section. If you do not have an ITAC instance or the hardware is not supported in the ITAC yet, you can still run this on-prem. 
@@ -218,7 +218,6 @@ Here are some sample messages if proxy environment variables are not set:
     WARN[0000] The "https_proxy" variable is not set. Defaulting to a blank string.
 
 #### Check the Container Status
-
 Check if all the containers launched via docker compose have started.
 
 The CodeGen example starts 4 docker containers. Check that these docker
