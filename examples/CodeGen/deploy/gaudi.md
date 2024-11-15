@@ -3,14 +3,15 @@
 This deployment section covers single-node on-prem deployment of the CodeGen
 example with OPEA comps to deploy using the TGI service. We will be showcasing how
 to build an e2e CodeGen solution with the CodeLlama-7b-hf model,
-deployed on Intel® Tiber™ AI Cloud (ITAC). To quickly learn about OPEA in just 5 minutes and set up the required hardware and software, please follow the instructions in the
-[Getting Started](https://opea-project.github.io/latest/getting-started/README.html) section. If you do
-not have an ITAC instance or the hardware is not supported in the ITAC yet, you can still run this on-prem.
+deployed on Intel® Tiber™ AI Cloud ([ITAC](https://www.intel.com/content/www/us/en/developer/tools/tiber/ai-cloud.html)). 
+To quickly learn about OPEA in just 5 minutes and set up the required hardware and software, 
+please follow the instructions in the [Getting Started](https://opea-project.github.io/latest/getting-started/README.html) 
+section. If you do not have an ITAC instance or the hardware is not supported in the ITAC yet, you can still run this on-prem. 
 
 ## Overview
 
 The CodeGen use case uses a single microservice called LLM. In this tutorial, we 
-will walk through the steps on how on enable it from OPEA GenAIComps to deploy on 
+will walk through the steps on how to enable it from OPEA GenAIComps to deploy on 
 a single node TGI megaservice solution. 
 
 The solution is aimed to show how to use the CodeLlama-7b-hf model on the Intel® 
@@ -174,7 +175,7 @@ The use case will use the following combination of GenAIComps and tools
 Tools and models mentioned in the table are configurable either through the
 environment variables or `compose.yaml` file.
 
-Set the necessary environment variables to setup the use case case by running the `set_env.sh` script.
+Set the necessary environment variables to setup the use case by running the `set_env.sh` script.
 Here is where the environment variable `LLM_MODEL_ID` is set, and you can change it to another model 
 by specifying the HuggingFace model card ID.
 
@@ -198,7 +199,7 @@ docker compose up -d
 
 ### Checks to Ensure the Services are Running
 #### Check Startup and Env Variables
-Check the start up log by running `docker compose logs` to ensure there are no errors.
+Check the startup log by running `docker compose logs` to ensure there are no errors.
 The warning messages print out the variables if they are **NOT** set.
 
 Here are some sample messages if proxy environment variables are not set:
@@ -218,7 +219,7 @@ Here are some sample messages if proxy environment variables are not set:
 
 #### Check the Container Status
 
-Check if all the containers launched via docker compose has started.
+Check if all the containers launched via docker compose have started.
 
 The CodeGen example starts 4 docker containers. Check that these docker
 containers are all running, i.e, all the containers  `STATUS`  are  `Up`.
@@ -250,7 +251,7 @@ curl http://${host_ip}:8028/generate \
 
 Here is the output:
 
-```
+```bash
 {"generated_text":"\n\nIO iflow diagram:\n\n![IO flow diagram(s)](TodoList.iflow.svg)\n\n### TDD Kata walkthrough\n\n1. Start with a user story. We will add story tests later. In this case, we'll choose a story about adding a TODO:\n    ```ruby\n    as a user,\n    i want to add a todo,\n    so that i can get a todo list.\n\n    conformance:\n    - a new todo is added to the list\n    - if the todo text is empty, raise an exception\n    ```\n\n1. Write the first test:\n    ```ruby\n    feature Testing the addition of a todo to the list\n\n    given a todo list empty list\n    when a user adds a todo\n    the todo should be added to the list\n\n    inputs:\n    when_values: [[\"A\"]]\n\n    output validations:\n    - todo_list contains { text:\"A\" }\n    ```\n\n1. Write the first step implementation in any programming language you like. In this case, we will choose Ruby:\n    ```ruby\n    def add_"}
 ```
 
@@ -265,7 +266,7 @@ curl http://${host_ip}:9000/v1/chat/completions\
 
 The output is given one character at a time. It is too long to show 
 here but the last item will be
-```
+```bash
 data: [DONE]
 ```
 
@@ -279,7 +280,7 @@ curl http://${host_ip}:7778/v1/codegen -H "Content-Type: application/json" -d '{
 
 The output is given one character at a time. It is too long to show 
 here but the last item will be
-```
+```bash
 data: [DONE]
 ```
 
@@ -363,7 +364,7 @@ View the docker input parameters in  `./CodeGen/docker_compose/intel/hpu/gaudi/c
 ```
 
 The input `--model-id` is  `${LLM_MODEL_ID}`. Ensure the environment variable `LLM_MODEL_ID` 
-is set correctly. Check spelling. Whenever this is changed, restart the containers to use 
+is set and spelled correctly. Check spelling. Whenever this is changed, restart the containers to use 
 the newly selected model.
 
 
