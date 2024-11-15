@@ -12,6 +12,5 @@ Single Node
 .. toctree::
    :maxdepth: 1
    :glob:
-
-    Xeon Scalable Processor <GenAIExamples/AgentQnA/docker_compose/intel/cpu/xeon/README>
-    Gaudi  <GenAIExamples/AgentQnA/docker_compose/intel/hpu/gaudi/README>
+- **Xeon Scalable Processor**: `Xeon <https://opea-project.github.io/latest/GenAIExamples/AgentQnA/docker_compose/intel/cpu/xeon/README.html>`_ 
+- **Gaudi**: `Gaudi <https://opea-project.github.io/latest/GenAIExamples/AgentQnA/docker_compose/intel/hpu/gaudi/README.html>`_ 
