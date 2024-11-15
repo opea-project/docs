@@ -9,10 +9,11 @@ GenAIExamples are designed to give developers an easy entry into generative AI, 
    :maxdepth: 1
 
    ChatQnA/ChatQnA_Guide
-   ChatQnA/deploy/index
+     .. toctree::
+     ChatQnA/deploy/index
    AgentQnA/AgentQnA_Guide
-   AgentQnA/deploy/index
-
+     .. toctree::
+     AgentQnA/deploy/index
 ----
 
 We're building this documentation from content in the
