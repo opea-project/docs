@@ -231,6 +231,7 @@ Check if you have the below set of docker images, before moving on to the next s
 :::{tab-item} vllm
 :sync: vllm
 
+<<<<<<< HEAD
 * opea/dataprep-redis:1.1
 * opea/embedding-tei:1.1
 * opea/retriever-redis:1.1
@@ -241,6 +242,18 @@ Check if you have the below set of docker images, before moving on to the next s
 * opea/chatqna-ui:1.1
 * opea/vllm:1.1
 * opea/llm-vllm:1.1
+=======
+* opea/dataprep-redis:latest
+* opea/embedding-tei:latest
+* opea/retriever-redis:latest
+* opea/reranking-tei:latest
+* opea/tei-gaudi:latest
+* opea/chatqna:latest or opea/chatqna-guardrails:latest
+* opea/chatqna:latest
+* opea/chatqna-ui:latest
+* opea/vllm:latest
+* opea/llm-vllm:latest
+>>>>>>> 2228ae628446114012e0a5e325ac52fee0d52c32
 :::
 :::{tab-item} TGI
 :sync: TGI
