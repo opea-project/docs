@@ -43,5 +43,5 @@ The worker agent uses the retrieval tool to generate answers to the queries post
 
 Deployment
 **********
-
-See the :ref:`agentqna-example-deployment`.
+.. toctree::
+     AgentQnA/deploy/index
