@@ -250,8 +250,8 @@ curl http://${host_ip}:8028/generate \
 
 Here is the output:
 
-```bash
-{"generated_text":"\n\nIO iflow diagram:\n\n![IO flow diagram(s)](TodoList.iflow.svg)\n\n### TDD Kata walkthrough\n\n1. Start with a user story. We will add story tests later. In this case, we'll choose a story about adding a TODO:\n    ```ruby\n    as a user,\n    i want to add a todo,\n    so that i can get a todo list.\n\n    conformance:\n    - a new todo is added to the list\n    - if the todo text is empty, raise an exception\n    ```\n\n1. Write the first test:\n    ```ruby\n    feature Testing the addition of a todo to the list\n\n    given a todo list empty list\n    when a user adds a todo\n    the todo should be added to the list\n\n    inputs:\n    when_values: [[\"A\"]]\n\n    output validations:\n    - todo_list contains { text:\"A\" }\n    ```\n\n1. Write the first step implementation in any programming language you like. In this case, we will choose Ruby:\n    ```ruby\n    def add_"}
+```
+{"generated_text":"\n\nIO iflow diagram:\n\n!\[IO flow diagram(s)\]\(TodoList.iflow.svg\)\n\n### TDD Kata walkthrough\n\n1. Start with a user story. We will add story tests later. In this case, we'll choose a story about adding a TODO:\n    ```ruby\n    as a user,\n    i want to add a todo,\n    so that i can get a todo list.\n\n    conformance:\n    - a new todo is added to the list\n    - if the todo text is empty, raise an exception\n    ```\n\n1. Write the first test:\n    ```ruby\n    feature Testing the addition of a todo to the list\n\n    given a todo list empty list\n    when a user adds a todo\n    the todo should be added to the list\n\n    inputs:\n    when_values: [[\"A\"]]\n\n    output validations:\n    - todo_list contains { text:\"A\" }\n    ```\n\n1. Write the first step implementation in any programming language you like. In this case, we will choose Ruby:\n    ```ruby\n    def add_"}
 ```
 
 ### LLM Microservice
@@ -265,7 +265,7 @@ curl http://${host_ip}:9000/v1/chat/completions\
 
 The output is given one character at a time. It is too long to show 
 here but the last item will be
-```bash
+```
 data: [DONE]
 ```
 
@@ -279,7 +279,7 @@ curl http://${host_ip}:7778/v1/codegen -H "Content-Type: application/json" -d '{
 
 The output is given one character at a time. It is too long to show 
 here but the last item will be
-```bash
+```
 data: [DONE]
 ```
 
