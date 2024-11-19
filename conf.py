@@ -70,6 +70,8 @@ if not version:
 # files and directories to ignore when looking for source files.
 exclude_patterns = [
         'scripts/*',
+        'examples/AgentQnA/deploy/index.rst',
+        'examples/AgentQnA/deploy/xeon.md'
         ]
 try:
     import sphinx_rtd_theme
