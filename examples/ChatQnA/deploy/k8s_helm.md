@@ -31,7 +31,7 @@ git clone https://github.com/opea-project/GenAIInfra.git
 Checkout the release tag
 ```
 cd GenAIInfra/helm-charts/
-git checkout tags/v1.0
+git checkout tags/v1.1
 ```
 ### HF Token
 The example can utilize model weights from HuggingFace and langchain.
@@ -46,8 +46,8 @@ export HF_TOKEN="Your_Huggingface_API_Token"
 
 ### Proxy Settings
 
-For services requiring internet access, such as the LLM microservice, embedding service, reranking service, and other backend services, proxy settings can be essential. These settings ensure services can download necessary content from the internet, especially when behind a corporate firewall.
-Proxy can be set in the `values.yaml` file, like so:
+If you are behind a corporate VPN, proxy settings must be added for services requiring internet access, such as the LLM microservice, embedding service, reranking service, and other backend services.
+Proxy can be set in the `values.yaml`.
 Open the `values.yaml` file using an editor
 ```bash
 vi chatqna/values.yaml
@@ -61,6 +61,7 @@ global:
   no_proxy: "localhost,127.0.0.1,localaddress,.localdomain.com"
 ```
 ## Use Case Setup
+
 The `GenAIInfra` repository utilizes a structured Helm chart approach, comprising a primary `Charts.yaml` and individual sub-charts for components like the LLM Service, Embedding Service, and Reranking Service. Each sub-chart includes its own `values.yaml` file, enabling specific configurations such as Docker image sources and deployment parameters. This modular design facilitates flexible, scalable deployment and easy management of the GenAI application suite within Kubernetes environments. For detailed configurations and common components, visit the [GenAIInfra common components directory](https://github.com/opea-project/GenAIInfra/tree/main/helm-charts/common).
 
 This use case employs a tailored combination of Helm charts and `values.yaml` configurations to deploy the following components and tools:
@@ -78,7 +79,7 @@ environment variable or `values.yaml`
 
 Set a new [namespace](#create-and-set-namespace) and switch to it if needed
 
-To enable UI, uncomment the lines `54-58` in `GenAIInfra/helm-charts/chatqna/values.yaml`:
+To enable UI, uncomment the lines `56-62` in `GenAIInfra/helm-charts/chatqna/values.yaml`:
 ```bash
 chatqna-ui:
    image:
@@ -86,7 +87,6 @@ chatqna-ui:
      tag: "latest"
    containerPort: "5173"
 ```
-
 
 Next, we will update the dependencies for all Helm charts in the specified directory and ensure the `chatqna` Helm chart is ready for deployment by updating its dependencies as defined in the `Chart.yaml` file.
 
@@ -127,35 +127,33 @@ LAST DEPLOYED: Thu Sep  5 13:40:20 2024
 NAMESPACE: chatqa
 STATUS: deployed
 REVISION: 1
-
 ```
+It takes a few minutes for all the microservices to be up and running. Go to the next section which is [Validate Microservices](#validate-microservices) to verify that the deployment is successful.
 
 
 ### Validate microservice
 #### Check the pod status
-Check if all the pods launched via Helm have started.
+To check if all the pods have started, run:
 
-For example, the ChatQnA deployment starts 12 Kubernetes services. Ensure that all associated pods are running, i.e., all the pods' statuses are 'Running'. To perform a quick sanity check, use the command `kubectl get pods` to see if all the pods are active.
+```bash
+kubectl get pods
+``` 
+You should expect a similar output as below:
 ```
-NAME                                       READY   STATUS             RESTARTS        AGE
-chatqna-5cd6b44f98-7tdnk                   1/1     Running            0               15m
-chatqna-chatqna-ui-b9984f596-4pckn         1/1     Running            0               15m
-chatqna-data-prep-7496bcf74-gj2fm          1/1     Running            0               15m
-chatqna-embedding-usvc-79c9795545-5zpk5    1/1     Running            0               15m
-chatqna-llm-uservice-564c497d65-kw6b2      1/1     Running            0               15m
-chatqna-nginx-67fc749576-krmxs             1/1     Running            0               15m
-chatqna-redis-vector-db-798f474769-5g7bh   1/1     Running            0               15m
-chatqna-reranking-usvc-767545c6ff-966w2    1/1     Running            0               15m
-chatqna-retriever-usvc-5ccf966546-446dd    1/1     Running            0               15m
-chatqna-tei-7b987585c9-nwncb               1/1     Running            0               15m
-chatqna-teirerank-fd745dcd5-md2l5          1/1     Running            0               15m
-chatqna-tgi-675c4d79f6-cf4pq               1/1     Running            0               15m
-
-
+NAME                                      READY   STATUS    RESTARTS      AGE
+chatqna-chatqna-ui-77dbdfc949-6dtms        1/1     Running   0          5m7s
+chatqna-data-prep-798f59f447-4frqt         1/1     Running   0          5m7s
+chatqna-df57cc766-t6lkg                    1/1     Running   0          5m7s
+chatqna-nginx-5dd47bfc7d-54x96             1/1     Running   0          5m7s
+chatqna-redis-vector-db-7f489b6bb6-mvzbw   1/1     Running   0          5m7s
+chatqna-retriever-usvc-6695979d67-z5jgx    1/1     Running   0          5m7s
+chatqna-tei-769dc796c-gh5vx                1/1     Running   0          5m7s
+chatqna-teirerank-54f58c596c-76xqz         1/1     Running   0          5m7s
+chatqna-tgi-7b5556d46d-pnzph               1/1     Running   0          5m7s
 ```
-> [!NOTE] 
-> Use `kubectl get pods -o wide` to check the nodes that the respective pods are running on
+>**Note:** Use `kubectl get pods -o wide` to check the nodes that the respective pods are running on
 
+For example, the ChatQnA deployment starts 9 Kubernetes services. Ensure that all associated pods are running, i.e., all the pods' statuses are 'Running'. To perform a quick sanity check, use the command `kubectl get pods` to see if all the pods are active.
 
 When issues are encountered with a pod in the Kubernetes deployment, there are two primary commands to diagnose and potentially resolve problems:
 1. **Checking Logs**: To view the logs of a specific pod, which can provide insight into what the application is doing and any errors it might be encountering, use:
@@ -185,20 +183,17 @@ Before starting the validation of microservices, check the network configuration
 ```
    This command will display a list of services along with their network-related details such as cluster IP and ports. 
  ```
- NAME                      TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)             AGE
-chatqna                   ClusterIP   100.XX.XXX.92    <none>        8888/TCP            37m
-chatqna-chatqna-ui        ClusterIP   100.XX.XX.87     <none>        5174/TCP            37m
-chatqna-data-prep         ClusterIP   100.XX.XXX.62    <none>        6007/TCP            37m
-chatqna-embedding-usvc    ClusterIP   100.XX.XX.77     <none>        6000/TCP            37m
-chatqna-llm-uservice      ClusterIP   100.XX.XXX.133   <none>        9000/TCP            37m
-chatqna-nginx             NodePort    100.XX.XX.173    <none>        80:30700/TCP        37m
-chatqna-redis-vector-db   ClusterIP   100.XX.X.126     <none>        6379/TCP,8001/TCP   37m
-chatqna-reranking-usvc    ClusterIP   100.XX.XXX.82    <none>        8000/TCP            37m
-chatqna-retriever-usvc    ClusterIP   100.XX.XXX.157   <none>        7000/TCP            37m
-chatqna-tei               ClusterIP   100.XX.XX.143    <none>        80/TCP              37m
-chatqna-teirerank         ClusterIP   100.XX.XXX.120   <none>        80/TCP              37m
-chatqna-tgi               ClusterIP   100.XX.XX.133    <none>        80/TCP              37m
-
+NAME                      TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)             AGE
+chatqna                   ClusterIP   10.108.186.198   <none>        8888/TCP            8m16s
+chatqna-chatqna-ui        ClusterIP   10.102.80.123    <none>        5173/TCP            8m16s
+chatqna-data-prep         ClusterIP   10.110.143.212   <none>        6007/TCP            8m16s
+chatqna-nginx             NodePort    10.100.224.12    <none>        80:30304/TCP        8m16s
+chatqna-redis-vector-db   ClusterIP   10.205.9.19      <none>        6379/TCP,8001/TCP   8m16s
+chatqna-retriever-usvc    ClusterIP   10.202.3.15      <none>        7000/TCP            8m16s
+chatqna-tei               ClusterIP   10.105.204.12    <none>        80/TCP              8m16s
+chatqna-teirerank         ClusterIP   10.115.146.21    <none>        80/TCP              8m16s
+chatqna-tgi               ClusterIP   10.108.195.244   <none>        80/TCP              8m16s
+kubernetes                ClusterIP   10.92.0.100      <none>        443/TCP             11d
  ```
    To begin port forwarding, which maps a service's port from the cluster to local host for testing, use:
  ```bash
@@ -208,7 +203,33 @@ chatqna-tgi               ClusterIP   100.XX.XX.133    <none>        80/TCP     
 
 Use `ctrl+c` to end the port-forwarding to test other services.
 
-### Dataprep Microservice（Optional）
+
+### MegaService Before RAG Dataprep
+
+Use the following command to forward traffic from your local machine to the service running in the Kubernetes cluster:
+```bash
+kubectl port-forward svc/chatqna 8888:8888
+```
+Follow the below steps in a different terminal.
+
+```
+curl http://localhost:8888/v1/chatqna -H "Content-Type: application/json" -d '{
+     "model": "Intel/neural-chat-7b-v3-3",
+     "messages": "What is the revenue of Nike in 2023?"
+     }'
+
+```
+Here is the output for your reference:
+```bash
+data: b' O', data: b'PE', data: b'A', data: b' stands', data: b' for', data: b' Organization', data: b' of', data: b' Public', data: b' Em', data: b'ploy', data: b'ees', data: b' of', data: b' Alabama', data: b'.', data: b' It', data: b' is', data: b' a', data: b' labor', data: b' union', data: b' representing', data: b' public', data: b' employees', data: b' in', data: b' the', data: b' state', data: b' of', data: b' Alabama', data: b',', data: b' working', data: b' to', data: b' protect', data: b' their', data: b' rights', data: b' and', data: b' interests', data: b'.', data: b'', data: b'', data: [DONE]
+```
+which is essentially the following sentence:
+```
+OPEA stands for Organization of Public Employees of Alabama. It is a labor union representing public employees in the state of Alabama, working to protect their rights and interests.
+```
+In the upcoming sections we will see how this answer can be improved with RAG.
+
+### Dataprep Microservice
 Use the following command to forward traffic from your local machine to the service running in the Kubernetes cluster:
 ```bash
 kubectl port-forward svc/chatqna-data-prep 6007:6007
@@ -220,60 +241,49 @@ commands. The dataprep microservice extracts the texts from variety of data
 sources, chunks the data, embeds each chunk using embedding microservice and
 store the embedded vectors in the redis vector database.
 
-Local File `nke-10k-2023.pdf` Upload:
+this example leverages the OPEA document for its RAG based content. You can download the [OPEA document](https://opea-project.github.io/latest/_downloads/41c91aec1d47f20ca22350daa8c2cadc/what_is_opea.pdf) and upload it using the UI.
+
+
+Local File `what_is_opea.pdf` Upload:
 
 ```
 curl -X POST "http://localhost:6007/v1/dataprep" \
      -H "Content-Type: multipart/form-data" \
-     -F "files=@./nke-10k-2023.pdf"
+     -F "files=@./what_is_opea.pdf"
 ```
 
 This command updates a knowledge base by uploading a local file for processing.
 Update the file path according to your environment.
 
-Add Knowledge Base via HTTP Links:
+You should see the following output after successful execution:
+```
+{"status":200,"message":"Data preparation succeeded"}
+```
+For advanced usage of the dataprep microservice refer [here](#dataprep-microservice-%28advanced%29)
+
+### MegaService After RAG Dataprep
+
+Use the following command to forward traffic from your local machine to the service running in the Kubernetes cluster:
+```bash
+kubectl port-forward svc/chatqna 8888:8888
+```
+Similarly, follow the below steps in a different terminal.
 
 ```
-curl -X POST "http://localhost:6007/v1/dataprep" \
-     -H "Content-Type: multipart/form-data" \
-     -F 'link_list=["https://opea.dev"]'
-```
-
-This command updates a knowledge base by submitting a list of HTTP links for processing.
-
-Also, you are able to get the file list that you uploaded:
+curl http://localhost:8888/v1/chatqna -H "Content-Type: application/json" -d '{
+     "model": "Intel/neural-chat-7b-v3-3",
+     "messages": "What is OPEA?"
+     }'
 
 ```
-curl -X POST "http://localhost:6007/v1/dataprep/get_file" \
-     -H "Content-Type: application/json"
+After uploading the pdf with information about OPEA, we can see that the pdf is being used as a context to answer the question correctly:
 
+```bash
+data: b' O', data: b'PE', data: b'A', data: b' (', data: b'Open', data: b' Platform', data: b' for', data: b' Enterprise', data: b' AI', data: b')', data: b' is', data: b' a', data: b' framework', data: b' that', data: b' focuses', data: b' on', data: b' creating', data: b' and', data: b' evalu', data: b'ating', data: b' open', data: b',', data: b' multi', data: b'-', data: b'provider', data: b',', data: b' robust', data: b',', data: b' and', data: b' compos', data: b'able', data: b' gener', data: b'ative', data: b' AI', data: b' (', data: b'Gen', data: b'AI', data: b')', data: b' solutions', data: b'.', data: b' It', data: b' aims', data: b' to', data: b' facilitate', data: b' the', data: b' implementation', data: b' of', data: b' enterprise', data: b'-', data: b'grade', data: b' composite', data: b' Gen', data: b'AI', data: b' solutions', data: b',', data: b' particularly', data: b' Ret', data: b'riev', data: b'al', data: b' Aug', data: b'ment', data: b'ed', data: b' Gener', data: b'ative', data: b' AI', data: b' (', data: b'R', data: b'AG', data: b'),', data: b' by', data: b' simpl', data: b'ifying', data: b' the', data: b' integration', data: b' of', data: b' secure', data: b',', data: b' perform', data: b'ant', data: b',', data: b' and', data: b' cost', data: b'-', data: b'effective', data: b' Gen', data: b'AI', data: b' work', data: b'fl', data: b'ows', data: b' into', data: b' business', data: b' systems', data: b'.', data: b'', data: b'', data: [DONE]
 ```
-
-To delete the file/link you uploaded you can use the following commands:
-
-#### Delete link
+The above output has been parsed into the below sentence which shows how the LLM has picked up the right context to answer the question correctly after the document upload:
 ```
-# The dataprep service will add a .txt postfix for link file
-
-curl -X POST "http://localhost:6007/v1/dataprep/delete_file" \
-     -d '{"file_path": "https://opea.dev.txt"}' \
-     -H "Content-Type: application/json"
-```
-
-#### Delete file
-
-```
-curl -X POST "http://localhost:6007/v1/dataprep/delete_file" \
-     -d '{"file_path": "nke-10k-2023.pdf"}' \
-     -H "Content-Type: application/json"
-```
-
-#### Delete all uploaded files and links
-
-```
-curl -X POST "http://localhost:6007/v1/dataprep/delete_file" \
-     -d '{"file_path": "all"}' \
-     -H "Content-Type: application/json"
+OPEN Platform for Enterprise AI (Open Platform for Enterprise AI) is a framework that focuses on creating and evaluating open, multi-provider, robust, and composable generative AI (GenAI) solutions. It aims to facilitate the implementation of enterprise-grade composite GenAI solutions, particularly Retrieval Augmented Generative AI (RAG), by simplifying the integration of secure, performant, and cost-effective GenAI workflows into business systems.
 ```
 
 ### TEI Embedding Service
@@ -297,23 +307,6 @@ curl http://localhost:6006/embed \
 In this example the embedding model used is "BAAI/bge-base-en-v1.5", which has a vector size of 768. So the output of the curl command is a embedded vector of
 length 768.
 
-### Embedding Microservice
-Use the following command to forward traffic from your local machine to the service running in the Kubernetes cluster:
-```bash
-kubectl port-forward svc/chatqna-embedding-usvc 6000:6000
-```
-Follow the below steps in a different terminal.
-
-The embedding microservice depends on the TEI embedding service. In terms of
-input parameters, it takes in a string, embeds it into a vector using the TEI
-embedding service and pads other default parameters that are required for the
-retrieval microservice and returns it.
-```
-curl http://localhost:6000/v1/embeddings\
-  -X POST \
-  -d '{"text":"hello"}' \
-  -H 'Content-Type: application/json'
-```
 
 ### Retriever Microservice
 Use the following command to forward traffic from your local machine to the service running in the Kubernetes cluster:
@@ -371,48 +364,8 @@ curl http://localhost:8808/rerank \
 
 Output is:  `[{"index":1,"score":0.9988041},{"index":0,"score":0.022948774}]`
 
-### Reranking Microservice
-Use the following command to forward traffic from your local machine to the service running in the Kubernetes cluster:
-```bash
-kubectl port-forward svc/chatqna-reranking-usvc 8000:8000
-```
-Follow the below steps in a different terminal.
 
-The reranking microservice consumes the TEI Reranking service and pads the
-response with default parameters required for the llm microservice.
-
-```
-curl http://localhost:8000/v1/reranking\
-  -X POST \
-  -d '{"initial_query":"What is Deep Learning?", "retrieved_docs": \
-     [{"text":"Deep Learning is not..."}, {"text":"Deep learning is..."}]}' \
-  -H 'Content-Type: application/json'
-```
-
-The input to the microservice is the `initial_query` and a list of retrieved
-documents and it outputs the most relevant document to the initial query along
-with other default parameter such as temperature, `repetition_penalty`,
-`chat_template` and so on. We can also get top n documents by setting `top_n` as one
-of the input parameters. For example:
-
-```
-curl http://localhost:8000/v1/reranking\
-  -X POST \
-  -d '{"initial_query":"What is Deep Learning?" ,"top_n":2, "retrieved_docs": \
-     [{"text":"Deep Learning is not..."}, {"text":"Deep learning is..."}]}' \
-  -H 'Content-Type: application/json'
-```
-
-Here is the output:
-
-```
-{"id":"e1eb0e44f56059fc01aa0334b1dac313","query":"Human: Answer the question based only on the following context:\n    Deep learning is...\n    Question: What is Deep Learning?","max_new_tokens":1024,"top_k":10,"top_p":0.95,"typical_p":0.95,"temperature":0.01,"repetition_penalty":1.03,"streaming":true}
-
-```
-You may notice reranking microservice are with state ('ID' and other meta data),
-while reranking service are not.
-
-### vLLM and TGI Service
+### TGI Service
 
 Use the following command to forward traffic from your local machine to the service running in the Kubernetes cluster:
 ```bash
@@ -451,117 +404,92 @@ and the log shows model warm up, please wait for a while and try it later.
 2024-06-05T05:45:27.867833811Z 2024-06-05T05:45:27.867759Z  INFO text_generation_router: router/src/main.rs:221: Warming up model
 ```
 
-### LLM Microservice
+### Dataprep Microservice (Advanced)
 
-Use the following command to forward traffic from your local machine to the service running in the Kubernetes cluster:
-```bash
-kubectl port-forward svc/chatqna-llm-uservice 9000:9000
-```
-Follow the below steps in a different terminal.
+Add Knowledge Base via HTTP Links:
 
 ```
-curl http://localhost:9000/v1/chat/completions\
-  -X POST \
-  -d '{"query":"What is Deep Learning?","max_new_tokens":17,"top_k":10,"top_p":0.95,\
-     "typical_p":0.95,"temperature":0.01,"repetition_penalty":1.03,"streaming":true}' \
-  -H 'Content-Type: application/json'
-
+curl -X POST "http://localhost:6007/v1/dataprep" \
+     -H "Content-Type: multipart/form-data" \
+     -F 'link_list=["https://opea.dev"]'
 ```
 
-You will get generated text from LLM:
+This command updates a knowledge base by submitting a list of HTTP links for processing.
+
+Also, you are able to get the file list that you uploaded:
 
 ```
-data: b'\n'
-data: b'\n'
-data: b'Deep'
-data: b' learning'
-data: b' is'
-data: b' a'
-data: b' subset'
-data: b' of'
-data: b' machine'
-data: b' learning'
-data: b' that'
-data: b' uses'
-data: b' algorithms'
-data: b' to'
-data: b' learn'
-data: b' from'
-data: b' data'
-data: [DONE]
-```
-### MegaService
-
-Use the following command to forward traffic from your local machine to the service running in the Kubernetes cluster:
-```bash
-kkubectl port-forward svc/chatqna 8888:8888
-```
-Follow the below steps in a different terminal.
-
-```
-curl http://localhost:8888/v1/chatqna -H "Content-Type: application/json" -d '{
-     "model": "Intel/neural-chat-7b-v3-3",
-     "messages": "What is the revenue of Nike in 2023?"
-     }'
+curl -X POST "http://localhost:6007/v1/dataprep/get_file" \
+     -H "Content-Type: application/json"
 
 ```
 
-Here is the output for your reference:
+To delete the file/link you uploaded you can use the following commands:
+
+#### Delete link
+```
+# The dataprep service will add a .txt postfix for link file
+
+curl -X POST "http://localhost:6007/v1/dataprep/delete_file" \
+     -d '{"file_path": "https://opea.dev.txt"}' \
+     -H "Content-Type: application/json"
+```
+
+#### Delete file
 
 ```
-data: b'\n'
-data: b'An'
-data: b'swer'
-data: b':'
-data: b' In'
-data: b' fiscal'
-data: b' '
-data: b'2'
-data: b'0'
-data: b'2'
-data: b'3'
-data: b','
-data: b' N'
-data: b'I'
-data: b'KE'
-data: b','
-data: b' Inc'
-data: b'.'
-data: b' achieved'
-data: b' record'
-data: b' Rev'
-data: b'en'
-data: b'ues'
-data: b' of'
-data: b' $'
-data: b'5'
-data: b'1'
-data: b'.'
-data: b'2'
-data: b' billion'
-data: b'.'
-data: b'</s>'
-data: [DONE]
+curl -X POST "http://localhost:6007/v1/dataprep/delete_file" \
+     -d '{"file_path": "what_is_opea.pdf"}' \
+     -H "Content-Type: application/json"
 ```
+
+#### Delete all uploaded files and links
+
+```
+curl -X POST "http://localhost:6007/v1/dataprep/delete_file" \
+     -d '{"file_path": "all"}' \
+     -H "Content-Type: application/json"
+```
+
+
+
 ## Launch UI
 ### Basic UI
 To access the frontend, open the following URL in your browser: 
 `http://{k8s-node-ip-address}:${port}`
 You can find the NGINX port using the following command:
 ```bash
-export port=$(kubectl get service chatqna-nginx --output='jsonpath={.spec.ports[0].nodePort}')
-echo $port
+kubectl get service chatqna-nginx
 ```
-Open a browser to access `http://<k8s-node-ip-address>:${port}`
+Which shows the Nginx port as follows:
+```
+NAME            TYPE       CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
+chatqna-nginx   NodePort   10.201.220.120   <none>        80:30304/TCP   16h
+```
+We can see that it is serving at port `30304` based on this configuration via a NodePort.
+
+Next step is to get the `<k8s-node-ip-address>` by running:
+```bash
+kubectl get nodes -o wide
+```
+The command shows internal IPs for all the nodes in the cluster:
+```
+NAME       STATUS   ROLES           AGE   VERSION   INTERNAL-IP    EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION       CONTAINER-RUNTIME
+minikube   Ready    control-plane   11d   v1.31.0   190.128.49.1   <none>        Ubuntu 22.04.4 LTS   5.15.0-124-generic   docker://27.2.0
+```
+When using a NodePort, all the nodes in the cluster will be listening at the specified port, which is  `30304` in this example. The `<k8s-node-ip-address>` can be found under INTERNAL-IP. Here it is `190.128.49.1`.
+
+Open a browser to access `http://<k8s-node-ip-address>:${port}`.
+From the configuration shown above, it would be `http://190.128.49.1:30304`
+
+Alternatively, You can also choose to use port forwarding as shown previously using:
+```bash
+kubectl port-forward service/chatqna-nginx 8080:80
+```
+and open a browser to access `http://localhost:8080`
  
- By default, the UI runs on port 5173 internally. If you prefer to use a different host port to access the frontend, you can modify the port mapping in the `GenAIInfra/helm-charts/chatqna/values.yaml` file as shown below:
-```
-chatqna-ui:
-   image:
-     repository: "opea/chatqna-ui"
-     tag: "latest"
-   containerPort: "5173"
-```
+ Visit this [link](https://opea-project.github.io/latest/getting-started/README.html#:~:text=tei%2Dembedding%2Dserver%20%20%20%20%20%20%20%20%20%7C-,Interact%20with%20ChatQnA,-%C2%B6) to see how to interact with the UI. 
+
 ### Stop the services
 Once you are done with the entire pipeline and wish to stop and remove all the containers, use the command below:
 ```
