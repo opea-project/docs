@@ -46,7 +46,10 @@ Deployment
 Here are some deployment options, depending on your hardware and environment:
 
 Single Node
+.. toctree::
++   :maxdepth: 1
 
-- **Xeon Scalable Processor**: `Xeon </GenAIExamples/AgentQnA/docker_compose/intel/cpu/xeon/README.html>`_ 
-- **Gaudi**: `Gaudi </GenAIExamples/AgentQnA/docker_compose/intel/hpu/gaudi/README.html>`_ 
++   Xeon Scalable Processor </GenAIExamples/AgentQnA/docker_compose/intel/cpu/xeon/README.md>
++
++   Gaudi </GenAIExamples/AgentQnA/docker_compose/intel/hpu/gaudi/README.md>
 
