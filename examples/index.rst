@@ -11,7 +11,8 @@ GenAIExamples are designed to give developers an easy entry into generative AI, 
    ChatQnA/ChatQnA_Guide
    ChatQnA/deploy/index
    AgentQnA/AgentQnA_Guide
-   AgentQnA/deploy/index
+   CodeGen/deploy/gaudi.md
+   CodeGen/deploy/index
 
 ----
 
