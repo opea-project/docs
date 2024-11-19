@@ -1,13 +1,6 @@
-# Multi-node on-prem deployment with TGI on Xeon Scalable processors on a K8s cluster using Helm Charts
+# Multi-node on-prem deployment with TGI on Xeon Scalable processors on a K8s cluster using Helm
 
-This deployment section covers multi-node on-prem deployment of the ChatQnA
-example with OPEA comps to deploy using the TGI service. There are several
-slice-n-dice ways to enable RAG with vectordb and LLM models, but here we will
-be covering one option of doing it for convenience : we will be showcasing  how
-to build an e2e chatQnA with Redis VectorDB and neural-chat-7b-v3-3 model,
-deployed on a Kubernetes cluster using Helm. For more information on how to setup a Xeon based Kubernetes cluster along with the development pre-requisites,
-please follow the instructions here (*** ### Kubernetes Cluster and Development Environment***). 
-For a quick introduction on Helm Charts, visit the helm section in  [Getting Started with Kubernetes for ChatQnA](./k8s_getting_started.md)
+This deployment section covers multi-node on-prem deployment of the ChatQnA example with OPEA comps to deploy using the TGI service. There are several slice-n-dice ways to enable RAG with vectordb and LLM models, but here we will be covering one option of doing it for convenience: we will be showcasing how to build an e2e chatQnA with Redis VectorDB and neural-chat-7b-v3-3 model, deployed on a Kubernetes cluster using Helm. For more information on how to setup a Xeon based Kubernetes cluster along with the development pre-requisites, follow the instructions here [Kubernetes Cluster and Development Environment](./k8s_getting_started.md#kubernetes-cluster-and-development-environment). For a quick introduction on Helm Charts, visit the helm section in [Getting Started with Kubernetes for ChatQnA](./k8s_getting_started.md).
 
 ## Overview
 
@@ -61,6 +54,7 @@ vi chatqna/values.yaml
 ```
 Update the following section and save file:
 ```yaml
+# chatqna/values.yaml
 global:
   http_proxy: "http://your-proxy-address:port"
   https_proxy: "http://your-proxy-address:port"
@@ -166,11 +160,11 @@ chatqna-tgi-675c4d79f6-cf4pq               1/1     Running            0         
 When issues are encountered with a pod in the Kubernetes deployment, there are two primary commands to diagnose and potentially resolve problems:
 1. **Checking Logs**: To view the logs of a specific pod, which can provide insight into what the application is doing and any errors it might be encountering, use:
     ```bash
-    kubectl logs [pod-name]
+    kubectl logs <pod-name>
     ```
 2. **Describing Pods**: For a detailed view of the pod's current state, its configuration, and its operational events, run:
 	```bash
-    kubectl describe pod [pod-name]
+    kubectl describe pod <pod-name>
     ```
 For example, if the status of the TGI service does not show 'Running', describe the pod using the name from the above table:
 ```bash
