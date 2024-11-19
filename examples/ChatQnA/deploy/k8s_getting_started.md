@@ -58,11 +58,13 @@ kubectl config set-context --current --namespace=chatqa
 
 **What is Helm?** Helm is a package manager for Kubernetes, similar to how apt is for Ubuntu. It simplifies deploying and managing Kubernetes applications through Helm charts, which are packages of pre-configured Kubernetes resources.
 
-**Key Components of a Helm Chart:**
+#### Key Components of a Helm Chart
 
-- **Chart.yaml**: This file contains metadata about the chart such as name, version, and description.
-- **values.yaml**: Stores configuration values that can be customized depending on the deployment environment. These values override defaults set in the chart templates.
-- **deployment.yaml**: Part of the templates directory, this file describes how the Kubernetes resources should be deployed, such as Pods and Services.
+| Component         |Description                                                                                                                                             |
+| ---               | ---                                                                                                                                                    |
+| `Chart.yaml`      | This file contains metadata about the chart such as name, version, and description.                                                                    |
+| `values.yaml`     | Stores configuration values that can be customized depending on the deployment environment. These values override defaults set in the chart templates. |
+| `deployment.yaml` | Part of the templates directory, this file describes how the Kubernetes resources should be deployed, such as Pods and Services.                       |
 
 **Update Dependencies:**
 
@@ -74,3 +76,15 @@ kubectl config set-context --current --namespace=chatqa
 - `helm install [RELEASE_NAME] [CHART_NAME]`: This command deploys a Helm chart into your Kubernetes cluster, creating a new release. It is used to set up all the Kubernetes resources specified in the chart and track the version of the deployment.
 
 For more detailed instructions and explanations, you can refer to the [official Helm documentation](https://helm.sh/docs/).
+
+### Using Kubernetes Manifest to Deploy
+Manifest files in YAML format define the Kubernetes resources you want to manage. The main components in a manifest file include:
+
+-   **ConfigMap**: Stores configuration data that can be used by pods, allowing you to keep containerized applications portable without embedding configuration data directly within the application's images. For example, a ConfigMap might store the database URL and credentials that your application needs to connect to a database.
+    
+-   **Services**: Defines a logical set of Pods and a policy by which to access them. This resource abstracts the way you expose an application running on a set of Pods as a network service.
+    
+-   **Deployment**: Manages the state of replicated application instances. It automatically replaces instances that fail or are deleted, maintaining the desired state of the application.
+    
+
+For more detailed examples, you can view the [ChatQnA manifest file](https://github.com/opea-project/GenAIExamples/blob/main/ChatQnA/kubernetes/intel/cpu/xeon/manifest/chatqna.yaml) which includes definitions for services, deployments, and other resources essential for running the ChatQnA application. This file is a reference for understanding how Kubernetes resources for ChatQnA are defined and orchestrated.
