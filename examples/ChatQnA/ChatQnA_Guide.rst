@@ -211,7 +211,7 @@ requirements.
 .. toctree::
    :maxdepth: 1
 
-   ChatQnA Deployment Options <ChatQnA/deploy/index>
+   ChatQnA Deployment Options <deploy/index>
 ----
 
 Troubleshooting
