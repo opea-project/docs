@@ -211,7 +211,8 @@ requirements.
 .. toctree::
    :maxdepth: 1
 
-   ChatQnA Deployment Options <deploy/index>
+Single Node
+===========
    
 ----
 
