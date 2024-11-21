@@ -43,5 +43,12 @@ The worker agent uses the retrieval tool to generate answers to the queries post
 
 Deployment
 **********
+Here are some deployment options, depending on your hardware and environment:
 
-See the :ref:`agentqna-example-deployment`.
+Single Node
++++++++++++++++
+.. toctree::
+   :maxdepth: 1
+
+   Xeon Scalable Processor </GenAIExamples/AgentQnA/docker_compose/intel/cpu/xeon/README.md>
+   Gaudi </GenAIExamples/AgentQnA/docker_compose/intel/hpu/gaudi/README.md>
