@@ -416,7 +416,7 @@ CONTAINER ID   IMAGE                                                   COMMAND  
 ce4e7802a371   opea/retriever-redis:${TAG}                             "python retriever_re…"   About a minute ago   Up About a minute   0.0.0.0:7000->7000/tcp, :::7000->7000/tcp                                              retriever-redis-server
 be6cd2d0ea38   opea/reranking-tei:${TAG}                               "python reranking_te…"   About a minute ago   Up About a minute   0.0.0.0:8000->8000/tcp, :::8000->8000/tcp                                              reranking-tei-gaudi-server
 cc45ff032e8c   opea/tei-gaudi:${TAG}                                   "text-embeddings-rou…"   About a minute ago   Up About a minute   0.0.0.0:8090->80/tcp, :::8090->80/tcp                                                  tei-embedding-gaudi-server
-4969ec3aea02   opea/llm-vllm-hpu:${TAG}                                "/bin/bash -c 'expor…"   About a minute ago   Up About a minute   0.0.0.0:8007->80/tcp, :::8007->80/tcp                                                  vllm-gaudi-server
+4969ec3aea02   opea/vllm-gaudi:${TAG}                                  "/bin/bash -c 'expor…"   About a minute ago   Up About a minute   0.0.0.0:8007->80/tcp, :::8007->80/tcp                                                  vllm-gaudi-server
 0657cb66df78   redis/redis-stack:7.2.0-v9                              "/entrypoint.sh"         About a minute ago   Up About a minute   0.0.0.0:6379->6379/tcp, :::6379->6379/tcp, 0.0.0.0:8001->8001/tcp, :::8001->8001/tcp   redis-vector-db
 684d3e9d204a   ghcr.io/huggingface/text-embeddings-inference:cpu-1.2   "text-embeddings-rou…"   About a minute ago   Up About a minute   0.0.0.0:8808->80/tcp, :::8808->80/tcp                                                  tei-reranking-gaudi-server
 ```
@@ -863,7 +863,7 @@ View the docker input parameters in  `./ChatQnA/docker_compose/intel/hpu/gaudi/c
 
 ```yaml
   vllm-service:
-    image: ${REGISTRY:-opea}/llm-vllm-hpu:${TAG:-latest}
+    image: ${REGISTRY:-opea}/vllm-gaudi:${TAG:-latest}
     container_name: vllm-gaudi-server
     ports:
       - "8007:80"
