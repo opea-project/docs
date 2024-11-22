@@ -209,10 +209,13 @@ orchestrated multi-node configurations, and choose the one that best fits your
 requirements. 
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
 
-Single Node
-===========
+   Single Node <deploy/single_node>
+      Xeon Scalable Processor <deploy/xeon>
+      Gaudi AI Accelerator <deploy/gaudi>
+      Nvidia GPU <deploy/nvidia>
+      AI PC <deploy/aipc>
    
 ----
 
