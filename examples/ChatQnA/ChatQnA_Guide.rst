@@ -1,6 +1,6 @@
 .. _ChatQnA_Guide:
 
-ChatQnA Sample Guide
+ChatQnA Example Guide
 ####################
 
 .. note:: This guide is in its early development and is a work-in-progress with
