@@ -1,4 +1,4 @@
-# Multilingual-support microservice (MM-RAG) 
+# Multilingual-support microservice 
 
 ## Author
 
