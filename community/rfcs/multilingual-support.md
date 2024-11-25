@@ -2,7 +2,7 @@
 
 ## Author
 
-[Siddhi Velankar](https://github.com/siddhivelankar23), 
+[Siddhi Velankar](https://github.com/siddhivelankar23)
 
 ## Status
 
