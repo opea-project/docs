@@ -19,7 +19,7 @@ By introducing multilingual support as a standalone microservice, we aim to deco
 
 
 ## Design Proposal
-This RFC proposes a Multimodal Retrieval-Augmented Generation (MM-RAG) architecture detailed in the following figure. 
+
 
 ![Enterprise RAG Architecture](./assets/enterprise-rag-translation.png)
 
@@ -32,7 +32,7 @@ This ensures seamless, accurate communication across different languages in real
 
 Signature of multilingual-support microservice
 ```python
-@traceable(run_type="multilingual")
+@traceable(run_type="multilingual-support")
 @register_statistics(names=["opea_service@multilingual_support"])
 def embedding(input: LLMParamsDoc) -> Union[LLMParamsDoc, ChatCompletionRequest, SearchedDoc]:
 ```
