@@ -204,16 +204,16 @@ The gateway serves as the interface for users to access. The gateway routes inco
 Deployment
 **********
 
-See the :ref:`chatqna-example-deployment` that includes both single-node and
+Here are some deployment options, including both single-node and
 orchestrated multi-node configurations, and choose the one that best fits your
-requirements.  Here are quick references to the single-node deployment options:
+requirements. 
 
-* :doc:`Xeon Scalable Processor <deploy/xeon>`
-* :doc:`Gaudi AI Accelerator <deploy/gaudi>`
-* :doc:`Nvidia GPU <deploy/nvidia>`
-* :doc:`AI PC <deploy/aipc>`
+.. toctree::
+   :maxdepth: 1
 
-
+   ChatQnA Deployment Options <deploy/index>
+   
+----
 
 Troubleshooting
 ***************
