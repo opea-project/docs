@@ -36,8 +36,3 @@ Signature of multilingual-support microservice
 @register_statistics(names=["opea_service@multilingual_support"])
 def embedding(input: LLMParamsDoc) -> Union[LLMParamsDoc, ChatCompletionRequest, SearchedDoc]:
 ```
-
-
-
-## Use-case Stories
-
