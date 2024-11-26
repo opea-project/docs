@@ -1,15 +1,13 @@
-# RFC Template
+# Adding SMLs support for AgentQnA workflow in GenAIExamples on Intel Xeon platform
 
-Replace the "RFC Template" heading with your RFC Title, followed by
-the short description of the feature you want to contribute
-
+AgentQnA workflow in GenAIExamples uses LLM as an agent to intelligently decide the control flow in the pipeline. Currently, the workflow uses OpenAI paid API for LLM services on Xeon platform. The goal for this RFC to add support for open source SLMs locally deployed on Xeon through Ollama.
 ## Author(s)
 
-List all contributors of this RFC.
+Pratool Bharti
 
 ## Status
 
-Change the PR status to `Under Review` | `Rejected` | `Accepted`.
+ `Under Review`
 
 ## Objective
 
