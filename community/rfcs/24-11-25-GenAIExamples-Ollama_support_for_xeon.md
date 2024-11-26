@@ -15,8 +15,8 @@ Pratool Bharti
 ## Objective
 
 ### Problems This Will Solve
-
-- **Cost Reduction**: Eliminates the need for paid API services by using open-source LLMs.
+- **Access to Open-source SLMs on Xeon**: Provides access to open-source SLMs through Ollama on Xeon. SOTA open-source SLMs model work fine for simpler agent task. 
+- **Cost Reduction**: Eliminates the need for paid API services by using open-source SLMs.
 - **Data Privacy**: Ensures data privacy by processing data locally.
 - **Performance Optimization**: Leverages the computational power of Intel Xeon CPUs for efficient LLM execution.
 
