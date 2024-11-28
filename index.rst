@@ -59,6 +59,13 @@ Source code for the OPEA Project is maintained in the
            </a>
            <p>Use modular building blocks to build robust GenAI solutions.</p>
        </li>
+       <li class="grid-item">
+           <a href="tutorials/index.html">
+               <span class="grid-icon fa fa-graduation-cap"></span>  <!-- Optional: Change icon here -->
+               <h2>Tutorials</h2>
+           </a>
+           <p>Explore detailed tutorials to get started with OPEA features.</p>
+       </li>
    </ul>
 
 
