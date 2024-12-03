@@ -2,7 +2,7 @@
 
 ## Release Cadence
 
-The following release cadence is for year 2024/2025. Please note that the dates listed below may not reflect the most up-to-date information
+The following release cadence is for year 2024/2025. Please note that the dates listed below may not reflect the most up-to-date information. 
 
 | Version | Release Date |
 | --- | --- |
@@ -23,24 +23,25 @@ The following release cadence is for year 2024/2025. Please note that the dates 
 
 Releasing a new version of OPEA generally involves the following key steps:
 
-1. Feature/Dockerfile Freeze (2 weeks before the release)
-2. Code/Doc Freeze, and Creating the RC(Release Candidate) Branch (1 week before the release)
-3. Merging Cherry Picks to the RC Branch
-4. Creating Tag from RC Branch
+1. Feature freeze (2 weeks before the release)
+2. Code/Doc freeze, and creating the RC(Release Candidate) branch (1 week before the release)
+3. Cherry Pick critical Code/Doc fix from main branch to the RC branch
+4. Create release tag from RC branch
+5. Deliver docker images, helm charts, and pypi binaries 
 
-## Feature/Dockerfile Freeze
+## Feature Freeze
 
-Generally, this marks a point in the OPEA release process where no new features or Dockerfile updates are added to the `main` branch of OPEA projects. It typically occurs two weeks before the scheduled OPEA release.
+Generally, this marks a point in the OPEA release process where no new features are added to the `main` branch of OPEA projects. It typically occurs two weeks before the scheduled OPEA release. After this point, first round release test will be triggered. 
 
 ## Code/Doc Freeze, and Creating the RC Branch
 
-This is the point in the OPEA release process where no code changes or document changes are updated to the `main` branch of OPEA projects. It typically occurs one week before the scheduled OPEA release.
+This is the point in the OPEA release cycle to create the Release Candidate (RC) branch. It typically occurs one week before the scheduled OPEA release. After this point, final round release test will be triggered.
 
 ### Preparing Creating RC Branch
 Following requirements needs to be met prior to creating the RC branch:
 - Implement all features and functionalities targeting this release.
 - Resolve all the known outstanding issues targeting this release.
-- Validation?? TODO
+- Fix all the bugs found in the release test.
 
 ### Creating RC Branch
 The RC branch are typically created from the `main` branch. The branch name must follow the following format: 
@@ -52,21 +53,21 @@ An example of this would look like:
 v1.1rc
 ```
 
-## Merging Cherry Picks to the RC Branch
-Fixes typically are necessary for bugs and regressions after code freeze. 
+## Cherry Pick Critical Code/Doc Fix
+Fixes for critical issues after code freeze must cherry-pick into the RC branch.
 
 ### How to do Cherry Picking
-TODO
-
-### Cherry Picking Reverts
-TODO
+Critical issues found in the RC branch must be fixed in the `main` branch and then cherry-picked into the RC branch. Cherry-picking will be done manually by the CI/CD owner. 
 
 ## Creating Tag from RC Branch
 The following requirements need to be met prior to creating final Release Candidate:
-- No outstanding issues in the milestone. No open issues/PRs whose has the milestone of this release(e.g. v1.1).
-- All the closed milestone PRs should be present in the release branch.
+- No outstanding issues in the milestone. 
+- No open issues/PRs marked with the milestone of this release(e.g. v1.1).
+- All the closed milestone PRs should be contained in the release branch.
+- Create tags with [GHA job](https://github.com/opea-project/Validation/actions/workflows/manual-create-tag.yaml). 
 
-You can use the following commands to create release tag.
-TODO
-
-
+## Deliver Docker Images, Helm Charts, and PyPi Binaries
+After the release tag is created, the following artifacts need to be delivered:
+- Docker images, [GHA job](https://github.com/opea-project/GenAIExamples/actions/workflows/manual-docker-publish.yml).
+- Helm charts, [GHA job](https://github.com/opea-project/GenAIInfra/actions/workflows/manual-release-charts.yaml).
+- PyPi binaries, [GHA job](https://github.com/opea-project/Validation/actions/workflows/manual-pypi-publish.yml).
