@@ -5,19 +5,20 @@
 The following release cadence is for year 2024/2025. Please note that the dates listed below may not reflect the most up-to-date information. 
 
 | Version | Release Date |
-| --- | --- |
-| 0.6 | Jun 2024 |
-| 0.7 | Jun 2024 |
-| 0.8 | Jul 2024 |
-| 0.9 | Aug 2024 |
-| 1.0 | Sep 2024 |
-| 1.1 | Nov 2024 |
-| 1.2 | Jan 2025 |
-| 1.3 | Mar 2025 |
-| 1.4 | May 2025 |
-| 1.5 | Jul 2025 |
-| 1.6 | Sep 2025 |
-| 1.7 | Nov 2025 |
+|---------|--------------|
+| 0.1     | Apr 2024     |
+| 0.6     | May 2024     |
+| 0.7     | Jun 2024     |
+| 0.8     | Jul 2024     |
+| 0.9     | Aug 2024     |
+| 1.0     | Sep 2024     |
+| 1.1     | Nov 2024     |
+| 1.2     | Jan 2025     |
+| 1.3     | Mar 2025     |
+| 1.4     | May 2025     |
+| 1.5     | Jul 2025     |
+| 1.6     | Sep 2025     |
+| 1.7     | Nov 2025     |
 
 ## General Overview
 
