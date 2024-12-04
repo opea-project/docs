@@ -1,7 +1,6 @@
 # Adding SLMs support for AgentQnA workflow in GenAIExamples on Intel Xeon platform
 
-The AgentQnA workflow in GenAIExamples uses LLMs as agents to intelligently manage the control flow in the pipeline. Currently, it relies on the OpenAI paid API for LLM services on the Xeon platform, which incurs costs and does not utilize Xeon for LLM computation. This RFC aims to add support for open-source small language models (SLMs) locally deployed on Xeon through Ollama for LLM services.
-
+The AgentQnA workflow in GenAIExamples uses LLMs as agents to intelligently manage the control flow in the pipeline. Currently, it relies on the OpenAI paid API for LLM services on the Xeon platform, which incurs costs and does not utilize Xeon for LLM computation. This RFC aims to add support for open-source small language models (SLMs) locally deployed on Xeon through Ollama for LLM engines.
 ## Author(s)
 
 Pratool Bharti
@@ -13,7 +12,7 @@ Pratool Bharti
 ## Objective
 
 ### Problems This Will Solve
-- **Access to Open-source SLMs on Xeon**: Provides access to open-source SLMs through Ollama on Xeon. SOTA open-source SLMs model work fine for simpler agent task. 
+- **Access to Open-source SLMs on Xeon**: Provides access to open-source SLMs through Ollama on Xeon. SOTA open-source SLMs model work fine for less complex agentic workflow. Given an elaborated prompt, Llama 3.1 and 3.2 small models are fairly accurate for tool calling, an important feature for Agents.
 - **Cost Reduction**: Eliminates the need for paid API services by using open-source SLMs.
 - **Data Privacy**: Ensures data privacy by processing data locally.
 - **Performance Optimization**: Leverages the computational power of Intel Xeon CPUs for efficient LLM execution.
@@ -23,17 +22,17 @@ Pratool Bharti
 - **Local Deployment**: Enable local deployment of open-source SLMs on Intel Xeon CPUs.
 - **Integration with Ollama**: Seamless integration of Ollama framework to access open-source SLMs.
 - **Maintain Functionality**: Ensure the AgentQnA workflow continues to function effectively with the new setup.
+- **Integration of popular serving framework**: Integration of Ollama serving framework in AgentQnA.
 
 ### Non-Goals
 
-- **Cloud Deployment**: This RFC does not aim to support cloud-based LLM deployment.
 - **New Features**: No new features will be added to the AgentQnA workflow beyond the support for local SLMs as an agent.
 - **Support for Non-Xeon Platforms**: This RFC is specific to Intel Xeon CPUs and does not cover other hardware platforms.
 
 ## Motivation
 
 ### SLMs Performance on CPU
-Open-source small language models (SLMs) are optimized to run efficiently on CPUs, including Intel Xeon processors. These models are designed to balance performance and resource usage, making them suitable for deployment in environments where GPU resources are limited or unavailable. By leveraging the computational capabilities of Xeon CPUs, SLMs can achieve satisfactory performance for various agent tasks within the AgentQnA workflow.
+Open-source small language models (SLMs) are optimized to run efficiently on CPUs, including Intel Xeon processors. These models are designed to balance performance and resource usage, making them suitable for deployment in environments where GPU resources are limited or unavailable. By leveraging the computational capabilities of Xeon CPUs, SLMs can achieve satisfactory performance for various agent tasks within the AgentQnA workflow. Given a right prompt, smaller Llama models are fairly accurate in tool calling which is an essential features for agents.
 
 ### Ollama Popularity and Wide Range of Models
 Ollama provides a comprehensive set of libraries and tools to facilitate the deployment and management of open-source language models. These libraries are designed to integrate seamlessly with existing workflows, enabling developers to easily incorporate SLMs into their applications. Ollama's model libraries support a wide range of open-source models, ensuring compatibility and ease of use for different use cases.
@@ -62,30 +61,94 @@ By integrating open-source small language models (SLMs) through Ollama, organiza
 ### Enhanced Data Security
 Processing data locally ensures that sensitive information remains secure and private.
 
-### Performance Gains
-Utilizing the computational power of Intel Xeon CPUs can lead to faster and more efficient processing.
-
 ### Open-Source Flexibility
 Open-source LLMs provide greater flexibility and customization options compared to proprietary solutions.
 
 
 ## Design Proposal
 
-This is the heart of the document, used to elaborate the design philosophy and detail proposal.
+The workflow for the proposed changes are as follows. As shown below, Ollama serving models will be added as LLM serving engine for the Xeon platform. This will work as an alternative for vLLM, TGI and OpenAI LLM engines. New change is highlighted in orange.
 
-## Alternatives Considered
+```mermaid
+---
+config:
+  flowchart:
+    nodeSpacing: 400
+    rankSpacing: 100
+    curve: linear
+  themeVariables:
+    fontSize: 50px
+---
+flowchart LR
+    %% Colors %%
+    classDef blue fill:#ADD8E6,stroke:#ADD8E6,stroke-width:2px,fill-opacity:0.5
+    classDef orange fill:#FBAA60,stroke:#ADD8E6,stroke-width:2px,fill-opacity:0.5
+    classDef orchid fill:#C26DBC,stroke:#ADD8E6,stroke-width:2px,fill-opacity:0.5
+    classDef invisible fill:transparent,stroke:transparent;
 
-List other alternatives if have, and corresponding pros/cons to each proposal.
+    %% Subgraphs %%
+    subgraph DocIndexRetriever-MegaService["DocIndexRetriever MegaService "]
+        direction LR
+        EM([Embedding MicroService]):::blue
+        RET([Retrieval MicroService]):::blue
+        RER([Rerank MicroService]):::blue
+    end
+    subgraph UserInput[" User Input "]
+        direction LR
+        a([User Input Query]):::orchid
+        Ingest([Ingest data]):::orchid
+    end
+    AG_REACT([Agent MicroService - react]):::blue
+    AG_RAG([Agent MicroService - rag]):::blue
+    LLM_gen{{LLM Service <br>}}
+    LLM_ollama{{LLMs by Ollama <br>}}:::orange
+    LLM_tgi{{LLMs by TGI <br>}}:::blue
+    LLM_vllm{{LLMs by vLLM <br>}}:::blue
+    LLM_openai{{LLMs by OpenAI <br>}}:::blue
+    DP([Data Preparation MicroService]):::blue
+    TEI_RER{{Reranking service<br>}}
+    TEI_EM{{Embedding service <br>}}
+    VDB{{Vector DB<br><br>}}
+    R_RET{{Retriever service <br>}}
+
+
+
+    %% Questions interaction
+    direction LR
+    a[User Input Query] --> AG_REACT
+    AG_REACT --> AG_RAG
+    AG_RAG --> DocIndexRetriever-MegaService
+    EM ==> RET
+    RET ==> RER
+    Ingest[Ingest data] --> DP
+
+    %% Embedding service flow
+    direction LR
+    AG_RAG <-.-> LLM_gen
+    LLM_gen <-.-> LLM_ollama
+    LLM_gen <-.-> LLM_tgi
+    LLM_gen <-.-> LLM_vllm
+    LLM_gen <-.-> LLM_openai
+    AG_REACT <-.-> LLM_gen
+    EM <-.-> TEI_EM
+    RET <-.-> R_RET
+    RER <-.-> TEI_RER
+
+    direction TB
+    %% Vector DB interaction
+    R_RET <-.-> VDB
+    DP <-.-> VDB
+
+
+```
+The proposed design for Ollama serving support entails following changes:
+
+### 1. Ollama serving container:
+- **Models hosted in Ollama container**: Build and run a container on Xeon platform that hosts Ollama models as an alternative LLM service engine. Hosted models can be accessed by Agent microservice at a given host ip and port. 
+
+### 2. Support for latest Llama SLMs:
+- **Add Llama 3.1 and 3.2 small models for Xeon**: SLMs from Lllama 3.1 and 3.2 models will be added and validated for the AgentQnA workflow.
 
 ## Compatibility
 
-list possible incompatible interface or workflow changes if exists.
-
-## Miscellaneous
-
-List other information user and developer may care about, such as:
-
-- Performance Impact, such as speed, memory, accuracy.
-- Engineering Impact, such as binary size, startup time, build time, test times.
-- Security Impact, such as code vulnerability.
-- TODO List or staging plan.
+Added component will be compatible with the existing components
