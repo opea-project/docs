@@ -1,4 +1,4 @@
-# Releasing OPEA
+# OPEA Release Guide
 
 ## Release Cadence
 
