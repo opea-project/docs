@@ -104,7 +104,7 @@ helm dependency update chatqna
 
 Set the necessary environment variables to setup the use case
 ```bash
-export MODELDIR="/mnt/opea-models"  #export MODELDIR="null" if you don't want to cache the model.  
+export MODELDIR=""  #export MODELDIR="/mnt/opea-models" if you want to cache the model.  
 export MODELNAME="Intel/neural-chat-7b-v3-3"
 export EMBEDDING_MODELNAME="BAAI/bge-base-en-v1.5"
 export RERANKER_MODELNAME="BAAI/bge-reranker-base"
