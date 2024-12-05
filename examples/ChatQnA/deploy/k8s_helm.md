@@ -1,6 +1,8 @@
 # Multi-node on-prem deployment with TGI on Xeon Scalable processors on a K8s cluster using Helm
 
-This deployment section covers multi-node on-prem deployment of the ChatQnA example with OPEA comps to deploy using the TGI service. There are several slice-n-dice ways to enable RAG with vectordb and LLM models, but here we will be covering one option of doing it for convenience: we will be showcasing how to build an e2e chatQnA with Redis VectorDB and neural-chat-7b-v3-3 model, deployed on a Kubernetes cluster using Helm. For more information on how to setup a Xeon based Kubernetes cluster along with the development pre-requisites, follow the instructions here [Kubernetes Cluster and Development Environment](./k8s_getting_started.md#kubernetes-cluster-and-development-environment). For a quick introduction on Helm Charts, visit the helm section in [Getting Started with Kubernetes for ChatQnA](./k8s_getting_started.md).
+This deployment section covers multi-node on-prem deployment of the ChatQnA example with OPEA comps to deploy using the TGI service. There are several slice-n-dice ways to enable RAG with vectordb and LLM models, but here we will be covering one option of doing it for convenience: we will be showcasing how to build an e2e chatQnA with Redis VectorDB and neural-chat-7b-v3-3 model, deployed on a Kubernetes cluster using Helm. 
+
+For more information on how to setup a Xeon based Kubernetes cluster along with the development pre-requisites, follow the instructions here [Kubernetes Cluster and Development Environment](./k8s_getting_started.md#kubernetes-cluster-and-development-environment). For a quick introduction on Helm Charts, visit the helm section in [Getting Started with Kubernetes for ChatQnA](./k8s_getting_started.md).
 
 ## Overview
 
@@ -14,7 +16,7 @@ GenAIComps to deploy a multi-node TGI megaservice solution.
 4. Reranking
 5. LLM with TGI
 
-> **Note:** ChatQnA can also be deployed on a single node using Kubernetes, provided that all pods are configured to run on the same node.
+> **Note:** ChatQnA can also be deployed on a single node using Kubernetes, provided that all pods are configured to run on the same node and it has resources (memory) for running all of them.
 
 ## Prerequisites
 
@@ -62,7 +64,7 @@ global:
 ```
 ## Use Case Setup
 
-The `GenAIInfra` repository utilizes a structured Helm chart approach, comprising a primary `Charts.yaml` and individual sub-charts for components like the LLM Service, Embedding Service, and Reranking Service. Each sub-chart includes its own `values.yaml` file, enabling specific configurations such as Docker image sources and deployment parameters. This modular design facilitates flexible, scalable deployment and easy management of the GenAI application suite within Kubernetes environments. For detailed configurations and common components, visit the [GenAIInfra common components directory](https://github.com/opea-project/GenAIInfra/tree/main/helm-charts/common).
+The `GenAIInfra` repository utilizes a structured Helm chart approach, comprising a primary `Charts.yaml` and individual sub-charts for components like the LLM Service, Embedding Service, and Reranking Service. Each sub-chart includes its own `values.yaml` file, enabling specific configurations such as container image name and deployment parameters. This modular design facilitates flexible, scalable deployment and easy management of the GenAI application suite within Kubernetes environments. For detailed configurations and common components, visit the [GenAIInfra common components directory](https://github.com/opea-project/GenAIInfra/tree/main/helm-charts/common).
 
 This use case employs a tailored combination of Helm charts and `values.yaml` configurations to deploy the following components and tools:
 |use case components | Tools |   Model     | Service Type |
@@ -79,7 +81,7 @@ environment variable or `values.yaml`
 
 Set a new [namespace](#create-and-set-namespace) and switch to it if needed
 
-To enable UI, uncomment the lines `56-62` in `GenAIInfra/helm-charts/chatqna/values.yaml`:
+To enable UI, uncomment the following lines in `GenAIInfra/helm-charts/chatqna/values.yaml`:
 ```bash
 chatqna-ui:
    image:
@@ -215,9 +217,8 @@ Follow the below steps in a different terminal.
 ```
 curl http://localhost:8888/v1/chatqna -H "Content-Type: application/json" -d '{
      "model": "Intel/neural-chat-7b-v3-3",
-     "messages": "What is the revenue of Nike in 2023?"
+     "messages": "What is OPEA?"
      }'
-
 ```
 Here is the output for your reference:
 ```bash
@@ -259,7 +260,7 @@ You should see the following output after successful execution:
 ```
 {"status":200,"message":"Data preparation succeeded"}
 ```
-For advanced usage of the dataprep microservice refer [here](#dataprep-microservice-%28advanced%29)
+For advanced usage of the dataprep microservice refer [here](#dataprep-microservice-advanced)
 
 ### MegaService After RAG Dataprep
 
@@ -274,7 +275,6 @@ curl http://localhost:8888/v1/chatqna -H "Content-Type: application/json" -d '{
      "model": "Intel/neural-chat-7b-v3-3",
      "messages": "What is OPEA?"
      }'
-
 ```
 After uploading the pdf with information about OPEA, we can see that the pdf is being used as a context to answer the question correctly:
 
@@ -304,7 +304,7 @@ curl http://localhost:6006/embed \
     -H 'Content-Type: application/json'
 ```
 
-In this example the embedding model used is "BAAI/bge-base-en-v1.5", which has a vector size of 768. So the output of the curl command is a embedded vector of
+In this example the embedding model used is "BAAI/bge-base-en-v1.5", which has a vector size of 768. So the output of the `curl` command is a embedded vector of
 length 768.
 
 
@@ -330,7 +330,6 @@ curl http://localhost:7000/v1/retrieval \
   -X POST \
   -d "{\"text\":\"test\",\"embedding\":${your_embedding}}" \
   -H 'Content-Type: application/json'
-
 ```
 The output of the retriever microservice comprises of the a unique id for the
 request, initial query or the input to the retrieval microservice, a list of top
@@ -378,16 +377,15 @@ curl http://localhost:9009/generate \
   -X POST \
   -d '{"inputs":"What is Deep Learning?","parameters":{"max_new_tokens":17, "do_sample": true}}' \
   -H 'Content-Type: application/json'
-
 ```
 
-TGI service generate text for the input prompt. Here is the expected result from TGI:
+TGI service generates text for the input prompt. Here is the expected result from TGI:
 
 ```
 {"generated_text":"We have all heard the buzzword, but our understanding of it is still growing. It’s a sub-field of Machine Learning, and it’s the cornerstone of today’s Machine Learning breakthroughs.\n\nDeep Learning makes machines act more like humans through their ability to generalize from very large"}
 ```
 
-**NOTE**: After launch the TGI, it takes few minutes for TGI server to load LLM model and warm up.
+**NOTE**: After TGI service is started, it takes few minutes to load a LLM model and warm up, before reaching `Ready` state.
 
 If you get
 
@@ -416,12 +414,11 @@ curl -X POST "http://localhost:6007/v1/dataprep" \
 
 This command updates a knowledge base by submitting a list of HTTP links for processing.
 
-Also, you are able to get the file list that you uploaded:
+To get list of uploaded files:
 
 ```
 curl -X POST "http://localhost:6007/v1/dataprep/get_file" \
      -H "Content-Type: application/json"
-
 ```
 
 To delete the file/link you uploaded you can use the following commands:
@@ -454,7 +451,7 @@ curl -X POST "http://localhost:6007/v1/dataprep/delete_file" \
 
 
 ## Launch UI
-### Basic UI
+### Basic UI via NodePort
 To access the frontend, open the following URL in your browser: 
 `http://{k8s-node-ip-address}:${port}`
 You can find the NGINX port using the following command:
@@ -482,16 +479,18 @@ When using a NodePort, all the nodes in the cluster will be listening at the spe
 Open a browser to access `http://<k8s-node-ip-address>:${port}`.
 From the configuration shown above, it would be `http://190.128.49.1:30304`
 
+### Basic UI via Port Forwarding
+
 Alternatively, You can also choose to use port forwarding as shown previously using:
 ```bash
 kubectl port-forward service/chatqna-nginx 8080:80
 ```
 and open a browser to access `http://localhost:8080`
  
- Visit this [link](https://opea-project.github.io/latest/getting-started/README.html#:~:text=tei%2Dembedding%2Dserver%20%20%20%20%20%20%20%20%20%7C-,Interact%20with%20ChatQnA,-%C2%B6) to see how to interact with the UI. 
+ Visit this [link](https://opea-project.github.io/latest/getting-started/README.html#interact-with-chatqna) to see how to interact with the UI. 
 
 ### Stop the services
-Once you are done with the entire pipeline and wish to stop and remove all the containers, use the command below:
+Once you are done with the entire pipeline and wish to stop and remove all the resources, use the command below:
 ```
 helm uninstall chatqna
 ```
