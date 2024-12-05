@@ -102,6 +102,13 @@ Next, we will update the dependencies for all Helm charts in the specified direc
 helm dependency update chatqna
 ```
 
+To use the bfloat16 data type for the LLM in TGI, modify the `values.yaml` file located in `GenAIInfra/helm-charts/common/tgi/`. Uncomment or add the following line:
+
+```yaml
+extraCmdArgs: ["--dtype","bfloat16"]
+```
+This configuration ensures that TGI processes LLM operations in bfloat16 precision, enabling lower-precision computations for improved performance and reduced memory usage.
+
 Set the necessary environment variables to setup the use case
 ```bash
 export MODELDIR=""  #export MODELDIR="/mnt/opea-models" if you want to cache the model.  
