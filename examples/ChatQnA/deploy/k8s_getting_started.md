@@ -76,3 +76,5 @@ Some commonly used kubectl commands and their functions that will help deploy Ch
 - `helm install [RELEASE_NAME] [CHART_NAME]`: This command deploys a Helm chart into your Kubernetes cluster, creating a new release. It is used to set up all the Kubernetes resources specified in the chart and track the version of the deployment.
 
 For more detailed instructions and explanations, you can refer to the [official Helm documentation](https://helm.sh/docs/).
+
+Continue to [Helm Deployment](./k8s_helm.md) to deploy ChatQnA via Helm. 
