@@ -79,7 +79,7 @@ This use case employs a tailored combination of Helm charts and `values.yaml` co
 Tools and models mentioned in the table are configurable either through the
 environment variable or `values.yaml` 
 
-Set a new [namespace](#create-and-set-namespace) and switch to it if needed
+Set a new [namespace](k8s_getting_started.md#create-and-set-namespace) and switch to it if needed
 
 To enable UI, uncomment the following lines in `GenAIInfra/helm-charts/chatqna/values.yaml`:
 ```bash
