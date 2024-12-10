@@ -22,11 +22,15 @@ By introducing multilingual support as a standalone microservice, we aim to deco
 
 
 ![Enterprise RAG Architecture](./assets/enterprise-rag-translation.png)
+![Multilingual support microservice](./assets/multilingual-support.png)
+
 
 The proposed architecture involves the creation of a new microservice called multilingual-support. 
-This microservice detects the language of the user's query as well as the response from the first llm microservice. 
-It then configures a translation prompt to convert the answer from the response language to the query language. 
-This prompt is sent to the second llm microservice to generate the final answer. 
+This microservice does the following -
+1. Detects the language of the user's query as well as the response from the first llm microservice. 
+2. Configures a translation prompt to convert the answer from the response language to the query language. 
+3. This prompt is sent to the second llm microservice to generate the final answer. 
+
 This ensures seamless, accurate communication across different languages in real time.
 
 
