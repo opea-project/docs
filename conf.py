@@ -116,6 +116,7 @@ html_context = {
    'is_release': is_release,
    'versions': ( ("latest", "/latest/"),
                  ("1.0", "/1.0/"),
+                 ("1.1", "/1.1/"),
                )
     }
 
