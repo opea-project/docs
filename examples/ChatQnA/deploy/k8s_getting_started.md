@@ -64,7 +64,7 @@ Some commonly used kubectl commands and their functions that will help deploy Ch
 | ---               | ---                                                                                                                                                    |
 | `Chart.yaml`      | This file contains metadata about the chart such as name, version, and description.                                                                    |
 | `values.yaml`     | Overridable configuration values for the Helm chart deployment, used in the chart k8s object templates. |
-| `deployment.yaml` | Part of the templates directory, this file describes how the Kubernetes resources should be deployed, such as Pods and Services.                       |
+| `templates/`  Directory | Contains YAML templates for Kubernetes objects, typically one file per object type (e.g., deployment.yaml for Deployments, service.yaml for Services). For more details, refer to the Helm Templates Best Practices.
 
 **Update Dependencies:**
 
