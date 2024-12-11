@@ -122,9 +122,9 @@ export RERANKER_MODELNAME="BAAI/bge-reranker-base"
 > 
 > Setting `MODELDIR` to an empty string will download the models without sharing them among worker nodes. This configuration is intended as a quick setup for testing in a single-node environment.
 > 
-> In a multi-node environment, go to every K8s worker node to make sure that a ${MODELDIR} directory exists and is writable.
+> In a multi-node environment, go to every k8s worker node to make sure that a ${MODELDIR} directory exists and is writable.
 > 
-> Another option is to to use K8s persistent volume to share the model data files. For more information click [here](https://github.com/opea-project/GenAIInfra/blob/main/helm-charts/README.md#using-persistent-volume).
+> Another option is to to use k8s persistent volume to share the model data files. For more information see [Using Persistent Volume](https://github.com/opea-project/GenAIInfra/blob/main/helm-charts/README.md#using-persistent-volume).
 
 ## Deploy the use case
 The `helm install` command will initiate all the aforementioned services such as Kubernetes pods.
