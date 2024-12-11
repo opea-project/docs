@@ -20,6 +20,7 @@ GenAIComps to deploy a multi-node TGI megaservice solution.
 
 ## Prerequisites
 
+
 ### Install Helm
 First, ensure that Helm (version >= 3.15) is installed on your system. Helm is an essential tool for managing Kubernetes applications. It simplifies the deployment and management of Kubernetes applications using Helm charts. 
 For detailed installation instructions, refer to the [Helm Installation Guide](https://helm.sh/docs/intro/install/)
@@ -116,6 +117,14 @@ export MODELNAME="Intel/neural-chat-7b-v3-3"
 export EMBEDDING_MODELNAME="BAAI/bge-base-en-v1.5"
 export RERANKER_MODELNAME="BAAI/bge-reranker-base"
 ```
+
+> **Note:**
+> 
+> Setting `MODELDIR` to an empty string will download the models without sharing them among worker nodes. This configuration is intended as a quick setup for testing in a single-node environment.
+> 
+> In a multi-node environment, go to every K8s worker node to make sure that a ${MODELDIR} directory exists and is writable.
+> 
+> Another option is to to use K8s persistent volume to share the model data files. For more information click [here](https://github.com/opea-project/GenAIInfra/blob/main/helm-charts/README.md#using-persistent-volume).
 
 ## Deploy the use case
 The `helm install` command will initiate all the aforementioned services such as Kubernetes pods.
@@ -228,9 +237,28 @@ curl http://localhost:8888/v1/chatqna -H "Content-Type: application/json" -d '{
      }'
 ```
 Here is the output for your reference:
+
 ```bash
-data: b' O', data: b'PE', data: b'A', data: b' stands', data: b' for', data: b' Organization', data: b' of', data: b' Public', data: b' Em', data: b'ploy', data: b'ees', data: b' of', data: b' Alabama', data: b'.', data: b' It', data: b' is', data: b' a', data: b' labor', data: b' union', data: b' representing', data: b' public', data: b' employees', data: b' in', data: b' the', data: b' state', data: b' of', data: b' Alabama', data: b',', data: b' working', data: b' to', data: b' protect', data: b' their', data: b' rights', data: b' and', data: b' interests', data: b'.', data: b'', data: b'', data: [DONE]
+data: b' O'
+data: b'PE'
+data: b'A'
+data: b' stands'
+data: b' Organization'
+data: b' of'
+data: b' Public'
+data: b' Em'
+data: b'ploy'
+data: b'ees'
+data: b' of'
+data: b' Alabama'
+.
+.
+.
+data: b''
+data: b''
+data: [DONE]
 ```
+
 which is essentially the following sentence:
 ```
 OPEA stands for Organization of Public Employees of Alabama. It is a labor union representing public employees in the state of Alabama, working to protect their rights and interests.
@@ -286,8 +314,26 @@ curl http://localhost:8888/v1/chatqna -H "Content-Type: application/json" -d '{
 After uploading the pdf with information about OPEA, we can see that the pdf is being used as a context to answer the question correctly:
 
 ```bash
-data: b' O', data: b'PE', data: b'A', data: b' (', data: b'Open', data: b' Platform', data: b' for', data: b' Enterprise', data: b' AI', data: b')', data: b' is', data: b' a', data: b' framework', data: b' that', data: b' focuses', data: b' on', data: b' creating', data: b' and', data: b' evalu', data: b'ating', data: b' open', data: b',', data: b' multi', data: b'-', data: b'provider', data: b',', data: b' robust', data: b',', data: b' and', data: b' compos', data: b'able', data: b' gener', data: b'ative', data: b' AI', data: b' (', data: b'Gen', data: b'AI', data: b')', data: b' solutions', data: b'.', data: b' It', data: b' aims', data: b' to', data: b' facilitate', data: b' the', data: b' implementation', data: b' of', data: b' enterprise', data: b'-', data: b'grade', data: b' composite', data: b' Gen', data: b'AI', data: b' solutions', data: b',', data: b' particularly', data: b' Ret', data: b'riev', data: b'al', data: b' Aug', data: b'ment', data: b'ed', data: b' Gener', data: b'ative', data: b' AI', data: b' (', data: b'R', data: b'AG', data: b'),', data: b' by', data: b' simpl', data: b'ifying', data: b' the', data: b' integration', data: b' of', data: b' secure', data: b',', data: b' perform', data: b'ant', data: b',', data: b' and', data: b' cost', data: b'-', data: b'effective', data: b' Gen', data: b'AI', data: b' work', data: b'fl', data: b'ows', data: b' into', data: b' business', data: b' systems', data: b'.', data: b'', data: b'', data: [DONE]
+data: b' O'
+data: b'PE'
+data: b'A'
+data: b' ('
+data: b'Open'
+data: b' Platform'
+data: b' for'
+data: b' Enterprise'
+data: b' AI'
+data: b')',
+.
+.
+.
+data: b' systems'
+data: b'.'
+data: b''
+data: b''
+data: [DONE]
 ```
+
 The above output has been parsed into the below sentence which shows how the LLM has picked up the right context to answer the question correctly after the document upload:
 ```
 OPEN Platform for Enterprise AI (Open Platform for Enterprise AI) is a framework that focuses on creating and evaluating open, multi-provider, robust, and composable generative AI (GenAI) solutions. It aims to facilitate the implementation of enterprise-grade composite GenAI solutions, particularly Retrieval Augmented Generative AI (RAG), by simplifying the integration of secure, performant, and cost-effective GenAI workflows into business systems.
