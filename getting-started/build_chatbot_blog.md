@@ -6,17 +6,17 @@ Generative AI demonstrates immense potential in enhancing productivity and drivi
 
 Here are several ways in which generative AI can assist enterprises:
 
-* Data Analysis and Insights: By analyzing vast amounts of enterprise data, generative AI can uncover patterns, provide actionable insights, and support better decision-making processes.
+* **Data Analysis and Insights**: By analyzing vast amounts of enterprise data, generative AI can uncover patterns, provide actionable insights, and support better decision-making processes.
 
-* Document Management: Generative AI streamlines the organization, summarization, and retrieval of documents, enhancing efficiency in knowledge management systems.
+* **Document Management**: Generative AI streamlines the organization, summarization, and retrieval of documents, enhancing efficiency in knowledge management systems.
 
-* Customer Support and Chatbots: AI-driven chatbots can provide 24/7 customer service, respond to inquiries, and even handle complex issues by understanding user intents and offering personalized solutions.
+* **Customer Support and Chatbots**: AI-driven chatbots can provide 24/7 customer service, respond to inquiries, and even handle complex issues by understanding user intents and offering personalized solutions.
 
-* Code Generation and Software Development: AI models can write code snippets, debug software, and even recommend solutions to programming challenges, accelerating the software development lifecycle.
+* **Code Generation and Software Development**: AI models can write code snippets, debug software, and even recommend solutions to programming challenges, accelerating the software development lifecycle.
 
-* Fraud Detection and Risk Management: By analyzing transaction patterns and detecting anomalies, generative AI helps enterprises identify and mitigate potential risks or fraudulent activities.
+* **Fraud Detection and Risk Management**: By analyzing transaction patterns and detecting anomalies, generative AI helps enterprises identify and mitigate potential risks or fraudulent activities.
 
-* Healthcare and Well-being: In enterprises with healthcare initiatives, generative AI can support mental health programs by generating therapeutic content or helping manage employee well-being through tailored recommendations.
+* **Healthcare and Well-being**: In enterprises with healthcare initiatives, generative AI can support mental health programs by generating therapeutic content or helping manage employee well-being through tailored recommendations.
 
 By leveraging generative AI in these areas, enterprises can not only solve existing problems but also unlock new opportunities for innovation and growth.
 
@@ -121,7 +121,7 @@ source set_env.sh
 ```
 docker compose up -d
 ```
-It automatically downloads the following Docker images from Docker Hub and starts up the Docker container.
+This command automatically downloads the following Docker images from Docker Hub and starts the Docker container.
 |Image name	| tag |
 |-----------|---------------------------|
 | redis/redis-stack |7.2.0-v9 |
@@ -136,10 +136,10 @@ It automatically downloads the following Docker images from Docker Hub and start
 
 #### Check Docker Container Status
 
-Run this command to check Docker container status
+Run this command to check the Docker container status
 `docker ps -a`
 
-Make sure all the docker container status are `UP` as following:
+Make sure all the Docker containers are `UP` as shown below:
 
 ```
 CONTAINER ID   IMAGE                                                           COMMAND                  CREATED         STATUS          PORTS                                                                                  NAMES
@@ -157,9 +157,9 @@ cf91b1a4f5d2   redis/redis-stack:7.2.0-v9                                      "
 
 #### Check TGI Service Is Ready
 
-It takes minutes for TGI service to download LLM models and do warm up inference.
+It takes a few minutes for the TGI service to download LLM models and perform warm-up inference.
 
-Check the TGI service log to make sure it is ready.
+Check the TGI service log to ensure it is ready.
 
 Run this command to check the log:
 `docker logs tgi-service | grep Connected`
@@ -171,7 +171,7 @@ The following log indicates TGI service is ready.
 
 #### Consume the ChatQnA Service
 
- Please consume ChatQnA service until **tgi-service is ready**
+ Please wait until the **tgi-service is ready** before consuming the ChatQnA service
 
 Open the following URL in your browser:
 
@@ -188,7 +188,7 @@ Figure 2. Access ChatQnA
 
 ### Deploy by Kubernetes on AWS EC2 Instance
 
-Assumed you set up the Kubernetes on EC2 instance. Please refer to [k8s_install_kubespray](https://github.com/opea-project/docs/blob/main/guide/installation/k8s_install/k8s_install_kubespray.md) to set up Kubernetes.
+Assume you have set up Kubernetes on the EC2 instance. Please refer to [k8s_install_kubespray](https://github.com/opea-project/docs/blob/main/guide/installation/k8s_install/k8s_install_kubespray.md) to set up Kubernetes.
 
 Here are the steps to deploy ChatQnA using Kubernetes:
 
@@ -198,7 +198,7 @@ Here are the steps to deploy ChatQnA using Kubernetes:
 
 #### 1. Download Code and Setup Environment Variable
 
-Follow these steps to download code set up environment variables:
+Follow these steps to download the code and set up environment variables:
 
 (Skip this if you have already downloaded the code)
 ```
@@ -218,7 +218,7 @@ kubectl apply -f chatqna.yaml
 ```
 ##### Check Kubernetes Status
 
-1. Check services status to get the port number to access the ChatQnA:
+1. Check the services status to get the port number to access ChatQnA:
 ```
 kubectl get services
 ```
@@ -229,11 +229,11 @@ Figure 3. Kubernetes Service
 </div>
 The nginx nodeport is **31146**.
 
-2. Check pod status
+2. Check the pod status
 ```
 kubectl get pods
 ```
-Make sure all pods are ready in state
+Make sure all pods are in the ready state
 ![kubernetes pods](assets/kube_pod.png)
 <div align="center">
 Figure 4. Kubernetes Pod Status
@@ -241,11 +241,11 @@ Figure 4. Kubernetes Pod Status
 
 #### Consume the ChatQnA Service
 
-Open the following URL in your browser.
+Open the following URL in your browser:
 ```
 http://{Public-IPv4-address}:31146
 ```
 
-Here the port number `31146` is from Kubernetes service `chatqna-nginx` exposed port in Figure 2.
+The port number `31146` is from the Kubernetes service `chatqna-nginx` exposed port shown in Figure 2.
 
 For ChatQnA example interaction, please refer to the [consume service section](#Consume-the-ChatQnA-Service) for details.
