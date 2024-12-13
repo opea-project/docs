@@ -2,35 +2,35 @@
 
 ## Generative AI: A Transformational Force for Enterprises
 
-Generative AI demonstrates immense potential in enhancing productivity and driving innovation across various industries. Its ability to address enterprise challenges by offering innovative and efficient solutions makes it a powerful tool for businesses seeking a competitive edge.
+Generative AI demonstrates immense potential in enhancing productivity and driving innovation across industries. Its ability to address enterprise challenges with innovative and efficient solutions makes it a powerful tool for businesses seeking a competitive edge.
 
-Here are several ways in which generative AI can assist enterprises:
+Here are several ways generative AI can assist enterprises:
 
-* **Data Analysis and Insights**: By analyzing vast amounts of enterprise data, generative AI can uncover patterns, provide actionable insights, and support better decision-making processes.
+* **Data Analysis and Insights**:  Analyze vast amounts of enterprise data to uncover patterns, provide actionable insights, and support better decision-making.
 
-* **Document Management**: Generative AI streamlines the organization, summarization, and retrieval of documents, enhancing efficiency in knowledge management systems.
+* **Document Management**: Streamline the organization, summarization, and retrieval of documents to enhance efficiency in knowledge management.
 
-* **Customer Support and Chatbots**: AI-driven chatbots can provide 24/7 customer service, respond to inquiries, and even handle complex issues by understanding user intents and offering personalized solutions.
+* **Customer Support and Chatbots**: Provide 24/7 customer service, respond to inquiries, and even resolve complex issues through AI-driven chatbots.
 
-* **Code Generation and Software Development**: AI models can write code snippets, debug software, and even recommend solutions to programming challenges, accelerating the software development lifecycle.
+* **Code Generation and Software Development**: Generate code snippets, debug software, and recommend solutions to programming challenges, accelerating development timelines.
 
-* **Fraud Detection and Risk Management**: By analyzing transaction patterns and detecting anomalies, generative AI helps enterprises identify and mitigate potential risks or fraudulent activities.
+* **Fraud Detection and Risk Management**: Identify and mitigate risks or fraud by analyzing transaction patterns and detecting anomalies.
 
-* **Healthcare and Well-being**: In enterprises with healthcare initiatives, generative AI can support mental health programs by generating therapeutic content or helping manage employee well-being through tailored recommendations.
+* **Healthcare and Well-being**:  Support mental health programs and employee well-being with tailored, AI-generated recommendations.
 
-By leveraging generative AI in these areas, enterprises can not only solve existing problems but also unlock new opportunities for innovation and growth.
+By leveraging generative AI, enterprises can solve existing problems and unlock new opportunities for innovation and growth.
 
-In this blog, we introduce the Open Platform for Enterprise AI (OPEA), a powerful GenAI framework to help you build your GenAI applications. First, we explore the features and attributes of OPEA, and then we show you how to build your ChatBot with OPEA step by step.
+In this blog, we introduce the **Open Platform for Enterprise AI (OPEA)**, a powerful GenAI framework to help you build your generative applications. We’ll first explore OPEA’s features and capabilities, followed by a step-by-step guide to build your chatbot.
 
 ## Open Platform for Enterprise AI
 
-Open Platform for Enterprise AI (OPEA) is an open platform project that allows you to create open, multi-provider, robust, and composable GenAI solutions that harness the best innovations across the ecosystem.
+The **Open Platform for Enterprise AI (OPEA)** is an open platform project that allows you to create open, multi-provider, robust, and composable generative AI solutions,  leveraging innovations across the ecosystem.
 
 OPEA platform includes:
 
-* Detailed framework of composable building blocks for state-of-the-art generative AI systems including LLMs, data stores, and prompt engines.
-* Architectural blueprints of retrieval-augmented generative AI component stack structure and end-to-end workflows.
-* A four-step assessment for grading generative AI systems around performance, features, trustworthiness, and enterprise-grade readiness.
+* **Framework**: Detailed framework of composable building blocks for state-of-the-art generative AI systems including LLMs, data stores, and prompt engines.
+* **Architectural**: blueprints of retrieval-augmented generative AI component stack structure and end-to-end workflows.
+* **Evaluation**: A four-step assessment for grading generative AI systems around performance, features, trustworthiness, and enterprise-grade readiness.
 
 OPEA is designed with the following considerations:
 
@@ -58,7 +58,8 @@ Ecosystem and Growth: Access to a vibrant ecosystem of partners to help build an
 OPEA [GenAIExamples](https://github.com/opea-project/GenAIExamples) are designed to give developers an easy entry into generative AI, featuring microservice-based samples that simplify the processes of deploying, testing, and scaling GenAI applications.
 All examples are fully compatible with Docker and Kubernetes, supporting a wide range of hardware platforms such as Gaudi, Xeon, and NVIDIA GPU, and other hardwares, ensuring flexibility and efficiency for your GenAI adoption.
 
-In this section, we deploy a GenAIExample, ChatQnA, on Amazon Web Services (AWS) in two different ways: **Docker** and **Kubernetes**.
+### Deploying ChatQnA: A Step-by-Step Guide
+In this section,  we demonstrate deploying a GenAIExample, ChatQnA, on Amazon Web Services (AWS) in two different ways: **Docker** and **Kubernetes**.
 
 ChatQnA is a Retrieval-Augmented Generation (RAG) chatbot, which integrates the power of retrieval systems to fetch relevant, domain-specific knowledge with generative AI to produce human-like responses. ChatQnA dataflow is shown in Figure 1.
 
@@ -71,17 +72,17 @@ Figure 1. ChatQnA Dataflow
 
 ### Prerequisites
 
-**Hardware**
+**Hardware Requirements**
 
-* CPU: the 4th (and later) Gen Intel Xeon with Intel (Advanced Matrix Extension) AMX
-* Minimum Memory Size: 64G 
-* Storage: 100GB disk space
+* **CPU**: the 4th (and later) Gen Intel Xeon with Intel (Advanced Matrix Extension) AMX
+* **Memory**: 64GB minimum
+* **Storage**: 100GB disk space, minimum
 
 The recommended configurations are Amazon EC2 c7i.8xlarge and c7i.16xlarge instance types. These instances are Intel Xeon with AMX, to leverage 4th Generation (and later) Intel Xeon Scalable processors that are optimized for demanding workloads.
 
-**Software**
+**Software Requirements**
 
-* OS: Ubuntu 22.04 LTS
+* **OS**: Ubuntu 22.04 LTS
 
 **Required Models:**
 
@@ -95,7 +96,7 @@ By default, the embedding, reranking, and LLM models are set to the following va
 
 ### Deploy by Docker on AWS EC2 Instance
 
-Here are the steps to deploy ChatQnA using Docker
+Here are the steps to deploy ChatQnA using Docker:
 
 1. Download code and set up the environment variables.
 2. Run docker compose.
@@ -169,7 +170,7 @@ The following log indicates TGI service is ready.
 2024-09-03T02:47:53.402023Z  INFO text_generation_router::server: router/src/server.rs:2311: Connected
 ```
 
-#### Consume the ChatQnA Service
+#### Access ChatQnA Service
 
  Please wait until the **tgi-service is ready** before consuming the ChatQnA service
 
@@ -239,7 +240,7 @@ Make sure all pods are in the ready state
 Figure 4. Kubernetes Pod Status
 </div>
 
-#### Consume the ChatQnA Service
+#### Access ChatQnA Service
 
 Open the following URL in your browser:
 ```
