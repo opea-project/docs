@@ -20,9 +20,7 @@ By introducing multilingual support as a standalone microservice, we aim to deco
 
 ## Design Proposal
 
-
-![Enterprise RAG Architecture](./assets/enterprise-rag-translation.png)
-![Multilingual support microservice](./assets/multilingual-support.png)
+![Multilingual support microservice](./assets/multilingual-support-diagram.png)
 
 
 The proposed architecture involves the creation of a new microservice called multilingual-support. 
