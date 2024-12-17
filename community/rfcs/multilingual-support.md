@@ -36,5 +36,5 @@ Signature of multilingual-support microservice
 ```python
 @traceable(run_type="multilingual-support")
 @register_statistics(names=["opea_service@multilingual_support"])
-def multilingual(input: LLMParamsDoc) -> Union[LLMParamsDoc, ChatCompletionRequest, SearchedDoc]:
+def multilingual(input: GeneratedDoc) -> Union[LLMParamsDoc, ChatCompletionRequest, SearchedDoc]:
 ```
