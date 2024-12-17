@@ -20,6 +20,10 @@ GenAIComps to deploy a multi-node TGI megaservice solution.
 
 ## Prerequisites
 
+### Hardware Prerequisites
+For cloud deployments, the ChatQnA pipeline in this guide has been tested on an AWS `m7i.8xlarge` single node instance, which provides `32 vCPUs`, `128 GiB` memory and upgraded to `100 GB` of disk space. While the default deployment uses only `~24 GiB` of memory, similar instance types with at least 32 vCPUs and 32 GiB of memory are recommended to ensure smooth performance.
+
+By switching to bf16 from the default fp32, the memory requirement can be further relaxed. Instructions to switch to bf16 are provided in the [Use Case Setup](#use-case-setup) section below.
 
 ### Install Helm
 First, ensure that Helm (version >= 3.15) is installed on your system. Helm is an essential tool for managing Kubernetes applications. It simplifies the deployment and management of Kubernetes applications using Helm charts. 
@@ -108,7 +112,7 @@ To use the bfloat16 data type for the LLM in TGI, modify the `values.yaml` file 
 ```yaml
 extraCmdArgs: ["--dtype","bfloat16"]
 ```
-This configuration ensures that TGI processes LLM operations in bfloat16 precision, enabling lower-precision computations for improved performance and reduced memory usage.
+This configuration ensures that TGI processes LLM operations in bfloat16 precision, enabling lower-precision computations for improved performance and reduced memory usage. Bfloat16 operations are accelerated using Intel® AMX, the built-in AI accelerator on 4th Gen Intel® Xeon® Scalable processors and later.
 
 Set the necessary environment variables to setup the use case
 ```bash
