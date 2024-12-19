@@ -7,23 +7,12 @@ GenAIExamples are designed to give developers an easy entry into generative AI, 
 
 .. toctree::
    :maxdepth: 1
+   :glob:
 
-   AgentQnA/AgentQnA_Guide
-   ChatQnA/ChatQnA_Guide
-   CodeGen/CodeGen_Guide
+   /GenAIExamples/README
 
-----
 
 We're building this documentation from content in the
 :GenAIExamples_blob:`GenAIExamples<README.md>` GitHub repository.
 
-.. rst-class:: rst-columns
-
-.. toctree::
-   :maxdepth: 1
-   :glob:
-
-   /GenAIExamples/README
-   examples.rst
-   /GenAIExamples/*
 
