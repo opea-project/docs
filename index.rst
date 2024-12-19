@@ -63,20 +63,22 @@ Source code for the OPEA Project is maintained in the
 
 
 .. toctree::
-   :maxdepth: 1
    :hidden:
+   :maxdepth: 2
+   :glob:
 
-   Documentation Home <self>
-   introduction/index
-   getting-started/README
-   examples/index
-   microservices/index
-   deploy/index
-   eval/index
+   Home <self>
+   Overview <introduction/index>
+   Getting Started <getting-started/README>
+   Tutorial<tutorial>
+   Projects <projects>
    developer-guides/index
    community/index
    release_notes/index
    CONTRIBUTING
-   faq
+   Q&A <faq>
+   Repo <https://github.com/opea-project>
+
 
 .. _OPEA Project GitHub repository: https://github.com/opea-project
+

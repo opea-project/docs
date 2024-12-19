@@ -46,38 +46,32 @@ support systems:
 Contributing Guides
 *******************
 
-.. toctree::
-   :maxdepth: 1
+- :doc:`Contribution Guide <CONTRIBUTING>`
 
-   CONTRIBUTING
-   codeowner
-   SECURITY
+- :doc:`OPEA Project Code Owners <codeowner>`
+
+- :doc:`Reporting a Vulnerability <SECURITY>`
 
 Roadmaps
 ********
 
-.. toctree::
-   :maxdepth: 1
-   :glob:
+- :doc:`OPEA 2024 - 2025 Roadmap <../roadmap/2024-2025>`
 
-   ../roadmap/*
-
+- :doc:`OPEA CI/CD Roadmap <../roadmap/CICD>`
 
 Project Governance
 ******************
 
-.. toctree::
-   :maxdepth: 1
+- :doc:` Technical Charter (the “Charter”) for OPEA a Series of LF Projects, LLC <charter>`
 
-   charter
-   TSC
-   CODE_OF_CONDUCT
-   SECURITY
+- :doc:`Technical Steering Committee (TSC) <TSC>`
+
+- :doc:`Contributor Covenant Code of Conduct <CODE_OF_CONDUCT>`
+
+- :doc:`Reporting a Vulnerability <SECURITY>`
 
 RFC Proposals
 *************
 
-.. toctree::
-   :maxdepth: 1
+- :doc:`RFC Archive <rfcs/README>`
 
-   rfcs

@@ -84,7 +84,4 @@ Links to:
 * Get Involved with the OPEA Open Source Community
 * Browse the OPEA wiki, mailing lists, and working groups: https://wiki.lfaidata.foundation/display/DL/OPEA+Home
 
-.. toctree::
-   :maxdepth: 1
-
-   ../framework/framework
+- :doc:`Open Platform for Enterprise AI (OPEA) Framework Draft Proposal <../framework/framework>`
