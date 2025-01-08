@@ -68,78 +68,68 @@ Open-source LLMs provide greater flexibility and customization options compared 
 ## Design Proposal
 
 The workflow for the proposed changes are as follows. As shown below, Ollama serving models will be added as LLM serving engine for the Xeon platform. This will work as an alternative for vLLM, TGI and OpenAI LLM engines. New change is highlighted in orange.
-
 ```mermaid
 ---
 config:
   flowchart:
-    nodeSpacing: 400
-    rankSpacing: 100
+    nodeSpacing: 200
+    rankSpacing: 50
     curve: linear
   themeVariables:
-    fontSize: 50px
+    fontSize: 16px
 ---
 flowchart LR
     %% Colors %%
     classDef blue fill:#ADD8E6,stroke:#ADD8E6,stroke-width:2px,fill-opacity:0.5
     classDef orange fill:#FBAA60,stroke:#ADD8E6,stroke-width:2px,fill-opacity:0.5
     classDef orchid fill:#C26DBC,stroke:#ADD8E6,stroke-width:2px,fill-opacity:0.5
-    classDef invisible fill:transparent,stroke:transparent;
 
     %% Subgraphs %%
-    subgraph DocIndexRetriever-MegaService["DocIndexRetriever MegaService "]
-        direction LR
+    subgraph DocIndexRetriever["DocIndexRetriever MegaService"]
+        direction TB
         EM([Embedding MicroService]):::blue
         RET([Retrieval MicroService]):::blue
         RER([Rerank MicroService]):::blue
     end
-    subgraph UserInput[" User Input "]
-        direction LR
+    subgraph UserInput["User Input"]
+        direction TB
         a([User Input Query]):::orchid
-        Ingest([Ingest data]):::orchid
+        Ingest([Ingest Data]):::orchid
     end
+    subgraph LLMServices["LLM Services"]
+        direction TB
+        LLM_ollama{{LLMs by Ollama}}:::orange
+        LLM_tgi{{LLMs by TGI}}:::blue
+        LLM_vllm{{LLMs by vLLM}}:::blue
+        LLM_openai{{LLMs by OpenAI}}:::blue
+    end
+
     AG_REACT([Agent MicroService - react]):::blue
     AG_RAG([Agent MicroService - rag]):::blue
-    LLM_gen{{LLM Service <br>}}
-    LLM_ollama{{LLMs by Ollama <br>}}:::orange
-    LLM_tgi{{LLMs by TGI <br>}}:::blue
-    LLM_vllm{{LLMs by vLLM <br>}}:::blue
-    LLM_openai{{LLMs by OpenAI <br>}}:::blue
+    LLM_gen{{LLM Service}}
     DP([Data Preparation MicroService]):::blue
-    TEI_RER{{Reranking service<br>}}
-    TEI_EM{{Embedding service <br>}}
-    VDB{{Vector DB<br><br>}}
-    R_RET{{Retriever service <br>}}
+    TEI_RER{{Reranking Service}}
+    TEI_EM{{Embedding Service}}
+    VDB{{Vector DB}}
+    R_RET{{Retriever Service}}
 
-
-
-    %% Questions interaction
-    direction LR
-    a[User Input Query] --> AG_REACT
+    %% Flow %%
+    a --> AG_REACT
     AG_REACT --> AG_RAG
-    AG_RAG --> DocIndexRetriever-MegaService
-    EM ==> RET
-    RET ==> RER
-    Ingest[Ingest data] --> DP
+    AG_RAG --> DocIndexRetriever
+    EM --> RET
+    RET --> RER
+    Ingest --> DP
 
-    %% Embedding service flow
-    direction LR
-    AG_RAG <-.-> LLM_gen
-    LLM_gen <-.-> LLM_ollama
-    LLM_gen <-.-> LLM_tgi
-    LLM_gen <-.-> LLM_vllm
-    LLM_gen <-.-> LLM_openai
-    AG_REACT <-.-> LLM_gen
-    EM <-.-> TEI_EM
-    RET <-.-> R_RET
-    RER <-.-> TEI_RER
+    AG_RAG <--> LLM_gen
+    LLM_gen <--> LLMServices
+    AG_REACT <--> LLM_gen
+    EM <--> TEI_EM
+    RET <--> R_RET
+    RER <--> TEI_RER
 
-    direction TB
-    %% Vector DB interaction
-    R_RET <-.-> VDB
-    DP <-.-> VDB
-
-
+    R_RET <--> VDB
+    DP <--> VDB
 ```
 The proposed design for Ollama serving support entails following changes:
 
