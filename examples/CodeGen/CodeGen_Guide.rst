@@ -42,4 +42,4 @@ Here are some deployment options, depending on your hardware and environment:
 .. toctree::
    :maxdepth: 1
 
-   CodeGen Deployment Options <deploy/index>
+   Gaudi AI Accelerator <deploy/gaudi>
