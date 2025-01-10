@@ -162,7 +162,7 @@ flowchart LR
         direction LR
         EM([Embedding MicroService]):::blue
         RET([Retrieval MicroService]):::blue
-        RER([Rerank MicroService]):::blue
+        RER([Agents MicroService]):::blue
         LLM([LLM MicroService]):::blue
     end
     subgraph User Interface
@@ -172,7 +172,7 @@ flowchart LR
         Ingest([Manage Resources<br>]):::orchid
     end
 
-    LOCAL_RER{{Reranking service<br>}}
+    LOCAL_RER{{Agents service<br>}}
     CLIP_EM{{Embedding service <br>}}
     VDB{{Vector DB<br><br>}}
     V_RET{{Retriever service <br>}}
