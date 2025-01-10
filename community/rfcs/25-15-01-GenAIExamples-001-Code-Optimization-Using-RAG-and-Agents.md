@@ -211,7 +211,61 @@ flowchart LR
     DP <-.->VDB
 ```
 
-> THIS PART WILL BE IMPLEMENTED SIMILAR TO MM-Q&A
+#### **Components**
+
+#### 1. **User Interface**
+   - **Submit Query Tab**: This is where users can input their queries for code optimization. It includes a dropdown to select the database to be used in the RAG process.
+   - **UI Server**: The backend server that handles user interactions and forwards requests to the appropriate microservices.
+   - **Manage Resources**: This section allows users to save documents or online resources to the vector database.
+
+#### 2. **CodeGen-MegaService**
+   - **Embedding MicroService**: This service is responsible for generating vector embeddings of documents and code snippets.
+   - **Retrieval MicroService**: This service retrieves relevant information based on the query vectors.
+   - **Agents MicroService**: This service filters and prioritizes the most relevant context from the retrieved information.
+   - **LLM MicroService**: This service uses a large language model to generate code optimizations based on the filtered context.
+
+#### 3. **External Services**
+   - **Agents Service**: An external service that provides additional agent functionalities.
+   - **Embedding Service**: An external service that generates embeddings for documents and code snippets.
+   - **Vector DB**: A vector database that stores and retrieves vector representations of documents and code snippets.
+   - **Retriever Service**: An external service that retrieves relevant information from the vector database.
+   - **LLM Service**: An external service that provides large language model functionalities.
+
+#### 4. **Data Preparation**
+   - This component is responsible for preparing data for ingestion into the vector database.
+
+#### 5. **CodeGen Gateway**
+   - This gateway handles the communication between the UI server and the CodeGen-MegaService.
+
+#### **Interactions**
+
+#### Data Preparation Flow
+1. **Ingest Data**: Users can upload documents or enter URLs in the "Manage Resources" section.
+2. **UI Server**: The UI server forwards the ingested data to the Data Preparation component.
+3. **Data Preparation**: The data is prepared and sent to the Embedding Service for generating vector embeddings.
+4. **Vector DB**: The prepared data and embeddings are stored in the vector database.
+
+#### Query Interaction
+1. **User Input Query**: Users submit their queries through the "Submit Query Tab".
+2. **UI Server**: The UI server forwards the query to the CodeGen Gateway.
+3. **CodeGen Gateway**: The gateway communicates with the CodeGen-MegaService to process the query.
+4. **Embedding MicroService**: Generates vector embeddings for the query.
+5. **Retrieval MicroService**: Retrieves relevant information based on the query vectors.
+6. **Agents MicroService**: Filters and prioritizes the most relevant context from the retrieved information.
+7. **LLM MicroService**: Uses a large language model to generate code optimizations based on the filtered context.
+8. **Response**: The generated code optimizations are sent back to the UI server and displayed to the user.
+
+#### Embedding Service Flow
+1. **Embedding MicroService**: Communicates with the Embedding Service to generate vector embeddings.
+2. **Retrieval MicroService**: Communicates with the Retriever Service to retrieve relevant information.
+3. **Agents MicroService**: Communicates with the Agents Service for additional agent functionalities.
+4. **LLM MicroService**: Communicates with the LLM Service for large language model functionalities.
+
+#### Vector DB Interaction
+1. **Retriever Service**: Interacts with the Vector DB to retrieve relevant information.
+2. **Data Preparation**: Interacts with the Vector DB to store prepared data and embeddings.
+
+
 
 
 <!-- ### Implementation Plan
@@ -268,11 +322,4 @@ These use-case stories illustrate how the integration of RAG and Agents can enha
 3. Begin the integration of RAG and Agents into the existing code optimization framework.
 4. Conduct testing and validation to ensure the system meets the desired objectives.
 
----
 
-Thank you for considering this proposal. We look forward to your feedback and approval to proceed with the integration of RAG and Agents for code optimization.
-
-Best regards,
-
-Mustafa Cetin
-Intel Team
