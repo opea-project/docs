@@ -138,18 +138,80 @@ The proposed UI changes aim to provide a seamless and efficient user experience 
 
 ### Design Diagram
 
-> THIS PART WILL BE IMPLEMENTED SIMILAR TO MM-Q&A
+
 
 ```mermaid
-graph TD
-    A[Code Optimization Request] -->|Send Request| B[Vector Database Microservice]
-    B -->|Retrieve Vectors| C[Agent Microservice]
-    C -->|Filter Context| D[RAG Microservice]
-    D -->|Generate Optimizations| E[Optimized Code]
-    E -->|Return Response| F[User]
+---
+config:
+  flowchart:
+    nodeSpacing: 400
+    rankSpacing: 100
+    curve: linear
+  themeVariables:
+    fontSize: 50px
+---
+flowchart LR
+    %% Colors %%
+    classDef blue fill:#ADD8E6,stroke:#ADD8E6,stroke-width:2px,fill-opacity:0.5
+    classDef orange fill:#FBAA60,stroke:#ADD8E6,stroke-width:2px,fill-opacity:0.5
+    classDef orchid fill:#C26DBC,stroke:#ADD8E6,stroke-width:2px,fill-opacity:0.5
+    classDef invisible fill:transparent,stroke:transparent;
+    style CodeGen-MegaService stroke:#000000
+    %% Subgraphs %%
+    subgraph CodeGen-MegaService["CodeGen-MegaService"]
+        direction LR
+        EM([Embedding MicroService]):::blue
+        RET([Retrieval MicroService]):::blue
+        RER([Rerank MicroService]):::blue
+        LLM([LLM MicroService]):::blue
+    end
+    subgraph User Interface
+        direction LR
+        a([Submit Query Tab]):::orchid
+        UI([UI server<br>]):::orchid
+        Ingest([Manage Resources<br>]):::orchid
+    end
+
+    LOCAL_RER{{Reranking service<br>}}
+    CLIP_EM{{Embedding service <br>}}
+    VDB{{Vector DB<br><br>}}
+    V_RET{{Retriever service <br>}}
+    Ingest{{Ingest data <br>}}
+    DP([Data Preparation<br>]):::blue
+    LLM_gen{{LLM Service <br>}}
+    GW([CodeGen GateWay<br>]):::orange
+
+    %% Data Preparation flow
+    %% Ingest data flow
+    direction LR
+    Ingest[Ingest data] --> UI
+    UI --> DP
+    DP <-.-> CLIP_EM
+
+    %% Questions interaction
+    direction LR
+    a[User Input Query] --> UI
+    UI --> GW
+    GW <==> CodeGen-MegaService
+    EM ==> RET
+    RET ==> RER
+    RER ==> LLM
+
+
+    %% Embedding service flow
+    direction LR
+    EM <-.-> CLIP_EM
+    RET <-.-> V_RET
+    RER <-.-> LOCAL_RER
+    LLM <-.-> LLM_gen
+
+    direction TB
+    %% Vector DB interaction
+    V_RET <-.->VDB
+    DP <-.->VDB
 ```
 
-
+> THIS PART WILL BE IMPLEMENTED SIMILAR TO MM-Q&A
 
 
 <!-- ### Implementation Plan
