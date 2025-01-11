@@ -90,6 +90,8 @@ The proposed UI changes aim to provide a seamless and efficient user experience 
 
 The proposed design involves the integration of RAG and Agents into our existing CodeGen examples in OPEA.
 
+
+
 ```mermaid
 ---
 config:
@@ -110,26 +112,26 @@ flowchart LR
     %% Subgraphs %%
     subgraph CodeGen-MegaService["CodeGen-MegaService"]
         direction LR
-        EM([Embedding MicroService]):::blue
-        RET([Retrieval MicroService]):::blue
-        RER([Agents MicroService]):::blue
-        LLM([LLM MicroService]):::blue
+        EM([Embedding<br>MicroService]):::blue
+        RET([Retrieval<br>MicroService]):::blue
+        RER([Agents<br>MicroService]):::blue
+        LLM([LLM<br>MicroService]):::blue
     end
     subgraph User Interface
         direction LR
         a([Submit Query Tab]):::orchid
-        UI([UI server<br>]):::orchid
-        Ingest([Manage Resources<br>]):::orchid
+        UI([UI server]):::orchid
+        Ingest([Manage Resources]):::orchid
     end
 
-    LOCAL_RER{{Agents service<br>}}
-    CLIP_EM{{Embedding service <br>}}
-    VDB{{Vector DB<br><br>}}
-    V_RET{{Retriever service <br>}}
-    Ingest{{Ingest data <br>}}
-    DP([Data Preparation<br>]):::blue
-    LLM_gen{{LLM Service <br>}}
-    GW([CodeGen GateWay<br>]):::orange
+    LOCAL_RER{{Agents<br>service}}
+    CLIP_EM{{Embedding<br>service}}
+    VDB{{Vector DB}}
+    V_RET{{Retriever<br>service}}
+    Ingest{{Ingest data}}
+    DP([Data Preparation]):::blue
+    LLM_gen{{LLM Service}}
+    GW([CodeGen GateWay]):::orange
 
     %% Data Preparation flow
     %% Ingest data flow
