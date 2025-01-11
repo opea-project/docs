@@ -117,10 +117,10 @@ flowchart LR
         RER([Agents<br>MicroService]):::blue
         LLM([LLM<br>MicroService]):::blue
     end
-    subgraph User Interface
+    subgraph User<br>Interface
         direction LR
         a([Submit Query Tab]):::orchid
-        UI([UI server]):::orchid
+        UI([UI<br>server]):::orchid
         Ingest([Manage Resources]):::orchid
     end
 
