@@ -65,7 +65,7 @@ The main interface will now include a new tab for managing resources. The existi
 This tab will retain the existing functionality for submitting direct queries but with an improved layout for better user experience. Additionally, a dropdown menu will be added to allow users to select the database to be used in the RAG process. The default option for the dropdown will be "None".
 
 **Components**:
-- **Query Input**: A single-line input box for users to enter their query.
+- **Query Input**: An input box for users to enter their query.
 - **Database Selection Dropdown**: A dropdown menu where users can select the database to be used in the RAG process. The default option will be "None".
 - **Submit Button**: A button to submit the query.
 - **Response Box**: A text box to display the response from the system.
@@ -86,23 +86,9 @@ This new tab will allow users to save documents or online resources to the vecto
 
 The proposed UI changes aim to provide a seamless and efficient user experience for submitting direct queries and saving resources to the vector database. The main interface will have a new tab for managing resources, while the existing query submission functionality will be enhanced for better usability. The "Manage Resources" tab will allow users to upload documents or enter URLs, categorize them with tags, and manage their saved resources effectively. This ensures that users can easily access and utilize the new functionalities, enhancing the overall code optimization process with RAG and Agents.
 
-### Design Proposal
+### Design Proposal and Diagram  
 
-The proposed design involves the integration of RAG and Agents into our existing microservices architecture. The following components will be implemented:
-
-1. **Vector Database Microservice**:
-   - Stores and retrieves vector representations of documents and code snippets.
-   - Provides efficient retrieval of relevant information based on query vectors.
-
-2. **Agent Microservice**:
-   - Filters and returns the most relevant context from the retriever.
-   - Enhances the quality of the final output by ensuring contextual accuracy.
-
-3. **RAG Microservice**:
-   - Combines the strengths of retrieval-based models and generative models.
-   - Generates code optimizations based on the retrieved context.
-
-### Design Diagram
+The proposed design involves the integration of RAG and Agents into our existing CodeGen examples in OPEA.
 
 ```mermaid
 ---
