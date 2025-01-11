@@ -46,31 +46,12 @@ Using Agents in conjunction with RAG for code optimization offers several advant
 
 **Dynamic Adaptability**: Agents can dynamically adapt to different coding styles, project requirements, and domain-specific needs. This adaptability ensures that the generated code optimizations are tailored to the unique context and preferences of the development team, enhancing overall satisfaction and usability.
 
-**Scalability**: Agents can handle large-scale codebases and complex projects by efficiently managing and filtering vast amounts of retrieved information. This scalability makes Agents suitable for both small and large development teams, ensuring consistent and reliable code optimizations across different parts of the project.
-
-**Continuous Learning and Improvement**: Agents can continuously learn and improve from new data, ensuring that the filtering and prioritization processes evolve with changing technologies and best practices. This continuous improvement helps maintain the relevance and effectiveness of the optimizations over time, keeping the development process aligned with the latest advancements.
-
 **Reduced Cognitive Load**: By automating the filtering and prioritization of relevant context, Agents reduce the cognitive load on developers. This allows developers to focus on more critical and creative aspects of the development process, enhancing productivity and innovation.
 
 **Consistency and Coherence**: Agents ensure that the retrieved context is consistently relevant and coherent, leading to uniform and high-quality code optimizations. This consistency enhances the overall quality and maintainability of the codebase, reducing the need for extensive manual reviews and corrections.
 
 By incorporating Agents into the code optimization process, we can achieve more accurate, relevant, and efficient code optimizations. Agents enhance the overall quality and effectiveness of the generated code, ultimately leading to a more robust and maintainable codebase.
 
-### Design Proposal
-
-The proposed design involves the integration of RAG and Agents into our existing microservices architecture. The following components will be implemented:
-
-1. **Vector Database Microservice**:
-   - Stores and retrieves vector representations of documents and code snippets.
-   - Provides efficient retrieval of relevant information based on query vectors.
-
-2. **Agent Microservice**:
-   - Filters and returns the most relevant context from the retriever.
-   - Enhances the quality of the final output by ensuring contextual accuracy.
-
-3. **RAG Microservice**:
-   - Combines the strengths of retrieval-based models and generative models.
-   - Generates code optimizations based on the retrieved context.
 
 ### Proposed UI Changes for Enhanced Code Optimization with RAG and Agents
 
@@ -105,10 +86,23 @@ This new tab will allow users to save documents or online resources to the vecto
 
 The proposed UI changes aim to provide a seamless and efficient user experience for submitting direct queries and saving resources to the vector database. The main interface will have a new tab for managing resources, while the existing query submission functionality will be enhanced for better usability. The "Manage Resources" tab will allow users to upload documents or enter URLs, categorize them with tags, and manage their saved resources effectively. This ensures that users can easily access and utilize the new functionalities, enhancing the overall code optimization process with RAG and Agents.
 
+### Design Proposal
+
+The proposed design involves the integration of RAG and Agents into our existing microservices architecture. The following components will be implemented:
+
+1. **Vector Database Microservice**:
+   - Stores and retrieves vector representations of documents and code snippets.
+   - Provides efficient retrieval of relevant information based on query vectors.
+
+2. **Agent Microservice**:
+   - Filters and returns the most relevant context from the retriever.
+   - Enhances the quality of the final output by ensuring contextual accuracy.
+
+3. **RAG Microservice**:
+   - Combines the strengths of retrieval-based models and generative models.
+   - Generates code optimizations based on the retrieved context.
 
 ### Design Diagram
-
-
 
 ```mermaid
 ---
