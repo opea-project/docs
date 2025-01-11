@@ -91,7 +91,6 @@ The proposed UI changes aim to provide a seamless and efficient user experience 
 The proposed design involves the integration of RAG and Agents into our existing CodeGen examples in OPEA.
 
 
-
 ```mermaid
 ---
 config:
@@ -117,10 +116,10 @@ flowchart LR
         RER([Agents<br>MicroService]):::blue
         LLM([LLM<br>MicroService]):::blue
     end
-    subgraph User<br>Interface
+    subgraph User Interface
         direction LR
         a([Submit Query Tab]):::orchid
-        UI([UI<br>server]):::orchid
+        UI([UI server]):::orchid
         Ingest([Manage Resources]):::orchid
     end
 
