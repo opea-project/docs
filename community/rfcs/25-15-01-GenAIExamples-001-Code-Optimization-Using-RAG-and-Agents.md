@@ -1,23 +1,24 @@
 # 25-15-01-GenAIExamples-001-Code-Optimization-Using-RAG-and-Agents
+--
 
-## RFC Content
 
-#### Author: Mustafa Cetin
-#### Date: January 9, 2025
-#### Email: mustafa.cetin@intel.com
-
+#### Author
 ---
+Mustafa Cetin
+
+
+
 
 ### Objective
-
+---
 The objective of this RFC is to propose the integration of Retrieval-Augmented Generation (RAG) and Agents into our existing code optimization framework. The goal is to leverage the strengths of RAG and Agents to enhance the efficiency, effectiveness, and quality of code optimizations. This document outlines the benefits, design proposal, and implementation plan for incorporating RAG and Agents into our code optimization process.
 
 ### Motivation
-
+---
 The motivation behind this proposal stems from the need to improve the current code optimization process by incorporating advanced technologies that can provide more accurate, relevant, and high-quality optimizations. The integration of RAG and Agents offers several advantages, including enhanced contextual understanding, access to up-to-date information, improved code quality, time efficiency, scalability, customization, and continuous learning. By leveraging these technologies, we can achieve more robust and maintainable code, ultimately enhancing the overall development process.
 
 ### Benefits of Using RAG for Code Optimization
-
+---
 Using Retrieval-Augmented Generation (RAG) for code optimization offers several advantages that can significantly enhance the development process:
 
 **Enhanced Contextual Understanding**: RAG combines the strengths of retrieval-based models and generative models. It retrieves relevant information from a large corpus of documents and uses this information to generate more accurate and contextually relevant code optimizations. This approach ensures that the generated code is not only syntactically correct but also aligns with best practices and domain-specific knowledge.
@@ -35,7 +36,7 @@ Using Retrieval-Augmented Generation (RAG) for code optimization offers several 
 **Continuous Learning and Improvement**: RAG models can continuously learn and improve from new data, ensuring that the code optimizations evolve with changing technologies and best practices. This continuous improvement helps maintain the relevance and effectiveness of the optimizations over time.
 
 ### Benefits of Using Agents
-
+---
 Using Agents in conjunction with RAG for code optimization offers several advantages that can significantly enhance the quality and relevance of the generated code optimizations:
 
 **Contextual Relevance**: Agents can filter and prioritize the most relevant context from the retrieved information, ensuring that the generated code optimizations are highly relevant to the specific problem at hand. This targeted approach minimizes the inclusion of irrelevant or less pertinent information, leading to more precise and effective optimizations.
@@ -54,7 +55,7 @@ By incorporating Agents into the code optimization process, we can achieve more 
 
 
 ### Proposed UI Changes for Enhanced Code Optimization with RAG and Agents
-
+---
 To improve the current UI and add the functionality for saving documents or online resources to the vector database, we will introduce a new tab in the existing interface. This new tab will allow users to manage their resources effectively, ensuring a seamless integration with the RAG system.
 
 #### Main Interface
@@ -87,7 +88,7 @@ This new tab will allow users to save documents or online resources to the vecto
 The proposed UI changes aim to provide a seamless and efficient user experience for submitting direct queries and saving resources to the vector database. The main interface will have a new tab for managing resources, while the existing query submission functionality will be enhanced for better usability. The "Manage Resources" tab will allow users to upload documents or enter URLs, categorize them with tags, and manage their saved resources effectively. This ensures that users can easily access and utilize the new functionalities, enhancing the overall code optimization process with RAG and Agents.
 
 ### Design Proposal and Diagram  
-
+---
 The proposed design involves the integration of RAG and Agents into our existing CodeGen examples in OPEA.
 
 
@@ -201,8 +202,8 @@ flowchart LR
 2. **UI Server**: The UI server forwards the query to the CodeGen Gateway.
 3. **CodeGen Gateway**: The gateway communicates with the CodeGen-MegaService to process the query.
 4. **Embedding MicroService**: Generates vector embeddings for the query.
-5. **Retrieval MicroService**: Retrieves relevant information based on the query vectors.
-6. **Agents MicroService**: Filters and prioritizes the most relevant context from the retrieved information.
+5. **Retrieval MicroService**: If vector database is selected from UI, Retrieves relevant information based on the query vectors.
+6. **Agents MicroService**: If vector database is selected from UI, Filters and prioritizes the most relevant context from the retrieved information.
 7. **LLM MicroService**: Uses a large language model to generate code optimizations based on the filtered context.
 8. **Response**: The generated code optimizations are sent back to the UI server and displayed to the user.
 
@@ -217,29 +218,31 @@ flowchart LR
 2. **Data Preparation**: Interacts with the Vector DB to store prepared data and embeddings.
 
 
+### Implementation Plan
+---
+#### Development Phases
+We have planned the following development phases based on the priority of the features and their development effort:
+
+* Phase 1:
+   - Implement UI
+   - Data prep and ingestion
+      - Embedding Service
+      - Retrieval Service 
+      - Vector Database 
+
+* Phase 2:
+   - Implement/Integrate MegaService Items 
+      - Integrate Embedding MicroService
+      - Integrate Retrieval MicroService
+
+* Phase 2:
+   - Implement/Integrate MegaService Items 
+      - Integrate Agents MicroService
 
 
-<!-- ### Implementation Plan
 
-1. **Integrate Vector Database Microservice**:
-   - Implement the vector database microservice to store and retrieve vector representations of documents and code snippets.
-
-2. **Develop Agent Microservice**:
-   - Implement the agent microservice to filter and return the most relevant context from the retriever.
-
-3. **Implement RAG Microservice**:
-   - Develop the RAG microservice to generate code optimizations based on the retrieved context.
-
-4. **Integrate Microservices**:
-   - Integrate the vector database, agent, and RAG microservices into the existing code optimization framework.
-
-5. **Testing and Validation**:
-   - Test the integrated system to ensure it generates accurate and contextually relevant code optimizations.
-   - Validate the performance and scalability of the system. -->
-
-
-#### 8. Use-Cases
-
+### Use-Cases
+---
 **Enhancing Performance of a Legacy Codebase Using RAG and Agents**
 
 A software developer is tasked with improving the performance of a legacy codebase that has become sluggish over time. By submitting a code optimization request, the developer leverages the Vector Database Microservice to retrieve relevant performance optimization techniques and best practices. The Agent Microservice filters and prioritizes the most pertinent information, while the RAG Microservice generates precise code optimizations. The developer applies these optimizations, resulting in a significantly more responsive and efficient application, saving valuable time and effort.
@@ -264,13 +267,7 @@ A research scientist is working on a confidential and experimental software proj
 
 These use-case stories illustrate how the integration of RAG and Agents can enhance various aspects of the code optimization process, including performance improvement, adherence to coding standards, efficient feature development, hardware-specific optimization, and optimization for confidential/experimental implementations.
 
----
 
-#### 9. Next Steps
 
-1. Review the RFC and provide feedback.
-2. Approve the design proposal and implementation plan.
-3. Begin the integration of RAG and Agents into the existing code optimization framework.
-4. Conduct testing and validation to ensure the system meets the desired objectives.
 
 
