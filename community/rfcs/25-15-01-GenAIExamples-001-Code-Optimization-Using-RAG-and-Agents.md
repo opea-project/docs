@@ -1,24 +1,19 @@
 # 25-15-01-GenAIExamples-001-Code-Optimization-Using-RAG-and-Agents
---
 
+## Author(s)
 
-#### Author
----
 Mustafa Cetin
 
+## Objective
 
-
-
-### Objective
----
 The objective of this RFC is to propose the integration of Retrieval-Augmented Generation (RAG) and Agents into our existing code optimization framework. The goal is to leverage the strengths of RAG and Agents to enhance the efficiency, effectiveness, and quality of code optimizations. This document outlines the benefits, design proposal, and implementation plan for incorporating RAG and Agents into our code optimization process.
 
-### Motivation
----
+## Motivation
+
 The motivation behind this proposal stems from the need to improve the current code optimization process by incorporating advanced technologies that can provide more accurate, relevant, and high-quality optimizations. The integration of RAG and Agents offers several advantages, including enhanced contextual understanding, access to up-to-date information, improved code quality, time efficiency, scalability, customization, and continuous learning. By leveraging these technologies, we can achieve more robust and maintainable code, ultimately enhancing the overall development process.
 
-### Benefits of Using RAG for Code Optimization
----
+## Benefits of Using RAG for Code Optimization
+
 Using Retrieval-Augmented Generation (RAG) for code optimization offers several advantages that can significantly enhance the development process:
 
 **Enhanced Contextual Understanding**: RAG combines the strengths of retrieval-based models and generative models. It retrieves relevant information from a large corpus of documents and uses this information to generate more accurate and contextually relevant code optimizations. This approach ensures that the generated code is not only syntactically correct but also aligns with best practices and domain-specific knowledge.
@@ -35,8 +30,8 @@ Using Retrieval-Augmented Generation (RAG) for code optimization offers several 
 
 **Continuous Learning and Improvement**: RAG models can continuously learn and improve from new data, ensuring that the code optimizations evolve with changing technologies and best practices. This continuous improvement helps maintain the relevance and effectiveness of the optimizations over time.
 
-### Benefits of Using Agents
----
+## Benefits of Using Agents
+
 Using Agents in conjunction with RAG for code optimization offers several advantages that can significantly enhance the quality and relevance of the generated code optimizations:
 
 **Contextual Relevance**: Agents can filter and prioritize the most relevant context from the retrieved information, ensuring that the generated code optimizations are highly relevant to the specific problem at hand. This targeted approach minimizes the inclusion of irrelevant or less pertinent information, leading to more precise and effective optimizations.
@@ -54,15 +49,15 @@ Using Agents in conjunction with RAG for code optimization offers several advant
 By incorporating Agents into the code optimization process, we can achieve more accurate, relevant, and efficient code optimizations. Agents enhance the overall quality and effectiveness of the generated code, ultimately leading to a more robust and maintainable codebase.
 
 
-### Proposed UI Changes for Enhanced Code Optimization with RAG and Agents
----
+## Proposed UI Changes for Enhanced Code Optimization with RAG and Agents
+
 To improve the current UI and add the functionality for saving documents or online resources to the vector database, we will introduce a new tab in the existing interface. This new tab will allow users to manage their resources effectively, ensuring a seamless integration with the RAG system.
 
-#### Main Interface
+### Main Interface
 
 The main interface will now include a new tab for managing resources. The existing functionality for submitting direct queries will remain, but with an enhanced layout for better usability. The navigation bar will have two tabs: "Submit Query" and "Manage Resources".
 
-#### Submit Query Tab
+### Submit Query Tab
 This tab will retain the existing functionality for submitting direct queries but with an improved layout for better user experience. Additionally, a dropdown menu will be added to allow users to select the database to be used in the RAG process. The default option for the dropdown will be "None".
 
 **Components**:
@@ -71,7 +66,7 @@ This tab will retain the existing functionality for submitting direct queries bu
 - **Submit Button**: A button to submit the query.
 - **Response Box**: A text box to display the response from the system.
 
-#### Manage Resources Tab
+### Manage Resources Tab
 
 This new tab will allow users to save documents or online resources to the vector database. Users can upload files or provide URLs, and manage their saved resources. The components of this tab will include:
 - **Resource Form**: A form for uploading files or entering URLs.
@@ -87,8 +82,8 @@ This new tab will allow users to save documents or online resources to the vecto
 
 The proposed UI changes aim to provide a seamless and efficient user experience for submitting direct queries and saving resources to the vector database. The main interface will have a new tab for managing resources, while the existing query submission functionality will be enhanced for better usability. The "Manage Resources" tab will allow users to upload documents or enter URLs, categorize them with tags, and manage their saved resources effectively. This ensures that users can easily access and utilize the new functionalities, enhancing the overall code optimization process with RAG and Agents.
 
-### Design Proposal and Diagram  
----
+## Design Proposal and Diagram  
+
 The proposed design involves the integration of RAG and Agents into our existing CodeGen examples in OPEA.
 
 
@@ -163,7 +158,7 @@ flowchart LR
     DP <-.->VDB
 ```
 
-#### **Components**
+### **Components**
 
 #### 1. **User Interface**
    - **Submit Query Tab**: This is where users can input their queries for code optimization. It includes a dropdown to select the database to be used in the RAG process.
@@ -189,7 +184,7 @@ flowchart LR
 #### 5. **CodeGen Gateway**
    - This gateway handles the communication between the UI server and the CodeGen-MegaService.
 
-#### **Interactions**
+### **Interactions**
 
 #### Data Preparation Flow
 1. **Ingest Data**: Users can upload documents or enter URLs in the "Manage Resources" section.
@@ -218,9 +213,8 @@ flowchart LR
 2. **Data Preparation**: Interacts with the Vector DB to store prepared data and embeddings.
 
 
-### Implementation Plan
----
-#### Development Phases
+## Implementation Plan
+
 We have planned the following development phases based on the priority of the features and their development effort:
 
 * Phase 1:
@@ -241,8 +235,8 @@ We have planned the following development phases based on the priority of the fe
 
 
 
-### Use-Cases
----
+## Use-Cases
+
 **Enhancing Performance of a Legacy Codebase Using RAG and Agents**
 
 A software developer is tasked with improving the performance of a legacy codebase that has become sluggish over time. By submitting a code optimization request, the developer leverages the Vector Database Microservice to retrieve relevant performance optimization techniques and best practices. The Agent Microservice filters and prioritizes the most pertinent information, while the RAG Microservice generates precise code optimizations. The developer applies these optimizations, resulting in a significantly more responsive and efficient application, saving valuable time and effort.
