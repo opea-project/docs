@@ -99,7 +99,7 @@ config:
     rankSpacing: 100
     curve: linear
   themeVariables:
-    fontSize: 50px
+    fontSize: 25px
 ---
 flowchart LR
     %% Colors %%
