@@ -237,10 +237,6 @@ We have planned the following development phases based on the priority of the fe
 
 ## Use-Cases
 
-**Enhancing Performance of a Legacy Codebase Using RAG and Agents**
-
-A software developer is tasked with improving the performance of a legacy codebase that has become sluggish over time. By submitting a code optimization request, the developer leverages the Vector Database Microservice to retrieve relevant performance optimization techniques and best practices. The Agent Microservice filters and prioritizes the most pertinent information, while the RAG Microservice generates precise code optimizations. The developer applies these optimizations, resulting in a significantly more responsive and efficient application, saving valuable time and effort.
-
 **Adapting a Codebase to New Coding Standards Using RAG and Agents**
 
 A software architect is responsible for updating an existing codebase to align with newly adopted coding standards. By submitting a code optimization request, the architect utilizes the Vector Database Microservice to gather information on the new standards and best practices. The Agent Microservice ensures that only the most relevant context is used, and the RAG Microservice generates code optimizations that adhere to the new standards. The architect reviews and applies these optimizations, ensuring the codebase is consistent and maintains high quality.
@@ -251,7 +247,7 @@ A software engineer is developing a new feature for an application and needs to 
 
 **Optimizing Code for Specific Hardware Using RAG and Agents** 
 
-A hardware engineer is tasked with optimizing a software application to run efficiently on a new hardware platform. By submitting a code optimization request, the engineer leverages the Vector Database Microservice to retrieve relevant information on hardware-specific optimization techniques and best practices. The Agent Microservice filters and prioritizes the most pertinent information, while the RAG Microservice generates precise code optimizations tailored to the new hardware. The engineer applies these optimizations, resulting in a software application that runs efficiently and takes full advantage of the new hardware's capabilities.
+A software engineer is tasked with optimizing a software application to run efficiently on a new hardware platform. By submitting a code optimization request, the engineer leverages the Vector Database Microservice to retrieve relevant information on hardware-specific optimization techniques and best practices. The Agent Microservice filters and prioritizes the most pertinent information, while the RAG Microservice generates precise code optimizations tailored to the new hardware. The engineer applies these optimizations, resulting in a software application that runs efficiently and takes full advantage of the new hardware's capabilities.
 
 **Optimizing Confidential/Experimental Code Using RAG and Agents** 
 
