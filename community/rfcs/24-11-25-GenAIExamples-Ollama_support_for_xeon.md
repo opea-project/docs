@@ -1,9 +1,9 @@
-# Adding SLMs support for AgentQnA workflow in GenAIExamples on Intel Xeon platform
+# 24-11-25-GenAIExamples-Ollama_Support_for_Xeon
 
-The AgentQnA workflow in GenAIExamples uses LLMs as agents to intelligently manage the control flow in the pipeline. Currently, it relies on the OpenAI paid API for LLM services on the Xeon platform, which incurs costs and does not utilize Xeon for LLM computation. This RFC aims to add support for open-source small language models (SLMs) locally deployed on Xeon through Ollama for LLM engines.
+The AgentQnA workflow in GenAIExamples uses LLMs as agents to intelligently manage the control flow in the pipeline. Currently, it relies on the OpenAI paid API for LLM services on the Xeon platform, which incurs costs and does not utilize Xeon capability for LLM computation. This RFC aims to add support for open-source small language models (SLMs) locally deployed on Xeon through Ollama for LLM engines.
 ## Author(s)
 
-Pratool Bharti
+[Pratool Bharti](https://github.com/pbharti0831/)
 
 ## Status
 
@@ -76,20 +76,19 @@ config:
     rankSpacing: 50
     curve: linear
   themeVariables:
-    fontSize: 16px
+    fontSize: 30px
 ---
 flowchart LR
     %% Colors %%
     classDef blue fill:#ADD8E6,stroke:#ADD8E6,stroke-width:2px,fill-opacity:0.5
     classDef orange fill:#FBAA60,stroke:#ADD8E6,stroke-width:2px,fill-opacity:0.5
     classDef orchid fill:#C26DBC,stroke:#ADD8E6,stroke-width:2px,fill-opacity:0.5
-
     %% Subgraphs %%
     subgraph DocIndexRetriever["DocIndexRetriever MegaService"]
-        direction TB
-        EM([Embedding MicroService]):::blue
-        RET([Retrieval MicroService]):::blue
-        RER([Rerank MicroService]):::blue
+      direction TB
+      EM([Embedding MicroService]):::blue
+      RET([Retrieval MicroService]):::blue
+      RER([Rerank MicroService]):::blue
     end
     subgraph UserInput["User Input"]
         direction TB
@@ -97,13 +96,17 @@ flowchart LR
         Ingest([Ingest Data]):::orchid
     end
     subgraph LLMServices["LLM Services"]
-        direction TB
-        LLM_ollama{{LLMs by Ollama}}:::orange
-        LLM_tgi{{LLMs by TGI}}:::blue
-        LLM_vllm{{LLMs by vLLM}}:::blue
-        LLM_openai{{LLMs by OpenAI}}:::blue
+      direction TB
+      LLM_ollama{{Ollama}}:::orange
+      LLM_tgi{{TGI}}:::blue
+      LLM_vllm{{vLLM}}:::blue
+      LLM_openai{{OpenAI}}:::blue
     end
-
+    subgraph Legend
+        X([New LLM service]):::orange
+        Y([Input query]):::orchid
+        Z{{Existing serv./ Microserv.}}:::blue
+    end
     AG_REACT([Agent MicroService - react]):::blue
     AG_RAG([Agent MicroService - rag]):::blue
     LLM_gen{{LLM Service}}
@@ -139,6 +142,38 @@ The proposed design for Ollama serving support entails following changes:
 ### 2. Support for latest Llama SLMs:
 - **Add Llama 3.1 and 3.2 small models for Xeon**: SLMs from Lllama 3.1 and 3.2 models will be added and validated for the AgentQnA workflow.
 
-## Compatibility
+### 3. Compatibility
 
-Added component will be compatible with the existing components
+**Compatibility with exisiting services**: Added component will be compatible with the existing components, ensuring seamless integration with the current AgentQnA workflow. Ollama's serving container will work alongside existing LLM services like vLLM, TGI, and OpenAI, maintaining the overall functionality and performance of the system.
+
+## Use-case Stories
+
+1. **Data Privacy and Security**:
+   - **Scenario**: A healthcare organization needs to process sensitive patient data for generating medical reports and insights.
+   - **Solution**: By using Ollama service on Intel Xeon CPUs, the organization can run LLM agents locally, ensuring that sensitive patient data remains within their secure infrastructure. This preserves privacy and complies with data protection regulations.
+
+2. **Cost Efficiency**:
+   - **Scenario**: A startup is developing an AI-driven customer support system but has limited budget for cloud services.
+   - **Solution**: Deploying Ollama service on Intel Xeon CPUs allows the startup to run LLM agents locally, reducing dependency on expensive cloud-based APIs like OpenAI. This significantly lowers operational costs and makes the solution more affordable.
+
+3. **Low Latency and High Performance**:
+   - **Scenario**: A financial institution requires real-time analysis of market data to make quick trading decisions.
+   - **Solution**: Running Ollama service on Intel Xeon CPUs provides high computational power locally, enabling the institution to achieve low latency and high performance. This ensures timely and accurate analysis without the delays associated with cloud-based services.
+
+4. **Scalability and Control**:
+   - **Scenario**: An enterprise wants to scale its AI capabilities across multiple departments while maintaining control over the infrastructure.
+   - **Solution**: Deploying Ollama service on Intel Xeon CPUs enables the enterprise to scale LLM agents locally across various departments. This provides better control over the infrastructure and ensures consistent performance and reliability.
+
+5. **Compliance with Regulations**:
+   - **Scenario**: A legal firm needs to process confidential client information while adhering to strict regulatory requirements.
+   - **Solution**: Running Ollama service on Intel Xeon CPUs ensures that all data processing happens locally, helping the firm comply with regulations and maintain client confidentiality.
+
+6. **Enhanced Reliability**:
+   - **Scenario**: A manufacturing company relies on AI-driven predictive maintenance to avoid equipment downtime.
+   - **Solution**: By using Ollama service on Intel Xeon CPUs, the company can run LLM agents locally, ensuring reliable and uninterrupted operation even in environments with limited internet connectivity.
+
+7. **Energy Efficiency**:
+   - **Scenario**: An environmental organization aims to minimize its carbon footprint while leveraging AI for data analysis.
+   - **Solution**: Deploying Ollama service on Intel Xeon CPUs allows the organization to run energy-efficient LLM agents locally, reducing the need for energy-intensive cloud data centers.
+  
+  The proposed design for Ollama serving support on Intel Xeon CPUs integrates Ollama as an additional LLM service alongside existing services like vLLM, TGI, and OpenAI. This setup enhances data privacy by keeping processing local, reduces operational costs by leveraging on-premise hardware, and provides flexibility and control over AI deployments. The workflow includes embedding, retrieval, and reranking microservices, ensuring efficient and secure handling of user queries and data preparation.
