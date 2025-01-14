@@ -6,7 +6,7 @@ For more information on how to setup a Xeon based Kubernetes cluster along with 
 
 ## Overview
 
-There are several ways to setup a ChatQnA use case. Here in this tutorial, we
+In this ChatQnA  tutorial, we
 will walk through how to enable the below list of microservices from OPEA
 GenAIComps to deploy a multi-node TGI megaservice solution.
 
