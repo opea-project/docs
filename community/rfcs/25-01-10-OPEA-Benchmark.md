@@ -6,6 +6,41 @@ In v1.1, those bechmark scripts are per examples. It causes many duplicated code
 
 That is why we have motivation to improve such tool to have an unified entry for perf benchmark.
 
+## Original benchmark script layout
+
+```
+GenAIExamples/
+├── ChatQnA/
+│   ├── benchmark/
+│   │   ├── benchmark.sh # each example has its own script
+│   │   └── deploy.py
+│   ├── kubernetes/
+│   │   ├── charts.yaml
+│   │   └── ...
+│   ├── docker-compose/
+│   │   └── compose.yaml
+│   └── chatqna.py
+└── ...
+```
+
+## Proposed benchmark script layout
+
+```
+GenAIExamples/
+├── deploy_and_benchmark.py # main entry of GenAIExamples 
+├── ChatQnA/
+│   ├── benchmark/
+│   │   └── chatqna.yaml
+│   ├── kubernetes/
+│   │   ├── charts.yaml
+│   │   └── ...
+│   |── docker-compose/
+│   |   └── compose.yaml
+|   └── chatqna.py
+└── ...
+```
+
+
 # Design
 
 The pesudo code of run_example.py is listed at below for your reference.
@@ -39,34 +74,38 @@ Taking chatqna as an example, the configurable fields are listed at below
 # chatqna.yaml
 #
 # usage:
-#  1)    run_examples.py --workload chatqna [overrided parameters]
-#  2) or run_examples.py ./chatqna/benchmark/chatqna.yaml [overrided parameters]
+#  1)    deploy_and_benchmark.py --workload chatqna [overrided parameters]
+#  2) or deploy_and_benchmark.py ./chatqna/benchmark/chatqna.yaml [overrided parameters]
 #
-#  for example, run_examples.sh ./chatqna/benchmark/chatqna.yaml --node=2
+#  for example, deploy_and_benchmark.sh ./chatqna/benchmark/chatqna.yaml --node=2
 #
 deploy:
    # hardware related config
-   device:         [xeon-only, gaudi]
+   device:         [xeon, gaudi, ...] # AMD and other h/ws could be extended into here
    node:           [1, 2, 4]
    cards_per_node: [4, 8]
 
    # components related config, by default is for OOB, if overrided, then it is for tuned version
    embedding:
-      model_id:           bge_large_v1.5
-      instance_num:       [2, 4, 8]
-      core_per_instance:  4
-      memory:             20 # unit: G
+      model_id:              bge_large_v1.5
+      node:                  [1, 2, 4]
+      instance_num:          [2, 4, 8]
+      cores_per_instance:    4
+      memory_capacity:       20 # unit: G
       retrieval:
+         node:               [1, 2, 4]
          instance_num:       [2, 4, 8]
-         core_per_instance:  4
-         memory:             20 # unit: G
+         cores_per_instance: 4
+         memory_capacity:    20 # unit: G
       rerank:
          enable:             True
          model_id:           bge_rerank_v1.5
+         node:               [1, 2, 4]
          instance_num:       1
-         cards_per_instance: 1
+         cards_per_instance: 1     # if cpu is specified, this field is ignored and will check cores_per_instance field
       llm:
          model_id:           llama2-7b
+         node:               [1, 2, 4]
          instance_num:       7
          cards_per_instance: 1     # if cpu is specified, this field is ignored and will check cores_per_instance field
          # serving related config, dynamic batching
@@ -81,25 +120,25 @@ benchmark:
    query_num_per_concurrency: [4, 8, 16]
    possion:                   True
    possion_arrival_rate:      1.0
-   warm_up:                   10
+   warmup_iterations:         10
    seed:                      1024
 
    # dataset relted fields
-   ingested_dataset:       [dummy_english, dummy_chinese, pub_med100, ...] # predefined keywords for supported dataset
+   dataset:                [dummy_english, dummy_chinese, pub_med100, ...] # predefined keywords for supported dataset
    user_query:             [dummy_english_qlist, dummy_chinese_qlist, pub_med100_qlist, ...]
-   fixed_query_token_size: 128
+   query_token_size:       128                   # if specified, means fixed query token size will be sent out
    data_ratio:             [10%, 20%, ..., 100%] # optional, ratio from query dataset 
 
    #advance settings in each component which will impact perf.
    data_prep:                  # not target this time
-   chunk_size:               [1024]
-   chunk_overlap_size:       [1000]
+      chunk_size:              [1024]
+      chunk_overlap:           [1000]
    retriver:                   # not target this time
-      algo: IVF
-      fetch_topk:               2
-      k:                        1
+      algo:                    IVF
+      fetch_k:                 2
+      k:                       1
    rerank:
-      top_n:                    2
+      top_n:                   2
    llm:
-      max_token_size:           1024   # specify the output token size
+      max_token_size:          1024   # specify the output token size
 ```
