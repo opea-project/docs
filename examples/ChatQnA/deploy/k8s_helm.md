@@ -2,13 +2,13 @@
 
 This deployment section covers multi-node on-prem deployment of the ChatQnA example with OPEA components  using the TGI service. While one may customize the RAG application with a choice of vector database, the LLM model used, we will be showcasing how to build an e2e chatQnA application using the Redis VectorDB and the neural-chat-7b-v3-3 model, deployed on a Kubernetes cluster using Helm. 
 
-For more information on how to setup a Xeon based Kubernetes cluster along with the development pre-requisites, follow the instructions here [Kubernetes Cluster and Development Environment](./k8s_getting_started.md#kubernetes-cluster-and-development-environment). For a quick introduction on Helm Charts, click [here](k8s_getting_started.md#using-helm-charts-to-deploy).
+For more information on how to setup a Xeon based Kubernetes cluster along with the development pre-requisites, refer to [Kubernetes Cluster and Development Environment] (./k8s_getting_started.md#kubernetes-cluster-and-development-environment) and for a [quick introduction to Helm Charts](k8s_getting_started.md#using-helm-charts-to-deploy).
 
 ## Overview
 
 In this ChatQnA  tutorial, we
 will walk through how to enable the below list of microservices from OPEA
-GenAIComps to deploy a multi-node TGI megaservice solution.
+GenAIComps to deploy a multi-node TGI-based service solution.
 
 1. Data Prep
 2. Embedding
@@ -16,7 +16,7 @@ GenAIComps to deploy a multi-node TGI megaservice solution.
 4. Reranking
 5. LLM with TGI
 
-> **Note:** ChatQnA can also be deployed on a single node using Kubernetes, provided that all pods are configured to run on the same node and it has resources (memory) for running all of them.
+> **Note:** ChatQnA can also be deployed on a single node using Kubernetes provided there are adequate resources for all the associated pods, namely CPU and memory and no constraints such as affinity, anti-affinity, or taints.
 
 ## Prerequisites
 
@@ -186,7 +186,7 @@ When issues are encountered with a pod in the Kubernetes deployment, there are t
 	```bash
     kubectl describe pod <pod-name>
     ```
-For example, if the status of the TGI service does not show 'Running', describe the pod using the name from the above table:
+For example, if the status of the TGI service does not show 'Running', describe the pod using the name from the above table. In our example the pod name is chatqna-tgi-778bb6598f-cv5cg.
 ```bash
 kubectl describe pod chatqna-tgi-778bb6598f-cv5cg
 ```
@@ -217,7 +217,7 @@ chatqna-teirerank         ClusterIP   10.115.146.21    <none>        80/TCP     
 chatqna-tgi               ClusterIP   10.108.195.244   <none>        80/TCP              8m16s
 kubernetes                ClusterIP   10.92.0.100      <none>        443/TCP             11d
  ```
-   To begin port forwarding, which maps a service's port from the cluster to local host for testing, use:
+To access the services running in your Kubernetes cluster from your local machine, you can set up port forwarding with kubectl:
  ```bash
     kubectl port-forward svc/[service-name] [local-port]:[service-port]
    ```
@@ -226,7 +226,7 @@ kubernetes                ClusterIP   10.92.0.100      <none>        443/TCP    
 Use `ctrl+c` to end the port-forwarding to test other services.
 
 
-### MegaService Before RAG Dataprep
+### Accessing the ChatQnA application
 
 Use the following command to forward traffic from your local machine to the service running in the Kubernetes cluster:
 ```bash
@@ -240,6 +240,8 @@ curl http://localhost:8888/v1/chatqna -H "Content-Type: application/json" -d '{
      "messages": "What is OPEA?"
      }'
 ```
+>**NOTE:** in the curl command, in addition to our prompt, we are specifying the LLM model to use.
+
 Here is the output for your reference:
 
 ```bash
@@ -270,16 +272,15 @@ OPEA stands for Organization of Public Employees of Alabama. It is a labor union
 In the upcoming sections we will see how this answer can be improved with RAG.
 
 ### Dataprep Microservice
-Use the following command to forward traffic from your local machine to the service running in the Kubernetes cluster:
+Use the following command to forward traffic from your local machine to the data-prep service running in the Kubernetes cluster, which allows uploading documents to provide a more domain specific context:
 ```bash
 kubectl port-forward svc/chatqna-data-prep 6007:6007
 ```
 Follow the below steps in a different terminal.
 
-If you want to add/update the default knowledge base, you can use the following
-commands. The dataprep microservice extracts the texts from variety of data
-sources, chunks the data, embeds each chunk using embedding microservice and
-store the embedded vectors in the redis vector database.
+If you want to add to or update the default knowledge base, you can use the following
+commands. The dataprep microservice extracts the text from the provided data
+source (multiple data source types are supported such as PDF, Word, URLs), chunks the data, embeds each chunk using the embedding microservice and stores the embedded vectors in the vector database, in our current example a Redis Vector database.
 
 this example leverages the OPEA document for its RAG based content. You can download the [OPEA document](https://opea-project.github.io/latest/_downloads/41c91aec1d47f20ca22350daa8c2cadc/what_is_opea.pdf) and upload it using the UI.
 
@@ -299,9 +300,9 @@ You should see the following output after successful execution:
 ```
 {"status":200,"message":"Data preparation succeeded"}
 ```
-For advanced usage of the dataprep microservice refer [here](#dataprep-microservice-advanced)
+Refer to [advanced use of dataprep microservice] (#dataprep-microservice-advanced) to learn more.
 
-### MegaService After RAG Dataprep
+### Accessing ChatQnA application after custom data upload
 
 Use the following command to forward traffic from your local machine to the service running in the Kubernetes cluster:
 ```bash
@@ -340,11 +341,11 @@ data: [DONE]
 
 The above output has been parsed into the below sentence which shows how the LLM has picked up the right context to answer the question correctly after the document upload:
 ```
-OPEN Platform for Enterprise AI (Open Platform for Enterprise AI) is a framework that focuses on creating and evaluating open, multi-provider, robust, and composable generative AI (GenAI) solutions. It aims to facilitate the implementation of enterprise-grade composite GenAI solutions, particularly Retrieval Augmented Generative AI (RAG), by simplifying the integration of secure, performant, and cost-effective GenAI workflows into business systems.
+Open Platform for Enterprise AI (Open Platform for Enterprise AI) is a framework that focuses on creating and evaluating open, multi-provider, robust, and composable generative AI (GenAI) solutions. It aims to facilitate the implementation of enterprise-grade composite GenAI solutions, particularly Retrieval Augmented Generative AI (RAG), by simplifying the integration of secure, performant, and cost-effective GenAI workflows into business systems.
 ```
 
 ### TEI Embedding Service
-Use the following command to forward traffic from your local machine to the service running in the Kubernetes cluster:
+Use the following command to forward traffic from your local machine to the TEI service running in your Kubernetes cluster:
 ```bash
 kubectl port-forward svc/chatqna-tei 6006:80
 ```
@@ -366,7 +367,7 @@ length 768.
 
 
 ### Retriever Microservice
-Use the following command to forward traffic from your local machine to the service running in the Kubernetes cluster:
+Use the following command to forward traffic from your local machine to the Retriever service running in your Kubernetes cluster:
 ```bash
 kubectl port-forward svc/chatqna-retriever-usvc 7000:7000
 ```
@@ -375,7 +376,7 @@ Follow the below steps in a different terminal.
 To consume the retriever microservice, you need to generate a mock embedding
 vector by Python script. The length of embedding vector is determined by the
 embedding model. Here we use the
-model EMBEDDING_MODEL_ID="BAAI/bge-base-en-v1.5", which vector size is 768.
+model EMBEDDING_MODEL_ID="BAAI/bge-base-en-v1.5", which creates a vector of size 768.
 
 Check the vector dimension of your embedding model and set
 `your_embedding` dimension equal to it.
@@ -388,18 +389,18 @@ curl http://localhost:7000/v1/retrieval \
   -d "{\"text\":\"test\",\"embedding\":${your_embedding}}" \
   -H 'Content-Type: application/json'
 ```
-The output of the retriever microservice comprises of the a unique id for the
+The output of the retriever microservice comprises of a unique id for the
 request, initial query or the input to the retrieval microservice, a list of top
 `n` retrieved documents relevant to the input query, and top_n where n refers to
 the number of documents to be returned.
 
-The output is retrieved text that relevant to the input data:
+The output is retrieved text that is relevant to the input data:
 ```
 {"id":"13617fc8ac716a9ca5df036fd297b9ad","retrieved_docs":[{"downstream_black_list":[],"id":"7e6f2e6584947f293d6d40cccb7ef58d","text":"applications.\nMicroservices: Flexible and Scalable Architecture\nThe GenAI Microservices documentation describes a suite of microservices. Each microservice is\ndesigned to perform a specific function or task within the application architecture. By breaking\ndown the system into these smaller, self-contained services, microservices promote modularity,\nflexibility, and scalability. This modular approach allows developers to independently develop,\ndeploy, and scale individual components of the application, making it easier to maintain and\nevolve over time. All of the microservices are containerized, allowing cloud native deployment.Megaservices: A Comprehensive Solution\nMegaservices are higher-level architectural constructs composed of one or more microservices.\nUnlike individual microservices, which focus on specific tasks or functions, a megaservice\norchestrates multiple microservices to deliver a comprehensive solution. Megaservices\nencapsulate complex business logic and workflow orchestration, coordinating the interactions\nbetween various microservices to fulfill specific application requirements. This approach enables\nthe creation of modular yet integrated applications. You can find a collection of use case-based\napplications in the GenAI Examples documentation\nGateways: Customized Access to Mega- and Microservices\nThe Gateway serves as the interface for users to access a megaservice, providing customized"},{"downstream_black_list":[],"id":"94197f8afc84ccabd1c95df2cfc91e6f","text":"The Gateway serves as the interface for users to access a megaservice, providing customized\naccess based on user requirements. It acts as the entry point for incoming requests, routing\nthem to the appropriate microservices within the megaservice architecture.\nGateways support API definition, API versioning, rate limiting, and request transformation,\nallowing for fine-grained control over how users interact with the underlying Microservices. By\nabstracting the complexity of the underlying infrastructure, Gateways provide a seamless and\nuser-friendly experience for interacting with the Megaservice.\nNext Step\nLinks to:\nGetting Started Guide\nGet Involved with the OPEA Open Source Community\nBrowse the OPEA wiki, mailing lists, and working groups:\nhttps://wiki.lfaidata.foundation/display/DL/OPEA+Home \nOpen Platform for Enterprise AI (OPEA) Framework Draft Proposal."},{"downstream_black_list":[],"id":"9636f9b479f2412bc8ce177db502c8c9","text":"Latest » OPEA Overview\nOPEA Overview\nOPEA (Open Platform for Enterprise AI) is a framework that enables the creation and evaluation\nof open, multi-provider, robust, and composable generative AI (GenAI) solutions. It harnesses\nthe best innovations across the ecosystem while keeping enterprise-level needs front and\ncenter.\nOPEA simplifies the implementation of enterprise-grade composite GenAI solutions, starting\nwith a focus on Retrieval Augmented Generative AI (RAG). The platform is designed to facilitate\nefficient integration of secure, performant, and cost-effective GenAI workflows into business\nsystems and manage its deployments, leading to quicker GenAI adoption and business value.\nThe OPEA platform includes:\nDetailed framework of composable microservices building blocks for state-of-the-art GenAI\nsystems including LLMs, data stores, and prompt engines\nArchitectural blueprints of retrieval-augmented GenAI component stack structure and end-\nto-end workflows\nMultiple micro- and megaservices to get your GenAI into production and deployed\nA four-step assessment for grading GenAI systems around performance, features,\ntrustworthiness and enterprise-grade readiness\nOPEA Project Architecture\nOPEA uses microservices to create high-quality GenAI applications for enterprises, simplifying\nthe scaling and deployment process for production. These microservices leverage a service\ncomposer that assembles them into a megaservice thereby creating real-world Enterprise AI\napplications."}],"initial_query":"test","top_n":1}
 ```
 ### TEI Reranking Service
 
-Use the following command to forward traffic from your local machine to the service running in the Kubernetes cluster:
+Use the following command to forward traffic from your local machine to the Reranking service running in the Kubernetes cluster:
 ```bash
 kubectl port-forward svc/chatqna-teirerank 8808:80
 ```
@@ -407,7 +408,7 @@ Follow the below steps in a different terminal.
 
 The TEI Reranking Service reranks the documents returned by the retrieval
 service. It consumes the query and list of documents and returns the document
-index based on decreasing order of the similarity score. The document
+indices based on decreasing order of the similarity score. The document
 corresponding to the returned index with the highest score is the most relevant
 document for the input query.
 ```
@@ -422,7 +423,7 @@ Output is:  `[{"index":1,"score":0.9988041},{"index":0,"score":0.022948774}]`
 
 ### TGI Service
 
-Use the following command to forward traffic from your local machine to the service running in the Kubernetes cluster:
+Use the following command to forward traffic from your local machine to the service running in your Kubernetes cluster:
 ```bash
 kubectl port-forward svc/chatqna-tgi 9009:80
 ```
@@ -441,7 +442,7 @@ TGI service generates text for the input prompt. Here is the expected result fro
 {"generated_text":"We have all heard the buzzword, but our understanding of it is still growing. It’s a sub-field of Machine Learning, and it’s the cornerstone of today’s Machine Learning breakthroughs.\n\nDeep Learning makes machines act more like humans through their ability to generalize from very large"}
 ```
 
-**NOTE**: After TGI service is started, it takes few minutes to load a LLM model and warm up, before reaching `Ready` state.
+**NOTE**: After TGI service is started, it takes a few minutes to load the LLM model and warm up, before it reaches the `Ready` state.
 
 If you get
 
@@ -449,7 +450,7 @@ If you get
 curl: (7) Failed to connect to localhost port 8008 after 0 ms: Connection refused
 ```
 
-and the log shows model warm up, please wait for a while and try it later.
+and the log shows model warm up, please wait for a while and retry.
 
 ```
 2024-06-05T05:45:27.707509646Z 2024-06-05T05:45:27.707361Z  WARN text_generation_router: router/src/main.rs:357: `--revision` is not set
@@ -459,6 +460,7 @@ and the log shows model warm up, please wait for a while and try it later.
 ```
 
 ### Dataprep Microservice (Advanced)
+Once you have set up port forward for the dataprep service, you can upload, delete, and list documents.
 
 Add Knowledge Base via HTTP Links:
 
