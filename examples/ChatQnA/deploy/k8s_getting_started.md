@@ -41,9 +41,7 @@ If you want to avoid specifying the namespace with every command, you can set th
 kubectl config set-context --current --namespace=chatqa
 ```
 
-This command lists all the nodes in the cluster, verifying that `kubectl` is correctly configured and has the necessary permissions to interact with the cluster.
-
-Some commonly used kubectl commands and their functions that will help deploy ChatQnA successfully:
+Some commonly used kubectl commands and their functions, assuming that you have set your namespace context appropriately are:
 |Command                          |Function                     |
 |-------------------------------  |-----------------------------|
 |`kubectl describe pod <pod-name>` | Provides detailed information about a specific pod, including its            current state, recent events, and configuration details.                            |
