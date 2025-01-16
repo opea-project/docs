@@ -35,7 +35,8 @@ def setup(app):
     rev = get_github_rev()
 
     baseurl = 'https://github.com/opea-project/'
-    repos = ["GenAIComps", "GenAIEval", "GenAIExamples", "GenAIInfra", "Governance", "docs"]
+    repos = ["GenAIComps", "GenAIEval", "GenAIExamples", "GenAIInfra", "GenAIStudio",
+            "Governance", "docs"]
 
     for r in repos:
         app.add_role('{}_blob'.format(r), autolink('{}{}/blob/{}/%s'.format(baseurl, r, rev)))

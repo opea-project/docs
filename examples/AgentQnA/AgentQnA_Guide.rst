@@ -9,7 +9,7 @@ AgentQnA Sample Guide
 Overview
 ********
 
-This example showcases a hierarchical multi-agent system for question-answering applications. 
+This example showcases a hierarchical multi-agent system for question-answering applications.
 
 Purpose
 *******
@@ -49,6 +49,7 @@ Single Node
 +++++++++++++++
 .. toctree::
    :maxdepth: 1
+   :glob:
 
    Xeon Scalable Processor </GenAIExamples/AgentQnA/docker_compose/intel/cpu/xeon/README.md>
    Gaudi </GenAIExamples/AgentQnA/docker_compose/intel/hpu/gaudi/README.md>

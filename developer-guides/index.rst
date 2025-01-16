@@ -1,25 +1,26 @@
 .. _developer_guides:
 
-Developer Guides
+Developer Guide
 ################
 
-Coding Guides
+Coding Guide
 *************
 
-.. toctree::
-   :maxdepth: 1
-
-   OPEA_API
+- :doc:`OPEA API Service Spec (v1.0) <OPEA_API>`
 
 
-
-Documentation Guides
+Documentation Guide
 ********************
 
 .. toctree::
    :maxdepth: 1
 
-   doc_guidelines
-   graphviz
-   docbuild
+- :doc:`Documentation Guidelines <doc_guidelines>`
+
+- :doc:`Drawings Using Graphviz <graphviz>`
+
+- :doc:`OPEA Documentation Generation <docbuild>`
+
+
+
 

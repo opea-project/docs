@@ -1,6 +1,6 @@
 .. _release_notes:
 
-Release Notes
+Release Note
 #############
 
 Release plan & guide.
