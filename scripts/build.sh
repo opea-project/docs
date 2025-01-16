@@ -12,7 +12,7 @@ pwd
 source $ENV_NAME/bin/activate
 
 #clone repos
-for repo_name in docs GenAIComps GenAIEval GenAIExamples GenAIInfra opea-project.github.io; do
+for repo_name in docs GenAIComps GenAIEval GenAIExamples GenAIInfra GenAIStudio opea-project.github.io; do
   echo "prepare for $repo_name"
 
   if [[ "$1" == "f" ]]; then
