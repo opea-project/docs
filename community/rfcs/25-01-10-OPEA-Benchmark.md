@@ -88,29 +88,25 @@ deploy:
    # components related config, by default is for OOB, if overrided, then it is for tuned version
    embedding:
       model_id:              bge_large_v1.5
-      node:                  [1, 2, 4]
       instance_num:          [2, 4, 8]
       cores_per_instance:    4
       memory_capacity:       20 # unit: G
-      retrieval:
-         node:               [1, 2, 4]
+   retrieval:
          instance_num:       [2, 4, 8]
          cores_per_instance: 4
          memory_capacity:    20 # unit: G
-      rerank:
-         enable:             True
-         model_id:           bge_rerank_v1.5
-         node:               [1, 2, 4]
-         instance_num:       1
-         cards_per_instance: 1     # if cpu is specified, this field is ignored and will check cores_per_instance field
-      llm:
-         model_id:           llama2-7b
-         node:               [1, 2, 4]
-         instance_num:       7
-         cards_per_instance: 1     # if cpu is specified, this field is ignored and will check cores_per_instance field
-         # serving related config, dynamic batching
-         max_batch_size:     [1, 2, 8, 16, 32]  # the query number to construct a single batch in serving
-         max_latency:        20     # time to wait before combining incoming requests into a batch, unit milliseconds
+   rerank:
+      enable:             True
+      model_id:           bge_rerank_v1.5
+      instance_num:       1
+      cards_per_instance: 1     # if cpu is specified, this field is ignored and will check cores_per_instance field
+   llm:
+      model_id:           llama2-7b
+      instance_num:       7
+      cards_per_instance: 1     # if cpu is specified, this field is ignored and will check cores_per_instance field
+      # serving related config, dynamic batching
+      max_batch_size:     [1, 2, 8, 16, 32]  # the query number to construct a single batch in serving
+      max_latency:        20     # time to wait before combining incoming requests into a batch, unit milliseconds
 
 benchmark:
    # http request behavior related fields
