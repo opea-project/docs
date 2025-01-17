@@ -236,7 +236,14 @@ Cloud Native
 Troubleshooting
 ***************
 
-TBD.
+1. Browser interface https link failed 
+
+   Q:For example, started ChatQnA example in IBM Cloud and trying to access the UI interface. By default, typing the :5173 resolves to https://:5173. Chrome shows the following warning message：xx.xx.xx.xx doesn't support a secure connection
+
+   A: That is because by default, the browser resolves xx.xx.xx.xx:5173 to https://xx.xx.xx.xx:5173. But  to meet security requirements, users need to deploy a certificate to enable HTTPS support in some cloud environments. OPEA provides HTTP services by default，but also supports HTTPS. To enable HTTPS, you can specify the certificate file paths in the MicroService class. For more details, please refer to the `source code <https://github.com/opea-project/GenAIComps/blob/main/comps/cores/mega/micro_service.py#L33>`_.
+
+2. For other troubles, please check the `doc <https://opea-project.github.io/latest/GenAIExamples/ChatQnA/docker_compose/intel/hpu/gaudi/how_to_validate_service.html>`_.
+
 
 Monitoring
 **********
