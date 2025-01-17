@@ -41,3 +41,4 @@ Here are some deployment options, depending on your hardware and environment:
    :maxdepth: 1
 
    Intel® Xeon® Scalable processor <deploy/xeon>
+   Gaudi AI Accelerator <deploy/gaudi>
