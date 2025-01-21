@@ -2,7 +2,7 @@
 
 This deployment section covers multi-node on-prem deployment of the ChatQnA example with OPEA components  using the TGI service. While one may customize the RAG application with a choice of vector database, the LLM model used, we will be showcasing how to build an e2e chatQnA application using the Redis VectorDB and the neural-chat-7b-v3-3 model, deployed on a Kubernetes cluster using Helm. 
 
-For more information on how to setup a Xeon based Kubernetes cluster along with the development pre-requisites, refer to [Kubernetes Cluster and Development Environment] (./k8s_getting_started.md#kubernetes-cluster-and-development-environment) and for a [quick introduction to Helm Charts](k8s_getting_started.md#using-helm-charts-to-deploy).
+For more information on how to setup a Xeon based Kubernetes cluster along with the development pre-requisites, refer to [Kubernetes Cluster and Development Environment](k8s_getting_started.md#kubernetes-cluster-and-development-environment) and for a [quick introduction to Helm Charts](k8s_getting_started.md#using-helm-charts-to-deploy).
 
 ## Overview
 
