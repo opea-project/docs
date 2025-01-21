@@ -29,8 +29,7 @@ GenAIExamples/
 GenAIExamples/
 ├── deploy_and_benchmark.py # main entry of GenAIExamples 
 ├── ChatQnA/
-│   ├── benchmark/
-│   │   └── chatqna.yaml
+│   ├── chatqna.yaml  # default deploy and benchmark config for deploy_and_benchmark.py
 │   ├── kubernetes/
 │   │   ├── charts.yaml
 │   │   └── ...
@@ -43,10 +42,10 @@ GenAIExamples/
 
 # Design
 
-The pesudo code of run_example.py is listed at below for your reference.
+The pesudo code of deploy_and_benchmark.py is listed at below for your reference.
 
 ```
-# run_example.py
+# deploy_and_benchmark.py
 # below is the pesudo code to demostrate its behavior
 #
 # def main(yaml_file):
@@ -92,9 +91,9 @@ deploy:
       cores_per_instance:    4
       memory_capacity:       20 # unit: G
    retrieval:
-         instance_num:       [2, 4, 8]
-         cores_per_instance: 4
-         memory_capacity:    20 # unit: G
+      instance_num:       [2, 4, 8]
+      cores_per_instance: 4
+      memory_capacity:    20 # unit: G
    rerank:
       enable:             True
       model_id:           bge_rerank_v1.5
