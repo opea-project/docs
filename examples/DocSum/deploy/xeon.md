@@ -33,7 +33,7 @@ Below is the list of content we will be covering in this tutorial:
 2. Prepare (Building / Pulling) Docker images
 3. Use case setup
 4. Deploy the use case
-5. Interacting with CodeGen deployment
+5. Interacting with DocSum deployment
 
 ## Prerequisites
 
@@ -218,7 +218,7 @@ Here are some sample messages if proxy environment variables are not set:
 #### Check the Container Status
 Check if all the containers launched via docker compose have started.
 
-The CodeGen example starts 4 docker containers. Check that these docker
+The DocSum example starts 4 docker containers. Check that these docker
 containers are all running, i.e, all the containers  `STATUS`  are  `Up`.
 You can do this with the `docker ps -a` command.
 
@@ -232,7 +232,7 @@ d20a8896d2a0   ghcr.io/huggingface/text-generation-inference:2.4.0-intel-cpu   "
 
 ```
 
-## Interacting with CodeGen for Deployment
+## Interacting with DocSum for Deployment
 
 This section will walk you through the different ways to interact with
 the microservices deployed. After a couple minutes, rerun `docker ps -a` 
@@ -375,7 +375,7 @@ curl http://${host_ip}:8888/v1/docsum \
 ### Gradio UI
 To access the frontend, open the following URL in your browser: http://{host_ip}:5173. By default, the UI runs on port 5173 internally. If you prefer to use a different host port to access the frontend, you can modify the port mapping in the `compose.yaml` file as shown below:
 ```bash
-  codegen-gaudi-ui-server:
+  docsum-xeon-ui-server:
     image: ${REGISTRY:-opea}/docsum-ui:${TAG:-latest}
     ...
     ports:
@@ -439,18 +439,18 @@ docker logs <CONTAINER ID> -t
 You can also check the overall logs with the following command, where the
 `compose.yaml` is the megaservice docker-compose configuration file.
 
-Assumming you are still in this directory `GenAIExamples/CodeGen/docker_compose/intel/hpu/gaudi`,
+Assumming you are still in this directory `GenAIExamples/DocSum/docker_compose/intel/cpu/xeon`,
 run the following command to check the logs:
 ```bash
 docker compose -f compose.yaml logs
 ```
 
-View the docker input parameters in  `./CodeGen/docker_compose/intel/hpu/gaudi/compose.yaml`
+View the docker input parameters in  `./DocSum/docker_compose/intel/cpu/xeon/compose.yaml`
 
 ```yaml
   tgi-service:
-    image: ghcr.io/huggingface/tgi-gaudi:2.0.1
-    container_name: tgi-gaudi-server
+    image: ghcr.io/huggingface/text-generation-inference:2.4.0-intel-cpu
+    container_name: tgi-server
     ports:
       - "8028:80"
     volumes:

@@ -11,11 +11,11 @@ section.
 
 ## Overview
 
-The DocSum use case uses a LLM and ASR microservices. In this tutorial, we 
+The DocSum example uses a LLM and an ASR microservice. In this tutorial, we  
 will walk through the steps on how to enable it from OPEA GenAIComps to deploy on 
 a single node. 
 
-The solution is aimed to show how to use the Intel/neural-chat-7b-v3-3 model on the 
+The solution uses the Intel/neural-chat-7b-v3-3 model on the 
 Gaudi AI Accelerator. We will go through how to setup docker containers to start 
 the microservice and megaservice. The solution will then take a document(.txt,.doc,.pdf), audio or 
 video file as the input and generate a summary of it. It is deployed with a UI with 3 modes to 
@@ -25,15 +25,14 @@ choose from:
 2. Svelte-Based UI
 3. React-Based UI
 
-If you need to work with multimedia documents, .doc, or .pdf files, suggested to use Gradio UI
-
+Use the Gradio UI if you will be working with multimedia documents, .doc, or .pdf files.
 Below is the list of content we will be covering in this tutorial:
 
 1. Prerequisites
 2. Prepare (Building / Pulling) Docker images
 3. Use case setup
 4. Deploy the use case
-5. Interacting with CodeGen deployment
+5. Interacting with DocSum deployment
 
 ## Prerequisites
 
@@ -67,8 +66,8 @@ This step will involve building/pulling relevant docker
 images with step-by-step process along with sanity check in the end. For
 DocSum, the following docker images will be needed: llm-docsum and whisper. 
 Additionally, you will need to build docker images for the 
-DocSum megaservice, and UI (Svelte/React UI is optional). In total,
-there are **4 required docker images** and two optional docker image.
+DocSum megaservice, while the UI (Svelte/React) is optional. In total,
+there are **4 required docker images** and two optional docker images.
 
 ### Build/Pull Microservice image
 
@@ -79,7 +78,7 @@ there are **4 required docker images** and two optional docker image.
 
 If you decide to pull the docker containers and not build them locally,
 you can proceed to the next step where all the necessary containers will
-be pulled in from dockerhub.
+be pulled in from Docker hub.
 
 :::::
 :::::{tab-item} Build
@@ -120,7 +119,7 @@ cd ../..
 
 ### Build the UI Image
 
-You can build 3 modes of UI
+There are 3 UI options. Below are instructions to build each.
 
 *Gradio UI*
 
@@ -218,21 +217,21 @@ Here are some sample messages if proxy environment variables are not set:
 #### Check the Container Status
 Check if all the containers launched via docker compose have started.
 
-The CodeGen example starts 4 docker containers. Check that these docker
+The DocSum example starts 4 docker containers. Check that these docker
 containers are all running, i.e, all the containers  `STATUS`  are  `Up`.
 You can do this with the `docker ps -a` command.
 
 ```
 CONTAINER ID   IMAGE                                                           COMMAND                  CREATED             STATUS                       PORTS                                       NAMES
-8ec82528bcbb   opea/docsum-gradio-ui:latest                                    "python docsum_ui_gr…"   About an hour ago   Up About an hour             0.0.0.0:5173->5173/tcp, :::5173->5173/tcp   docsum-xeon-ui-server
-e22344ed80d5   opea/docsum:latest                                              "python docsum.py"       About an hour ago   Up About an hour             0.0.0.0:8888->8888/tcp, :::8888->8888/tcp   docsum-xeon-backend-server
-bbb3c05a2878   opea/llm-docsum:latest                                          "bash entrypoint.sh"     About an hour ago   Up About an hour             0.0.0.0:9000->9000/tcp, :::9000->9000/tcp   llm-docsum-server
-d20a8896d2a0   ghcr.io/huggingface/tgi-gaudi:2.3.1                             "text-generation-lau…"   About an hour ago   Up About an hour (healthy)   0.0.0.0:8008->80/tcp, :::8008->80/tcp       tgi-server
+8ec82528bcbb   opea/docsum-gradio-ui:latest                                    "python docsum_ui_gr…"   About an hour ago   Up About an hour             0.0.0.0:5173->5173/tcp, :::5173->5173/tcp   docsum-gaudi-ui-server
+e22344ed80d5   opea/docsum:latest                                              "python docsum.py"       About an hour ago   Up About an hour             0.0.0.0:8888->8888/tcp, :::8888->8888/tcp   docsum-gaudi-backend-server
+bbb3c05a2878   opea/llm-docsum:latest                                          "bash entrypoint.sh"     About an hour ago   Up About an hour             0.0.0.0:9000->9000/tcp, :::9000->9000/tcp   llm-docsum-gaudi-server
+d20a8896d2a0   ghcr.io/huggingface/tgi-gaudi:2.3.1                             "text-generation-lau…"   About an hour ago   Up About an hour (healthy)   0.0.0.0:8008->80/tcp, :::8008->80/tcp       tgi-gaudi-server
 8213029b6b26   opea/whisper:latest                                             "python whisper_serv…"   About an hour ago   Up About an hour             0.0.0.0:7066->7066/tcp, :::7066->7066/tcp   whisper-server
 
 ```
 
-## Interacting with CodeGen for Deployment
+## Interacting with DocSum for Deployment
 
 This section will walk you through the different ways to interact with
 the microservices deployed. After a couple minutes, rerun `docker ps -a` 
@@ -347,17 +346,17 @@ curl http://${host_ip}:8888/v1/docsum \
 
 ::::::
 
-When dealing with longer context of the content to be summarized, we can use different summarization stratergies such as auto, stuff, truncate, map_reduce or refine. Depending on various factors like models context size and input tokens we can select the stratergy that best fits.
+When dealing with content longer than the maximum input context of the model being used, we can use different summarization strategies such as auto, stuff, truncate, map_reduce or refine. Depending on various factors like model's context size and number of input tokens we can select the strategy that best fits.
 
-1. Auto : In this mode we will check input token length, if it exceed MAX_INPUT_TOKENS, summary_type will automatically be set to refine mode, otherwise will be set to stuff mode.
+1. uto : In this mode we will check input token length, if it exceeds MAX_INPUT_TOKENS, the summary_type will automatically be set to refine mode, otherwise will be set to stuff mode.
 
-2. Stuff : In this mode LLM generate summary based on complete input text. In this case please carefully set MAX_INPUT_TOKENS and MAX_TOTAL_TOKENS according to your model and device memory, otherwise it may exceed LLM context limit and raise error when meet long context.
+2. Stuff : In this mode the LLM generates a summary based on the complete input text. In this case please carefully set MAX_INPUT_TOKENS and MAX_TOTAL_TOKENS according to your model and device memory, otherwise it may exceed the LLM context limit and raise an error.
 
 3. Truncate : Truncate mode will truncate the input text and keep only the first chunk, whose length is equal to min(MAX_TOTAL_TOKENS - input.max_tokens - 50, MAX_INPUT_TOKENS).
 
 4. Map_reduce : Map_reduce mode will split the inputs into multiple chunks, map each document to an individual summary, then consolidate those summaries into a single global summary. stream=True is not allowed here. In this mode, default chunk_size is set to be min(MAX_TOTAL_TOKENS - input.max_tokens - 50, MAX_INPUT_TOKENS).
 
-5. Refine : Refin mode will split the inputs into multiple chunks, generate summary for the first one, then combine with the second, loops over every remaining chunks to get the final summary. In this mode, default chunk_size is set to be min(MAX_TOTAL_TOKENS - 2 * input.max_tokens - 128, MAX_INPUT_TOKENS).
+5. Refine : Refine mode will split the inputs into multiple chunks, generate summary for the first one, then combine with the second, loops over every remaining chunks to get the final summary. In this mode, default chunk_size is set to be min(MAX_TOTAL_TOKENS - 2 * input.max_tokens - 128, MAX_INPUT_TOKENS).
 
 We can define the summary_type by providing one of the 5 values discussed above as the value for the summary_type variable as shown below:
 ```bash
@@ -375,7 +374,7 @@ curl http://${host_ip}:8888/v1/docsum \
 ### Gradio UI
 To access the frontend, open the following URL in your browser: http://{host_ip}:5173. By default, the UI runs on port 5173 internally. If you prefer to use a different host port to access the frontend, you can modify the port mapping in the `compose.yaml` file as shown below:
 ```bash
-  codegen-gaudi-ui-server:
+  docsum-gaudi-ui-server:
     image: ${REGISTRY:-opea}/docsum-ui:${TAG:-latest}
     ...
     ports:
@@ -386,9 +385,9 @@ To access the Svelte-based frontend, modify the UI service in the `compose.yaml`
 ```bash
 docsum-ui:
     image: ${REGISTRY:-opea}/docsum-ui:${TAG:-latest}
-    container_name: docsum-xeon-ui-server
+    container_name: docsum-gaudi-ui-server
     depends_on:
-      - docsum-xeon-backend-server
+      - docsum-gaudi-backend-server
     ports:
       - "5173:5173"
     environment:
@@ -405,11 +404,11 @@ Open the following URL in your browser: http://{host_ip}:5173 to access the UI.
 ### React-Based UI (Optional)
 To access the React-based frontend, modify the UI service in the `compose.yaml` file. Replace `docsum-gradio-ui` service with the `docsum-react-ui` service as per the config below:
 ```bash
-docsum-xeon-react-ui-server:
+docsum-gaudi-react-ui-server:
   image: ${REGISTRY:-opea}/docsum-react-ui:${TAG:-latest}
-  container_name: docsum-xeon-react-ui-server
+  container_name: docsum-gaudi-react-ui-server
   depends_on:
-    - docsum-xeon-backend-server
+    - docsum-gaudi-backend-server
   ports:
     - "5174:80"
   environment:
@@ -423,7 +422,7 @@ docsum-xeon-react-ui-server:
 
 Once the services are up, open the following URL in your browser: http://{host_ip}:5174. By default, the UI runs on port 80 internally. If you prefer to use a different host port to access the frontend, you can modify the port mapping in the `compose.yaml` file as shown below:
 ```bash
-  docsum-xeon-react-ui-server:
+  docsum-gaudi-react-ui-server:
     image: ${REGISTRY:-opea}/docsum-react-ui:${TAG:-latest}
     ...
     ports:
@@ -441,13 +440,13 @@ docker logs <CONTAINER ID> -t
 You can also check the overall logs with the following command, where the
 `compose.yaml` is the megaservice docker-compose configuration file.
 
-Assumming you are still in this directory `GenAIExamples/CodeGen/docker_compose/intel/hpu/gaudi`,
+Assumming you are still in this directory `GenAIExamples/DocSum/docker_compose/intel/hpu/gaudi`,
 run the following command to check the logs:
 ```bash
 docker compose -f compose.yaml logs
 ```
 
-View the docker input parameters in  `./CodeGen/docker_compose/intel/hpu/gaudi/compose.yaml`
+View the docker input parameters in  `./DocSum/docker_compose/intel/hpu/gaudi/compose.yaml`
 
 ```yaml
   tgi-service:
