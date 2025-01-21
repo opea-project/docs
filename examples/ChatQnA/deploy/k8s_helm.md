@@ -219,9 +219,9 @@ kubernetes                ClusterIP   10.92.0.100      <none>        443/TCP    
  ```
 To access the services running in your Kubernetes cluster from your local machine, you can set up port forwarding with kubectl:
  ```bash
-    kubectl port-forward svc/[service-name] [local-port]:[service-port]
+    kubectl port-forward svc/[service-name] [local-port]:[service-port] &
    ```
-   Replace `[service-name]`, `[local-port]`, and `[service-port]` with the appropriate values from your services list (as shown in the output given by `kubectl get svc`). This setup enables interaction with the microservice directly from the local machine. In another terminal, use `curl` commands to test the functionality and response of the service.
+   Replace `[service-name]`, `[local-port]`, and `[service-port]` with the appropriate values from your services list (as shown in the output given by `kubectl get svc`). This setup enables interaction with the microservice directly from the local machine. In another terminal, use `curl` commands to test the functionality and response of the service. `&` runs the process in the background.
 
 Use `ctrl+c` to end the port-forwarding to test other services.
 
@@ -230,9 +230,9 @@ Use `ctrl+c` to end the port-forwarding to test other services.
 
 Use the following command to forward traffic from your local machine to the service running in the Kubernetes cluster:
 ```bash
-kubectl port-forward svc/chatqna 8888:8888
+kubectl port-forward svc/chatqna 8888:8888 &
 ```
-Follow the below steps in a different terminal.
+Test the service:
 
 ```
 curl http://localhost:8888/v1/chatqna -H "Content-Type: application/json" -d '{
@@ -274,9 +274,9 @@ In the upcoming sections we will see how this answer can be improved with RAG.
 ### Dataprep Microservice
 Use the following command to forward traffic from your local machine to the data-prep service running in the Kubernetes cluster, which allows uploading documents to provide a more domain specific context:
 ```bash
-kubectl port-forward svc/chatqna-data-prep 6007:6007
+kubectl port-forward svc/chatqna-data-prep 6007:6007 &
 ```
-Follow the below steps in a different terminal.
+Test the service:
 
 If you want to add to or update the default knowledge base, you can use the following
 commands. The dataprep microservice extracts the text from the provided data
@@ -306,9 +306,9 @@ Refer to [advanced use of dataprep microservice] (#dataprep-microservice-advance
 
 Use the following command to forward traffic from your local machine to the service running in the Kubernetes cluster:
 ```bash
-kubectl port-forward svc/chatqna 8888:8888
+kubectl port-forward svc/chatqna 8888:8888 &
 ```
-Similarly, follow the below steps in a different terminal.
+Similarly, Test the service:
 
 ```
 curl http://localhost:8888/v1/chatqna -H "Content-Type: application/json" -d '{
@@ -347,9 +347,9 @@ Open Platform for Enterprise AI (Open Platform for Enterprise AI) is a framework
 ### TEI Embedding Service
 Use the following command to forward traffic from your local machine to the TEI service running in your Kubernetes cluster:
 ```bash
-kubectl port-forward svc/chatqna-tei 6006:80
+kubectl port-forward svc/chatqna-tei 6006:80 &
 ```
-Follow the below steps in a different terminal.
+Test the service:
 
 The TEI embedding service takes in a string as input, embeds the string into a
 vector of a specific length determined by the embedding model and returns this
@@ -369,9 +369,9 @@ length 768.
 ### Retriever Microservice
 Use the following command to forward traffic from your local machine to the Retriever service running in your Kubernetes cluster:
 ```bash
-kubectl port-forward svc/chatqna-retriever-usvc 7000:7000
+kubectl port-forward svc/chatqna-retriever-usvc 7000:7000 &
 ```
-Follow the below steps in a different terminal.
+Test the service:
 
 To consume the retriever microservice, you need to generate a mock embedding
 vector by Python script. The length of embedding vector is determined by the
@@ -402,9 +402,9 @@ The output is retrieved text that is relevant to the input data:
 
 Use the following command to forward traffic from your local machine to the Reranking service running in the Kubernetes cluster:
 ```bash
-kubectl port-forward svc/chatqna-teirerank 8808:80
+kubectl port-forward svc/chatqna-teirerank 8808:80 &
 ```
-Follow the below steps in a different terminal.
+Test the service:
 
 The TEI Reranking Service reranks the documents returned by the retrieval
 service. It consumes the query and list of documents and returns the document
@@ -425,9 +425,9 @@ Output is:  `[{"index":1,"score":0.9988041},{"index":0,"score":0.022948774}]`
 
 Use the following command to forward traffic from your local machine to the service running in your Kubernetes cluster:
 ```bash
-kubectl port-forward svc/chatqna-tgi 9009:80
+kubectl port-forward svc/chatqna-tgi 9009:80 &
 ```
-Follow the below steps in a different terminal.
+Test the service:
 
 ```
 curl http://localhost:9009/generate \
@@ -541,7 +541,7 @@ From the configuration shown above, it would be `http://190.128.49.1:30304`
 
 Alternatively, You can also choose to use port forwarding as shown previously using:
 ```bash
-kubectl port-forward service/chatqna-nginx 8080:80
+kubectl port-forward service/chatqna-nginx 8080:80 &
 ```
 and open a browser to access `http://localhost:8080`
  
@@ -551,4 +551,8 @@ and open a browser to access `http://localhost:8080`
 Once you are done with the entire pipeline and wish to stop and remove all the resources, use the command below:
 ```
 helm uninstall chatqna
+```
+To stop all port-forwarding processes and free up the ports, run the following command:
+```
+pkill -f "kubectl port-forward"
 ```
