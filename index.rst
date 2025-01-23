@@ -74,6 +74,7 @@ Source code for the OPEA Project is maintained in the
    Projects <projects>
    developer-guides/index
    community/index
+   publish/index
    release_notes/index
    CONTRIBUTING
    Q&A <faq>
