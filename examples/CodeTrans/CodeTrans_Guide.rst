@@ -1,7 +1,7 @@
 .. _CodeTrans_Guide:
 
 Code Translation Sample Guide
-#####################
+##############################
 
 .. note:: This guide is in its early development and is a work-in-progress with
    placeholder content.
