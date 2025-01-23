@@ -1,6 +1,6 @@
 # Single node on-prem deployment with TGI on Xeon Scalable processors
 
-This deployment section covers single-node on-prem deployment of the CodeTrans example with OPEA comps using the Text Generation service based on TGI. The solution demonstrates how to build a code translation service using `mistralai/Mistral-7B-Instruct-v0.3` model deployed on Intel® Xeon® Scalable processors. To quickly learn about OPEA in just 5 minutes and set up the required hardware and software, please follow the instructions in the [Getting Started](https://opea-project.github.io/latest/getting-started/README.html) section.
+This deployment section covers the single-node on-prem deployment of the CodeTrans example with OPEA comps using the Text Generation service based on TGI. The solution demonstrates building a code translation service using the `mistralai/Mistral-7B-Instruct-v0.3` model deployed on Intel® Xeon® Scalable processors. To quickly learn about OPEA in just 5 minutes and set up the required hardware and software, please follow the instructions in the [Getting Started](https://opea-project.github.io/latest/getting-started/README.html) section.
 
 ## Overview
 
@@ -9,18 +9,18 @@ In this tutorial, we will walk through how to enable the following microservices
 1. LLM with TGI
 2. Nginx Service
 
-The solution demonstrates how to use Mistral-7B-Instruct-v0.3 model on Intel Xeon Scalable processors for translating code between different programming languages. We will go through how to setup docker containers to start the microservices and megaservice. Users can input code in one programming language and get it translated to another language. The solution is deployed with a basic UI accessible through both direct port and Nginx.
+The solution demonstrates using the Mistral-7B-Instruct-v0.3 model on Intel Xeon Scalable processors to translate code between different programming languages. We will go through setting up Docker containers to start the microservices and megaservice. Users can input code in one programming language and get it translated to another. The solution is deployed with a basic UI accessible through both direct port and Nginx.
 
 ## Prerequisites
 
-First step is to clone the GenAIExamples and GenAIComps. GenAIComps are fundamental necessary components used to build examples you find in GenAIExamples and deploy them as microservices.
+The first step is to clone the GenAIExamples and GenAIComps. GenAIComps are fundamental components used to build examples you find in GenAIExamples and deploy them as microservices.
 
 ```
 git clone https://github.com/opea-project/GenAIComps.git
 git clone https://github.com/opea-project/GenAIExamples.git
 ```
 The examples utilize model weights from HuggingFace.
-Setup your [HuggingFace](https://huggingface.co/) account and 
+Set up your [HuggingFace](https://huggingface.co/) account and 
 apply for model access to `Mistral-7B-Instruct-v0.3` which is a gated model. To obtain access for using the model, visit the [model site](https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3) and click on `Agree and access repository`. 
 
 Next, generate [user access token](https://huggingface.co/docs/transformers.js/en/guides/private#step-1-generating-a-user-access-token).
@@ -31,13 +31,13 @@ Setup the HuggingFace token
 export HUGGINGFACEHUB_API_TOKEN="Your_Huggingface_API_Token"
 ```
 
-The example requires you to set the `host_ip` to deploy the microservices on endpoint enabled with ports. Set the host_ip env variable
+The example requires you to set the `host_ip` to deploy the microservices on the endpoint enabled with ports. Set the host_ip env variable.
 
 ```
 export host_ip=$(hostname -I | awk '{print $1}')
 ```
 
-Make sure to setup Proxies if you are behind a firewall
+Make sure to set Proxies if you are behind a firewall.
 
 ```bash
 export no_proxy=${your_no_proxy},$host_ip
@@ -54,12 +54,12 @@ This step involves either building or pulling four required Docker images. Each 
 :::::{tab-item} Pull
 :sync: Pull
 
-If you decide to pull the docker containers and not build them locally, you can proceed to [Use Case Setup](#use-case-setup). where all the necessary containers will be pulled in from dockerhub.
+If you decide to pull the docker containers and not build them locally, you can proceed to [Use Case Setup](#use-case-setup). where all the necessary containers will be pulled in from the docker hub.
 :::::
 :::::{tab-item} Build
 :sync: Build
 
-From within the `GenAIComps` folder, checkout the release tag.
+From within the `GenAIComps` folder, check out the release tag.
 ```
 cd GenAIComps
 git checkout tags/v1.2
@@ -88,9 +88,9 @@ docker  build  -t  opea/nginx:latest  --build-arg  https_proxy=$https_proxy  \
 
 ### Build MegaService Image
 
-The Megaservice is a pipeline that channels data through different microservices, each performing varied tasks. We define the different microservices and the flow of data between them in the  `code_translation.py`  file, say in this example, CodeTrans MegaService formats the input code and language parameters into a prompt template, sends it to the LLM microservice, and returns the translated code.. You can also add newer or remove some microservices and customize the megaservice to suit the needs.
+The Megaservice is a pipeline that channels data through different microservices, each performing varied tasks. We define the different microservices and the flow of data between them in the  `code_translation.py`  file, in this example, CodeTrans MegaService formats the input code and language parameters into a prompt template, sends it to the LLM microservice, and returns the translated code. You can also add newer or remove some microservices and customize the megaservice to suit the needs.
 
-Build the megaservice image for this use case
+Build the megaservice image for this use case.
 
 ```bash
 git  clone  https://github.com/opea-project/GenAIExamples.git
@@ -126,7 +126,7 @@ Before proceeding, verify that you have all required Docker images by running `d
 
 ## Use Case Setup
 
-The use case will use the following combination of the GenAIComps with the tools
+The use case will use the following combination of the GenAIComps with the tools.
 
 | Use Case Components | Tools         | Model                                | Service Type         |
 |---------------------|---------------|--------------------------------------|----------------------|
@@ -136,14 +136,14 @@ The use case will use the following combination of the GenAIComps with the tools
 
 Tools and models mentioned in the table are configurable either through the environment variable or `compose.yaml`
 
-Set the necessary environment variables to setup the use case
+Set the necessary environment variables to set the use case.
 
 ```bash
 cd GenAIExamples/CodeTrans/docker_compose
 git checkout tags/v1.2
 source ./set_env.sh
 ```
-Set up desired port for Nginx:
+Set up a desired port for Nginx:
 ```bash
 # Example: NGINX_PORT=80
 export  NGINX_PORT=${your_nginx_port}
@@ -151,7 +151,7 @@ export  NGINX_PORT=${your_nginx_port}
 
 ## Deploy the use case
 
-In this tutorial, we will be deploying via docker compose with the provided YAML file. The docker compose instructions should be starting all the above mentioned services as containers.
+In this tutorial, we will be deploying via docker compose with the provided YAML file. The docker compose instructions should start all the above-mentioned services as containers.
 
 ```bash
 cd intel/cpu/xeon
@@ -162,7 +162,7 @@ docker compose up -d
 
 #### Check Env Variables
 
-Check the start up log by `docker compose -f ./compose.yaml logs`.
+Check the startup log by `docker compose -f ./compose.yaml logs`.
 The warning messages print out the variables if they are **NOT** set.
 
 ubuntu@xeon-vm:~/GenAIExamples/CodeTrans/docker_compose/intel/cpu/xeon$ docker compose -f ./compose.yaml up -d
@@ -172,10 +172,10 @@ WARN[0000] The "http_proxy" variable is not set. Defaulting to a blank string.
 
 #### Check the container status
 
-Check if all the containers launched via docker compose has started
-For example, the CodeTrans example starts 5 docker (services), check these docker containers are all running, i.e, all the containers `STATUS` are `Up`.
+Check if all the containers launched via docker compose have started.
+For example, the CodeTrans example starts 5 docker containers (services), check these docker containers are all running, i.e., all the containers `STATUS` are `Up`.
 
-To do a quick sanity check, try `docker ps -a` to see if all the containers are running
+To do a quick sanity check, try `docker ps -a` to see if all the containers are running.
 
 ```
 | CONTAINER ID | IMAGE                                                             | COMMAND                   | CREATED         | STATUS                            | PORTS                                      | NAMES                           |
@@ -190,11 +190,11 @@ To do a quick sanity check, try `docker ps -a` to see if all the containers are 
 
 ## Interacting with CodeTrans deployment
 
-This section you will walk through the different ways to interact with the deployed microservices
+In this section, you will walk through the different ways to interact with the deployed microservices.
 
 ### TGI Service
 
-In first startup, this service will take more time to download the model files. After it's finished, the service will be ready.
+In the first startup, this service will take more time to download the model files. After it's finished, the service will be ready.
 
 Try the command below to check whether the LLM serving is ready.
 ```
@@ -212,12 +212,12 @@ curl  http://${host_ip}:8008/generate  \
 -H 'Content-Type: application/json'
 ```
 
-TGI service generate text for the input prompt. Here is the expected result from TGI:
+TGI service generates text for the input prompt. Here is the expected result from TGI:
  
 ```
 {"generated_text":"'''Python\nprint(\"Hello, World!\")"}
 ```
-**NOTE**: After launch the TGI, it takes few minutes for TGI server to load LLM model and warm up.
+**NOTE**: After launching TGI, it takes a few minutes for the TGI server to load the LLM model and warm up.
 
 ### Text Generation Microservice
 
@@ -304,11 +304,11 @@ The expected output is the same as the MegaService output.
 
 Each of these endpoints should return a successful response with the translated Python code. If any of these tests fail, check the corresponding service logs for more details.
 
-## Check docker container log
+## Check the docker container logs
 
 Following is an example of debugging using Docker logs:
 
-Check the log of container using:
+Check the log of the container using:
 
 `docker logs <CONTAINER ID> -t`
 
@@ -348,7 +348,7 @@ tgi-service:
 ```
 The input `MODEL_ID` is `${LLM_MODEL_ID}`
 
-Check environment variable `LLM_MODEL_ID` is set correctly, spelled correctly.
+Check environment variable `LLM_MODEL_ID` is set correctly, and spelled correctly.
 
 Set the `LLM_MODEL_ID` then restart the containers.
 You can also check overall logs with the following command, where the
