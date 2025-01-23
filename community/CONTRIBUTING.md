@@ -14,6 +14,7 @@ Thanks for considering contributing to OPEA project. The contribution process is
     GenAIComps
     ├── comps
     │   ├── agent
+    │   ├── animation
     │   ├── asr
     │   ├── chathistory
     │   ├── cores
@@ -25,20 +26,21 @@ Thanks for considering contributing to OPEA project. The contribution process is
     │   ├── feedback_management
     │   ├── finetuning
     │   ├── guardrails
-    │   ├── intent_detection
-    │   ├── knowledgegraphs
+    │   ├── image2image
+    │   ├── image2video
     │   ├── llms
     │   ├── lvms
-    │   ├── nginx
     │   ├── prompt_registry
-    │   ├── ragas
-    │   ├── reranks
+    │   ├── reranking
     │   ├── retrievers
+    │   ├── text2image
+    │   ├── text2sql
+    │   ├── third_parties
     │   ├── tts
-    │   ├── vectorstores
     │   └── web_retrievers
     └── tests
         ├── agent
+        ├── animation
         ├── asr
         ├── chathistory
         ├── cores
@@ -47,15 +49,17 @@ Thanks for considering contributing to OPEA project. The contribution process is
         ├── feedback_management
         ├── finetuning
         ├── guardrails
-        ├── intent_detection
+        ├── image2image
+        ├── image2video
         ├── llms
         ├── lvms
-        ├── nginx
         ├── prompt_registry
-        ├── reranks
+        ├── reranking
         ├── retrievers
+        ├── text2image
+        ├── text2sql
+        ├── third_parties
         ├── tts
-        ├── vectorstores
         └── web_retrievers
     ```
 
@@ -65,32 +69,33 @@ Thanks for considering contributing to OPEA project. The contribution process is
     GenAIComps
     ├── comps
     │   └── embeddings
-    │       ├── __init__.py
-    │       └── tei     #vendor name or serving framework name
-    │           ├── langchain
-    │           │   ├── Dockerfile
-    │           │   ├── Dockerfile.amd_gpu
-    │           │   ├── Dockerfile.nvidia_gpu
-    │           │   ├── embedding_tei.py    # definition and registration of microservice
-    │           │   ├── README.md
-    │           │   └── requirements.txt
-    │           └── llama_index
+    │       ├── src 
+    │           ├── Dockerfile
+    │           ├── __init__.py
+    │           ├── opea_embedding_microservice.py
+    │           ├── opea_multimodal_embedding_microservice.py
+    │           ├── README.md
+    │           └── requirements.txt
+    │       └── deployment
+    │           ├── docker_compose
+    │           │   ├── compose.yaml
+    │           └── kubernetes
     │               └── . . .
     ├── tests
     │   └── embeddings
-    │       ├── test_embeddings_tei_langchain.sh
-    │       ├── test_embeddings_tei_langchain_on_amd_gpu.sh
-    │       └── test_embeddings_tei_llama_index.sh
+    │       ├── test_embeddings_multimodal_bridgetower.sh
+    │       ├── test_embeddings_multimodal_bridgetower_on_intel_hpu.sh
+    │       ├── test_embeddings_predictionguard.sh
+    │       └── test_embeddings_tei.sh
     └── README.md
 
     ```
 
     - **File Descriptions**:
-      - `embedding_tei.py`: This file defines and registers the microservice. It serves as the entrypoint of the Docker container. Refer to [whisper ASR](https://github.com/opea-project/GenAIComps/tree/main/comps/asr/whisper/README.md) for a simple example or [TGI](https://github.com/opea-project/GenAIComps/blob/main/comps/llms/text-generation/tgi/llm.py) for a more complex example that required adapting to the OpenAI API.
+      - `opea_embedding_microservice.py`: This file defines and registers the microservice. It serves as the entrypoint of the Docker container. Refer to [whisper ASR](https://github.com/opea-project/GenAIComps/tree/main/comps/asr/whisper/README.md) for a simple example or [TGI](https://github.com/opea-project/GenAIComps/blob/main/comps/llms/text-generation/tgi/llm.py) for a more complex example that required adapting to the OpenAI API.
       - `requirements.txt`: This file is used by Docker to install the necessary dependencies.
       - `Dockerfile`: Used to generate the service container image. Please follow naming conventions:
-        - Dockerfile: `Dockerfile.[vendor]_[hardware]`, vendor and hardware in lower case (i,e Dockerfile.amd_gpu)
-        - Docker Image: `opea/[microservice type]-[microservice sub type]-[library name]-[vendor]-[hardware]:latest` all lower case (i,e opea/llm-vllm-intel-hpu, opea/llm-faqgen-tgi-intel-hpu-svc)
+        - Docker Image: `opea/[microservice type]-[microservice sub type if any]-[library name]-[vendor]-[hardware]:latest` all lower case (i,e opea/llm-vllm-intel-hpu, opea/llm-faqgen-tgi-intel-hpu-svc)
 
       - `tests/[microservices type]/` : contains end-to-end test for microservices Please refer to an example [test_asr_whisper.sh](https://github.com/opea-project/GenAIComps/blob/main/tests/asr/test_asr_whisper.sh). Please follow naming convention:`test_[microservice type]_[microservice sub type]_[library name]_on_[vendor]_[hardware].sh`
       - `tests/cores/` : contains Unit Tests (UT) for the core python components (orchestrator, gateway...). Please follow the naming convention:`test_[core component].sh`
