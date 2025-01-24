@@ -297,7 +297,7 @@ flowchart LR
       - `docker_build_image/build.yaml`: builds necessary images pointing to the Dockerfiles in the GenAIComp repository.
       - `docker_compose/[vendor]/[device]/compose.yaml`: defines pipeline for  Docker Compose deployment. For naming the Docker Image file please follow the naming convention:
         - Docker Image: `opea/[example name]-[feature name]:latest` all lower case (i,e: opea/chatqna, opea/codegen-react-ui)
-      - `kubernetes/helm` and `kubernetes/gmc` : used for K8s deployemnt with helm or GMC
+      - `kubernetes/helm` and `kubernetes/gmc` : used for K8s deployemnt with helm or [GenAI Microservices Connector (GMC)](https://github.com/opea-project/GenAIInfra/tree/main/microservices-connector#genai-microservices-connectorgmc)
       - `tests/`: at minimum you need to provide an E2E test with Docker Compose. If you are contributing a K8s Helm Chart or GMC yaml, you should also provide tests for those. Please follow this naming convention:
         - Docker compose test: `tests/test_compose_on_[hardware].sh`
         - K8s with GMC test: `tests/test_gmc_on_[hardware].sh`
@@ -407,7 +407,7 @@ The OPEA projects use GitHub Action for CI test.
 - End to End Test, the PR must pass all end to end tests.
 
 #### Pull Request Review
-You can add reviewers from [the code owners list](https://github.com/opea-project/docs/blob/main/community/codeowner.md) to your PR.
+You can tag or add reviewers from [the code owners list](https://github.com/opea-project/docs/blob/main/community/codeowner.md) to your PR.
 
 ## Support
 
