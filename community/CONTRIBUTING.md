@@ -140,7 +140,7 @@ Thanks for considering contributing to OPEA project. The contribution process is
 
 Each of the samples in OPEA GenAIExamples is a commonly used solution. They each have scripts to ease deployment, and have been tested for performance and scalability with Docker Compose and Kubernetes. When contributing an example, a Docker Compose deployment is the minimum requirement. However, since OPEA is intended for enterprise applications, supporting Kubernetes deployment is highly encouraged. You can find [examples for Kubernetes deployment](https://github.com/opea-project/GenAIExamples/tree/main/ChatQnA/kubernetes/helm#readme) using Helm Charts.
 
-- Navigate to [OPEA GenAIExamples](https://github.com/opea-project/GenAIExamples/tree/main/README.md) and check the catalog of examples. If you find one that is very similar to what you are looking for, you can contribute your variation of it to that particular example folder. If you are bringing a completly new application you will need to create a separate example folder.
+- Navigate to [OPEA GenAIExamples](https://github.com/opea-project/GenAIExamples/tree/main/README.md) and check the catalog of examples. If you find one that is very similar to what you are looking for, you can contribute your variation of it to that particular example folder. If you are bringing a completely new application you will need to create a separate example folder. We recommend submitting an RFC first in this case to the doc sub-project to discuss your new application and potentially get suggestions and collect fellow travellers.
 
 - Before stitching together all the microservices to build your application, let's make sure all the required building blocks are available!. Take a look at this **ChatQnA Flow Chart**:
 
@@ -326,7 +326,7 @@ The quality of OPEA project's documentation can have a huge impact on its succes
 
 ### Reporting Issues
 
-If you run into unexpected behavior, please report it using the `Issues` page under the corresponding github project but first check if there is already a similar existing issue. If not, please follow the Bug Report template and supply as much information as you can. It's helpful if the issue submitter can narrow down the problematic behavior to a minimal reproducible test case.
+If you run into unexpected behavior, please report it using the `Issues` page under the corresponding GitHub project but first check if there is already a similar existing issue. If not, please follow the Bug Report template and supply as much information as you can. It's helpful if the issue submitter can narrow down the problematic behavior to a minimal reproducible test case.
 
 ### Proposing New Features
 
@@ -352,7 +352,7 @@ It is not necessary for changes like:
   ```{literalinclude} rfcs/rfc_template.txt
   ```
 
-- Submit the proposal to the `Issues` page of the corresponding OPEA github repository.
+- Submit the proposal to the `Issues` page of the corresponding OPEA GitHub repository.
 - Reach out to your RFC's assignee if you need any help with the RFC process.
 - Amend your proposal in response to reviewer's feedback.
 
