@@ -105,7 +105,7 @@ Thanks for considering contributing to OPEA project. The contribution process is
 
 Each of the samples in OPEA GenAIExamples are a common oft used solution. They each have scripts to ease deployment, and have been tested for performance and scalability with Docker compose and Kubernetes. When contributing an example, a Docker Compose deployment is the minimum requirement. However, since OPEA is intended for enterprise applications, supporting Kubernetes deployment is highly encouraged. You can find [examples for Kubernetes deployment](https://github.com/opea-project/GenAIExamples/tree/main/README.md#deploy-examples) using manifests, Helms Charts, and the [GenAI Microservices Connector (GMC)](https://github.com/opea-project/GenAIInfra/tree/main/microservices-connector/README.md). GMC offers additional enterprise features, such as the ability to dynamically adjust pipelines on Kubernetes (e.g., switching to a different LLM on the fly, adding guardrails), composing pipeleines that include external services hosted in public cloud or on-premisees via URL, and supporting sequential, parallel and conditional flows in the pipelines.
 
-- Navigate to [OPEA GenAIExamples](https://github.com/opea-project/GenAIExamples/tree/main/README.md) and check the catalog of examples. If you find one that is very similar to what you are looking for, you can contribute your variation of it to that particular example folder. If you are bringing a completly new application you will need to create a separate example folder.
+- Navigate to [OPEA GenAIExamples](https://github.com/opea-project/GenAIExamples/tree/main/README.md) and check the catalog of examples. If you find one that is very similar to what you are looking for, you can contribute your variation of it to that particular example folder. If you are bringing a completely new application you will need to create a separate example folder. We recommend submitting an RFC first in this case to the doc sub-project to discuss your new application and potentially get suggestions and collect fellow travellers.
 
 - Before stitching together all the microservices to build your application, let's make sure all the required building blocks are available!. Take a look at this **ChatQnA Flow Chart**:
 
@@ -289,7 +289,7 @@ The quality of OPEA project's documentation can have a huge impact on its succes
 
 ### Reporting Issues
 
-If OPEA user runs into some unexpected behavior, reporting the issue to the `Issues` page under the corresponding github project is the proper way to do. Please ensure there is no similar one already existing on the issue list). Please follow the Bug Report template and supply as much information as you can, and any additional insights you might have. It's helpful if the issue submitter can narrow down the problematic behavior to a minimal reproducible test case.
+If OPEA user runs into some unexpected behavior, reporting the issue to the `Issues` page under the corresponding GitHub project is the proper way to do. Please ensure there is no similar one already existing on the issue list). Please follow the Bug Report template and supply as much information as you can, and any additional insights you might have. It's helpful if the issue submitter can narrow down the problematic behavior to a minimal reproducible test case.
 
 ### Proposing New Features
 
@@ -315,7 +315,7 @@ It is not necessary for changes like:
   ```{literalinclude} rfcs/rfc_template.txt
   ```
 
-- Submit the proposal to the `Issues` page of the corresponding OPEA github repository.
+- Submit the proposal to the `Issues` page of the corresponding OPEA GitHub repository.
 - Reach out to your RFC's assignee if you need any help with the RFC process.
 - Amend your proposal in response to reviewer's feedback.
 
