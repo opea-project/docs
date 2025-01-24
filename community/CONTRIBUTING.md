@@ -132,13 +132,13 @@ Thanks for considering contributing to OPEA project. The contribution process is
       - `tests/[microservices type]/` : contains end-to-end test for microservices. Please follow naming convention:`test_[microservice type]_[integration type].sh` or `test_[microservice type]_[integration type]_on_[hardware].sh` if hardware specific. This will ensure CICD evaluates components correctly.
       - `README.md`: at minimum it should include: microservice description, build, and start commands and a curl command with expected output.
 
-4. Now you have created all the required files, and validated your service. Last step is to add a `src/README_[interation_type].md` at the component level `GenAIComps/comps/[microservice type]` to list your new component. Now you are ready to file your PR! Once your PR is merged, in the next release the project  release maintainers will publish the Docker Image for the same to the Docker Hub.
+4. Now you have created all the required files, and validated your service. Last step is to add a `src/README_[interation_type].md` at the component level `GenAIComps/comps/[microservice type]` to list your new component. Now you are ready to file your PR! Once your PR is merged, in the next release the project release maintainers will publish the Docker Image for the same to Docker Hub.
 
 5. After your component has been merged, you are likely interested in building an application with it, and perhaps contributing it also to OPEA! Please continue on to the [Contribute a GenAI Example](#contribute-a-genai-example) guide.
 
 ### Contribute a GenAI Example
 
-Each of the samples in OPEA GenAIExamples are a common oft used solution. They each have scripts to ease deployment, and have been tested for performance and scalability with Docker compose and Kubernetes. When contributing an example, a Docker Compose deployment is the minimum requirement. However, since OPEA is intended for enterprise applications, supporting Kubernetes deployment is highly encouraged. You can find [examples for Kubernetes deployment](https://github.com/opea-project/GenAIExamples/tree/main/ChatQnA/kubernetes/helm#readme) using Helms Charts.
+Each of the samples in OPEA GenAIExamples is an oft used solution. They each have scripts to ease deployment, and have been tested for performance and scalability with Docker Compose and Kubernetes. When contributing an example, a Docker Compose deployment is the minimum requirement. However, since OPEA is intended for enterprise applications, supporting Kubernetes deployment is highly encouraged. You can find [examples for Kubernetes deployment](https://github.com/opea-project/GenAIExamples/tree/main/ChatQnA/kubernetes/helm#readme) using Helm Charts.
 
 - Navigate to [OPEA GenAIExamples](https://github.com/opea-project/GenAIExamples/tree/main/README.md) and check the catalog of examples. If you find one that is very similar to what you are looking for, you can contribute your variation of it to that particular example folder. If you are bringing a completly new application you will need to create a separate example folder.
 
@@ -295,10 +295,10 @@ flowchart LR
     - **File Descriptions**:
       - `chatqna.py`: application definition using microservice, megaservice and gateway. There could be multiple .py in the folder based on slight modification of the example application.
       - `docker_build_image/build.yaml`: builds necessary images pointing to the Dockerfiles in the GenAIComp repository.
-      - `docker_compose/[vendor]/[device]/compose.yaml`: defines pipeline for  Docker compose deployment. For selectng docker image name please follow the naming convention:
+      - `docker_compose/[vendor]/[device]/compose.yaml`: defines pipeline for  Docker Compose deployment. For naming the Docker Image file please follow the naming convention:
         - Docker Image: `opea/[example name]-[feature name]:latest` all lower case (i,e: opea/chatqna, opea/codegen-react-ui)
       - `kubernetes/helm` and `kubernetes/gmc` : used for K8s deployemnt with helm or GMC
-      - `tests/`: at minimum you need to provide an E2E test with Docker compose. If you are contritbutng K8s Helm Chart and GMC yaml, you should also provide test for those. Please follow naming convention:
+      - `tests/`: at minimum you need to provide an E2E test with Docker Compose. If you are contributing a K8s Helm Chart or GMC yaml, you should also provide tests for those. Please follow this naming convention:
         - Docker compose test: `tests/test_compose_on_[hardware].sh`
         - K8s with GMC test: `tests/test_gmc_on_[hardware].sh`
       - `ui`: (optional)
@@ -326,7 +326,7 @@ The quality of OPEA project's documentation can have a huge impact on its succes
 
 ### Reporting Issues
 
-If OPEA user runs into some unexpected behavior, reporting the issue to the `Issues` page under the corresponding github project is the proper way to do. Please ensure there is no similar one already existing on the issue list. Please follow the Bug Report template and supply as much information as you can, and any additional insights you might have. It's helpful if the issue submitter can narrow down the problematic behavior to a minimal reproducible test case.
+If you run into unexpected behavior, please report it using the `Issues` page under the corresponding github project. Please first check if there is already a similar existing issue. If not, please follow the Bug Report template and supply as much information as you can. It's helpful if the issue submitter can narrow down the problematic behavior to a minimal reproducible test case.
 
 ### Proposing New Features
 
