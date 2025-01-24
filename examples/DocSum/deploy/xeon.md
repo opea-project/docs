@@ -163,11 +163,12 @@ The tags are based on what you set the environment variable `TAG` to.
 
 The use case will use the following combination of GenAIComps and tools.
 
-|Use Case Components | Tools | Model     | Service Type |
-|----------------     |--------------|-----------------------------|------------------|
-|LLM                  |   TGI        | Intel/neural-chat-7b-v3-3  | OPEA Microservice |
-|ASR                  |   Whisper    | openai/whisper-small       | OPEA Microservice |
-|UI                   |              | NA                         | Gateway Service   |
+|Use Case Components  | Tools        | Model                      | Service Type      |
+|----------------     |--------------|----------------------------|------------------ |
+|LLM                  |   TGI        | Intel/neural-chat-7b-v3-3  | OPEA Microservice |
+|ASR                  |   Whisper    | openai/whisper-small       | OPEA Microservice |
+|UI                   |              | NA                         | Gateway Service   |
+
 
 Tools and models mentioned in the table are configurable either through the
 environment variables or the `compose.yaml` file.
@@ -201,19 +202,18 @@ The warning messages print out the variables if they are **NOT** set.
 
 Here are some sample messages if proxy environment variables are not set:
 
- WARN[0000] The "no_proxy" variable is not set. Defaulting to a blank string.
- WARN[0000] The "https_proxy" variable is not set. Defaulting to a blank string.
- WARN[0000] The "http_proxy" variable is not set. Defaulting to a blank string.
- WARN[0000] The "no_proxy" variable is not set. Defaulting to a blank string.
- WARN[0000] The "https_proxy" variable is not set. Defaulting to a blank string.
- WARN[0000] The "http_proxy" variable is not set. Defaulting to a blank string.
- WARN[0000] The "no_proxy" variable is not set. Defaulting to a blank string.
- WARN[0000] The "http_proxy" variable is not set. Defaulting to a blank string.
- WARN[0000] The "https_proxy" variable is not set. Defaulting to a blank string.
- WARN[0000] The "no_proxy" variable is not set. Defaulting to a blank string.
- WARN[0000] The "http_proxy" variable is not set. Defaulting to a blank string.
- WARN[0000] The "https_proxy" variable is not set. Defaulting to a blank string.
-
+    WARN[0000] The "no_proxy" variable is not set. Defaulting to a blank string.
+    WARN[0000] The "https_proxy" variable is not set. Defaulting to a blank string.
+    WARN[0000] The "http_proxy" variable is not set. Defaulting to a blank string.
+    WARN[0000] The "no_proxy" variable is not set. Defaulting to a blank string.
+    WARN[0000] The "https_proxy" variable is not set. Defaulting to a blank string.
+    WARN[0000] The "http_proxy" variable is not set. Defaulting to a blank string.
+    WARN[0000] The "no_proxy" variable is not set. Defaulting to a blank string.
+    WARN[0000] The "http_proxy" variable is not set. Defaulting to a blank string.
+    WARN[0000] The "https_proxy" variable is not set. Defaulting to a blank string.
+    WARN[0000] The "no_proxy" variable is not set. Defaulting to a blank string.
+    WARN[0000] The "http_proxy" variable is not set. Defaulting to a blank string.
+    WARN[0000] The "https_proxy" variable is not set. Defaulting to a blank string.
 #### Check the Container Status
 Check if all the containers launched via docker compose have started.
 
@@ -222,13 +222,12 @@ containers are all running, i.e., all the containers  `STATUS` are  `Up`.
 You can do this with the `docker ps -a` command.
 
 ```
-CONTAINER ID   IMAGE                                                           COMMAND                  CREATED             STATUS                       PORTS                                       NAMES
-8ec82528bcbb   opea/docsum-gradio-ui:latest                                    "python docsum_ui_gr…"   About an hour ago   Up About an hour             0.0.0.0:5173->5173/tcp, :::5173->5173/tcp   docsum-xeon-ui-server
-e22344ed80d5   opea/docsum:latest                                              "python docsum.py"       About an hour ago   Up About an hour             0.0.0.0:8888->8888/tcp, :::8888->8888/tcp   docsum-xeon-backend-server
-bbb3c05a2878   opea/llm-docsum:latest                                          "bash entrypoint.sh"     About an hour ago   Up About an hour             0.0.0.0:9000->9000/tcp, :::9000->9000/tcp   llm-docsum-server
-d20a8896d2a0   ghcr.io/huggingface/text-generation-inference:2.4.0-intel-cpu   "text-generation-lau…"   About an hour ago   Up About an hour (healthy)   0.0.0.0:8008->80/tcp, :::8008->80/tcp       tgi-server
-8213029b6b26   opea/whisper:latest                                             "python whisper_serv…"   About an hour ago   Up About an hour             0.0.0.0:7066->7066/tcp, :::7066->7066/tcp   whisper-server
-
+CONTAINER ID   IMAGE                                                           COMMAND                  CREATED             STATUS                       PORTS                                       NAMES
+8ec82528bcbb   opea/docsum-gradio-ui:latest                                    "python docsum_ui_gr…"   About an hour ago   Up About an hour             0.0.0.0:5173->5173/tcp, :::5173->5173/tcp   docsum-xeon-ui-server
+e22344ed80d5   opea/docsum:latest                                              "python docsum.py"       About an hour ago   Up About an hour             0.0.0.0:8888->8888/tcp, :::8888->8888/tcp   docsum-xeon-backend-server
+bbb3c05a2878   opea/llm-docsum:latest                                          "bash entrypoint.sh"     About an hour ago   Up About an hour             0.0.0.0:9000->9000/tcp, :::9000->9000/tcp   llm-docsum-server
+d20a8896d2a0   ghcr.io/huggingface/text-generation-inference:2.4.0-intel-cpu   "text-generation-lau…"   About an hour ago   Up About an hour (healthy)   0.0.0.0:8008->80/tcp, :::8008->80/tcp       tgi-server
+8213029b6b26   opea/whisper:latest                                             "python whisper_serv…"   About an hour ago   Up About an hour             0.0.0.0:7066->7066/tcp, :::7066->7066/tcp   whisper-server
 ```
 
 ## Interacting with DocSum for Deployment
