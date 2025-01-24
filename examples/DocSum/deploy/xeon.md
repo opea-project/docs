@@ -279,7 +279,7 @@ Here is the output:
 
 ### MegaService
 
-You can upload documents(.txt,.doc,.pdf), audio, and video and get a summary of the content.
+You can upload documents (.txt, .doc, .pdf), audio, and video to get a summary of the content.
 
 ::::::{tab-set}
 :::::{tab-item} Text
@@ -373,57 +373,57 @@ curl http://${host_ip}:8888/v1/docsum \
 ### Gradio UI
 To access the frontend, open the following URL in your browser: http://{host_ip}:5173. By default, the UI runs on port 5173 internally. If you prefer to use a different host port to access the frontend, you can modify the port mapping in the `compose.yaml` file as shown below:
 ```bash
-  docsum-xeon-ui-server:
-    image: ${REGISTRY:-opea}/docsum-ui:${TAG:-latest}
-    ...
-    ports:
-      - "5173:5173"
+  docsum-xeon-ui-server:
+  image: ${REGISTRY:-opea}/docsum-ui:${TAG:-latest}
+  ...
+  ports:
+  - "5173:5173"
 ```
 ### Svelte UI (Optional)
 To access the Svelte-based frontend, modify the UI service in the `compose.yaml` file. Replace `docsum-gradio-ui` service with the `docsum-ui` service as per the config below: 
 ```bash
-docsum-ui:
-    image: ${REGISTRY:-opea}/docsum-ui:${TAG:-latest}
-    container_name: docsum-xeon-ui-server
-    depends_on:
-      - docsum-xeon-backend-server
-    ports:
-      - "5173:5173"
-    environment:
-      - no_proxy=${no_proxy}
-      - https_proxy=${https_proxy}
-      - http_proxy=${http_proxy}
-      - BACKEND_SERVICE_ENDPOINT=${BACKEND_SERVICE_ENDPOINT}
-      - DOC_BASE_URL=${BACKEND_SERVICE_ENDPOINT}
-    ipc: host
-    restart: always
+  docsum-ui:
+    image: ${REGISTRY:-opea}/docsum-ui:${TAG:-latest}
+    container_name: docsum-xeon-ui-server
+    depends_on:
+    - docsum-xeon-backend-server
+    ports:
+    - "5173:5173"
+    environment:
+    - no_proxy=${no_proxy}
+    - https_proxy=${https_proxy}
+    - http_proxy=${http_proxy}
+    - BACKEND_SERVICE_ENDPOINT=${BACKEND_SERVICE_ENDPOINT}
+    - DOC_BASE_URL=${BACKEND_SERVICE_ENDPOINT}
+    ipc: host
+    restart: always
 ```
 ### React-Based UI (Optional)
 To access the React-based frontend, modify the UI service in the `compose.yaml` file. Replace `docsum-gradio-ui` service with the `docsum-react-ui` service as per the config below:
 ```bash
-docsum-xeon-react-ui-server:
-  image: ${REGISTRY:-opea}/docsum-react-ui:${TAG:-latest}
-  container_name: docsum-xeon-react-ui-server
-  depends_on:
-    - docsum-xeon-backend-server
-  ports:
-    - "5174:80"
-  environment:
-    - no_proxy=${no_proxy}
-    - https_proxy=${https_proxy}
-    - http_proxy=${http_proxy}
-  ipc: host
-  restart: always
+  docsum-xeon-react-ui-server:
+    image: ${REGISTRY:-opea}/docsum-react-ui:${TAG:-latest}
+    container_name: docsum-xeon-react-ui-server
+    depends_on:
+    - docsum-xeon-backend-server
+    ports:
+    - "5174:80"
+    environment:
+    - no_proxy=${no_proxy}
+    - https_proxy=${https_proxy}
+    - http_proxy=${http_proxy}
+    ipc: host
+    restart: always
 ```
 
 
 Once the services are up, open the following URL in your browser: http://{host_ip}:5174. By default, the UI runs on port 80 internally. If you prefer to use a different host port to access the frontend, you can modify the port mapping in the `compose.yaml` file as shown below:
 ```bash
-  docsum-xeon-react-ui-server:
-    image: ${REGISTRY:-opea}/docsum-react-ui:${TAG:-latest}
-    ...
-    ports:
-      - "80:80"
+  docsum-xeon-react-ui-server:
+    image: ${REGISTRY:-opea}/docsum-react-ui:${TAG:-latest}
+    ...
+    ports:
+    - "80:80"
 ```
 
 ## Check Docker Container Logs
@@ -446,25 +446,28 @@ docker compose -f compose.yaml logs
 View the docker input parameters in  `./DocSum/docker_compose/intel/cpu/xeon/compose.yaml`
 
 ```yaml
-  tgi-service:
-    image: ghcr.io/huggingface/text-generation-inference:2.4.0-intel-cpu
-    container_name: tgi-server
-    ports:
- - "8028:80"
-    volumes:
- - "./data:/data"
-    environment:
-      no_proxy: ${no_proxy}
-      http_proxy: ${http_proxy}
-      https_proxy: ${https_proxy}
-      HABANA_VISIBLE_DEVICES: all
-      OMPI_MCA_btl_vader_single_copy_mechanism: none
-      HF_TOKEN: ${HUGGINGFACEHUB_API_TOKEN}
-    runtime: habana
-    cap_add:
- - SYS_NICE
-    ipc: host
-    command: --model-id ${LLM_MODEL_ID} --max-input-length 1024 --max-total-tokens 2048
+    tgi-server:
+      image: ghcr.io/huggingface/text-generation-inference:2.4.0-intel-cpu
+      container_name: tgi-server
+      ports:
+        - ${LLM_ENDPOINT_PORT:-8008}:80
+      environment:
+        no_proxy: ${no_proxy}
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        TGI_LLM_ENDPOINT: ${TGI_LLM_ENDPOINT}
+        HUGGINGFACEHUB_API_TOKEN: ${HUGGINGFACEHUB_API_TOKEN}
+        host_ip: ${host_ip}
+        LLM_ENDPOINT_PORT: ${LLM_ENDPOINT_PORT}
+      healthcheck:
+        test: ["CMD-SHELL", "curl -f http://${host_ip}:${LLM_ENDPOINT_PORT}/health || exit 1"]
+        interval: 10s
+        timeout: 10s
+        retries: 100
+      volumes:
+        - "./data:/data"
+      shm_size: 1g
+      command: --model-id ${LLM_MODEL_ID} --cuda-graphs 0  --max-input-length ${MAX_INPUT_TOKENS} --max-total-tokens ${MAX_TOTAL_TOKENS}
 ```
 
 The input `--model-id` is  `${LLM_MODEL_ID}`. Ensure the environment variable `LLM_MODEL_ID` 
