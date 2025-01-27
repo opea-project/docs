@@ -224,8 +224,11 @@ Single Node
 Kubernetes
 **********
 
-* Getting Started <deploy/k8s_getting_started.md>
-* Deployment with Helm on Xeon Scalable processors <deploy/k8s_helm.md>
+.. toctree::
+   :maxdepth: 1
+
+   Getting Started <deploy/k8s_getting_started>
+   Kubernetes Deployment with Helm on Xeon <deploy/k8s_helm>
 
 Cloud Native
 ************
