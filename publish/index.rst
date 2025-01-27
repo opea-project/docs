@@ -1,21 +1,21 @@
-.. _Publication:
-
-Publication
-########################
+.. _Publications:
 
 Publications
-*****************
-Todo.
+##############
 
 News
 *****************
 https://opea.dev/news/
 
-Event
+Events
 *****************
 https://opea.dev/community-events/
 
 Blogs
+*****************
+Todo.
+
+Demos and Videos
 *****************
 Todo.
 
