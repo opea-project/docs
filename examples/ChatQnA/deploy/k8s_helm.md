@@ -1,8 +1,8 @@
 # Multi-node on-prem deployment with TGI on Xeon Scalable processors on a K8s cluster using Helm
 
-This deployment section covers multi-node on-prem deployment of the ChatQnA example with OPEA components  using the TGI service. While one may customize the RAG application with a choice of vector database, the LLM model used, we will be showcasing how to build an e2e chatQnA application using the Redis VectorDB and the neural-chat-7b-v3-3 model, deployed on a Kubernetes cluster using Helm. 
+This deployment section covers multi-node on-prem deployment of the ChatQnA example with OPEA components using the TGI service. While one may customize the RAG application with a choice of vector database, the LLM model used, this guide will show how to build an e2e chatQnA application using the Redis VectorDB and the neural-chat-7b-v3-3 model, deployed on a Kubernetes cluster using Helm. 
 
-For more information on how to setup a Xeon based Kubernetes cluster along with the development pre-requisites, refer to [Kubernetes Cluster and Development Environment](k8s_getting_started.md#kubernetes-cluster-and-development-environment) and for a [quick introduction to Helm Charts](k8s_getting_started.md#using-helm-charts-to-deploy).
+For more information on how to setup a Xeon-based Kubernetes cluster along with the development pre-requisites, refer to [Kubernetes Cluster and Development Environment](k8s_getting_started.md#kubernetes-cluster-and-development-environment) and for a [quick introduction to Helm Charts](k8s_getting_started.md#using-helm-charts-to-deploy).
 
 ## Overview
 
@@ -16,7 +16,7 @@ GenAIComps to deploy a multi-node TGI-based service solution.
 4. Reranking
 5. LLM with TGI
 
-> **Note:** ChatQnA can also be deployed on a single node using Kubernetes provided there are adequate resources for all the associated pods, namely CPU and memory and no constraints such as affinity, anti-affinity, or taints.
+> **Note:** ChatQnA can also be deployed on a single node using Kubernetes provided there are adequate resources for all the associated pods, namely CPU and memory and, no constraints such as affinity, anti-affinity, or taints.
 
 ## Prerequisites
 
@@ -30,7 +30,7 @@ First, ensure that Helm (version >= 3.15) is installed on your system. Helm is a
 For detailed installation instructions, refer to the [Helm Installation Guide](https://helm.sh/docs/intro/install/)
 
 ### Clone Repository 
-Next step is to clone the GenAIInfra which is the containerization and cloud native suite for OPEA, including artifacts to deploy ChatQnA in a cloud native way.
+The next step is to clone the GenAIInfra which is the containerization and cloud-native suite for OPEA, including artifacts to deploy ChatQnA in a cloud-native way.
 
 ```bash
 git clone https://github.com/opea-project/GenAIInfra.git
@@ -41,7 +41,7 @@ cd GenAIInfra/helm-charts/
 git checkout tags/v1.2
 ```
 ### HF Token
-The example can utilize model weights from HuggingFace and langchain.
+The example can utilize model weights from HuggingFace.
 
 Setup your [HuggingFace](https://huggingface.co/) account and generate
 [user access token](https://huggingface.co/docs/transformers.js/en/guides/private#step-1-generating-a-user-access-token).
@@ -98,7 +98,7 @@ chatqna-ui:
 Next, we will update the dependencies for all Helm charts in the specified directory and ensure the `chatqna` Helm chart is ready for deployment by updating its dependencies as defined in the `Chart.yaml` file.
 
 ```bash
-# all Helm charts in the specified directory have their 
+# All Helm charts in the specified directory have their 
 # dependencies up-to-date, facilitating consistent deployments.
 ./update_dependency.sh
 
@@ -114,7 +114,7 @@ extraCmdArgs: ["--dtype","bfloat16"]
 ```
 This configuration ensures that TGI processes LLM operations in bfloat16 precision, enabling lower-precision computations for improved performance and reduced memory usage. Bfloat16 operations are accelerated using Intel® AMX, the built-in AI accelerator on 4th Gen Intel® Xeon® Scalable processors and later.
 
-Set the necessary environment variables to setup the use case
+Set the necessary environment variables to set up the use case
 ```bash
 export MODELDIR=""  #export MODELDIR="/mnt/opea-models" if you want to cache the model.  
 export MODELNAME="Intel/neural-chat-7b-v3-3"
@@ -128,7 +128,7 @@ export RERANKER_MODELNAME="BAAI/bge-reranker-base"
 > 
 > In a multi-node environment, go to every k8s worker node to make sure that a ${MODELDIR} directory exists and is writable.
 > 
-> Another option is to to use k8s persistent volume to share the model data files. For more information see [Using Persistent Volume](https://github.com/opea-project/GenAIInfra/blob/main/helm-charts/README.md#using-persistent-volume).
+> Another option is to use k8s persistent volume to share the model data files. For more information see [Using Persistent Volume](https://github.com/opea-project/GenAIInfra/blob/main/helm-charts/README.md#using-persistent-volume).
 
 ## Deploy the use case
 The `helm install` command will initiate all the aforementioned services such as Kubernetes pods.
@@ -150,7 +150,7 @@ NAMESPACE: chatqa
 STATUS: deployed
 REVISION: 1
 ```
-It takes a few minutes for all the microservices to be up and running. Go to the next section which is [Validate Microservices](#validate-microservices) to verify that the deployment is successful.
+It takes a few minutes for all the microservices to get up and running. Go to the next section which is [Validate Microservices](#validate-microservices) to verify that the deployment is successful.
 
 
 ### Validate microservice
@@ -178,7 +178,7 @@ chatqna-tgi-7b5556d46d-pnzph               1/1     Running   0          5m7s
 For example, the ChatQnA deployment starts 9 Kubernetes services. Ensure that all associated pods are running, i.e., all the pods' statuses are 'Running'. To perform a quick sanity check, use the command `kubectl get pods` to see if all the pods are active.
 
 When issues are encountered with a pod in the Kubernetes deployment, there are two primary commands to diagnose and potentially resolve problems:
-1. **Checking Logs**: To view the logs of a specific pod, which can provide insight into what the application is doing and any errors it might be encountering, use:
+1. **Checking Logs**: To view the logs of a specific pod, which can provide insight into what the application is doing and any errors it might be encountering use:
     ```bash
     kubectl logs <pod-name>
     ```
@@ -190,7 +190,7 @@ For example, if the status of the TGI service does not show 'Running', describe 
 ```bash
 kubectl describe pod chatqna-tgi-778bb6598f-cv5cg
 ```
-or check logs using:
+Or check logs using:
 ```bash
 kubectl logs chatqna-tgi-778bb6598f-cv5cg
 ```
@@ -240,7 +240,7 @@ curl http://localhost:8888/v1/chatqna -H "Content-Type: application/json" -d '{
      "messages": "What is OPEA?"
      }'
 ```
->**NOTE:** in the curl command, in addition to our prompt, we are specifying the LLM model to use.
+>**NOTE:** In the curl command, in addition to our prompt, we are specifying the LLM model to use.
 
 Here is the output for your reference:
 
@@ -265,14 +265,14 @@ data: b''
 data: [DONE]
 ```
 
-which is essentially the following sentence:
+Which is essentially the following sentence:
 ```
 OPEA stands for Organization of Public Employees of Alabama. It is a labor union representing public employees in the state of Alabama, working to protect their rights and interests.
 ```
-In the upcoming sections we will see how this answer can be improved with RAG.
+In the upcoming sections, we will see how this answer can be improved with RAG.
 
 ### Dataprep Microservice
-Use the following command to forward traffic from your local machine to the data-prep service running in the Kubernetes cluster, which allows uploading documents to provide a more domain specific context:
+Use the following command to forward traffic from your local machine to the data-prep service running in the Kubernetes cluster, which allows uploading documents to provide a more domain-specific context:
 ```bash
 kubectl port-forward svc/chatqna-data-prep 6007:6007 &
 ```
@@ -280,9 +280,9 @@ Test the service:
 
 If you want to add to or update the default knowledge base, you can use the following
 commands. The dataprep microservice extracts the text from the provided data
-source (multiple data source types are supported such as PDF, Word, URLs), chunks the data, embeds each chunk using the embedding microservice and stores the embedded vectors in the vector database, in our current example a Redis Vector database.
+source (multiple data source types are supported such as PDF, Word, and URLs), chunks the data, embeds each chunk using the embedding microservice, and stores the embedded vectors in the vector database, in our current example a Redis Vector database.
 
-this example leverages the OPEA document for its RAG based content. You can download the [OPEA document](https://opea-project.github.io/latest/_downloads/41c91aec1d47f20ca22350daa8c2cadc/what_is_opea.pdf) and upload it using the UI.
+This example leverages the OPEA document for its RAG-based content. You can download the [OPEA document](https://opea-project.github.io/latest/_downloads/41c91aec1d47f20ca22350daa8c2cadc/what_is_opea.pdf) and upload it using the UI.
 
 
 Local File `what_is_opea.pdf` Upload:
@@ -362,7 +362,7 @@ curl http://localhost:6006/embed \
     -H 'Content-Type: application/json'
 ```
 
-In this example the embedding model used is "BAAI/bge-base-en-v1.5", which has a vector size of 768. So the output of the `curl` command is a embedded vector of
+In this example, the embedding model used is "BAAI/bge-base-en-v1.5", which has a vector size of 768. So the output of the `curl` command is an embedded vector of
 length 768.
 
 
@@ -374,7 +374,7 @@ kubectl port-forward svc/chatqna-retriever-usvc 7000:7000 &
 Test the service:
 
 To consume the retriever microservice, you need to generate a mock embedding
-vector by Python script. The length of embedding vector is determined by the
+vector by Python script. The length of the embedding vector is determined by the
 embedding model. Here we use the
 model EMBEDDING_MODEL_ID="BAAI/bge-base-en-v1.5", which creates a vector of size 768.
 
@@ -389,8 +389,8 @@ curl http://localhost:7000/v1/retrieval \
   -d "{\"text\":\"test\",\"embedding\":${your_embedding}}" \
   -H 'Content-Type: application/json'
 ```
-The output of the retriever microservice comprises of a unique id for the
-request, initial query or the input to the retrieval microservice, a list of top
+The output of the retriever microservice comprises of a unique ID for the
+request, initial query, or the input to the retrieval microservice, a list of top
 `n` retrieved documents relevant to the input query, and top_n where n refers to
 the number of documents to be returned.
 
@@ -408,7 +408,7 @@ Test the service:
 
 The TEI Reranking Service reranks the documents returned by the retrieval
 service. It consumes the query and list of documents and returns the document
-indices based on decreasing order of the similarity score. The document
+indices based on the decreasing order of the similarity score. The document
 corresponding to the returned index with the highest score is the most relevant
 document for the input query.
 ```
@@ -450,7 +450,7 @@ If you get
 curl: (7) Failed to connect to localhost port 8008 after 0 ms: Connection refused
 ```
 
-and the log shows model warm up, please wait for a while and retry.
+And the log shows the model warm-up, please wait for a while and retry.
 
 ```
 2024-06-05T05:45:27.707509646Z 2024-06-05T05:45:27.707361Z  WARN text_generation_router: router/src/main.rs:357: `--revision` is not set
@@ -472,7 +472,7 @@ curl -X POST "http://localhost:6007/v1/dataprep" \
 
 This command updates a knowledge base by submitting a list of HTTP links for processing.
 
-To get list of uploaded files:
+To get a list of uploaded files:
 
 ```
 curl -X POST "http://localhost:6007/v1/dataprep/get_file" \
@@ -523,7 +523,7 @@ chatqna-nginx   NodePort   10.201.220.120   <none>        80:30304/TCP   16h
 ```
 We can see that it is serving at port `30304` based on this configuration via a NodePort.
 
-Next step is to get the `<k8s-node-ip-address>` by running:
+The next step is to get the `<k8s-node-ip-address>` by running:
 ```bash
 kubectl get nodes -o wide
 ```
@@ -543,7 +543,7 @@ Alternatively, You can also choose to use port forwarding as shown previously us
 ```bash
 kubectl port-forward service/chatqna-nginx 8080:80 &
 ```
-and open a browser to access `http://localhost:8080`
+And open a browser to access `http://localhost:8080`
  
  Visit this [link](https://opea-project.github.io/latest/getting-started/README.html#interact-with-chatqna) to see how to interact with the UI. 
 

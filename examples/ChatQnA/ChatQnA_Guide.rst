@@ -224,8 +224,8 @@ Single Node
 Kubernetes
 **********
 
-* Getting Started <k8s_getting_started.md>
-* Deployment with Helm on Xeon Scalable processors <k8s_helm.md>
+* Getting Started <deploy/k8s_getting_started.md>
+* Deployment with Helm on Xeon Scalable processors <deploy/k8s_helm.md>
 
 Cloud Native
 ************
