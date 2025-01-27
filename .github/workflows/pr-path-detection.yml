@@ -34,15 +34,19 @@ jobs:
                 for url_line in $url_lines; do
                   url=$(echo "$url_line"|cut -d '(' -f2 | cut -d ')' -f1|sed 's/\.git$//')
                   path=$(echo "$url_line"|cut -d':' -f1 | cut -d'/' -f2-)
-                  response=$(curl -L -s -o /dev/null -w "%{http_code}" "$url")
-                  if [ "$response" -ne 200 ]; then
-                    echo "**********Validation failed, status code: $response, try again**********"
-                    response_retry=$(curl -s -o /dev/null -w "%{http_code}" "$url")
-                    if [ "$response_retry" -eq 200 ]; then
-                      echo "*****Retry successful*****"
-                    else
-                      urls_line+=("$url_line")
-                      echo "Status code: $response_retry, Link $url validation failed, will retry later."
+                  if [[ "$url" == "https://github.com/opea-project/GenAIExamples/compare/v1.1...v1.2"*  ]]; then
+                    echo "Link "$url" from ${{github.workspace}}/$path need to be verified by a real person."
+                  else
+                    response=$(curl -L -s -o /dev/null -w "%{http_code}" "$url")
+                    if [ "$response" -ne 200 ]; then
+                      echo "**********Validation failed, status code: $response, try again**********"
+                      response_retry=$(curl -s -o /dev/null -w "%{http_code}" "$url")
+                      if [ "$response_retry" -eq 200 ]; then
+                        echo "*****Retry successful*****"
+                      else
+                        urls_line+=("$url_line")
+                        echo "Status code: $response_retry, Link $url validation failed, will retry later."
+                      fi
                     fi
                   fi
                 done
