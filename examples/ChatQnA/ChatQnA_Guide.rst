@@ -224,9 +224,8 @@ Single Node
 Kubernetes
 **********
 
-* Xeon & Gaudi with GMC
-* Xeon & Gaudi without GMC
-* Using Helm Charts
+* Getting Started <k8s_getting_started.md>
+* Deployment with Helm on Xeon Scalable processors <k8s_helm.md>
 
 Cloud Native
 ************
