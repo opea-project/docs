@@ -28,7 +28,7 @@ Before starting this tutorial, you must install and configure the following tool
 You can refer to the YouTube video that demonstrates the steps to create an EKS cluster in the AWS console:
 https://www.youtube.com/watch?v=KxxgF-DAGWc
 
-Alternatively, you can refer to the AWS documentation directly: ["AWS Management Console and AWS CLI"](https://docs.aws.amazon.com/eks/latest/userguide/getting-started-console.html)
+Alternatively, you can refer to the AWS documentation directly: ["AWS Management Console and AWS CLI"](https://docs.aws.amazon.com/eks/latest/userguide/getting-started-console.html) or the AWS workshop to to learn how to create an EKS cluster at https://www.eksworkshop.com/
 
 ## Uploading images to an AWS Private Registry
 

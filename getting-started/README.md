@@ -174,6 +174,7 @@ Set up other specific use-case environment variables:
 ```bash
 cd docker_compose/intel/cpu/xeon/
 source set_env.sh
+export LOGFLAG=""
 ```
 Now we can start the services
 ```bash

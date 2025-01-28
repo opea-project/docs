@@ -24,6 +24,7 @@ jobs:
         run: |
           cd ${{github.workspace}}
           fail="FALSE"
+          retry="FALSE"
           # url_lines=$(grep -Eo '\]\(http[s]?://[^)]+\)' --include='*.md' -r .|grep -Ev 'linkedin')
           merged_commit=$(git log -1 --format='%H')
           changed_files="$(git diff --name-status --diff-filter=ARM ${{ github.event.pull_request.base.sha }} ${merged_commit} | awk '/\.md$/ {print $NF}')"
@@ -34,43 +35,51 @@ jobs:
                 for url_line in $url_lines; do
                   url=$(echo "$url_line"|cut -d '(' -f2 | cut -d ')' -f1|sed 's/\.git$//')
                   path=$(echo "$url_line"|cut -d':' -f1 | cut -d'/' -f2-)
-                  response=$(curl -L -s -o /dev/null -w "%{http_code}" "$url")
-                  if [ "$response" -ne 200 ]; then
-                    echo "**********Validation failed, status code: $response, try again**********"
-                    response_retry=$(curl -s -o /dev/null -w "%{http_code}" "$url")
-                    if [ "$response_retry" -eq 200 ]; then
-                      echo "*****Retry successful*****"
-                    else
-                      urls_line+=("$url_line")
-                      echo "Status code: $response_retry, Link $url validation failed, will retry later."
+                  if [[ "$url" == "https://github.com/opea-project/"*"/compare/"*"..."* ]]; then
+                    echo "Link "$url" from ${{github.workspace}}/$path need to be verified by a real person."
+                    retry="FALSE"
+                  else
+                    response=$(curl -L -s -o /dev/null -w "%{http_code}" "$url")
+                    if [ "$response" -ne 200 ]; then
+                      echo "**********Validation failed, status code: $response, try again**********"
+                      response_retry=$(curl -s -o /dev/null -w "%{http_code}" "$url")
+                      if [ "$response_retry" -eq 200 ]; then
+                        echo "*****Retry successful*****"
+                      else
+                        urls_line+=("$url_line")
+                        echo "Status code: $response_retry, Link $url validation failed, will retry later."
+                        retry="TRUE"
+                      fi
                     fi
                   fi
                 done
               fi
             done
           fi
-          echo "**************Start Retry**************"
-          for link in "${urls_line[@]}"; do
-            url=$(echo "$link"|cut -d '(' -f2 | cut -d ')' -f1|sed 's/\.git$//')
-            path=$(echo "$link"|cut -d':' -f1 | cut -d'/' -f2-)
-            attempt_num=1
-            while [ $attempt_num -le 5 ]; do
-              do_retry=$(curl -s -o /dev/null -w "%{http_code}" "$url")
-              if [ "$do_retry" -eq 200 ]; then
-                  echo "$url Retry successful"
-                  break
-              else
-                  echo "$url Validation failed, retrying..."
-                  ((attempt_num++))
-                  sleep 10
+          if [[ "$retry" == "TRUE" ]]; then
+            echo "**************Start Retry**************"
+            for link in "${urls_line[@]}"; do
+              url=$(echo "$link"|cut -d '(' -f2 | cut -d ')' -f1|sed 's/\.git$//')
+              path=$(echo "$link"|cut -d':' -f1 | cut -d'/' -f2-)
+              attempt_num=1
+              while [ $attempt_num -le 5 ]; do
+                do_retry=$(curl -s -o /dev/null -w "%{http_code}" "$url")
+                if [ "$do_retry" -eq 200 ]; then
+                    echo "$url Retry successful"
+                    break
+                else
+                    echo "$url Validation failed, retrying..."
+                    ((attempt_num++))
+                    sleep 10
+                fi
+              done
+
+              if [ $attempt_num -gt 5 ]; then
+                echo "Invalid link from ${{github.workspace}}/$path: $url status code: $do_retry"
+                fail="TRUE"
               fi
             done
-
-            if [ $attempt_num -gt 5 ]; then
-              echo "Invalid link from ${{github.workspace}}/$path: $url status code: $do_retry"
-              fail="TRUE"
-            fi
-          done
+          fi
           
           if [[ "$fail" == "TRUE" ]]; then
             exit 1
@@ -143,7 +152,7 @@ jobs:
                   fi
                 fi
               else
-                echo "$check_path does not exist $png_line"
+                echo "Invalid reference path from $refer_path, reference path: $(echo $png_line | cut -d ']' -f2)"
                 fail="TRUE"
               fi
             done
