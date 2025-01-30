@@ -45,15 +45,30 @@ To summarize, Below is the flow of contents we will be covering in this tutorial
 
 ## Prerequisites
 
-First step is to clone the GenAIExamples and GenAIComps. GenAIComps are
-fundamental necessary components used to build examples you find in
-GenAIExamples and deploy them as microservices. Also set the `TAG` 
-environment variable with the version. 
+First step is to clone the GenAIExamples and GenAIComps. GenAIComps are 
+fundamental necessary components used to build examples you find in 
+GenAIExamples and deploy them as microservices. Set an environment 
+variable for the desired release version with the **number only** 
+(i.e. 1.0, 1.1, etc) and checkout using the tag with that version. 
 
-```
+```bash
+# Set workspace
+export WORKSPACE=<path>
+
+# Set desired release version - number only
+export RELEASE_VERSION=<insert-release-version>
+
+# GenAIComps
 git clone https://github.com/opea-project/GenAIComps.git
+cd GenAIComps
+git checkout tags/v${RELEASE_VERSION}
+cd ..
+
+# GenAIExamples
 git clone https://github.com/opea-project/GenAIExamples.git
-export TAG=1.1
+cd GenAIExamples
+git checkout tags/v${RELEASE_VERSION}
+cd ..
 ```
 
 The examples utilize model weights from HuggingFace and langchain.
@@ -62,18 +77,18 @@ Setup your [HuggingFace](https://huggingface.co/) account and generate
 [user access token](https://huggingface.co/docs/transformers.js/en/guides/private#step-1-generating-a-user-access-token).
 
 Setup the HuggingFace token
-```
+```bash
 export HUGGINGFACEHUB_API_TOKEN="Your_Huggingface_API_Token"
 ```
 
 The example requires you to set the `host_ip` to deploy the microservices on
 endpoint enabled with ports. Set the host_ip env variable
-```
+```bash
 export host_ip=$(hostname -I | awk '{print $1}')
 ```
 
 Make sure to setup Proxies if you are behind a firewall
-```
+```bash
 export no_proxy=${your_no_proxy},$host_ip
 export http_proxy=${your_http_proxy}
 export https_proxy=${your_http_proxy}
@@ -86,7 +101,7 @@ images with step-by-step process along with sanity check in the end. For
 ChatQnA, the following docker images will be needed: embedding, retriever,
 rerank, LLM and dataprep. Additionally, you will need to build docker images for
 ChatQnA megaservice, and UI (conversational React UI is optional). In total,
-there are 8 required and an optional docker images.
+there are 8 required and 1 optional docker images.
 
 ### Build/Pull Microservice images
 
@@ -103,34 +118,36 @@ be pulled in from dockerhub.
 :::::{tab-item} Build
 :sync: Build
 
-From within the `GenAIComps` folder, checkout the release tag.
-```
-cd GenAIComps
-git checkout tags/v${TAG}
+Follow the steps below to build the docker images from within the `GenAIComps` folder.
+**Note:** For RELEASE_VERSIONS older than 1.0, you will need to add a 'v' in front 
+of ${RELEASE_VERSION} to reference the correct image on dockerhub.
+
+```bash
+cd $WORKSPACE/GenAIComps
 ```
 
 #### Build Dataprep Image
 
 ```bash
-docker build --no-cache -t opea/dataprep-redis:${TAG} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/dataprep/redis/langchain/Dockerfile .
+docker build --no-cache -t opea/dataprep-redis:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/dataprep/redis/langchain/Dockerfile .
 ```
 
 #### Build Embedding Image
 
 ```bash
-docker build --no-cache -t opea/embedding-tei:${TAG} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/embeddings/tei/langchain/Dockerfile .
+docker build --no-cache -t opea/embedding-tei:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/embeddings/tei/langchain/Dockerfile .
 ```
 
 #### Build Retriever Image
 
 ```bash
-docker build --no-cache -t opea/retriever-redis:${TAG} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/retrievers/redis/langchain/Dockerfile .
+docker build --no-cache -t opea/retriever-redis:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/retrievers/redis/langchain/Dockerfile .
 ```
 
 #### Build Rerank Image
 
 ```bash
-docker build --no-cache -t opea/reranking-tei:${TAG} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/reranks/tei/Dockerfile .
+docker build --no-cache -t opea/reranking-tei:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/reranks/tei/Dockerfile .
 ```
 
 #### Build LLM Image
@@ -141,13 +158,13 @@ docker build --no-cache -t opea/reranking-tei:${TAG} --build-arg https_proxy=$ht
 :sync: vllm
 
 Build vLLM docker image with hpu support
-```
+```bash
 bash ./comps/llms/text-generation/vllm/langchain/dependency/build_docker_vllm.sh hpu
 ```
 
 Build vLLM Microservice image
-```
-docker build --no-cache -t opea/llm-vllm:${TAG} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/llms/text-generation/vllm/langchain/Dockerfile .
+```bash
+docker build --no-cache -t opea/llm-vllm:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/llms/text-generation/vllm/langchain/Dockerfile .
 cd ..
 ```
 :::
@@ -155,7 +172,7 @@ cd ..
 :sync: TGI
 
 ```bash
-docker build --no-cache -t opea/llm-tgi:${TAG} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/llms/text-generation/tgi/Dockerfile .
+docker build --no-cache -t opea/llm-tgi:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/llms/text-generation/tgi/Dockerfile .
 ```
 :::
 ::::
@@ -167,9 +184,10 @@ Since a TEI Gaudi Docker image hasn't been published, we'll need to build it fro
 ```bash
 git clone https://github.com/huggingface/tei-gaudi
 cd tei-gaudi/
-docker build --no-cache -f Dockerfile-hpu -t opea/tei-gaudi:${TAG} .
+docker build --no-cache -f Dockerfile-hpu -t opea/tei-gaudi:${RELEASE_VERSION} .
 cd ..
 ```
+
 
 ### Build Mega Service images
 
@@ -183,16 +201,12 @@ megaservice to suit the needs.
 
 Build the megaservice image for this use case
 
-```
-cd ..
-cd GenAIExamples
-git checkout tags/v1.1
-cd ChatQnA
+```bash
+cd $WORKSPACE/GenAIExamples/ChatQnA
 ```
 
 ```bash
-docker build --no-cache -t opea/chatqna:${TAG} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f Dockerfile .
-cd ../..
+docker build --no-cache -t opea/chatqna:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f Dockerfile .
 ```
 
 ### Build Other Service images
@@ -200,9 +214,7 @@ cd ../..
 If you want to enable guardrails microservice in the pipeline, please use the below command instead:
 
 ```bash
-cd GenAIExamples/ChatQnA/
-docker build --no-cache -t opea/chatqna-guardrails:${TAG} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f Dockerfile.guardrails .
-cd ../..
+docker build --no-cache -t opea/chatqna-guardrails:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f Dockerfile.guardrails .
 ```
 
 ### Build the UI Image
@@ -212,51 +224,48 @@ As mentioned, you can build 2 modes of UI
 *Basic UI*
 
 ```bash
-cd GenAIExamples/ChatQnA/ui/
-docker build --no-cache -t opea/chatqna-ui:${TAG} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f ./docker/Dockerfile .
-cd ../../..
+cd $WORKSPACE/GenAIExamples/ChatQnA/ui/
+docker build --no-cache -t opea/chatqna-ui:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f ./docker/Dockerfile .
 ```
 
 *Conversation UI*
 If you want a conversational experience with chatqna megaservice.
 
 ```bash
-cd GenAIExamples/ChatQnA/ui/
-docker build --no-cache -t opea/chatqna-conversation-ui:${TAG} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f ./docker/Dockerfile.react .
-cd ../../..
+cd $WORKSPACE/GenAIExamples/ChatQnA/ui/
+docker build --no-cache -t opea/chatqna-conversation-ui:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f ./docker/Dockerfile.react .
 ```
 
 ### Sanity Check
-Check if you have the below set of docker images before moving on to the next step. The tags are 
-based on what you set the environment variable `TAG` to. 
+Check if you have the below set of docker images before moving on to the next step:
 
 ::::{tab-set}
 :::{tab-item} vllm
 :sync: vllm
 
-* opea/dataprep-redis:${TAG}
-* opea/embedding-tei:${TAG}
-* opea/retriever-redis:${TAG}
-* opea/reranking-tei:${TAG}
-* opea/tei-gaudi:${TAG}
-* opea/chatqna:${TAG} or opea/chatqna-guardrails:${TAG}
-* opea/chatqna:${TAG}
-* opea/chatqna-ui:${TAG}
-* opea/vllm:${TAG}
-* opea/llm-vllm:${TAG}
+* opea/dataprep-redis:${RELEASE_VERSION}
+* opea/embedding-tei:${RELEASE_VERSION}
+* opea/retriever-redis:${RELEASE_VERSION}
+* opea/reranking-tei:${RELEASE_VERSION}
+* opea/tei-gaudi:${RELEASE_VERSION}
+* opea/chatqna:${RELEASE_VERSION} or opea/chatqna-guardrails:${RELEASE_VERSION}
+* opea/chatqna:${RELEASE_VERSION}
+* opea/chatqna-ui:${RELEASE_VERSION}
+* opea/vllm:${RELEASE_VERSION}
+* opea/llm-vllm:${RELEASE_VERSION}
 
 :::
 :::{tab-item} TGI
 :sync: TGI
 
-* opea/dataprep-redis:${TAG}
-* opea/embedding-tei:${TAG}
-* opea/retriever-redis:${TAG}
-* opea/reranking-tei:${TAG}
-* opea/tei-gaudi:${TAG}
-* opea/chatqna:${TAG} or opea/chatqna-guardrails:${TAG}
-* opea/chatqna-ui:${TAG}
-* opea/llm-tgi:${TAG}
+* opea/dataprep-redis:${RELEASE_VERSION}
+* opea/embedding-tei:${RELEASE_VERSION}
+* opea/retriever-redis:${RELEASE_VERSION}
+* opea/reranking-tei:${RELEASE_VERSION}
+* opea/tei-gaudi:${RELEASE_VERSION}
+* opea/chatqna:${RELEASE_VERSION} or opea/chatqna-guardrails:${RELEASE_VERSION}
+* opea/chatqna-ui:${RELEASE_VERSION}
+* opea/llm-tgi:${RELEASE_VERSION}
 :::
 ::::
 
@@ -304,8 +313,8 @@ environment variable or `compose.yaml` file.
 
 Set the necessary environment variables to setup the use case case
 
-```
-cd GenAIExamples/ChatQnA/docker_compose/intel/hpu/gaudi/
+```bash
+cd $WORKSPACE/GenAIExamples/ChatQnA/docker_compose/intel/hpu/gaudi
 source ./set_env.sh
 ```
 
@@ -319,16 +328,16 @@ above mentioned services as containers.
 :::{tab-item} vllm
 :sync: vllm
 
-```
-cd GenAIExamples/ChatQnA/docker_compose/intel/hpu/gaudi
+```bash
+cd $WORKSPACE/GenAIExamples/ChatQnA/docker_compose/intel/hpu/gaudi
 docker compose -f compose_vllm.yaml up -d
 ```
 :::
 :::{tab-item} TGI
 :sync: TGI
 
-```
-cd GenAIExamples/ChatQnA/docker_compose/intel/hpu/gaudi
+```bash
+cd $WORKSPACE/GenAIExamples/ChatQnA/docker_compose/intel/hpu/gaudi
 ```
 
 Follow ONE of the methods below.
@@ -400,7 +409,6 @@ Check if all the containers  launched via docker compose has started
 For example, the ChatQnA example starts 11 docker (services), check these docker
 containers are all running, i.e, all the containers  `STATUS`  are  `Up`
 To do a quick sanity check, try `docker ps -a` to see if all the containers are running.
-Note that `TAG` will be the value you set earlier. 
 
 ::::{tab-set}
 
@@ -408,15 +416,15 @@ Note that `TAG` will be the value you set earlier.
 :sync: vllm
 ```bash
 CONTAINER ID   IMAGE                                                   COMMAND                  CREATED              STATUS              PORTS                                                                                  NAMES
-42c8d5ec67e9   opea/chatqna-ui:${TAG}                                  "docker-entrypoint.s…"   About a minute ago   Up About a minute   0.0.0.0:5173->5173/tcp, :::5173->5173/tcp                                              chatqna-gaudi-ui-server
-7f7037a75f8b   opea/chatqna:${TAG}                                     "python chatqna.py"      About a minute ago   Up About a minute   0.0.0.0:8888->8888/tcp, :::8888->8888/tcp                                              chatqna-gaudi-backend-server
-4049c181da93   opea/embedding-tei:${TAG}                               "python embedding_te…"   About a minute ago   Up About a minute   0.0.0.0:6000->6000/tcp, :::6000->6000/tcp                                              embedding-tei-server
-171816f0a789   opea/dataprep-redis:${TAG}                              "python prepare_doc_…"   About a minute ago   Up About a minute   0.0.0.0:6007->6007/tcp, :::6007->6007/tcp                                              dataprep-redis-server
-10ee6dec7d37   opea/llm-vllm:${TAG}                                    "bash entrypoint.sh"     About a minute ago   Up About a minute   0.0.0.0:9000->9000/tcp, :::9000->9000/tcp                                              llm-vllm-gaudi-server
-ce4e7802a371   opea/retriever-redis:${TAG}                             "python retriever_re…"   About a minute ago   Up About a minute   0.0.0.0:7000->7000/tcp, :::7000->7000/tcp                                              retriever-redis-server
-be6cd2d0ea38   opea/reranking-tei:${TAG}                               "python reranking_te…"   About a minute ago   Up About a minute   0.0.0.0:8000->8000/tcp, :::8000->8000/tcp                                              reranking-tei-gaudi-server
-cc45ff032e8c   opea/tei-gaudi:${TAG}                                   "text-embeddings-rou…"   About a minute ago   Up About a minute   0.0.0.0:8090->80/tcp, :::8090->80/tcp                                                  tei-embedding-gaudi-server
-4969ec3aea02   opea/vllm-gaudi:${TAG}                                  "/bin/bash -c 'expor…"   About a minute ago   Up About a minute   0.0.0.0:8007->80/tcp, :::8007->80/tcp                                                  vllm-gaudi-server
+42c8d5ec67e9   opea/chatqna-ui:${RELEASE_VERSION}                                  "docker-entrypoint.s…"   About a minute ago   Up About a minute   0.0.0.0:5173->5173/tcp, :::5173->5173/tcp                                              chatqna-gaudi-ui-server
+7f7037a75f8b   opea/chatqna:${RELEASE_VERSION}                                     "python chatqna.py"      About a minute ago   Up About a minute   0.0.0.0:8888->8888/tcp, :::8888->8888/tcp                                              chatqna-gaudi-backend-server
+4049c181da93   opea/embedding-tei:${RELEASE_VERSION}                               "python embedding_te…"   About a minute ago   Up About a minute   0.0.0.0:6000->6000/tcp, :::6000->6000/tcp                                              embedding-tei-server
+171816f0a789   opea/dataprep-redis:${RELEASE_VERSION}                              "python prepare_doc_…"   About a minute ago   Up About a minute   0.0.0.0:6007->6007/tcp, :::6007->6007/tcp                                              dataprep-redis-server
+10ee6dec7d37   opea/llm-vllm:${RELEASE_VERSION}                                    "bash entrypoint.sh"     About a minute ago   Up About a minute   0.0.0.0:9000->9000/tcp, :::9000->9000/tcp                                              llm-vllm-gaudi-server
+ce4e7802a371   opea/retriever-redis:${RELEASE_VERSION}                             "python retriever_re…"   About a minute ago   Up About a minute   0.0.0.0:7000->7000/tcp, :::7000->7000/tcp                                              retriever-redis-server
+be6cd2d0ea38   opea/reranking-tei:${RELEASE_VERSION}                               "python reranking_te…"   About a minute ago   Up About a minute   0.0.0.0:8000->8000/tcp, :::8000->8000/tcp                                              reranking-tei-gaudi-server
+cc45ff032e8c   opea/tei-gaudi:${RELEASE_VERSION}                                   "text-embeddings-rou…"   About a minute ago   Up About a minute   0.0.0.0:8090->80/tcp, :::8090->80/tcp                                                  tei-embedding-gaudi-server
+4969ec3aea02   opea/vllm-gaudi:${RELEASE_VERSION}                                  "/bin/bash -c 'expor…"   About a minute ago   Up About a minute   0.0.0.0:8007->80/tcp, :::8007->80/tcp                                                  vllm-gaudi-server
 0657cb66df78   redis/redis-stack:7.2.0-v9                              "/entrypoint.sh"         About a minute ago   Up About a minute   0.0.0.0:6379->6379/tcp, :::6379->6379/tcp, 0.0.0.0:8001->8001/tcp, :::8001->8001/tcp   redis-vector-db
 684d3e9d204a   ghcr.io/huggingface/text-embeddings-inference:cpu-1.2   "text-embeddings-rou…"   About a minute ago   Up About a minute   0.0.0.0:8808->80/tcp, :::8808->80/tcp                                                  tei-reranking-gaudi-server
 ```
@@ -426,15 +434,15 @@ cc45ff032e8c   opea/tei-gaudi:${TAG}                                   "text-emb
 :sync: TGI
 ```bash
 CONTAINER ID   IMAGE                                                   COMMAND                  CREATED         STATUS         PORTS                                                                                  NAMES
-0355d705484a   opea/chatqna-ui:${TAG}                                  "docker-entrypoint.s…"   2 minutes ago   Up 2 minutes   0.0.0.0:5173->5173/tcp, :::5173->5173/tcp                                              chatqna-gaudi-ui-server
-29a7a43abcef   opea/chatqna:${TAG}                                     "python chatqna.py"      2 minutes ago   Up 2 minutes   0.0.0.0:8888->8888/tcp, :::8888->8888/tcp                                              chatqna-gaudi-backend-server
-1eb6f5ad6f85   opea/llm-tgi:${TAG}                                     "bash entrypoint.sh"     2 minutes ago   Up 2 minutes   0.0.0.0:9000->9000/tcp, :::9000->9000/tcp                                              llm-tgi-gaudi-server
-ad27729caf68   opea/reranking-tei:${TAG}                               "python reranking_te…"   2 minutes ago   Up 2 minutes   0.0.0.0:8000->8000/tcp, :::8000->8000/tcp                                              reranking-tei-gaudi-server
-84f02cf2a904   opea/dataprep-redis:${TAG}                              "python prepare_doc_…"   2 minutes ago   Up 2 minutes   0.0.0.0:6007->6007/tcp, :::6007->6007/tcp                                              dataprep-redis-server
-367459f6e65b   opea/embedding-tei:${TAG}                               "python embedding_te…"   2 minutes ago   Up 2 minutes   0.0.0.0:6000->6000/tcp, :::6000->6000/tcp                                              embedding-tei-server
-8c78cde9f588   opea/retriever-redis:${TAG}                             "python retriever_re…"   2 minutes ago   Up 2 minutes   0.0.0.0:7000->7000/tcp, :::7000->7000/tcp                                              retriever-redis-server
+0355d705484a   opea/chatqna-ui:${RELEASE_VERSION}                                  "docker-entrypoint.s…"   2 minutes ago   Up 2 minutes   0.0.0.0:5173->5173/tcp, :::5173->5173/tcp                                              chatqna-gaudi-ui-server
+29a7a43abcef   opea/chatqna:${RELEASE_VERSION}                                     "python chatqna.py"      2 minutes ago   Up 2 minutes   0.0.0.0:8888->8888/tcp, :::8888->8888/tcp                                              chatqna-gaudi-backend-server
+1eb6f5ad6f85   opea/llm-tgi:${RELEASE_VERSION}                                     "bash entrypoint.sh"     2 minutes ago   Up 2 minutes   0.0.0.0:9000->9000/tcp, :::9000->9000/tcp                                              llm-tgi-gaudi-server
+ad27729caf68   opea/reranking-tei:${RELEASE_VERSION}                               "python reranking_te…"   2 minutes ago   Up 2 minutes   0.0.0.0:8000->8000/tcp, :::8000->8000/tcp                                              reranking-tei-gaudi-server
+84f02cf2a904   opea/dataprep-redis:${RELEASE_VERSION}                              "python prepare_doc_…"   2 minutes ago   Up 2 minutes   0.0.0.0:6007->6007/tcp, :::6007->6007/tcp                                              dataprep-redis-server
+367459f6e65b   opea/embedding-tei:${RELEASE_VERSION}                               "python embedding_te…"   2 minutes ago   Up 2 minutes   0.0.0.0:6000->6000/tcp, :::6000->6000/tcp                                              embedding-tei-server
+8c78cde9f588   opea/retriever-redis:${RELEASE_VERSION}                             "python retriever_re…"   2 minutes ago   Up 2 minutes   0.0.0.0:7000->7000/tcp, :::7000->7000/tcp                                              retriever-redis-server
 fa80772de92c   ghcr.io/huggingface/tgi-gaudi:2.0.1                     "text-generation-lau…"   2 minutes ago   Up 2 minutes   0.0.0.0:8005->80/tcp, :::8005->80/tcp                                                  tgi-gaudi-server
-581687a2cc1a   opea/tei-gaudi:${TAG}                                   "text-embeddings-rou…"   2 minutes ago   Up 2 minutes   0.0.0.0:8090->80/tcp, :::8090->80/tcp                                                  tei-embedding-gaudi-server
+581687a2cc1a   opea/tei-gaudi:${RELEASE_VERSION}                                   "text-embeddings-rou…"   2 minutes ago   Up 2 minutes   0.0.0.0:8090->80/tcp, :::8090->80/tcp                                                  tei-embedding-gaudi-server
 c59178629901   redis/redis-stack:7.2.0-v9                              "/entrypoint.sh"         2 minutes ago   Up 2 minutes   0.0.0.0:6379->6379/tcp, :::6379->6379/tcp, 0.0.0.0:8001->8001/tcp, :::8001->8001/tcp   redis-vector-db
 5c3a78144498   ghcr.io/huggingface/text-embeddings-inference:cpu-1.5   "text-embeddings-rou…"   2 minutes ago   Up 2 minutes   0.0.0.0:8808->80/tcp, :::8808->80/tcp                                                  tei-reranking-gaudi-server
 ```
@@ -804,32 +812,32 @@ curl http://${host_ip}:9090/v1/guardrails\
 To access the frontend, open the following URL in your browser: http://{host_ip}:5173. By default, the UI runs on port 5173 internally. If you prefer to use a different host port to access the frontend, you can modify the port mapping in the compose.yaml file as shown below:
 ```bash
   chaqna-gaudi-ui-server:
-    image: opea/chatqna-ui:${TAG}
+    image: opea/chatqna-ui:${RELEASE_VERSION}
     ...
     ports:
-      - "80:5173"
+      - "5173:5173"
 ```
 
 ### Conversational UI
-To access the Conversational UI (react based) frontend, modify the UI service in the compose.yaml file. Replace chaqna-gaudi-ui-server service with the chatqna-gaudi-conversation-ui-server service as per the config below:
+To access the Conversational UI (react based) frontend, modify the UI service in the `compose.yaml` file. Replace `chaqna-gaudi-ui-server` service with the `chatqna-gaudi-conversation-ui-server` service as per the config below:
 ```bash
 chaqna-gaudi-conversation-ui-server:
-  image: opea/chatqna-conversation-ui:${TAG}
+  image: opea/chatqna-conversation-ui:${RELEASE_VERSION}
   container_name: chatqna-gaudi-conversation-ui-server
   environment:
     - APP_BACKEND_SERVICE_ENDPOINT=${BACKEND_SERVICE_ENDPOINT}
     - APP_DATA_PREP_SERVICE_URL=${DATAPREP_SERVICE_ENDPOINT}
   ports:
-    - "5174:80"
+    - "5174:5174"
   depends_on:
     - chaqna-gaudi-backend-server
   ipc: host
   restart: always
 ```
-Once the services are up, open the following URL in your browser: http://{host_ip}:5174. By default, the UI runs on port 80 internally. If you prefer to use a different host port to access the frontend, you can modify the port mapping in the compose.yaml file as shown below:
+Once the services are up, open the following URL in your browser: http://{host_ip}:5174. By default, the UI runs on port 80 internally. If you prefer to use a different host port to access the frontend, you can modify the port mapping in the `compose.yaml` file as shown below:
 ```
   chaqna-gaudi-conversation-ui-server:
-    image: opea/chatqna-conversation-ui:${TAG}
+    image: opea/chatqna-conversation-ui:${RELEASE_VERSION}
     ...
     ports:
       - "80:80"
@@ -863,7 +871,7 @@ View the docker input parameters in  `./ChatQnA/docker_compose/intel/hpu/gaudi/c
 
 ```yaml
   vllm-service:
-    image: ${REGISTRY:-opea}/vllm-gaudi:${TAG:-latest}
+    image: ${REGISTRY:-opea}/vllm-gaudi:${RELEASE_VERSION:-latest}
     container_name: vllm-gaudi-server
     ports:
       - "8007:80"
