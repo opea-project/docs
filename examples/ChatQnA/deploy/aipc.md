@@ -6,6 +6,7 @@ slice-n-dice ways to enable RAG with vectordb and LLM models, but here we will
 be covering one option of doing it for convenience : we will be showcasing  how
 to build an e2e chatQnA with Redis VectorDB and the llama-3 model,
 deployed on the client CPU.  
+
 ## Overview
 
 There are several ways to setup a ChatQnA use case. Here in this tutorial, we
@@ -23,29 +24,34 @@ the llama-3 model on Intel Client PCs. We will go through
 how to setup docker container to start microservices and megaservice. 
 The solution will then utilize a sample Nike dataset which is in PDF format. Users 
 can then ask a question about Nike and get a chat-like response by default for 
-up to 1024 tokens. The solution is deployed with a UI. There are 2 modes you can use:
-1. Basic UI
-2. Conversational UI
-
-Conversational UI is optional, but a feature supported in this example if you are interested to use.
+up to 1024 tokens. The solution is deployed with a UI.
 
 ## Prerequisites 
 
 First step is to clone the GenAIExamples and GenAIComps. GenAIComps are 
 fundamental necessary components used to build examples you find in 
-GenAIExamples and deploy them as microservices.
+GenAIExamples and deploy them as microservices. Set an environment 
+variable for the desired release version with the **number only** 
+(i.e. 1.0, 1.1, etc) and checkout using the tag with that version. 
 
-```
-mkdir ~/OPEA -p
-cd ~/OPEA
+```bash
+# Set workspace
+export WORKSPACE=<path>
+
+# Set desired release version - number only
+export RELEASE_VERSION=<insert-release-version>
+
+# GenAIComps
 git clone https://github.com/opea-project/GenAIComps.git
-git clone https://github.com/opea-project/GenAIExamples.git
-```
+cd GenAIComps
+git checkout tags/v${RELEASE_VERSION}
+cd ..
 
-Checkout the release tag
-```
-cd ~/OPEA/GenAIComps
-git checkout tags/v1.0
+# GenAIExamples
+git clone https://github.com/opea-project/GenAIExamples.git
+cd GenAIExamples
+git checkout tags/v${RELEASE_VERSION}
+cd ..
 ```
 
 Setup your [HuggingFace](https://huggingface.co/) account and generate
@@ -168,46 +174,63 @@ The outputs are similar to these:
 
 ## Prepare (Building / Pulling) Docker images
 
-This step will involve building/pulling ( maybe in future) relevant docker
+This step will involve building/pulling relevant docker
 images with step-by-step process along with sanity check in the end. For
 ChatQnA, the following docker images will be needed: embedding, retriever,
 rerank, LLM and dataprep. Additionally, you will need to build docker images for
-ChatQnA megaservice, and UI (conversational React UI is optional). In total,
-there are 8 required and an optional docker images.
+ChatQnA megaservice, and UI. In total, there are 7 required docker images.
 
 The docker images needed to setup the example needs to be build local, however
 the images will be pushed to docker hub soon by Intel.
 
 ### Build/Pull Microservice images
 
-From within the `GenAIComps` folder
+::::::{tab-set}
+
+:::::{tab-item} Pull
+:sync: Pull
+
+If you decide to pull the docker containers and not build them locally,
+you can proceed to the next step where all the necessary containers will
+be pulled in from dockerhub.
+
+:::::
+:::::{tab-item} Build
+:sync: Build
+
+Follow the steps below to build the docker images from within the `GenAIComps` folder.
+**Note:** For RELEASE_VERSIONS older than 1.0, you will need to add a 'v' in front 
+of ${RELEASE_VERSION} to reference the correct image on dockerhub.
+
+```
+cd $WORKSPACE/GenAIComps
+```
 
 #### Build Dataprep Image
 
 ```
-cd ~/OPEA/GenAIComps
-docker build --no-cache -t opea/dataprep-redis:latest --build-arg https_proxy=$https_proxy \
+docker build --no-cache -t opea/dataprep-redis:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy \
   --build-arg http_proxy=$http_proxy -f comps/dataprep/redis/langchain/Dockerfile .
 ```
 
 #### Build Embedding Image
 
 ```
-docker build --no-cache -t opea/embedding-tei:latest --build-arg https_proxy=$https_proxy \
+docker build --no-cache -t opea/embedding-tei:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy \
   --build-arg http_proxy=$http_proxy -f comps/embeddings/tei/langchain/Dockerfile .
 ```
 
 #### Build Retriever Image
 
 ```
- docker build --no-cache -t opea/retriever-redis:latest --build-arg https_proxy=$https_proxy \
+ docker build --no-cache -t opea/retriever-redis:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy \
   --build-arg http_proxy=$http_proxy -f comps/retrievers/redis/langchain/Dockerfile .
 ```
 
 #### Build Rerank Image
 
 ```
-docker build --no-cache -t opea/reranking-tei:latest --build-arg https_proxy=$https_proxy \
+docker build --no-cache -t opea/reranking-tei:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy \
   --build-arg http_proxy=$http_proxy -f comps/reranks/tei/Dockerfile .
 ```
 
@@ -222,7 +245,7 @@ docker build --no-cache -t opea/reranking-tei:latest --build-arg https_proxy=$ht
 Next, we'll build the Ollama microservice docker. This will set the entry point
 needed for Ollama to suit the ChatQnA examples
 ```
-docker build --no-cache -t opea/llm-ollama:latest --build-arg https_proxy=$https_proxy \
+docker build --no-cache -t opea/llm-ollama:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy \
    --build-arg http_proxy=$http_proxy -f comps/llms/text-generation/ollama/langchain/Dockerfile .
 ```
 
@@ -243,12 +266,11 @@ megaservice to suit the needs.
 Build the megaservice image for this use case
 
 ```
-cd ~/OPEA/GenAIExamples/ChatQnA
-git checkout tags/v1.0
+cd $WORKSPACE/GenAIExamples/ChatQnA
 ```
 
 ```
-docker build --no-cache -t opea/chatqna:latest --build-arg https_proxy=$https_proxy \
+docker build --no-cache -t opea/chatqna:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy \
   --build-arg http_proxy=$http_proxy -f Dockerfile .
 ```
 
@@ -256,23 +278,12 @@ docker build --no-cache -t opea/chatqna:latest --build-arg https_proxy=$https_pr
 
 #### Build the UI Image
 
-As mentioned, you can build 2 modes of UI
-
-*Basic UI*
+*UI*
 
 ```
-cd ~/OPEA/GenAIExamples/ChatQnA/ui/
-docker build --no-cache -t opea/chatqna-ui:latest --build-arg https_proxy=$https_proxy \
+cd $WORKSPACE/GenAIExamples/ChatQnA/ui/
+docker build --no-cache -t opea/chatqna-ui:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy \
   --build-arg http_proxy=$http_proxy -f ./docker/Dockerfile .
-```
-
-*Conversation UI*
-If you want a conversational experience with chatqna megaservice.
-
-```
-cd ~/OPEA/GenAIExamples/ChatQnA/ui/
-docker build --no-cache -t opea/chatqna-conversation-ui:latest --build-arg https_proxy=$https_proxy \
-  --build-arg http_proxy=$http_proxy -f ./docker/Dockerfile.react .
 ```
 
 ### Sanity Check
@@ -282,18 +293,19 @@ Check if you have the below set of docker images, before moving on to the next s
 :::{tab-item} Ollama
 :sync: Ollama
 
-* opea/dataprep-redis:latest
-* opea/embedding-tei:latest
-* opea/retriever-redis:latest
-* opea/reranking-tei:latest
-* opea/llm-ollama:latest
-* opea/chatqna:latest
-* opea/chatqna-ui:latest
+* opea/dataprep-redis:${RELEASE_VERSION}
+* opea/embedding-tei:${RELEASE_VERSION}
+* opea/retriever-redis:${RELEASE_VERSION}
+* opea/reranking-tei:${RELEASE_VERSION}
+* opea/llm-ollama:${RELEASE_VERSION}
+* opea/chatqna:${RELEASE_VERSION}
+* opea/chatqna-ui:${RELEASE_VERSION}
 :::
 
 ::::
 
-
+:::::
+::::::
 
 
 ## Use Case Setup
@@ -322,48 +334,10 @@ environment variable or `compose.yaml` file.
 
 Set the necessary environment variables to setup the use case case
 
-> Note: Replace `host_ip` with your external IP address. Do **NOT** use localhost
-> for the below set of environment variables
-
-### Dataprep
-
-    export DATAPREP_SERVICE_ENDPOINT="http://${host_ip}:6007/v1/dataprep"
-    export DATAPREP_GET_FILE_ENDPOINT="http://${host_ip}:6007/v1/dataprep/get_file"
-    export DATAPREP_DELETE_FILE_ENDPOINT="http://${host_ip}:6007/v1/dataprep/delete_file"
-
-### VectorDB
-
-    export REDIS_URL="redis://${host_ip}:6379"
-    export INDEX_NAME="rag-redis"
-
-### Embedding Service
-
-    export EMBEDDING_MODEL_ID="BAAI/bge-base-en-v1.5"
-    export EMBEDDING_SERVICE_HOST_IP=${host_ip}
-    export RETRIEVER_SERVICE_HOST_IP=${host_ip}
-    export TEI_EMBEDDING_ENDPOINT="http://${host_ip}:6006"
-
-### Reranking Service
-
-    export RERANK_MODEL_ID="BAAI/bge-reranker-base"
-    export TEI_RERANKING_ENDPOINT="http://${host_ip}:8808"
-    export RERANK_SERVICE_HOST_IP=${host_ip}
-
-### LLM Service
-::::{tab-set}
-:::{tab-item} Ollama
-:sync: Ollama
-
-    export LLM_SERVICE_HOST_IP=${host_ip}
-    export OLLAMA_ENDPOINT=http://${host_ip}:11434
-    export OLLAMA_MODEL="llama3"
-:::
-::::
-
-### Megaservice
-
-    export MEGA_SERVICE_HOST_IP=${host_ip}
-    export BACKEND_SERVICE_ENDPOINT="http://${host_ip}:8888/v1/chatqna"
+```
+cd $WORKSPACE/GenAIExamples/ChatQnA/docker_compose/intel/cpu/aipc
+source ./set_env.sh
+```
 
 ## Deploy the use case
 
@@ -376,7 +350,7 @@ above mentioned services as containers.
 :sync: Ollama
 
 ```
-cd GenAIExamples/ChatQnA/docker_compose/intel/cpu/aipc
+cd $WORKSPACE/GenAIExamples/ChatQnA/docker_compose/intel/cpu/aipc
 docker compose -f compose.yaml up -d
 ```
 :::
@@ -412,7 +386,7 @@ Check if all the containers  launched via docker compose has started
 
 For example, the ChatQnA example starts 11 docker (services), check these docker
 containers are all running, i.e, all the containers  `STATUS`  are  `Up`
-To do a quick sanity check, try `docker ps -a` to see if all the containers are running
+To do a quick sanity check, try `docker ps -a` to see if all the containers are running.
 
 ::::{tab-set}
 
@@ -421,12 +395,12 @@ To do a quick sanity check, try `docker ps -a` to see if all the containers are 
 
 ```
 CONTAINER ID   IMAGE                                                   COMMAND                  CREATED          STATUS                      PORTS                                                                                  NAMES
-5db065a9fdf9   opea/chatqna-ui:latest                                  "docker-entrypoint.s…"   29 seconds ago   Up 25 seconds               0.0.0.0:5173->5173/tcp, :::5173->5173/tcp                                              chatqna-aipc-ui-server
-6fa87927d00c   opea/chatqna:latest                                     "python chatqna.py"      29 seconds ago   Up 25 seconds               0.0.0.0:8888->8888/tcp, :::8888->8888/tcp                                              chatqna-aipc-backend-server
-bdc93be9ce0c   opea/retriever-redis:latest                             "python retriever_re…"   29 seconds ago   Up 3 seconds                0.0.0.0:7000->7000/tcp, :::7000->7000/tcp                                              retriever-redis-server
-add761b504bc   opea/reranking-tei:latest                               "python reranking_te…"   29 seconds ago   Up 26 seconds               0.0.0.0:8000->8000/tcp, :::8000->8000/tcp                                              reranking-tei-aipc-server
-d6b540a423ac   opea/dataprep-redis:latest                              "python prepare_doc_…"   29 seconds ago   Up 26 seconds               0.0.0.0:6007->6007/tcp, :::6007->6007/tcp                                              dataprep-redis-server
-6662d857a154   opea/embedding-tei:latest                               "python embedding_te…"   29 seconds ago   Up 26 seconds               0.0.0.0:6000->6000/tcp, :::6000->6000/tcp                                              embedding-tei-server
+5db065a9fdf9   opea/chatqna-ui:${RELEASE_VERSION}                                  "docker-entrypoint.s…"   29 seconds ago   Up 25 seconds               0.0.0.0:5173->5173/tcp, :::5173->5173/tcp                                              chatqna-aipc-ui-server
+6fa87927d00c   opea/chatqna:${RELEASE_VERSION}                                     "python chatqna.py"      29 seconds ago   Up 25 seconds               0.0.0.0:8888->8888/tcp, :::8888->8888/tcp                                              chatqna-aipc-backend-server
+bdc93be9ce0c   opea/retriever-redis:${RELEASE_VERSION}                             "python retriever_re…"   29 seconds ago   Up 3 seconds                0.0.0.0:7000->7000/tcp, :::7000->7000/tcp                                              retriever-redis-server
+add761b504bc   opea/reranking-tei:${RELEASE_VERSION}                               "python reranking_te…"   29 seconds ago   Up 26 seconds               0.0.0.0:8000->8000/tcp, :::8000->8000/tcp                                              reranking-tei-aipc-server
+d6b540a423ac   opea/dataprep-redis:${RELEASE_VERSION}                              "python prepare_doc_…"   29 seconds ago   Up 26 seconds               0.0.0.0:6007->6007/tcp, :::6007->6007/tcp                                              dataprep-redis-server
+6662d857a154   opea/embedding-tei:${RELEASE_VERSION}                               "python embedding_te…"   29 seconds ago   Up 26 seconds               0.0.0.0:6000->6000/tcp, :::6000->6000/tcp                                              embedding-tei-server
 8b226edcd9db   ghcr.io/huggingface/text-embeddings-inference:cpu-1.5   "text-embeddings-rou…"   29 seconds ago   Up 27 seconds               0.0.0.0:8808->80/tcp, :::8808->80/tcp                                                  tei-reranking-server
 e1fc81b1d542   redis/redis-stack:7.2.0-v9                              "/entrypoint.sh"         29 seconds ago   Up 27 seconds               0.0.0.0:6379->6379/tcp, :::6379->6379/tcp, 0.0.0.0:8001->8001/tcp, :::8001->8001/tcp   redis-vector-db
 051e0d68e263   ghcr.io/huggingface/text-embeddings-inference:cpu-1.5   "text-embeddings-rou…"   29 seconds ago   Up 27 seconds               0.0.0.0:6006->80/tcp, :::6006->80/tcp                                                  tei-embedding-server
@@ -768,43 +742,13 @@ docker compose -f ./docker_compose/intel/cpu/apic/compose.yaml logs
 
 ## Launch UI
 
-### Basic UI
-
-To access the frontend, open the following URL in your browser: http://{host_ip}:5173. By default, the UI runs on port 5173 internally. If you prefer to use a different host port to access the frontend, you can modify the port mapping in the compose.yaml file as shown below:
+To access the frontend, open the following URL in your browser: http://{host_ip}:5173. By default, the UI runs on port 5173 internally. If you prefer to use a different host port to access the frontend, you can modify the port mapping in the `compose.yaml` file as shown below:
 ```
   chaqna-aipc-ui-server:
-    image: opea/chatqna-ui:latest
+    image: opea/chatqna-ui${TAG:-latest}
     ...
     ports:
-      - "80:5173"
-```
-
-### Conversational UI
-
-To access the Conversational UI (react based) frontend, modify the UI service in the compose.yaml file. Replace chaqna-aipc-ui-server service with the chatqna-aipc-conversation-ui-server service as per the config below:
-```
-chaqna-aipc-conversation-ui-server:
-  image: opea/chatqna-conversation-ui:latest
-  container_name: chatqna-aipc-conversation-ui-server
-  environment:
-    - APP_BACKEND_SERVICE_ENDPOINT=${BACKEND_SERVICE_ENDPOINT}
-    - APP_DATA_PREP_SERVICE_URL=${DATAPREP_SERVICE_ENDPOINT}
-  ports:
-    - "5174:80"
-  depends_on:
-    - chaqna-aipc-backend-server
-  ipc: host
-  restart: always
-```
-
-Once the services are up, open the following URL in your browser: http://{host_ip}:5174. By default, the UI runs on port 80 internally. If you prefer to use a different host port to access the frontend, you can modify the port mapping in the compose.yaml file as shown below:
-
-```
-  chaqna-aipc-conversation-ui-server:
-    image: opea/chatqna-conversation-ui:latest
-    ...
-    ports:
-      - "80:80"
+      - "5173:5173"
 ```
 
 ### Stop the services
