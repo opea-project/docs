@@ -292,7 +292,7 @@ with the tools
 |UI                   |              | NA                       | Gateway Service |
 
 Tools and models mentioned in the table are configurable either through the
-environment variable or `compose_vllm.yaml` file.
+environment variable or `compose.yaml` file.
 :::
 :::{tab-item} TGI
 :sync: TGI
@@ -311,7 +311,8 @@ environment variable or `compose.yaml` file.
 :::
 ::::
 
-Set the necessary environment variables to setup the use case case
+Set the necessary environment variables to setup the use case. If you want to swap 
+out models, modify `set_env.sh` before running.
 
 ```bash
 cd $WORKSPACE/GenAIExamples/ChatQnA/docker_compose/intel/hpu/gaudi
@@ -329,22 +330,17 @@ above mentioned services as containers.
 :sync: vllm
 
 ```bash
-cd $WORKSPACE/GenAIExamples/ChatQnA/docker_compose/intel/hpu/gaudi
-docker compose -f compose_vllm.yaml up -d
+docker compose -f compose.yaml up -d
 ```
 :::
 :::{tab-item} TGI
 :sync: TGI
 
-```bash
-cd $WORKSPACE/GenAIExamples/ChatQnA/docker_compose/intel/hpu/gaudi
-```
-
 Follow ONE of the methods below.
 1. Use TGI for the LLM backend.
 
 ```bash
-docker compose -f compose.yaml up -d
+docker compose -f compose_tgi.yaml up -d
 ```
 
 2. Enable the Guardrails microservice in the pipeline. It will use a TGI Guardrails service.
@@ -357,14 +353,14 @@ docker compose -f compose_guardrails.yaml up -d
 
 ### Validate microservice
 #### Check Env Variables
-Check the start up log by `docker compose -f ./docker/docker_compose/intel/hpu/gaudi/compose_vllm.yaml logs`.
+Check the start up log by `docker compose -f compose.yaml logs`.
 The warning messages print out the variables if they are **NOT** set.
 
 ::::{tab-set}
 :::{tab-item} vllm
 :sync: vllm
 ```bash
-    ubuntu@xeon-vm:~/GenAIExamples/ChatQnA/docker_compose/intel/hpu/gaudi$ docker compose -f ./compose_vllm.yaml up -d
+    ubuntu@xeon-vm:~/GenAIExamples/ChatQnA/docker_compose/intel/hpu/gaudi$ docker compose -f ./compose.yaml up -d
     [+] Running 12/12
     ✔ Network gaudi_default                   Created                                                                        0.1s
     ✔ Container tei-embedding-gaudi-server    Started                                                                        1.3s
@@ -404,7 +400,7 @@ The warning messages print out the variables if they are **NOT** set.
 
 #### Check the container status
 
-Check if all the containers  launched via docker compose has started
+Check if all the containers launched via docker compose has started
 
 For example, the ChatQnA example starts 11 docker (services), check these docker
 containers are all running, i.e, all the containers  `STATUS`  are  `Up`
@@ -867,7 +863,7 @@ The log indicates the `MODEL_ID` is not set.
 :::{tab-item} vllm
 :sync: vllm
 
-View the docker input parameters in  `./ChatQnA/docker_compose/intel/hpu/gaudi/compose_vllm.yaml`
+View the docker input parameters in  `./ChatQnA/docker_compose/intel/hpu/gaudi/compose.yaml`
 
 ```yaml
   vllm-service:
@@ -939,7 +935,7 @@ compose.yaml is the mega service docker-compose configuration file.
 :sync: vllm
 
 ```
-docker compose -f ./docker_compose/intel/hpu/gaudi/compose_vllm.yaml logs
+docker compose -f ./docker_compose/intel/hpu/gaudi/compose.yaml logs
 ```
 :::
 :::{tab-item} TGI
@@ -960,7 +956,7 @@ Once you are done with the entire pipeline and wish to stop and remove all the c
 :sync: vllm
 
 ```
-docker compose -f compose_vllm.yaml down
+docker compose -f compose.yaml down
 ```
 :::
 :::{tab-item} TGI
