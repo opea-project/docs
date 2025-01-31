@@ -238,7 +238,8 @@ environment variable or `compose.yaml` file.
 :::
 ::::
 
-Set the necessary environment variables to setup the use case case
+Set the necessary environment variables to setup the use case. If you want to swap 
+out models, modify `set_env.sh` before running.
 
 ```
 cd $WORKSPACE/GenAIExamples/ChatQnA/docker_compose/nvidia/gpu

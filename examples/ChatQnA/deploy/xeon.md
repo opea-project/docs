@@ -273,7 +273,7 @@ with the tools
 |UI                   |              | NA                       | Gateway Service |
 
 Tools and models mentioned in the table are configurable either through the
-environment variable or `compose_vllm.yaml` file.
+environment variable or `compose.yaml` file.
 :::
 :::{tab-item} TGI
 :sync: TGI
@@ -292,10 +292,11 @@ environment variable or `compose.yaml` file.
 :::
 ::::
 
-Set the necessary environment variables to setup the use case case
+Set the necessary environment variables to setup the use case. If you want to swap 
+out models, modify `set_env.sh` before running.
 
 ```
-cd $WORKSPACE/GenAIExamples/ChatQnA/docker_compose/intel/cpu/xeon/
+cd $WORKSPACE/GenAIExamples/ChatQnA/docker_compose/intel/cpu/xeon
 source ./set_env.sh
 ```
 
@@ -310,16 +311,14 @@ above mentioned services as containers.
 :sync: vllm
 
 ```
-cd $WORKSPACE/GenAIExamples/ChatQnA/docker_compose/intel/cpu/xeon
-docker compose -f compose_vllm.yaml up -d
+docker compose -f compose.yaml up -d
 ```
 :::
 :::{tab-item} TGI
 :sync: TGI
 
 ```
-cd $WORKSPACE/GenAIExamples/ChatQnA/docker_compose/intel/cpu/xeon
-docker compose -f compose.yaml up -d
+docker compose -f compose_tgi.yaml up -d
 ```
 :::
 ::::
@@ -330,10 +329,10 @@ docker compose -f compose.yaml up -d
 ::::{tab-set}
 :::{tab-item} vllm
 :sync: vllm
-    Check the start up log by `docker compose -f ./compose_vllm.yaml logs`.
+    Check the start up log by `docker compose -f ./compose.yaml logs`.
 The warning messages print out the variables if they are **NOT** set.
 
-    ubuntu@xeon-vm:~/GenAIExamples/ChatQnA/docker_compose/intel/cpu/xeon$ docker compose -f ./compose_vllm.yaml up -d
+    ubuntu@xeon-vm:~/GenAIExamples/ChatQnA/docker_compose/intel/cpu/xeon$ docker compose -f ./compose.yaml up -d
     WARN[0000] The "LANGCHAIN_API_KEY" variable is not set. Defaulting to a blank string.
     WARN[0000] The "LANGCHAIN_TRACING_V2" variable is not set. Defaulting to a blank string.
     WARN[0000] The "LANGCHAIN_API_KEY" variable is not set. Defaulting to a blank string.
@@ -342,7 +341,7 @@ The warning messages print out the variables if they are **NOT** set.
     WARN[0000] The "LANGCHAIN_TRACING_V2" variable is not set. Defaulting to a blank string.
     WARN[0000] The "LANGCHAIN_API_KEY" variable is not set. Defaulting to a blank string.
     WARN[0000] The "LANGCHAIN_TRACING_V2" variable is not set. Defaulting to a blank string.
-    WARN[0000] /home/ubuntu/GenAIExamples/ChatQnA/docker_compose/intel/cpu/xeon/compose_vllm.yaml: `version` is obsolete
+    WARN[0000] /home/ubuntu/GenAIExamples/ChatQnA/docker_compose/intel/cpu/xeon/compose.yaml: `version` is obsolete
 :::
 :::{tab-item} TGI
 :sync: TGI
@@ -789,7 +788,7 @@ The log indicates the `MODEL_ID` is not set.
 :::{tab-item} vllm
 :sync: vllm
 
-View the docker input parameters in  `./ChatQnA/docker_compose/intel/cpu/xeon/compose_vllm.yaml`
+View the docker input parameters in  `./ChatQnA/docker_compose/intel/cpu/xeon/compose.yaml`
 
 ```
 vllm_service:
@@ -852,7 +851,7 @@ compose.yaml is the mega service docker-compose configuration file.
 :sync: vllm
 
 ```
-docker compose -f ./docker_compose/intel/cpu/xeon/compose_vllm.yaml logs
+docker compose -f ./docker_compose/intel/cpu/xeon/compose.yaml logs
 ```
 :::
 :::{tab-item} TGI
@@ -914,7 +913,7 @@ Once you are done with the entire pipeline and wish to stop and remove all the c
 :sync: vllm
 
 ```
-docker compose -f compose_vllm.yaml down
+docker compose -f compose.yaml down
 ```
 :::
 :::{tab-item} TGI
