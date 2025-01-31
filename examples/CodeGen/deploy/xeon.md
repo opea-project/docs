@@ -34,14 +34,30 @@ Below is the list of content we will be covering in this tutorial:
 
 ## Prerequisites
 
-The first step is to clone the GenAIExamples and GenAIComps. GenAIComps are
-fundamental necessary components used to build examples you find in
-GenAIExamples and deploy them as microservices.
+The first step is to clone the GenAIExamples and GenAIComps. GenAIComps are 
+fundamental necessary components used to build examples you find in 
+GenAIExamples and deploy them as microservices. Set an environment 
+variable for the desired release version with the **number only** 
+(i.e. 1.0, 1.1, etc) and checkout using the tag with that version. 
 
 ```bash
+# Set workspace
+export WORKSPACE=<path>
+
+# Set desired release version - number only
+export RELEASE_VERSION=<insert-release-version>
+
+# GenAIComps
 git clone https://github.com/opea-project/GenAIComps.git
+cd GenAIComps
+git checkout tags/v${RELEASE_VERSION}
+cd ..
+
+# GenAIExamples
 git clone https://github.com/opea-project/GenAIExamples.git
-export TAG=1.2
+cd GenAIExamples
+git checkout tags/v${RELEASE_VERSION}
+cd ..
 ```
 
 The examples utilize model weights from HuggingFace and langchain.
@@ -91,16 +107,18 @@ be pulled in from dockerhub.
 :::::{tab-item} Build
 :sync: Build
 
-From within the `GenAIComps` folder, checkout the release tag.
-```
-cd GenAIComps
-git checkout tags/v${TAG}
+Follow the steps below to build the docker images from within the `GenAIComps` folder.
+**Note:** For RELEASE_VERSIONS older than 1.0, you will need to add a 'v' in front 
+of ${RELEASE_VERSION} to reference the correct image on dockerhub.
+
+```bash
+cd $WORKSPACE/GenAIComps
 ```
 
 #### Build LLM Image
 
 ```bash
-docker build -t opea/llm-textgen:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/llms/src/text-generation/Dockerfile .
+docker build -t opea/llm-textgen:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/llms/src/text-generation/Dockerfile .
 ```
 
 ### Build Mega Service images
@@ -113,14 +131,11 @@ remove microservices and customize the megaservice to suit your needs.
 Build the megaservice image for this use case
 
 ```bash
-cd ..
-cd GenAIExamples
-git checkout tags/v${TAG}
-cd CodeGen
+cd $WORKSPACE/GenAIExamples/CodeGen
 ```
 
 ```bash
-docker build -t opea/codegen:${TAG} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f Dockerfile .
+docker build -t opea/codegen:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f Dockerfile .
 cd ../..
 ```
 
@@ -128,11 +143,11 @@ cd ../..
 
 You can build 2 modes of UI
 
-*Svelte UI*
+*Basic UI*
 
 ```bash
-cd GenAIExamples/CodeGen/ui/
-docker build -t opea/codegen-ui:${TAG} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f ./docker/Dockerfile .
+cd $WORKSPACE/GenAIExamples/CodeGen/ui/
+docker build -t opea/codegen-ui:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f ./docker/Dockerfile .
 cd ../../..
 ```
 
@@ -140,18 +155,18 @@ cd ../../..
 If you want a React-based frontend.
 
 ```bash
-cd GenAIExamples/CodeGen/ui/
-docker build --no-cache -t opea/codegen-react-ui:${TAG} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f ./docker/Dockerfile.react .
+cd $WORKSPACE/GenAIExamples/CodeGen/ui/
+docker build --no-cache -t opea/codegen-react-ui:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f ./docker/Dockerfile.react .
 cd ../../..
 ```
 
 ### Sanity Check
 Check if you have the following set of docker images by running the command `docker images` before moving on to the next step:
 
-* `opea/llm-tgi:${TAG}`
-* `opea/codegen:${TAG}`
-* `opea/codegen-ui:${TAG}`
-* `opea/codegen-react-ui:${TAG}` (optional)
+* `opea/llm-tgi:${RELEASE_VERSION}`
+* `opea/codegen:${RELEASE_VERSION}`
+* `opea/codegen-ui:${RELEASE_VERSION}`
+* `opea/codegen-react-ui:${RELEASE_VERSION}` (optional)
 
 :::::
 ::::::
@@ -173,7 +188,7 @@ Here is where the environment variable `LLM_MODEL_ID` is set, and you can change
 by specifying the HuggingFace model card ID.
 
 ```bash
-cd GenAIExamples/CodeGen/docker_compose/
+cd $WORKSPACE/GenAIExamples/CodeGen/docker_compose/
 source ./set_env.sh
 cd ../../..
 ```
@@ -185,7 +200,7 @@ YAML file.  The docker compose instructions should be starting all the
 above mentioned services as containers.
 
 ```bash
-cd GenAIExamples/CodeGen/docker_compose/intel/cpu/xeon
+cd $WORKSPACE/GenAIExamples/CodeGen/docker_compose/intel/cpu/xeon
 docker compose up -d
 ```
 
@@ -220,9 +235,9 @@ You can do this with the `docker ps -a` command.
 
 ```
 CONTAINER ID   IMAGE                                                           COMMAND                  CREATED              STATUS              PORTS                                       NAMES
-bbd235074c3d   opea/codegen-ui:latest                                          "docker-entrypoint.s…"   About a minute ago   Up About a minute   0.0.0.0:5173->5173/tcp, :::5173->5173/tcp   codegen-xeon-ui-server
-8d3872ca66fa   opea/codegen:latest                                             "python codegen.py"      About a minute ago   Up About a minute   0.0.0.0:7778->7778/tcp, :::7778->7778/tcp   codegen-xeom-backend-server
-b9fc39f51cdb   opea/llm-tgi:latest                                             "bash entrypoint.sh"     About a minute ago   Up About a minute   0.0.0.0:9000->9000/tcp, :::9000->9000/tcp   llm-tgi-xeon-server
+bbd235074c3d   opea/codegen-ui:${RELEASE_VERSION}                                          "docker-entrypoint.s…"   About a minute ago   Up About a minute   0.0.0.0:5173->5173/tcp, :::5173->5173/tcp   codegen-xeon-ui-server
+8d3872ca66fa   opea/codegen:${RELEASE_VERSION}                                             "python codegen.py"      About a minute ago   Up About a minute   0.0.0.0:7778->7778/tcp, :::7778->7778/tcp   codegen-xeom-backend-server
+b9fc39f51cdb   opea/llm-tgi:${RELEASE_VERSION}                                             "bash entrypoint.sh"     About a minute ago   Up About a minute   0.0.0.0:9000->9000/tcp, :::9000->9000/tcp   llm-tgi-xeon-server
 39994e007f15   ghcr.io/huggingface/text-generation-inference:2.4.0-intel-cpu   "text-generation-lau…"   About a minute ago   Up About a minute   0.0.0.0:8028->80/tcp, :::8028->80/tcp       tgi-server
 ```
 
