@@ -13,12 +13,32 @@ The solution demonstrates using the Mistral-7B-Instruct-v0.3 model on the Intel�
 
 ## Prerequisites
 
-The first step is to clone the GenAIExamples and GenAIComps. GenAIComps are fundamental components used to build examples you find in GenAIExamples and deploy them as microservices.
+The first step is to clone the GenAIExamples and GenAIComps. GenAIComps are 
+fundamental necessary components used to build examples you find in 
+GenAIExamples and deploy them as microservices. Set an environment 
+variable for the desired release version with the **number only** 
+(i.e. 1.0, 1.1, etc) and checkout using the tag with that version. 
 
-```
+```bash
+# Set workspace
+export WORKSPACE=<path>
+
+# Set desired release version - number only
+export RELEASE_VERSION=<insert-release-version>
+
+# GenAIComps
 git clone https://github.com/opea-project/GenAIComps.git
+cd GenAIComps
+git checkout tags/v${RELEASE_VERSION}
+cd ..
+
+# GenAIExamples
 git clone https://github.com/opea-project/GenAIExamples.git
+cd GenAIExamples
+git checkout tags/v${RELEASE_VERSION}
+cd ..
 ```
+
 The examples utilize model weights from HuggingFace.
 Set up your [HuggingFace](https://huggingface.co/) account and 
 apply for model access to `Mistral-7B-Instruct-v0.3` which is a gated model. To obtain access for using the model, visit the [model site](https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3) and click on `Agree and access repository`. 
@@ -59,10 +79,12 @@ If you decide to pull the docker containers and not build them locally, you can 
 :::::{tab-item} Build
 :sync: Build
 
-From within the `GenAIComps` folder, check out the release tag.
-```
-cd GenAIComps
-git checkout tags/v1.2
+Follow the steps below to build the docker images from within the `GenAIComps` folder.
+**Note:** For RELEASE_VERSIONS older than 1.0, you will need to add a 'v' in front 
+of ${RELEASE_VERSION} to reference the correct image on dockerhub.
+
+```bash
+cd $WORKSPACE/GenAIComps
 ```
 
 ### Build LLM Image
@@ -70,7 +92,7 @@ git checkout tags/v1.2
 First, build the Text Generation LLM service image:
 
 ```bash
-docker  build  -t  opea/llm-textgen:latest  --build-arg  https_proxy=$https_proxy  \
+docker  build  -t  opea/llm-textgen:${RELEASE_VERSION}  --build-arg  https_proxy=$https_proxy  \
 --build-arg http_proxy=$http_proxy -f comps/llms/src/text-generation/Dockerfile .
 ```
 
@@ -81,7 +103,7 @@ docker  build  -t  opea/llm-textgen:latest  --build-arg  https_proxy=$https
 Build the Nginx service image that will handle routing:
 
 ```bash
-docker  build  -t  opea/nginx:latest  --build-arg  https_proxy=$https_proxy  \
+docker  build  -t  opea/nginx:${RELEASE_VERSION}  --build-arg  https_proxy=$https_proxy  \
 --build-arg http_proxy=$http_proxy -f comps/third_parties/nginx/src/Dockerfile .
 
 ```
@@ -93,12 +115,11 @@ The Megaservice is a pipeline that channels data through different microservices
 Build the megaservice image for this use case.
 
 ```bash
-git  clone  https://github.com/opea-project/GenAIExamples.git
-cd  GenAIExamples/CodeTrans
-git checkout tags/v1.2
+cd $WORKSPACE/GenAIExamples/CodeTrans
 ```
+
 ```
-docker  build  -t  opea/codetrans:latest  --build-arg  https_proxy=$https_proxy  \
+docker  build  -t  opea/codetrans:${RELEASE_VERSION}  --build-arg  https_proxy=$https_proxy  \
 --build-arg http_proxy=$http_proxy -f Dockerfile .
 ```
 
@@ -107,8 +128,8 @@ docker  build  -t  opea/codetrans:latest  --build-arg  https_proxy=$https_p
 Build the UI service image:
 
 ```bash
-cd  GenAIExamples/CodeTrans/ui
-docker  build  -t  opea/codetrans-ui:latest  --build-arg  https_proxy=$https_proxy  \
+cd $WORKSPACE/GenAIExamples/CodeTrans/ui
+docker  build  -t  opea/codetrans-ui:${RELEASE_VERSION}  --build-arg  https_proxy=$https_proxy  \
 --build-arg http_proxy=$http_proxy -f ./docker/Dockerfile .
 ```
 
@@ -116,10 +137,10 @@ docker  build  -t  opea/codetrans-ui:latest  --build-arg  https_proxy=$http
 
 Before proceeding, verify that you have all required Docker images by running `docker images`. You should see the following images:
 
-* opea/llm-textgen:latest
-* opea/codetrans:latest
-* opea/codetrans-ui:latest
-* opea/nginx:latest
+* opea/llm-textgen:${RELEASE_VERSION}
+* opea/codetrans:${RELEASE_VERSION}
+* opea/codetrans-ui:${RELEASE_VERSION}
+* opea/nginx:${RELEASE_VERSION}
 
 :::::
 ::::::
@@ -136,13 +157,17 @@ The use case will use the following combination of the GenAIComps with the tools
 
 Tools and models mentioned in the table are configurable either through the environment variable or `compose.yaml`
 
-Set the necessary environment variables to set the use case.
+Set the necessary environment variables to setup the use case by running the `set_env.sh` script.
+Here is where the environment variable `LLM_MODEL_ID` is set, and you can change it to another model 
+by specifying the HuggingFace model card ID.
+
+**Note:** If you are port-forwarding your server to a local machine such as a laptop, you will need to port-forward the port for the BACKEND_SERVICE_ENDPOINT and set the IP to use `localhost` or 127.0.0.1 instead for the UI to send data to the backend.
 
 ```bash
-cd GenAIExamples/CodeTrans/docker_compose
-git checkout tags/v1.2
+cd $WORKSPACE/GenAIExamples/CodeTrans/docker_compose
 source ./set_env.sh
 ```
+
 Set up a desired port for Nginx:
 ```bash
 # Example: NGINX_PORT=80
@@ -154,7 +179,7 @@ export  NGINX_PORT=${your_nginx_port}
 In this tutorial, we will be deploying via docker compose with the provided YAML file. The docker compose instructions should start all the above-mentioned services as containers.
 
 ```bash
-cd intel/hpu/gaudi
+cd $WORKSPACE/GenAIExamples/CodeTrans/docker_compose/intel/hpu/gaudi
 docker compose up -d
 ```
 
@@ -179,10 +204,10 @@ To do a quick sanity check, try `docker ps -a` to see if all the containers are 
 
 ```
 CONTAINER ID   IMAGE                                 COMMAND                  CREATED         STATUS                   PORTS                                       NAMES
-a6d83e9fb44f   opea/nginx:latest                     "/docker-entrypoint.…"   8 minutes ago   Up 26 seconds            0.0.0.0:80->80/tcp, :::80->80/tcp           codetrans-gaudi-nginx-server
-42af29c8a8b6   opea/codetrans-ui:latest              "docker-entrypoint.s…"   8 minutes ago   Up 27 seconds            0.0.0.0:5173->5173/tcp, :::5173->5173/tcp   codetrans-gaudi-ui-server
-d995d76e7b52   opea/codetrans:latest                 "python code_transla…"   8 minutes ago   Up 27 seconds            0.0.0.0:7777->7777/tcp, :::7777->7777/tcp   codetrans-gaudi-backend-server
-f40e954b107e   opea/llm-textgen:latest               "bash entrypoint.sh"     8 minutes ago   Up 27 seconds            0.0.0.0:9000->9000/tcp, :::9000->9000/tcp   llm-textgen-gaudi-server
+a6d83e9fb44f   opea/nginx:${RELEASE_VERSION}                     "/docker-entrypoint.…"   8 minutes ago   Up 26 seconds            0.0.0.0:80->80/tcp, :::80->80/tcp           codetrans-gaudi-nginx-server
+42af29c8a8b6   opea/codetrans-ui:${RELEASE_VERSION}              "docker-entrypoint.s…"   8 minutes ago   Up 27 seconds            0.0.0.0:5173->5173/tcp, :::5173->5173/tcp   codetrans-gaudi-ui-server
+d995d76e7b52   opea/codetrans:${RELEASE_VERSION}                 "python code_transla…"   8 minutes ago   Up 27 seconds            0.0.0.0:7777->7777/tcp, :::7777->7777/tcp   codetrans-gaudi-backend-server
+f40e954b107e   opea/llm-textgen:${RELEASE_VERSION}               "bash entrypoint.sh"     8 minutes ago   Up 27 seconds            0.0.0.0:9000->9000/tcp, :::9000->9000/tcp   llm-textgen-gaudi-server
 0eade4fe0637   ghcr.io/huggingface/tgi-gaudi:2.0.6   "text-generation-lau…"   8 minutes ago   Up 8 minutes (healthy)   0.0.0.0:8008->80/tcp, :::8008->80/tcp       codetrans-tgi-service
 
 ```
