@@ -3,11 +3,9 @@
 This deployment section covers single-node on-prem deployment of the ChatQnA
 example with OPEA comps to deploy using vLLM or TGI service. There are several
 slice-n-dice ways to enable RAG with vectordb and LLM models, but here we will
-be covering one option of doing it for convenience : we will be showcasing how
-to build an e2e chatQnA with Redis VectorDB and neural-chat-7b-v3-3 model,
-deployed on Intel® Tiber™ Developer Cloud (ITDC). To quickly learn about OPEA in just 5 minutes and set up the required hardware and software, please follow the instructions in the
-[Getting Started](https://opea-project.github.io/latest/getting-started/README.html) section. If you do
-not have an ITDC instance or the hardware is not supported in the ITDC yet, you can still run this on-prem.
+be covering one option of doing it for convenience : we will be showcasing  how
+to build an e2e chatQnA with Redis VectorDB and meta-llama/Meta-Llama-3-8B-Instruct model, deployed on Intel® Gaudi® AI Accelerators. To quickly learn about OPEA in just 5 minutes and set up the required hardware and software, please follow the instructions in the
+[Getting Started](https://opea-project.github.io/latest/getting-started/README.html) section.
 
 ## Overview
 
