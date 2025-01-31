@@ -693,7 +693,7 @@ docker compose -f ./docker_compose/nvidia/gpu/compose.yaml logs
 To access the frontend, open the following URL in your browser: http://{host_ip}:5173. By default, the UI runs on port 5173 internally. If you prefer to use a different host port to access the frontend, you can modify the port mapping in the compose.yaml file as shown below:
 ```
   chaqna-ui-server:
-    image: opea/chatqna-ui:${RELEASE_VERSION}
+    image: opea/chatqna-ui:${TAG:-latest}
     ...
     ports:
       - "5173:5173"
@@ -704,7 +704,7 @@ To access the frontend, open the following URL in your browser: http://{host_ip}
 To access the Conversational UI (react based) frontend, modify the UI service in the `compose.yaml` file. Replace `chaqna-ui-server` service with the `chatqna-conversation-ui-server` service as per the config below:
 ```
 chaqna-conversation-ui-server:
-  image: opea/chatqna-conversation-ui:${RELEASE_VERSION}
+  image: opea/chatqna-conversation-ui:${TAG:-latest}
   container_name: chatqna-conversation-ui-server
   environment:
     - APP_BACKEND_SERVICE_ENDPOINT=${BACKEND_SERVICE_ENDPOINT}
@@ -721,7 +721,7 @@ Once the services are up, open the following URL in your browser: http://{host_i
 
 ```
   chaqna-conversation-ui-server:
-    image: opea/chatqna-conversation-ui:${RELEASE_VERSION}
+    image: opea/chatqna-conversation-ui:${TAG:-latest}
     ...
     ports:
       - "80:80"

@@ -808,7 +808,7 @@ curl http://${host_ip}:9090/v1/guardrails\
 To access the frontend, open the following URL in your browser: http://{host_ip}:5173. By default, the UI runs on port 5173 internally. If you prefer to use a different host port to access the frontend, you can modify the port mapping in the compose.yaml file as shown below:
 ```bash
   chaqna-gaudi-ui-server:
-    image: opea/chatqna-ui:${RELEASE_VERSION}
+    image: opea/chatqna-ui:${TAG:-latest}
     ...
     ports:
       - "5173:5173"
@@ -818,7 +818,7 @@ To access the frontend, open the following URL in your browser: http://{host_ip}
 To access the Conversational UI (react based) frontend, modify the UI service in the `compose.yaml` file. Replace `chaqna-gaudi-ui-server` service with the `chatqna-gaudi-conversation-ui-server` service as per the config below:
 ```bash
 chaqna-gaudi-conversation-ui-server:
-  image: opea/chatqna-conversation-ui:${RELEASE_VERSION}
+  image: opea/chatqna-conversation-ui:${TAG:-latest}
   container_name: chatqna-gaudi-conversation-ui-server
   environment:
     - APP_BACKEND_SERVICE_ENDPOINT=${BACKEND_SERVICE_ENDPOINT}
@@ -831,9 +831,9 @@ chaqna-gaudi-conversation-ui-server:
   restart: always
 ```
 Once the services are up, open the following URL in your browser: http://{host_ip}:5174. By default, the UI runs on port 80 internally. If you prefer to use a different host port to access the frontend, you can modify the port mapping in the `compose.yaml` file as shown below:
-```
+```bash
   chaqna-gaudi-conversation-ui-server:
-    image: opea/chatqna-conversation-ui:${RELEASE_VERSION}
+    image: opea/chatqna-conversation-ui:${TAG:-latest}
     ...
     ports:
       - "80:80"
