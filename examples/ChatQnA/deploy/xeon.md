@@ -35,7 +35,7 @@ are interested to use.
 
 ## Prerequisites
 
-First step is to clone the GenAIExamples and GenAIComps. GenAIComps are 
+The first step is to clone the GenAIExamples and GenAIComps. GenAIComps are 
 fundamental necessary components used to build examples you find in 
 GenAIExamples and deploy them as microservices. Set an environment 
 variable for the desired release version with the **number only** 
