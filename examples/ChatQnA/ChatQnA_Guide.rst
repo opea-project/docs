@@ -224,9 +224,11 @@ Single Node
 Kubernetes
 **********
 
-* Xeon & Gaudi with GMC
-* Xeon & Gaudi without GMC
-* Using Helm Charts
+.. toctree::
+   :maxdepth: 1
+
+   Getting Started <deploy/k8s_getting_started>
+   Kubernetes Deployment with Helm on Xeon <deploy/k8s_helm>
 
 Cloud Native
 ************
