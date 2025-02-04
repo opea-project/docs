@@ -20,7 +20,7 @@ GenAIComps to deploy a single node vLLM or TGI megaservice solution.
 5. LLM with vLLM or TGI
 
 The solution is aimed to show how to use Redis vectordb for RAG and
-neural-chat-7b-v3-3 model on Intel Gaudi AI Accelerator. We will go through
+Meta-Llama-3-8B-Instruct model on Intel Gaudi AI Accelerator. We will go through
 how to setup docker container to start a microservices and megaservice . The
 solution will then utilize a sample Nike dataset which is in PDF format. Users
 can then ask a question about Nike and get a chat-like response by default for
@@ -282,11 +282,11 @@ with the tools
 
 |use case components | Tools |   Model     | Service Type |
 |----------------     |--------------|-----------------------------|-------|
-|Data Prep            |  LangChain   | NA                       |OPEA Microservice |
-|VectorDB             |  Redis       | NA                       |Open source service|
-|Embedding            |   TEI        | BAAI/bge-base-en-v1.5    |OPEA Microservice |
+|Data Prep            |  LangChain   | NA                       | OPEA Microservice |
+|VectorDB             |  Redis       | NA                       | Open source service |
+|Embedding            |   TEI        | BAAI/bge-base-en-v1.5    | OPEA Microservice |
 |Reranking            |   TEI        | BAAI/bge-reranker-base   | OPEA Microservice |
-|LLM                  |   vLLM     |Intel/neural-chat-7b-v3-3 |OPEA Microservice |
+|LLM                  |   vLLM       | meta-llama/Meta-Llama-3-8B-Instruct | OPEA Microservice |
 |UI                   |              | NA                       | Gateway Service |
 
 Tools and models mentioned in the table are configurable either through the
@@ -297,11 +297,11 @@ environment variable or `compose.yaml` file.
 
 |use case components | Tools |   Model     | Service Type |
 |----------------     |--------------|-----------------------------|-------|
-|Data Prep            |  LangChain   | NA                       |OPEA Microservice |
-|VectorDB             |  Redis       | NA                       |Open source service|
-|Embedding            |   TEI        | BAAI/bge-base-en-v1.5    |OPEA Microservice |
+|Data Prep            |  LangChain   | NA                       | OPEA Microservice |
+|VectorDB             |  Redis       | NA                       | Open source service|
+|Embedding            |   TEI        | BAAI/bge-base-en-v1.5    | OPEA Microservice |
 |Reranking            |   TEI        | BAAI/bge-reranker-base   | OPEA Microservice |
-|LLM                  |   TGI        | Intel/neural-chat-7b-v3-3|OPEA Microservice |
+|LLM                  |   TGI        | meta-llama/Meta-Llama-3-8B-Instruct|OPEA Microservice |
 |UI                   |              | NA                       | Gateway Service |
 
 Tools and models mentioned in the table are configurable either through the
@@ -654,7 +654,7 @@ If the service is ready, you will get the response like below.
 curl http://${host_ip}:8007/v1/completions \
   -H "Content-Type: application/json" \
   -d '{
-  "model": "Intel/neural-chat-7b-v3-3",
+  "model": "meta-llama/Meta-Llama-3-8B-Instruct",
   "prompt": "What is Deep Learning?",
   "max_tokens": 32,
   "temperature": 0
@@ -665,7 +665,7 @@ vLLM service generate text for the input prompt. Here is the expected result
 from vllm:
 
 ```
-{"id":"cmpl-be8e1d681eb045f082a7b26d5dba42ff","object":"text_completion","created":1726269914,"model":"Intel/neural-chat-7b-v3-3","choices":[{"index":0,"text":"\n\nDeep Learning is a subset of Machine Learning that is concerned with algorithms inspired by the structure and function of the brain. It is a part of Artificial","logprobs":null,"finish_reason":"length","stop_reason":null}],"usage":{"prompt_tokens":6,"total_tokens":38,"completion_tokens":32}}d
+{"id":"cmpl-be8e1d681eb045f082a7b26d5dba42ff","object":"text_completion","created":1726269914,"model":"meta-llama/Meta-Llama-3-8B-Instruct","choices":[{"index":0,"text":"\n\nDeep Learning is a subset of Machine Learning that is concerned with algorithms inspired by the structure and function of the brain. It is a part of Artificial","logprobs":null,"finish_reason":"length","stop_reason":null}],"usage":{"prompt_tokens":6,"total_tokens":38,"completion_tokens":32}}d
 ```
 
 **NOTE**: After launch the vLLM, it takes few minutes for vLLM server to load

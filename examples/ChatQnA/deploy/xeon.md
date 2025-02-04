@@ -20,7 +20,7 @@ GenAIComps to deploy a single node vLLM or TGI megaservice solution.
 5. LLM with vLLM or TGI
 
 The solution is aimed to show how to use Redis vectordb for RAG and
-neural-chat-7b-v3-3 model on Intel Xeon Scalable processors. We will go through
+Meta-Llama-3-8B-Instruct model on Intel Xeon Scalable processors. We will go through
 how to setup docker container to start a microservices and megaservice . The
 solution will then utilize a sample Nike dataset which is in PDF format. Users
 can then ask a question about Nike and get a chat-like response by default for
@@ -264,11 +264,11 @@ with the tools
 
 |use case components | Tools |   Model     | Service Type |
 |----------------     |--------------|-----------------------------|-------|
-|Data Prep            |  LangChain   | NA                       |OPEA Microservice |
-|VectorDB             |  Redis       | NA                       |Open source service|
-|Embedding            |   TEI        | BAAI/bge-base-en-v1.5    |OPEA Microservice |
+|Data Prep            |  LangChain   | NA                       | OPEA Microservice |
+|VectorDB             |  Redis       | NA                       | Open source service |
+|Embedding            |   TEI        | BAAI/bge-base-en-v1.5    | OPEA Microservice |
 |Reranking            |   TEI        | BAAI/bge-reranker-base   | OPEA Microservice |
-|LLM                  |   vLLM       |Intel/neural-chat-7b-v3-3 |OPEA Microservice |
+|LLM                  |   vLLM       | meta-llama/Meta-Llama-3-8B-Instruct | OPEA Microservice |
 |UI                   |              | NA                       | Gateway Service |
 
 Tools and models mentioned in the table are configurable either through the
@@ -279,11 +279,11 @@ environment variable or `compose.yaml` file.
 
 |use case components | Tools |   Model     | Service Type |
 |----------------     |--------------|-----------------------------|-------|
-|Data Prep            |  LangChain   | NA                       |OPEA Microservice |
-|VectorDB             |  Redis       | NA                       |Open source service|
-|Embedding            |   TEI        | BAAI/bge-base-en-v1.5    |OPEA Microservice |
+|Data Prep            |  LangChain   | NA                       | OPEA Microservice |
+|VectorDB             |  Redis       | NA                       | Open source service |
+|Embedding            |   TEI        | BAAI/bge-base-en-v1.5    | OPEA Microservice |
 |Reranking            |   TEI        | BAAI/bge-reranker-base   | OPEA Microservice |
-|LLM                  |   TGI        |Intel/neural-chat-7b-v3-3 |OPEA Microservice |
+|LLM                  |   TGI        | meta-llama/Meta-Llama-3-8B-Instruct | OPEA Microservice |
 |UI                   |              | NA                       | Gateway Service |
 
 Tools and models mentioned in the table are configurable either through the
@@ -619,7 +619,7 @@ If the service is ready, you will get the response like below.
 ```
 curl http://${host_ip}:9009/v1/completions \
   -H "Content-Type: application/json" \
-  -d '{"model": "Intel/neural-chat-7b-v3-3", \
+  -d '{"model": "meta-llama/Meta-Llama-3-8B-Instruct", \
      "prompt": "What is Deep Learning?", \
      "max_tokens": 32, "temperature": 0}'
 ```
