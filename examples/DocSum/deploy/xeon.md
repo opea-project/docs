@@ -37,15 +37,31 @@ Below is the list of content we will be covering in this tutorial:
 
 ## Prerequisites
 
-The first step is to clone the GenAIExamples and GenAIComps. GenAIComps are
-fundamental necessary components used to build examples you find in
-GenAIExamples and deploy them as microservices. Also, set the `TAG` 
-environment variable with the version. 
+The first step is to clone the GenAIExamples and GenAIComps. GenAIComps are 
+fundamental necessary components used to build examples you find in 
+GenAIExamples and deploy them as microservices. Set an environment 
+variable for the desired release version with the **number only** 
+(i.e. 1.0, 1.1, etc) and checkout using the tag with that version. 
 
 ```bash
+# Set workspace and navigate into it
+export WORKSPACE=<path>
+cd $WORKSPACE
+
+# Set desired release version - number only
+export RELEASE_VERSION=<insert-release-version>
+
+# GenAIComps
 git clone https://github.com/opea-project/GenAIComps.git
+cd GenAIComps
+git checkout tags/v${RELEASE_VERSION}
+cd ..
+
+# GenAIExamples
 git clone https://github.com/opea-project/GenAIExamples.git
-export TAG=1.2
+cd GenAIExamples
+git checkout tags/v${RELEASE_VERSION}
+cd ..
 ```
 
 The example requires you to set the `host_ip` to deploy the microservices on the endpoint enabled with ports. Set the host_ip env variable.
@@ -85,16 +101,18 @@ be pulled in from the docker hub.
 :::::{tab-item} Build
 :sync: Build
 
-From within the `GenAIComps` folder, check out the release tag.
-```
-cd GenAIComps
-git checkout tags/v${TAG}
+Follow the steps below to build the docker images from within the `GenAIComps` folder.
+**Note:** For RELEASE_VERSIONS older than 1.0, you will need to add a 'v' in front 
+of ${RELEASE_VERSION} to reference the correct image on dockerhub.
+
+```bash
+cd $WORKSPACE/GenAIComps
 ```
 
 #### Build Whisper Service
 
 ```bash
-docker build -t opea/whisper:${TAG} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/asr/src/integrations/dependency/whisper/Dockerfile .
+docker build -t opea/whisper:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/asr/src/integrations/dependency/whisper/Dockerfile .
 ```
 
 ### Build Mega Service images
@@ -106,15 +124,11 @@ remove microservices and customize the megaservice to suit your needs.
 Build the megaservice image for this use case.
 
 ```bash
-cd ..
-cd GenAIExamples
-git checkout tags/v${TAG}
-cd DocSum
+cd $WORKSPACE/GenAIExamples/DocSum
 ```
 
 ```bash
-docker build -t opea/docsum:${TAG} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f Dockerfile .
-cd ../..
+docker build -t opea/docsum:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f Dockerfile .
 ```
 
 ### Build the UI Image
@@ -124,17 +138,15 @@ You can build 3 modes of UI
 *Gradio UI*
 
 ```bash
-cd GenAIExamples/DocSum/ui
-docker build -t opea/docsum-gradio-ui:${TAG} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f docker/Dockerfile.gradio .
-cd ../../..
+cd $WORKSPACE/GenAIExamples/DocSum/ui
+docker build -t opea/docsum-gradio-ui:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f docker/Dockerfile.gradio .
 ```
 
 *Svelte UI (Optional)*
 
 ```bash
-cd GenAIExamples/DocSum/ui
-docker build -t opea/docsum-ui:${TAG} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f docker/Dockerfile .
-cd ../../..
+cd $WORKSPACE/GenAIExamples/DocSum/ui
+docker build -t opea/docsum-ui:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f docker/Dockerfile .
 ```
 
 *React UI (Optional)* 
@@ -142,19 +154,18 @@ If you want a React-based frontend.
 
 ```bash
 export BACKEND_SERVICE_ENDPOINT="http://${host_ip}:8888/v1/docsum"
-docker build -t opea/docsum-react-ui:${TAG} --build-arg BACKEND_SERVICE_ENDPOINT=$BACKEND_SERVICE_ENDPOINT --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy  -f ./docker/Dockerfile.react .
-cd ../../..
+docker build -t opea/docsum-react-ui:${RELEASE_VERSION} --build-arg BACKEND_SERVICE_ENDPOINT=$BACKEND_SERVICE_ENDPOINT --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy  -f ./docker/Dockerfile.react .
 ```
 
 ### Sanity Check
 Check if you have the following set of docker images by running the command `docker images` before moving on to the next step. 
-The tags are based on what you set the environment variable `TAG` to. 
+The tags are based on what you set the environment variable `RELEASE_VERSION` to. 
 
-* `opea/whisper:${TAG}`
-* `opea/docsum:${TAG}`
-* `opea/docsum-gradio-ui:${TAG}`
-* `opea/docsum-ui:${TAG}` (optional)
-* `opea/docsum-react-ui:${TAG}` (optional)
+* `opea/whisper:${RELEASE_VERSION}`
+* `opea/docsum:${RELEASE_VERSION}`
+* `opea/docsum-gradio-ui:${RELEASE_VERSION}`
+* `opea/docsum-ui:${RELEASE_VERSION}` (optional)
+* `opea/docsum-react-ui:${RELEASE_VERSION}` (optional)
 
 :::::
 ::::::
@@ -178,9 +189,8 @@ Here is where the environment variable `LLM_MODEL_ID` is set, and you can change
 by specifying the HuggingFace model card ID.
 
 ```bash
-cd GenAIExamples/DocSum/docker_compose
+cd $WORKSPACE/GenAIExamples/DocSum/docker_compose
 source ./set_env.sh
-cd ../../..
 ```
 
 ## Deploy the Use Case
@@ -190,7 +200,7 @@ YAML file.  The docker compose instructions should start all the
 above-mentioned services as containers.
 
 ```bash
-cd GenAIExamples/DocSum/docker_compose/intel/cpu/xeon
+cd $WORKSPACE/GenAIExamples/DocSum/docker_compose/intel/cpu/xeon
 docker compose up -d
 ```
 
