@@ -66,12 +66,12 @@ cd ..
 
 The example requires you to set the `host_ip` to deploy the microservices on the endpoint enabled with ports. Set the host_ip env variable.
 
-```
+```bash
 export host_ip=$(hostname -I | awk '{print $1}')
 ```
 
 Make sure to set up Proxies if you are behind a firewall.
-```
+```bash
 export no_proxy=${your_no_proxy},$host_ip
 export http_proxy=${your_http_proxy}
 export https_proxy=${your_http_proxy}
@@ -231,7 +231,7 @@ The DocSum example starts 4 docker containers. Check that these docker
 containers are all running, i.e., all the containers  `STATUS` are  `Up`.
 You can do this with the `docker ps -a` command.
 
-```
+```bash
 CONTAINER ID   IMAGE                                                           COMMAND                  CREATED             STATUS                       PORTS                                       NAMES
 8ec82528bcbb   opea/docsum-gradio-ui:latest                                    "python docsum_ui_gr…"   About an hour ago   Up About an hour             0.0.0.0:5173->5173/tcp, :::5173->5173/tcp   docsum-xeon-ui-server
 e22344ed80d5   opea/docsum:latest                                              "python docsum.py"       About an hour ago   Up About an hour             0.0.0.0:8888->8888/tcp, :::8888->8888/tcp   docsum-xeon-backend-server
@@ -258,7 +258,7 @@ curl http://${host_ip}:8008/generate \
 
 Here is the output:
 
-```
+```bash
 {"generated_text":"\nDeep learning is a sub-discipline of machine learning. Machine learning is"}
 
 ```
@@ -283,7 +283,7 @@ The output is the summary of the input given to this microservice.
 ```
 
 Here is the output:
-```
+```bash
  {"asr_result":"you"}
 ```
 
@@ -382,7 +382,7 @@ curl http://${host_ip}:8888/v1/docsum \
 ## Launch UI
 ### Gradio UI
 To access the frontend, open the following URL in your browser: http://{host_ip}:5173. By default, the UI runs on port 5173 internally. If you prefer to use a different host port to access the frontend, you can modify the port mapping in the `compose.yaml` file as shown below:
-```bash
+```yaml
   docsum-xeon-ui-server:
   image: ${REGISTRY:-opea}/docsum-ui:${TAG:-latest}
   ...
@@ -391,7 +391,7 @@ To access the frontend, open the following URL in your browser: http://{host_ip}
 ```
 ### Svelte UI (Optional)
 To access the Svelte-based frontend, modify the UI service in the `compose.yaml` file. Replace `docsum-gradio-ui` service with the `docsum-ui` service as per the config below: 
-```bash
+```yaml
   docsum-ui:
     image: ${REGISTRY:-opea}/docsum-ui:${TAG:-latest}
     container_name: docsum-xeon-ui-server
@@ -410,7 +410,7 @@ To access the Svelte-based frontend, modify the UI service in the `compose.yaml`
 ```
 ### React-Based UI (Optional)
 To access the React-based frontend, modify the UI service in the `compose.yaml` file. Replace `docsum-gradio-ui` service with the `docsum-react-ui` service as per the config below:
-```bash
+```yaml
   docsum-xeon-react-ui-server:
     image: ${REGISTRY:-opea}/docsum-react-ui:${TAG:-latest}
     container_name: docsum-xeon-react-ui-server
@@ -428,7 +428,7 @@ To access the React-based frontend, modify the UI service in the `compose.yaml` 
 
 
 Once the services are up, open the following URL in your browser: http://{host_ip}:5174. By default, the UI runs on port 80 internally. If you prefer to use a different host port to access the frontend, you can modify the port mapping in the `compose.yaml` file as shown below:
-```bash
+```yaml
   docsum-xeon-react-ui-server:
     image: ${REGISTRY:-opea}/docsum-react-ui:${TAG:-latest}
     ...
@@ -447,13 +447,13 @@ docker logs <CONTAINER ID> -t
 You can also check the overall logs with the following command, where the
 `compose.yaml` is the megaservice docker-compose configuration file.
 
-Assuming you are still in this directory `GenAIExamples/DocSum/docker_compose/intel/cpu/xeon`,
+Assuming you are still in this directory `$WORKSPACE/GenAIExamples/DocSum/docker_compose/intel/cpu/xeon`,
 run the following command to check the logs:
 ```bash
 docker compose -f compose.yaml logs
 ```
 
-View the docker input parameters in  `./DocSum/docker_compose/intel/cpu/xeon/compose.yaml`
+View the docker input parameters in  `$WORKSPACE/GenAIExamples/DocSum/docker_compose/intel/cpu/xeon/compose.yaml`
 
 ```yaml
     tgi-server:
@@ -488,7 +488,7 @@ the newly selected model.
 ## Stop the services
 
 Once you are done with the entire pipeline and wish to stop and remove all the containers, use the command below:
-```
+```bash
 docker compose down
 ```
 
