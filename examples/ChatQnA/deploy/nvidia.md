@@ -19,7 +19,7 @@ GenAIComps to deploy a single node vLLM or TGI megaservice solution.
 5. LLM with TGI
 
 The solution is aimed to show how to use Redis vectordb for RAG and
-neural-chat-7b-v3-3 model on Nvidia GPU. We will go through
+meta-llama/Meta-Llama-3-8B-Instruct model on Nvidia GPU. We will go through
 how to setup docker container to start a microservices and megaservice . The
 solution will then utilize a sample Nike dataset which is in PDF format. Users
 can then ask a question about Nike and get a chat-like response by default for
@@ -226,11 +226,11 @@ with the tools
 
 |use case components | Tools |   Model     | Service Type |
 |----------------     |--------------|-----------------------------|-------|
-|Data Prep            |  LangChain   | NA                       |OPEA Microservice |
-|VectorDB             |  Redis       | NA                       |Open source service|
-|Embedding            |   TEI        | BAAI/bge-base-en-v1.5    |OPEA Microservice |
+|Data Prep            |  LangChain   | NA                       | OPEA Microservice |
+|VectorDB             |  Redis       | NA                       | Open source service |
+|Embedding            |   TEI        | BAAI/bge-base-en-v1.5    | OPEA Microservice |
 |Reranking            |   TEI        | BAAI/bge-reranker-base   | OPEA Microservice |
-|LLM                  |   TGI        |Intel/neural-chat-7b-v3-3 |OPEA Microservice |
+|LLM                  |   TGI        | meta-llama/Meta-Llama-3-8B-Instruct | OPEA Microservice |
 |UI                   |              | NA                       | Gateway Service |
 
 Tools and models mentioned in the table are configurable either through the
@@ -532,7 +532,7 @@ and the log shows model warm up, please wait for a while and try it later.
 ```
 2024-06-05T05:45:27.707509646Z 2024-06-05T05:45:27.707361Z  WARN text_generation_router: router/src/main.rs:357: `--revision` is not set
 2024-06-05T05:45:27.707539740Z 2024-06-05T05:45:27.707379Z  WARN text_generation_router: router/src/main.rs:358: We strongly advise to set it to a known supported commit.
-2024-06-05T05:45:27.852525522Z 2024-06-05T05:45:27.852437Z  INFO text_generation_router: router/src/main.rs:379: Serving revision bdd31cf498d13782cc7497cba5896996ce429f91 of model Intel/neural-chat-7b-v3-3
+2024-06-05T05:45:27.852525522Z 2024-06-05T05:45:27.852437Z  INFO text_generation_router: router/src/main.rs:379: Serving revision bdd31cf498d13782cc7497cba5896996ce429f91 of model meta-llama/Meta-Llama-3-8B-Instruct
 2024-06-05T05:45:27.867833811Z 2024-06-05T05:45:27.867759Z  INFO text_generation_router: router/src/main.rs:221: Warming up model
 
 ```
@@ -575,7 +575,7 @@ data: [DONE]
 
 ```
 curl http://${host_ip}:8888/v1/chatqna -H "Content-Type: application/json" -d '{
-     "model": "Intel/neural-chat-7b-v3-3",
+     "model": "meta-llama/Meta-Llama-3-8B-Instruct",
      "messages": "What is the revenue of Nike in 2023?"
      }'
 

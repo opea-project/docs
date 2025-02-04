@@ -177,7 +177,7 @@ The use case will use the following combination of GenAIComps and tools
 
 |Use Case Components | Tools | Model     | Service Type |
 |----------------     |--------------|-----------------------------|-------|
-|LLM                  |   TGI        | meta-llama/CodeLlama-7b-hf | OPEA Microservice |
+|LLM                  |   TGI        | Qwen/Qwen2.5-Coder-7B-Instruct | OPEA Microservice |
 |UI                   |              | NA                        | Gateway Service |
 
 Tools and models mentioned in the table are configurable either through the

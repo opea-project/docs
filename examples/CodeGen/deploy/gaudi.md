@@ -12,7 +12,7 @@ The CodeGen use case uses a single microservice called LLM. In this tutorial, we
 will walk through the steps on how to enable it from OPEA GenAIComps to deploy on 
 a single node TGI megaservice solution. 
 
-The solution is aimed to show how to use the CodeLlama-7b-hf model on the Intel® 
+The solution is aimed to show how to use the Qwen2.5-Coder-7B-Instruct model on the Intel® 
 Gaudi® AI Accelerator. We will go through how to setup docker containers to start 
 the microservice and megaservice. The solution will then take text input as the 
 prompt and generate code accordingly. It is deployed with a UI with 2 modes to 
@@ -70,8 +70,8 @@ Setup the HuggingFace token
 export HUGGINGFACEHUB_API_TOKEN="Your_Huggingface_API_Token"
 ```
 
-Additionally, if you plan to use the default model CodeLlama-7b-hf, you will 
-need to [request access](https://huggingface.co/meta-llama/CodeLlama-7b-hf) from HuggingFace.
+Additionally, if you plan to use the default model Qwen2.5-Coder-7B-Instruct, you will 
+need to [request access](https://huggingface.co/Qwen/Qwen2.5-Coder-7B-Instruct) from HuggingFace.
 
 The example requires you to set the `host_ip` to deploy the microservices on
 endpoint enabled with ports. Set the host_ip env variable
@@ -181,7 +181,7 @@ The use case will use the following combination of GenAIComps and tools
 
 |Use Case Components | Tools | Model     | Service Type |
 |----------------     |--------------|-----------------------------|-------|
-|LLM                  |   TGI        | meta-llama/CodeLlama-7b-hf | OPEA Microservice |
+|LLM                  |   TGI        | Qwen/Qwen2.5-Coder-7B-Instruct | OPEA Microservice |
 |UI                   |              | NA                        | Gateway Service |
 
 Tools and models mentioned in the table are configurable either through the
