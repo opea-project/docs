@@ -22,6 +22,7 @@ variable for the desired release version with the **number only**
 ```bash
 # Set workspace
 export WORKSPACE=<path>
+cd $WORKSPACE
 
 # Set desired release version - number only
 export RELEASE_VERSION=<insert-release-version>
@@ -47,13 +48,13 @@ Next, generate [user access token](https://huggingface.co/docs/transformers.js/e
 
 Setup the HuggingFace token
 
-```
+```bash
 export HUGGINGFACEHUB_API_TOKEN="Your_Huggingface_API_Token"
 ```
 
 The example requires you to set the `host_ip` to deploy the microservices on the endpoint enabled with ports. Set the host_ip env variable.
 
-```
+```bash
 export host_ip=$(hostname -I | awk '{print $1}')
 ```
 
@@ -118,7 +119,7 @@ Build the megaservice image for this use case.
 cd $WORKSPACE/GenAIExamples/CodeTrans
 ```
 
-```
+```bash
 docker  build  -t  opea/codetrans:${RELEASE_VERSION}  --build-arg  https_proxy=$https_proxy  \
 --build-arg http_proxy=$http_proxy -f Dockerfile .
 ```
@@ -202,7 +203,7 @@ For example, the CodeTrans example starts 5 docker (services), check these docke
 
 To do a quick sanity check, try `docker ps -a` to see if all the containers are running.
 
-```
+```bash
 CONTAINER ID   IMAGE                                 COMMAND                  CREATED         STATUS                   PORTS                                       NAMES
 a6d83e9fb44f   opea/nginx:${RELEASE_VERSION}                     "/docker-entrypoint.…"   8 minutes ago   Up 26 seconds            0.0.0.0:80->80/tcp, :::80->80/tcp           codetrans-gaudi-nginx-server
 42af29c8a8b6   opea/codetrans-ui:${RELEASE_VERSION}              "docker-entrypoint.s…"   8 minutes ago   Up 27 seconds            0.0.0.0:5173->5173/tcp, :::5173->5173/tcp   codetrans-gaudi-ui-server
@@ -227,7 +228,7 @@ docker logs ${CONTAINER_ID} | grep Connected
 ```
 If the service is ready, you will get a response like below.
 
-```
+```bash
 2024-09-03T02:47:53.402023Z INFO text_generation_router::server: router/src/server.rs:2311: Connected
 ```
 ```bash
@@ -239,7 +240,7 @@ curl  http://${host_ip}:8008/generate  \
 
 TGI service generates text for the input prompt. Here is the expected result from TGI:
  
-```
+```bash
 {"generated_text":"'''Python\nprint(\"Hello, World!\")"}
 ```
 **NOTE**: After launching TGI, it takes a few minutes for the TGI server to load the LLM model and warm up.
@@ -258,7 +259,7 @@ curl http://${host_ip}:9000/v1/chat/completions \
  -H 'Content-Type: application/json'
 ```
 The expected output is as shown below:
-```
+```bash
 data: {"id":"","choices":[{"finish_reason":"","index":0,"logprobs":null,"text":"\n"}],"created":1737123223,"model":"mistralai/Mistral-7B-Instruct-v0.3","object":"text_completion","system_fingerprint":"2.4.0-sha-0a655a0-intel-cpu","usage":null}
 data: {"id":"","choices":[{"finish_reason":"","index":0,"logprobs":null,"text":"\n"}],"created":1737123223,"model":"mistralai/Mistral-7B-Instruct-v0.3","object":"text_completion","system_fingerprint":"2.4.0-sha-0a655a0-intel-cpu","usage":null}
 data: {"id":"","choices":[{"finish_reason":"","index":0,"logprobs":null,"text":"``"}],"created":1737123223,"model":"mistralai/Mistral-7B-Instruct-v0.3","object":"text_completion","system_fingerprint":"2.4.0-sha-0a655a0-intel-cpu","usage":null}
@@ -289,7 +290,7 @@ curl  http://${host_ip}:7777/v1/codetrans  \
 -d  '{"language_from": "Golang","language_to": "Python","source_code": "package main\n\nimport \"fmt\"\nfunc main() {\n fmt.Println(\"Hello, World!\");\n}"}'
 ```
 When you send this request, you’ll receive a streaming response from the MegaService. It will appear line by line like so:
-```
+```bash
 data: {"id":"","choices":[{"finish_reason":"","index":0,"logprobs":null,"text":"\n"}],"created":1737121307,"model":"mistralai/Mistral-7B-Instruct-v0.3","object":"text_completion","system_fingerprint":"2.4.0-sha-0a655a0-intel-cpu","usage":null}
 data: {"id":"","choices":[{"finish_reason":"","index":0,"logprobs":null,"text":"\n"}],"created":1737121307,"model":"mistralai/Mistral-7B-Instruct-v0.3","object":"text_completion","system_fingerprint":"2.4.0-sha-0a655a0-intel-cpu","usage":null}
 data: {"id":"","choices":[{"finish_reason":"","index":0,"logprobs":null,"text":"        "}],"created":1737121307,"model":"mistralai/Mistral-7B-Instruct-v0.3","object":"text_completion","system_fingerprint":"2.4.0-sha-0a655a0-intel-cpu","usage":null}
@@ -311,7 +312,7 @@ data: {"id":"","choices":[{"finish_reason":"eos_token","index":0,"logprobs":null
 data: [DONE]
 ```
 Within this output, each line contains JSON that includes a `text` field. Once you combine the `text` values in order, you’ll reconstruct the translated code. In this example, the final code is simply:
-```
+```bash
 print("Hello, World!")
 ```
 This demonstrates how the MegaService streams each segment of the response, which you can then piece together to get the complete translation.
@@ -348,8 +349,8 @@ Check the log using `docker logs 0eade4fe0637 -t`.
 ```
 The log indicates the `MODEL_ID` is not set.
 
-View the docker input parameters in `./CodeTrans/docker_compose/intel/hpu/gaudi/compose.yaml`
-```
+View the docker input parameters in `$WORKSPACE/GenAIExamples/CodeTrans/docker_compose/intel/hpu/gaudi/compose.yaml`
+```yaml
 tgi-service:
  image: ghcr.io/huggingface/tgi-gaudi:2.0.6
  container_name: codetrans-tgi-service
@@ -387,8 +388,8 @@ Set the `LLM_MODEL_ID` then restart the containers.
 
 You can also check overall logs with the following command, where the
 `compose.yaml` is the MegaService docker-compose configuration file.
-```
-docker compose -f ./docker_compose/intel/hpu/gaudi/compose.yaml logs
+```bash
+docker compose -f $WORKSPACE/GenAIExamples/CodeTrans/docker_compose/intel/hpu/gaudi/compose.yaml logs
 ```
 ## Launch UI
 
@@ -400,7 +401,7 @@ Alternatively, you can access the UI directly using its internal port. This meth
 
 If you need to change the port used to access the UI directly (not through Nginx), modify the ports section of the `compose.yaml` file:
 
-```
+```yaml
 codetrans-gaudi-ui-server:
  image: ${REGISTRY:-opea}/codetrans-ui:${TAG:-latest}
  container_name: codetrans-gaudi-ui-server
@@ -416,6 +417,6 @@ Remember to replace YOUR_HOST_PORT with your preferred host port number. After m
 
 Once you are done with the entire pipeline and wish to stop and remove all the containers, use the command below:
 
-```
+```bash
 docker compose -f compose.yaml down
 ```

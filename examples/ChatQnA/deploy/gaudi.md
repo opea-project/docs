@@ -52,6 +52,7 @@ variable for the desired release version with the **number only**
 ```bash
 # Set workspace
 export WORKSPACE=<path>
+cd $WORKSPACE
 
 # Set desired release version - number only
 export RELEASE_VERSION=<insert-release-version>
@@ -447,7 +448,7 @@ c59178629901   redis/redis-stack:7.2.0-v9                              "/entrypo
 ## Interacting with ChatQnA deployment
 
 This section will walk you through what are the different ways to interact with
-the microservices deployed
+the microservices deployed.
 
 ### Dataprep Microservice（Optional）
 
@@ -463,7 +464,7 @@ wget https://raw.githubusercontent.com/opea-project/GenAIComps/main/comps/retrie
 ```
 
 To upload the file:
-```
+```bash
 curl -X POST "http://${host_ip}:6007/v1/dataprep" \
      -H "Content-Type: multipart/form-data" \
      -F "files=@./nke-10k-2023.pdf"
@@ -474,7 +475,7 @@ Update the file path according to your environment.
 
 Add Knowledge Base via HTTP Links:
 
-```
+```bash
 curl -X POST "http://${host_ip}:6007/v1/dataprep" \
      -H "Content-Type: multipart/form-data" \
      -F 'link_list=["https://opea.dev"]'
@@ -484,7 +485,7 @@ This command updates a knowledge base by submitting a list of HTTP links for pro
 
 Also, you are able to get the file list that you uploaded:
 
-```
+```bash
 curl -X POST "http://${host_ip}:6007/v1/dataprep/get_file" \
      -H "Content-Type: application/json"
 
@@ -493,7 +494,7 @@ curl -X POST "http://${host_ip}:6007/v1/dataprep/get_file" \
 To delete the file/link you uploaded you can use the following commands:
 
 #### Delete link
-```
+```bash
 # The dataprep service will add a .txt postfix for link file
 
 curl -X POST "http://${host_ip}:6007/v1/dataprep/delete_file" \
@@ -503,7 +504,7 @@ curl -X POST "http://${host_ip}:6007/v1/dataprep/delete_file" \
 
 #### Delete file
 
-```
+```bash
 curl -X POST "http://${host_ip}:6007/v1/dataprep/delete_file" \
      -d '{"file_path": "nke-10k-2023.pdf"}' \
      -H "Content-Type: application/json"
@@ -511,7 +512,7 @@ curl -X POST "http://${host_ip}:6007/v1/dataprep/delete_file" \
 
 #### Delete all uploaded files and links
 
-```
+```bash
 curl -X POST "http://${host_ip}:6007/v1/dataprep/delete_file" \
      -d '{"file_path": "all"}' \
      -H "Content-Type: application/json"
@@ -523,7 +524,7 @@ The TEI embedding service takes in a string as input, embeds the string into a
 vector of a specific length determined by the embedding model and returns this
 embedded vector.
 
-```
+```bash
 curl ${host_ip}:8090/embed \
     -X POST \
     -d '{"inputs":"What is Deep Learning?"}' \
@@ -540,7 +541,7 @@ input parameters, it takes in a string, embeds it into a vector using the TEI
 embedding service and pads other default parameters that are required for the
 retrieval microservice and returns it.
 
-```
+```bash
 curl http://${host_ip}:6000/v1/embeddings\
   -X POST \
   -d '{"text":"hello"}' \
@@ -556,7 +557,7 @@ model EMBEDDING_MODEL_ID="BAAI/bge-base-en-v1.5", which vector size is 768.
 Check the vector dimension of your embedding model and set
 `your_embedding` dimension equal to it.
 
-```
+```bash
 export your_embedding=$(python3 -c "import random; embedding = [random.uniform(-1, 1) for _ in range(768)]; print(embedding)")
 
 curl http://${host_ip}:7000/v1/retrieval \
@@ -571,7 +572,7 @@ request, initial query or the input to the retrieval microservice, a list of top
 the number of documents to be returned.
 
 The output is retrieved text that relevant to the input data:
-```
+```bash
 {"id":"27210945c7c6c054fa7355bdd4cde818","retrieved_docs":[{"id":"0c1dd04b31ab87a5468d65f98e33a9f6","text":"Company: Nike. financial instruments are subject to master netting arrangements that allow for the offset of assets and liabilities in the event of default or early termination of the contract.\nAny amounts of cash collateral received related to these instruments associated with the Company's credit-related contingent features are recorded in Cash and\nequivalents and Accrued liabilities, the latter of which would further offset against the Company's derivative asset balance. Any amounts of cash collateral posted related\nto these instruments associated with the Company's credit-related contingent features are recorded in Prepaid expenses and other current assets, which would further\noffset against the Company's derivative liability balance. Cash collateral received or posted related to the Company's credit-related contingent features is presented in the\nCash provided by operations component of the Consolidated Statements of Cash Flows. The Company does not recognize amounts of non-cash collateral received, such\nas securities, on the Consolidated Balance Sheets. For further information related to credit risk, refer to Note 12 — Risk Management and Derivatives.\n2023 FORM 10-K 68Table of Contents\nThe following tables present information about the Company's derivative assets and liabilities measured at fair value on a recurring basis and indicate the level in the fair\nvalue hierarchy in which the Company classifies the fair value measurement:\nMAY 31, 2023\nDERIVATIVE ASSETS\nDERIVATIVE LIABILITIES"},{"id":"1d742199fb1a86aa8c3f7bcd580d94af","text": ... }
 
 ```
@@ -583,7 +584,7 @@ service. It consumes the query and list of documents and returns the document
 index based on decreasing order of the similarity score. The document
 corresponding to the returned index with the highest score is the most relevant
 document for the input query.
-```
+```bash
 curl http://${host_ip}:8808/rerank \
     -X POST \
     -d '{"query":"What is Deep Learning?", "texts": ["Deep Learning is not...", "Deep learning is..."]}' \
@@ -599,7 +600,7 @@ Output is:  `[{"index":1,"score":0.9988041},{"index":0,"score":0.022948774}]`
 The reranking microservice consumes the TEI Reranking service and pads the
 response with default parameters required for the llm microservice.
 
-```
+```bash
 curl http://${host_ip}:8000/v1/reranking \
   -X POST \
   -d '{"initial_query":"What is Deep Learning?", "retrieved_docs": [{"text":"Deep Learning is not..."}, {"text":"Deep learning is..."}]}' \
@@ -612,7 +613,7 @@ with other default parameter such as temperature, `repetition_penalty`,
 `chat_template` and so on. We can also get top n documents by setting `top_n` as one
 of the input parameters. For example:
 
-```
+```bash
 curl http://${host_ip}:8000/v1/reranking \
   -X POST \
   -d '{"initial_query":"What is Deep Learning?" ,"top_n":2, "retrieved_docs": [{"text":"Deep Learning is not..."}, {"text":"Deep learning is..."}]}' \
@@ -621,7 +622,7 @@ curl http://${host_ip}:8000/v1/reranking \
 
 Here is the output:
 
-```
+```bash
 {"id":"e1eb0e44f56059fc01aa0334b1dac313","query":"Human: Answer the question based only on the following context:\n    Deep learning is...\n    Question: What is Deep Learning?","max_new_tokens":1024,"top_k":10,"top_p":0.95,"typical_p":0.95,"temperature":0.01,"repetition_penalty":1.03,"streaming":true}
 
 ```
@@ -635,7 +636,7 @@ After it's finished, the service will be ready.
 
 Try the command below to check whether the LLM serving is ready.
 
-```
+```bash
 docker logs ${CONTAINER_ID} | grep Connected
 ```
 
@@ -650,7 +651,7 @@ If the service is ready, you will get the response like below.
 :::{tab-item} vllm
 :sync: vllm
 
-```
+```bash
 curl http://${host_ip}:8007/v1/completions \
   -H "Content-Type: application/json" \
   -d '{
@@ -674,7 +675,7 @@ LLM model and warm up.
 :::{tab-item} TGI
 :sync: TGI
 
-```
+```bash
 curl http://${host_ip}:8005/generate \
   -X POST \
   -d '{"inputs":"What is Deep Learning?","parameters":{"max_new_tokens":64, "do_sample": true}}' \
@@ -683,7 +684,7 @@ curl http://${host_ip}:8005/generate \
 
 TGI service generate text for the input prompt. Here is the expected result from TGI:
 
-```
+```bash
 {"generated_text":"Artificial Intelligence (AI) has become a very popular buzzword in the tech industry. While the phrase conjures images of sentient robots and self-driving cars, our current AI landscape is much more subtle. In fact, it most often manifests in the forms of algorithms that help recognize the faces of"}
 ```
 
@@ -699,7 +700,7 @@ This service depends on the above LLM backend service startup. Give it a couple 
 ::::{tab-set}
 :::{tab-item} vllm
 :sync: vllm
-```
+```bash
 curl http://${host_ip}:9000/v1/chat/completions \
  -X POST \
  -d '{"query":"What is Deep Learning?","max_tokens":17,"top_p":1,"temperature":0.7,\
@@ -711,7 +712,7 @@ For parameters in vLLM modes, can refer to [LangChain VLLMOpenAI API](https://hu
 :::
 :::{tab-item} TGI
 :sync: TGI
-```
+```bash
 curl http://${host_ip}:9000/v1/chat/completions \
   -X POST \
   -d '{"query":"What is Deep Learning?","max_new_tokens":17,"top_k":10,"top_p":0.95,"typical_p":0.95,"temperature":0.01,"repetition_penalty":1.03,"streaming":true}' \
@@ -724,7 +725,7 @@ For parameters in TGI modes, please refer to [HuggingFace InferenceClient API](h
 
 You will get generated text from LLM:
 
-```
+```bash
 data: b'\n'
 data: b'\n'
 data: b'Deep'
@@ -747,7 +748,7 @@ data: [DONE]
 
 ### MegaService
 
-```
+```bash
 curl http://${host_ip}:8888/v1/chatqna -H "Content-Type: application/json" -d '{
      "messages": "What is the revenue of Nike in 2023?"
      }'
@@ -755,7 +756,7 @@ curl http://${host_ip}:8888/v1/chatqna -H "Content-Type: application/json" -d '{
 
 Here is the output for your reference:
 
-```
+```bash
 data: b'\n'
 data: b'An'
 data: b'swer'
@@ -794,7 +795,7 @@ data: [DONE]
 #### Guardrail Microservice
 If you had enabled Guardrail microservice, access via the below curl command
 
-```
+```bash
 curl http://${host_ip}:9090/v1/guardrails\
   -X POST \
   -d '{"text":"How do you buy a tiger in the US?","parameters":{"max_new_tokens":32}}' \
@@ -861,7 +862,7 @@ The log indicates the `MODEL_ID` is not set.
 :::{tab-item} vllm
 :sync: vllm
 
-View the docker input parameters in  `./ChatQnA/docker_compose/intel/hpu/gaudi/compose.yaml`
+View the docker input parameters in  `$WORKSPACE/GenAIExamples/ChatQnA/docker_compose/intel/hpu/gaudi/compose.yaml`
 
 ```yaml
   vllm-service:
@@ -890,7 +891,7 @@ View the docker input parameters in  `./ChatQnA/docker_compose/intel/hpu/gaudi/c
 :::{tab-item} TGI
 :sync: TGI
 
-View the docker input parameters in  `./ChatQnA/docker_compose/intel/hpu/gaudi/compose.yaml`
+View the docker input parameters in  `$WORKSPACE/GenAIExamples/ChatQnA/docker_compose/intel/hpu/gaudi/compose_tgi.yaml`
 
 ```yaml
   tgi-service:
@@ -932,15 +933,15 @@ compose.yaml is the mega service docker-compose configuration file.
 :::{tab-item} vllm
 :sync: vllm
 
-```
-docker compose -f ./docker_compose/intel/hpu/gaudi/compose.yaml logs
+```bash
+docker compose -f compose.yaml logs
 ```
 :::
 :::{tab-item} TGI
 :sync: TGI
 
-```
-docker compose -f ./docker_compose/intel/hpu/gaudi/compose.yaml logs
+```bash
+docker compose -f compose_tgi.yaml logs
 ```
 :::
 ::::
@@ -953,15 +954,15 @@ Once you are done with the entire pipeline and wish to stop and remove all the c
 :::{tab-item} vllm
 :sync: vllm
 
-```
+```bash
 docker compose -f compose.yaml down
 ```
 :::
 :::{tab-item} TGI
 :sync: TGI
 
-```
-docker compose -f compose.yaml down
+```bash
+docker compose -f compose_tgi.yaml down
 ```
 :::
 ::::

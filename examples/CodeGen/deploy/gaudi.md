@@ -43,6 +43,7 @@ variable for the desired release version with the **number only**
 ```bash
 # Set workspace
 export WORKSPACE=<path>
+cd $WORKSPACE
 
 # Set desired release version - number only
 export RELEASE_VERSION=<insert-release-version>
@@ -66,7 +67,7 @@ Setup your [HuggingFace](https://huggingface.co/) account and generate
 [user access token](https://huggingface.co/docs/transformers.js/en/guides/private#step-1-generating-a-user-access-token).
 
 Setup the HuggingFace token
-```
+```bash
 export HUGGINGFACEHUB_API_TOKEN="Your_Huggingface_API_Token"
 ```
 
@@ -75,12 +76,12 @@ need to [request access](https://huggingface.co/Qwen/Qwen2.5-Coder-7B-Instruct) 
 
 The example requires you to set the `host_ip` to deploy the microservices on
 endpoint enabled with ports. Set the host_ip env variable
-```
+```bash
 export host_ip=$(hostname -I | awk '{print $1}')
 ```
 
 Make sure to setup Proxies if you are behind a firewall
-```
+```bash
 export no_proxy=${your_no_proxy},$host_ip
 export http_proxy=${your_http_proxy}
 export https_proxy=${your_http_proxy}
@@ -139,7 +140,6 @@ cd $WORKSPACE/GenAIExamples/CodeGen
 
 ```bash
 docker build --no-cache -t opea/codegen:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f Dockerfile .
-cd ../..
 ```
 
 ### Build the UI Image
@@ -151,7 +151,6 @@ You can build 2 modes of UI
 ```bash
 cd $WORKSPACE/GenAIExamples/CodeGen/ui/
 docker build --no-cache -t opea/codegen-ui:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f ./docker/Dockerfile .
-cd ../../..
 ```
 
 *React UI (Optional)* 
@@ -160,7 +159,6 @@ If you want a React-based frontend.
 ```bash
 cd $WORKSPACE/GenAIExamples/CodeGen/ui/
 docker build --no-cache -t opea/codegen-react-ui:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f ./docker/Dockerfile.react .
-cd ../../..
 ```
 
 ### Sanity Check
@@ -237,7 +235,7 @@ The CodeGen example starts 4 docker containers. Check that these docker
 containers are all running, i.e, all the containers  `STATUS`  are  `Up`.
 You can do this with the `docker ps -a` command.
 
-```
+```bash
 CONTAINER ID   IMAGE                                                   COMMAND                  CREATED              STATUS              PORTS                                       NAMES
 bbd235074c3d   opea/codegen-ui:${RELEASE_VERSION}                                  "docker-entrypoint.s…"   About a minute ago   Up About a minute   0.0.0.0:5173->5173/tcp, :::5173->5173/tcp   codegen-gaudi-ui-server
 8d3872ca66fa   opea/codegen:${RELEASE_VERSION}                                     "python codegen.py"      About a minute ago   Up About a minute   0.0.0.0:7778->7778/tcp, :::7778->7778/tcp   codegen-gaudi-backend-server
@@ -263,7 +261,7 @@ curl http://${host_ip}:8028/generate \
 
 Here is the output:
 
-```
+```bash
 {"generated_text":"\n\nIO iflow diagram:\n\n!\[IO flow diagram(s)\]\(TodoList.iflow.svg\)\n\n### TDD Kata walkthrough\n\n1. Start with a user story. We will add story tests later. In this case, we'll choose a story about adding a TODO:\n    ```ruby\n    as a user,\n    i want to add a todo,\n    so that i can get a todo list.\n\n    conformance:\n    - a new todo is added to the list\n    - if the todo text is empty, raise an exception\n    ```\n\n1. Write the first test:\n    ```ruby\n    feature Testing the addition of a todo to the list\n\n    given a todo list empty list\n    when a user adds a todo\n    the todo should be added to the list\n\n    inputs:\n    when_values: [[\"A\"]]\n\n    output validations:\n    - todo_list contains { text:\"A\" }\n    ```\n\n1. Write the first step implementation in any programming language you like. In this case, we will choose Ruby:\n    ```ruby\n    def add_"}
 ```
 
@@ -278,7 +276,7 @@ curl http://${host_ip}:9000/v1/chat/completions\
 
 The output is given one character at a time. It is too long to show 
 here but the last item will be
-```
+```bash
 data: [DONE]
 ```
 
@@ -292,14 +290,14 @@ curl http://${host_ip}:7778/v1/codegen -H "Content-Type: application/json" -d '{
 
 The output is given one character at a time. It is too long to show 
 here but the last item will be
-```
+```bash
 data: [DONE]
 ```
 
 ## Launch UI
 ### Svelte UI
 To access the frontend, open the following URL in your browser: http://{host_ip}:5173. By default, the UI runs on port 5173 internally. If you prefer to use a different host port to access the frontend, you can modify the port mapping in the `compose.yaml` file as shown below:
-```bash
+```yaml
   codegen-gaudi-ui-server:
     image: ${REGISTRY:-opea}/codegen-ui:${TAG:-latest}
     ...
@@ -309,7 +307,7 @@ To access the frontend, open the following URL in your browser: http://{host_ip}
 
 ### React-Based UI (Optional)
 To access the React-based frontend, modify the UI service in the `compose.yaml` file. Replace `codegen-gaudi-ui-server` service with the codegen-gaudi-react-ui-server service as per the config below:
-```bash
+```yaml
 codegen-gaudi-react-ui-server:
   image: ${REGISTRY:-opea}/codegen-react-ui:${TAG:-latest}
   container_name: codegen-gaudi-react-ui-server
@@ -326,7 +324,7 @@ codegen-gaudi-react-ui-server:
   restart: always
 ```
 Once the services are up, open the following URL in your browser: http://{host_ip}:5174. By default, the UI runs on port 80 internally. If you prefer to use a different host port to access the frontend, you can modify the port mapping in the `compose.yaml` file as shown below:
-```bash
+```yaml
   codegen-gaudi-react-ui-server:
     image: ${REGISTRY:-opea}/codegen-react-ui:${TAG:-latest}
     ...
@@ -345,13 +343,13 @@ docker logs <CONTAINER ID> -t
 You can also check the overall logs with the following command, where the
 `compose.yaml` is the megaservice docker-compose configuration file.
 
-Assumming you are still in this directory `GenAIExamples/CodeGen/docker_compose/intel/hpu/gaudi`,
+Assumming you are still in this directory `$WORKSPACE/GenAIExamples/CodeGen/docker_compose/intel/hpu/gaudi`,
 run the following command to check the logs:
 ```bash
 docker compose -f compose.yaml logs
 ```
 
-View the docker input parameters in  `./CodeGen/docker_compose/intel/hpu/gaudi/compose.yaml`
+View the docker input parameters in  `$WORKSPACE/GenAIExamples/CodeGen/docker_compose/intel/hpu/gaudi/compose.yaml`
 
 ```yaml
   tgi-service:
@@ -383,6 +381,6 @@ the newly selected model.
 ## Stop the services
 
 Once you are done with the entire pipeline and wish to stop and remove all the containers, use the command below:
-```
+```bash
 docker compose down
 ```
