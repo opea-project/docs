@@ -129,7 +129,7 @@ tcp        0      0 10.132.x.y:11434      0.0.0.0:*               LISTEN
 
 #### Pull Ollama LLM model
 
-Run the command to download LLM models. The <host_ip> is the one set in [Ollama Service Configuration](#Set-Ollama-Service-Configuration)
+Run the command to download LLM models. The <host_ip> is the one set in the `Set Ollama Service Configuration`.
 
 ```bash
 export host_ip=<host_ip>

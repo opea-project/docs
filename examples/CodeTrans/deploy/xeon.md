@@ -75,7 +75,7 @@ This step involves either building or pulling four required Docker images. Each 
 :::::{tab-item} Pull
 :sync: Pull
 
-If you decide to pull the docker containers and not build them locally, you can proceed to [Use Case Setup](#use-case-setup). where all the necessary containers will be pulled in from the docker hub.
+If you decide to pull the docker containers and not build them locally, you can proceed to the next step where all the necessary containers will be pulled in from dockerhub.
 :::::
 :::::{tab-item} Build
 :sync: Build
