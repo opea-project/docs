@@ -4,8 +4,10 @@ This deployment section covers single-node on-prem deployment of the ChatQnA
 example with OPEA comps to deploy using vLLM or TGI service. There are several
 slice-n-dice ways to enable RAG with vectordb and LLM models, but here we will
 be covering one option of doing it for convenience : we will be showcasing  how
-to build an e2e chatQnA with Redis VectorDB and meta-llama/Meta-Llama-3-8B-Instruct model, deployed on Intel® Xeon® Scalable processors. To quickly learn about OPEA in just 5 minutes and set up the required hardware and software, please follow the instructions in the
-[Getting Started](https://opea-project.github.io/latest/getting-started/README.html) section.
+to build an e2e chatQnA with Redis VectorDB and meta-llama/Meta-Llama-3-8B-Instruct model, 
+deployed on Intel® Xeon® Scalable processors. To quickly learn about OPEA in just 5 minutes 
+and set up the required hardware and software, please follow the instructions in the
+[Getting Started](../../../getting-started/README.md) section.
 
 ## Overview
 
@@ -419,13 +421,13 @@ commands. The dataprep microservice extracts the texts from variety of data
 sources, chunks the data, embeds each chunk using embedding microservice and
 store the embedded vectors in the redis vector database.
 
-Update Knowledge Base via Local File [nke-10k-2023.pdf](https://github.com/opea-project/GenAIComps/blob/main/comps/retrievers/redis/data/nke-10k-2023.pdf). Or click [here](https://raw.githubusercontent.com/opea-project/GenAIComps/main/comps/retrievers/redis/data/nke-10k-2023.pdf) to download the file via any web browser. Or run this command to get the file on a terminal.
+`nke-10k-2023.pdf` is Nike's annual report on a form 10-K. Run this command to get the file on a terminal:
 
 ```bash
-wget https://raw.githubusercontent.com/opea-project/GenAIComps/main/comps/retrievers/redis/data/nke-10k-2023.pdf
+wget https://github.com/opea-project/GenAIComps/blob/v1.1/comps/retrievers/redis/data/nke-10k-2023.pdf
 ```
 
-Upload:
+Upload the file:
 
 ```bash
 curl -X POST "http://${host_ip}:6007/v1/dataprep" \

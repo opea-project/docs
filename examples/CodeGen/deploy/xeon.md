@@ -3,8 +3,9 @@
 This deployment section covers single-node on-prem deployment of the CodeGen
 example with OPEA comps to deploy using the TGI service. We will be showcasing how
 to build an e2e CodeGen solution with the Qwen2.5-Coder-7B-Instruct,
-deployed on Intel® Xeon® Scalable processors. To quickly learn about OPEA in just 5 minutes and set up the required hardware and software, please follow the instructions in the
-[Getting Started](https://opea-project.github.io/latest/getting-started/README.html) section. 
+deployed on Intel® Xeon® Scalable processors. To quickly learn about OPEA in just 5 minutes 
+and set up the required hardware and software, please follow the instructions in the
+[Getting Started](../../../getting-started/README.md) section. 
 
 ## Overview
 
