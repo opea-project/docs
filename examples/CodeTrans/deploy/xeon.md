@@ -1,6 +1,6 @@
 # Single node on-prem deployment with TGI on Xeon Scalable processors
 
-This deployment section covers the single-node on-prem deployment of the CodeTrans example with OPEA comps using the Text Generation service based on TGI. The solution demonstrates building a code translation service using the `mistralai/Mistral-7B-Instruct-v0.3` model deployed on Intel® Xeon® Scalable processors. To quickly learn about OPEA in just 5 minutes and set up the required hardware and software, please follow the instructions in the [Getting Started](https://opea-project.github.io/latest/getting-started/README.html) section.
+This deployment section covers the single-node on-prem deployment of the CodeTrans example with OPEA comps using the Text Generation service based on TGI. The solution demonstrates building a code translation service using the `mistralai/Mistral-7B-Instruct-v0.3` model deployed on Intel® Xeon® Scalable processors. To quickly learn about OPEA in just 5 minutes and set up the required hardware and software, please follow the instructions in the [Getting Started](../../../getting-started/README.md) section.
 
 ## Overview
 

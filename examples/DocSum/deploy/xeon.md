@@ -6,7 +6,7 @@ example with OPEA comps to deploy using the TGI service. We will be showcasing h
 to build an e2e DocSum solution with the Intel/neural-chat-7b-v3-3 model, deployed on 
 Intel® Xeon® Scalable processors. To quickly learn about OPEA in just 5 minutes and set
  up the required hardware and software, please follow the instructions in the 
- [Getting Started](https://opea-project.github.io/latest/getting-started/README.html) 
+ [Getting Started](../../../getting-started/README.md) 
 section. 
 
 ## Overview

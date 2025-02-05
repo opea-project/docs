@@ -422,14 +422,13 @@ commands. The dataprep microservice extracts the texts from variety of data
 sources, chunks the data, embeds each chunk using embedding microservice and
 store the embedded vectors in the redis vector database.
 
-Download pdf file:
+`nke-10k-2023.pdf` is Nike's annual report on a form 10-K. Run this command to get the file on a terminal:
 
 ```bash
-wget https://raw.githubusercontent.com/opea-project/GenAIComps/main/comps/retrievers/redis/data/nke-10k-2023.pdf
+wget https://github.com/opea-project/GenAIComps/blob/v1.1/comps/retrievers/redis/data/nke-10k-2023.pdf
 ```
 
-Local File `nke-10k-2023.pdf` Upload with dataprep:
-This command updates a knowledge base by uploading a local file for processing.
+Upload the file:
 
 ```bash
 curl -X POST "http://${host_ip}:6007/v1/dataprep" \
@@ -437,7 +436,10 @@ curl -X POST "http://${host_ip}:6007/v1/dataprep" \
      -F "files=@./nke-10k-2023.pdf"
 ```
 
-Alternatively, you can add knowledge base via HTTP Links:
+This command updates a knowledge base by uploading a local file for processing.
+Update the file path according to your environment.
+
+Add Knowledge Base via HTTP Links:
 
 ```bash
 curl -X POST "http://${host_ip}:6007/v1/dataprep" \
