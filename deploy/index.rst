@@ -122,3 +122,15 @@ Scripts
    /GenAIInfra/scripts/README
    /GenAIInfra/scripts/*
    /GenAIInfra/scripts/**/*
+
+Contributing
+************
+
+.. rst-class:: rst-columns
+
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   /GenAIInfra/dev/*
+   /GenAIInfra/dev/**/*
