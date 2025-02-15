@@ -35,8 +35,8 @@ Below is the list of content we will be covering in this tutorial:
 
 ## Prerequisites
 
-The first step is to clone the GenAIExamples and GenAIComps. GenAIComps are 
-fundamental necessary components used to build examples you find in 
+The first step is to clone the GenAIExamples and GenAIComps projects. GenAIComps are 
+fundamental necessary components used to build the examples you find in 
 GenAIExamples and deploy them as microservices. Set an environment 
 variable for the desired release version with the **number only** 
 (i.e. 1.0, 1.1, etc) and checkout using the tag with that version. 
@@ -62,7 +62,7 @@ git checkout tags/v${RELEASE_VERSION}
 cd ..
 ```
 
-The examples utilize model weights from HuggingFace and langchain.
+The examples utilize model weights from HuggingFace and Langchain.
 
 Setup your [HuggingFace](https://huggingface.co/) account and generate
 [user access token](https://huggingface.co/docs/transformers.js/en/guides/private#step-1-generating-a-user-access-token).
@@ -103,7 +103,7 @@ there are **3 required docker images** and an optional docker image.
 
 If you decide to pull the docker containers and not build them locally,
 you can proceed to the next step where all the necessary containers will
-be pulled in from dockerhub.
+be pulled in from Docker Hub.
 
 :::::
 :::::{tab-item} Build
@@ -111,7 +111,7 @@ be pulled in from dockerhub.
 
 Follow the steps below to build the docker images from within the `GenAIComps` folder.
 **Note:** For RELEASE_VERSIONS older than 1.0, you will need to add a 'v' in front 
-of ${RELEASE_VERSION} to reference the correct image on dockerhub.
+of ${RELEASE_VERSION} to reference the correct image on Docker Hub.
 
 ```bash
 cd $WORKSPACE/GenAIComps
@@ -186,6 +186,13 @@ Set the necessary environment variables to setup the use case case by running th
 Here is where the environment variable `LLM_MODEL_ID` is set, and you can change it to another model 
 by specifying the HuggingFace model card ID.
 
+**Note:** If you wish to run the UI on a web browser on your laptop, you will need to modify `BACKEND_SERVICE_ENDPOINT` to use `localhost` or `127.0.0.1` instead of `host_ip` inside `set_env.sh` for the backend to properly receive data from the UI. Additionally, you will need to port-forward the port used for `BACKEND_SERVICE_ENDPOINT`. Specifically, for CodeGen, append the following to your ssh command: 
+
+```bash
+-L 7778:localhost:7778
+```
+
+Run the `set_env.sh` script.
 ```bash
 cd $WORKSPACE/GenAIExamples/CodeGen/docker_compose/
 source ./set_env.sh

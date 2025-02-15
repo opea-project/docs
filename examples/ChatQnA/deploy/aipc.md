@@ -28,8 +28,8 @@ up to 1024 tokens. The solution is deployed with a UI.
 
 ## Prerequisites 
 
-The first step is to clone the GenAIExamples and GenAIComps. GenAIComps are 
-fundamental necessary components used to build examples you find in 
+The first step is to clone the GenAIExamples and GenAIComps projects. GenAIComps are 
+fundamental necessary components used to build the examples you find in 
 GenAIExamples and deploy them as microservices. Set an environment 
 variable for the desired release version with the **number only** 
 (i.e. 1.0, 1.1, etc) and checkout using the tag with that version. 
@@ -193,7 +193,7 @@ the images will be pushed to docker hub soon by Intel.
 
 If you decide to pull the docker containers and not build them locally,
 you can proceed to the next step where all the necessary containers will
-be pulled in from dockerhub.
+be pulled in from Docker Hub.
 
 :::::
 :::::{tab-item} Build
@@ -201,7 +201,7 @@ be pulled in from dockerhub.
 
 Follow the steps below to build the docker images from within the `GenAIComps` folder.
 **Note:** For RELEASE_VERSIONS older than 1.0, you will need to add a 'v' in front 
-of ${RELEASE_VERSION} to reference the correct image on dockerhub.
+of ${RELEASE_VERSION} to reference the correct image on Docker Hub.
 
 ```bash
 cd $WORKSPACE/GenAIComps
@@ -384,11 +384,9 @@ The warning messages print out the variables if they are **NOT** set.
 
 #### Check the container status
 
-Check if all the containers  launched via docker compose has started
+Check if all the containers launched via docker compose has started.
 
-For example, the ChatQnA example starts 11 docker (services), check these docker
-containers are all running, i.e, all the containers  `STATUS`  are  `Up`
-To do a quick sanity check, try `docker ps -a` to see if all the containers are running.
+For example, the ChatQnA example starts 11 docker (services), check these docker containers are all running. That is, all the containers `STATUS` are `Up`. To do a quick sanity check, try `docker ps -a` to see if all the containers are running.
 
 ::::{tab-set}
 
@@ -422,7 +420,7 @@ commands. The dataprep microservice extracts the texts from variety of data
 sources, chunks the data, embeds each chunk using embedding microservice and
 store the embedded vectors in the redis vector database.
 
-`nke-10k-2023.pdf` is Nike's annual report on a form 10-K. Run this command to get the file on a terminal:
+`nke-10k-2023.pdf` is Nike's annual report on a form 10-K. Run in a terminal window this command to download the file:
 
 ```bash
 wget https://github.com/opea-project/GenAIComps/blob/v1.1/comps/retrievers/redis/data/nke-10k-2023.pdf

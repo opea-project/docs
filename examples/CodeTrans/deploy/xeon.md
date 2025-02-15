@@ -13,8 +13,8 @@ The solution demonstrates using the Mistral-7B-Instruct-v0.3 model on Intel Xeon
 
 ## Prerequisites
 
-TThe first step is to clone the GenAIExamples and GenAIComps. GenAIComps are 
-fundamental necessary components used to build examples you find in 
+TThe first step is to clone the GenAIExamples and GenAIComps projects. GenAIComps are 
+fundamental necessary components used to build the examples you find in 
 GenAIExamples and deploy them as microservices. Set an environment 
 variable for the desired release version with the **number only** 
 (i.e. 1.0, 1.1, etc) and checkout using the tag with that version. 
@@ -75,14 +75,14 @@ This step involves either building or pulling four required Docker images. Each 
 :::::{tab-item} Pull
 :sync: Pull
 
-If you decide to pull the docker containers and not build them locally, you can proceed to the next step where all the necessary containers will be pulled in from dockerhub.
+If you decide to pull the docker containers and not build them locally, you can proceed to the next step where all the necessary containers will be pulled in from Docker Hub.
 :::::
 :::::{tab-item} Build
 :sync: Build
 
 Follow the steps below to build the docker images from within the `GenAIComps` folder.
 **Note:** For RELEASE_VERSIONS older than 1.0, you will need to add a 'v' in front 
-of ${RELEASE_VERSION} to reference the correct image on dockerhub.
+of ${RELEASE_VERSION} to reference the correct image on Docker Hub.
 
 ```bash
 cd $WORKSPACE/GenAIComps
@@ -162,8 +162,13 @@ Set the necessary environment variables to setup the use case by running the `se
 Here is where the environment variable `LLM_MODEL_ID` is set, and you can change it to another model 
 by specifying the HuggingFace model card ID.
 
-**Note:** If you are port-forwarding your server to a local machine such as a laptop, you will need to port-forward the port for the BACKEND_SERVICE_ENDPOINT and set the IP to use `localhost` or 127.0.0.1 instead for the UI to send data to the backend.
+**Note:** If you wish to run the UI on a web browser on your laptop, you will need to modify `BACKEND_SERVICE_IP` to use `localhost` or `127.0.0.1` instead of `host_ip` inside `set_env.sh` for the backend to properly receive data from the UI. Additionally, you will need to port-forward the port used for `BACKEND_SERVICE_IP`. Specifically, for CodeTrans, append the following to your ssh command: 
 
+```bash
+-L 7777:localhost:7777
+```
+
+Run the `set_env.sh` script.
 ```bash
 cd $WORKSPACE/GenAIExamples/CodeTrans/docker_compose
 source ./set_env.sh

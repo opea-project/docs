@@ -37,8 +37,8 @@ Below is the list of content we will be covering in this tutorial:
 
 ## Prerequisites
 
-The first step is to clone the GenAIExamples and GenAIComps. GenAIComps are 
-fundamental necessary components used to build examples you find in 
+The first step is to clone the GenAIExamples and GenAIComps projects. GenAIComps are 
+fundamental necessary components used to build the examples you find in 
 GenAIExamples and deploy them as microservices. Set an environment 
 variable for the desired release version with the **number only** 
 (i.e. 1.0, 1.1, etc) and checkout using the tag with that version. 
@@ -188,6 +188,13 @@ Set the necessary environment variables to set up the use case by running the `s
 Here is where the environment variable `LLM_MODEL_ID` is set, and you can change it to another model 
 by specifying the HuggingFace model card ID.
 
+**Note:** If you wish to run the UI on a web browser on your laptop, you will need to modify `BACKEND_SERVICE_ENDPOINT` to use `localhost` or `127.0.0.1` instead of `host_ip` inside `set_env.sh` for the backend to properly receive data from the UI. Additionally, you will need to port-forward the port used for `BACKEND_SERVICE_ENDPOINT`. Specifically, for DocSum, append the following to your ssh command: 
+
+```bash
+-L 8888:localhost:8888
+```
+
+Run the `set_env.sh` script.
 ```bash
 cd $WORKSPACE/GenAIExamples/DocSum/docker_compose
 source ./set_env.sh

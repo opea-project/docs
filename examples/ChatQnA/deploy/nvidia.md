@@ -34,8 +34,8 @@ are interested to use.
 
 ## Prerequisites
 
-The first step is to clone the GenAIExamples and GenAIComps. GenAIComps are 
-fundamental necessary components used to build examples you find in 
+The first step is to clone the GenAIExamples and GenAIComps projects. GenAIComps are 
+fundamental necessary components used to build the examples you find in 
 GenAIExamples and deploy them as microservices. Set an environment 
 variable for the desired release version with the **number only** 
 (i.e. 1.0, 1.1, etc) and checkout using the tag with that version. 
@@ -102,7 +102,7 @@ there are 8 required and 1 optional docker images.
 
 If you decide to pull the docker containers and not build them locally,
 you can proceed to the next step where all the necessary containers will
-be pulled in from dockerhub.
+be pulled in from Docker Hub.
 
 :::::
 :::::{tab-item} Build
@@ -110,7 +110,7 @@ be pulled in from dockerhub.
 
 Follow the steps below to build the docker images from within the `GenAIComps` folder.
 **Note:** For RELEASE_VERSIONS older than 1.0, you will need to add a 'v' in front 
-of ${RELEASE_VERSION} to reference the correct image on dockerhub.
+of ${RELEASE_VERSION} to reference the correct image on Docker Hub.
 
 ```bash
 cd $WORKSPACE/GenAIComps
