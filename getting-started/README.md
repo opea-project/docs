@@ -146,24 +146,6 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 11. Connect using ssh (`ssh -i <private_key>  ubuntu@<public_ip_address>`).
 
 :::
-:::{tab-item} Intel® Tiber™ AI Cloud
-:sync: ITAC
-
-1. Log in to [Intel® Tiber™ AI Cloud](cloud.intel.com) - Go to the "Compute" tab on the left and click on "Instances". In the center of the screen, click on the "Launch instance" button.
-
-2. Select your instance configuration, instance type, and machine image which will be Ubuntu.
-
->**Note**: It is recommended to use the `VM-SPR-MED` powered by 4th Generation Intel® Xeon® Scalable processors or larger if you wish to use a CPU. For other hardware platforms such as Intel® Gaudi AI Accelerators, they can be found in the "Preview" tab on the left. Click on "Preview Instances", then the "Request instance" button. 
-
-3. Fill out the rest of the form such as giving your instance a name and answering any additional quesitons.
-
-4. Add your public key for SSH. You can select a key you have previously uploaded or upload your own key. The "Upload Key" button will also contain instructions to create a new SSH key.
-
-5. Click "Launch instance" to start your machine.
-
-6. Go back to the "Compute" tab and 
-
-:::
 ::::
 
 
