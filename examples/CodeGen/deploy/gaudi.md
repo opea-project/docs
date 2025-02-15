@@ -2,11 +2,10 @@
 
 This deployment section covers single-node on-prem deployment of the CodeGen
 example with OPEA comps to deploy using the TGI service. We will be showcasing how
-to build an e2e CodeGen solution with the CodeLlama-7b-hf model, deployed on Intel® 
-Tiber™ AI Cloud ([ITAC](https://www.intel.com/content/www/us/en/developer/tools/tiber/ai-cloud.html)). 
-To quickly learn about OPEA in just 5 minutes and set up the required hardware and software, 
-please follow the instructions in the [Getting Started](https://opea-project.github.io/latest/getting-started/README.html) 
-section. If you do not have an ITAC instance or the hardware is not supported in the ITAC yet, you can still run this on-prem. 
+to build an e2e CodeGen solution with the Qwen2.5-Coder-7B-Instruct,
+deployed on Intel® Gaudi® AI Accelerators. To quickly learn about OPEA in just 5 minutes 
+and set up the required hardware and software, please follow the instructions in the
+[Getting Started](../../../getting-started/README.md) section. 
 
 ## Overview
 
@@ -14,7 +13,7 @@ The CodeGen use case uses a single microservice called LLM. In this tutorial, we
 will walk through the steps on how to enable it from OPEA GenAIComps to deploy on 
 a single node TGI megaservice solution. 
 
-The solution is aimed to show how to use the CodeLlama-7b-hf model on the Intel® 
+The solution is aimed to show how to use the Qwen2.5-Coder-7B-Instruct model on the Intel® 
 Gaudi® AI Accelerator. We will go through how to setup docker containers to start 
 the microservice and megaservice. The solution will then take text input as the 
 prompt and generate code accordingly. It is deployed with a UI with 2 modes to 
@@ -36,38 +35,54 @@ Below is the list of content we will be covering in this tutorial:
 
 ## Prerequisites
 
-The first step is to clone the GenAIExamples and GenAIComps. GenAIComps are
-fundamental necessary components used to build examples you find in
-GenAIExamples and deploy them as microservices. Also set the `TAG` 
-environment variable with the version. 
+The first step is to clone the GenAIExamples and GenAIComps projects. GenAIComps are 
+fundamental necessary components used to build the examples you find in 
+GenAIExamples and deploy them as microservices. Set an environment 
+variable for the desired release version with the **number only** 
+(i.e. 1.0, 1.1, etc) and checkout using the tag with that version. 
 
 ```bash
+# Set workspace
+export WORKSPACE=<path>
+cd $WORKSPACE
+
+# Set desired release version - number only
+export RELEASE_VERSION=<insert-release-version>
+
+# GenAIComps
 git clone https://github.com/opea-project/GenAIComps.git
+cd GenAIComps
+git checkout tags/v${RELEASE_VERSION}
+cd ..
+
+# GenAIExamples
 git clone https://github.com/opea-project/GenAIExamples.git
-export TAG=1.1
+cd GenAIExamples
+git checkout tags/v${RELEASE_VERSION}
+cd ..
 ```
 
-The examples utilize model weights from HuggingFace and langchain.
+The examples utilize model weights from HuggingFace and Langchain.
 
 Setup your [HuggingFace](https://huggingface.co/) account and generate
 [user access token](https://huggingface.co/docs/transformers.js/en/guides/private#step-1-generating-a-user-access-token).
 
 Setup the HuggingFace token
-```
+```bash
 export HUGGINGFACEHUB_API_TOKEN="Your_Huggingface_API_Token"
 ```
 
-Additionally, if you plan to use the default model CodeLlama-7b-hf, you will 
-need to [request access](https://huggingface.co/meta-llama/CodeLlama-7b-hf) from HuggingFace.
+Additionally, if you plan to use the default model Qwen2.5-Coder-7B-Instruct, you will 
+need to [request access](https://huggingface.co/Qwen/Qwen2.5-Coder-7B-Instruct) from HuggingFace.
 
 The example requires you to set the `host_ip` to deploy the microservices on
 endpoint enabled with ports. Set the host_ip env variable
-```
+```bash
 export host_ip=$(hostname -I | awk '{print $1}')
 ```
 
 Make sure to setup Proxies if you are behind a firewall
-```
+```bash
 export no_proxy=${your_no_proxy},$host_ip
 export http_proxy=${your_http_proxy}
 export https_proxy=${your_http_proxy}
@@ -91,22 +106,24 @@ there are **3 required docker images** and an optional docker image.
 
 If you decide to pull the docker containers and not build them locally,
 you can proceed to the next step where all the necessary containers will
-be pulled in from dockerhub.
+be pulled in from Docker Hub.
 
 :::::
 :::::{tab-item} Build
 :sync: Build
 
-From within the `GenAIComps` folder, checkout the release tag.
-```
-cd GenAIComps
-git checkout tags/v${TAG}
+Follow the steps below to build the docker images from within the `GenAIComps` folder.
+**Note:** For RELEASE_VERSIONS older than 1.0, you will need to add a 'v' in front 
+of ${RELEASE_VERSION} to reference the correct image on Docker Hub.
+
+```bash
+cd $WORKSPACE/GenAIComps
 ```
 
 #### Build LLM Image
 
 ```bash
-docker build --no-cache -t opea/llm-tgi:${TAG} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/llms/text-generation/tgi/Dockerfile .
+docker build --no-cache -t opea/llm-tgi:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/llms/text-generation/tgi/Dockerfile .
 ```
 
 ### Build Mega Service images
@@ -119,15 +136,11 @@ remove microservices and customize the megaservice to suit your needs.
 Build the megaservice image for this use case
 
 ```bash
-cd ..
-cd GenAIExamples
-git checkout tags/v${TAG}
-cd CodeGen
+cd $WORKSPACE/GenAIExamples/CodeGen
 ```
 
 ```bash
-docker build --no-cache -t opea/codegen:${TAG} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f Dockerfile .
-cd ../..
+docker build --no-cache -t opea/codegen:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f Dockerfile .
 ```
 
 ### Build the UI Image
@@ -137,28 +150,26 @@ You can build 2 modes of UI
 *Svelte UI*
 
 ```bash
-cd GenAIExamples/CodeGen/ui/
-docker build --no-cache -t opea/codegen-ui:${TAG} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f ./docker/Dockerfile .
-cd ../../..
+cd $WORKSPACE/GenAIExamples/CodeGen/ui/
+docker build --no-cache -t opea/codegen-ui:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f ./docker/Dockerfile .
 ```
 
 *React UI (Optional)* 
 If you want a React-based frontend.
 
 ```bash
-cd GenAIExamples/CodeGen/ui/
-docker build --no-cache -t opea/codegen-react-ui:${TAG} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f ./docker/Dockerfile.react .
-cd ../../..
+cd $WORKSPACE/GenAIExamples/CodeGen/ui/
+docker build --no-cache -t opea/codegen-react-ui:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f ./docker/Dockerfile.react .
 ```
 
 ### Sanity Check
 Check if you have the following set of docker images by running the command `docker images` before moving on to the next step. 
-The tags are based on what you set the environment variable `TAG` to. 
+The tags are based on what you set the environment variable `RELEASE_VERSION` to. 
 
-* `opea/llm-tgi:${TAG}`
-* `opea/codegen:${TAG}`
-* `opea/codegen-ui:${TAG}`
-* `opea/codegen-react-ui:${TAG}` (optional)
+* `opea/llm-tgi:${RELEASE_VERSION}`
+* `opea/codegen:${RELEASE_VERSION}`
+* `opea/codegen-ui:${RELEASE_VERSION}`
+* `opea/codegen-react-ui:${RELEASE_VERSION}` (optional)
 
 :::::
 ::::::
@@ -169,7 +180,7 @@ The use case will use the following combination of GenAIComps and tools
 
 |Use Case Components | Tools | Model     | Service Type |
 |----------------     |--------------|-----------------------------|-------|
-|LLM                  |   TGI        | meta-llama/CodeLlama-7b-hf | OPEA Microservice |
+|LLM                  |   TGI        | Qwen/Qwen2.5-Coder-7B-Instruct | OPEA Microservice |
 |UI                   |              | NA                        | Gateway Service |
 
 Tools and models mentioned in the table are configurable either through the
@@ -179,10 +190,16 @@ Set the necessary environment variables to setup the use case by running the `se
 Here is where the environment variable `LLM_MODEL_ID` is set, and you can change it to another model 
 by specifying the HuggingFace model card ID.
 
+**Note:** If you wish to run the UI on a web browser on your laptop, you will need to modify `BACKEND_SERVICE_ENDPOINT` to use `localhost` or `127.0.0.1` instead of `host_ip` inside `set_env.sh` for the backend to properly receive data from the UI. Additionally, you will need to port-forward the port used for `BACKEND_SERVICE_ENDPOINT`. Specifically, for CodeGen, append the following to your ssh command: 
+
 ```bash
-cd GenAIExamples/CodeGen/docker_compose/
+-L 7778:localhost:7778
+```
+
+Run the `set_env.sh` script.
+```bash
+cd $WORKSPACE/GenAIExamples/CodeGen/docker_compose
 source ./set_env.sh
-cd ../../..
 ```
 
 ## Deploy the Use Case
@@ -192,7 +209,7 @@ YAML file.  The docker compose instructions should be starting all the
 above mentioned services as containers.
 
 ```bash
-cd GenAIExamples/CodeGen/docker_compose/intel/hpu/gaudi
+cd $WORKSPACE/GenAIExamples/CodeGen/docker_compose/intel/hpu/gaudi
 docker compose up -d
 ```
 
@@ -224,11 +241,11 @@ The CodeGen example starts 4 docker containers. Check that these docker
 containers are all running, i.e, all the containers  `STATUS`  are  `Up`.
 You can do this with the `docker ps -a` command.
 
-```
+```bash
 CONTAINER ID   IMAGE                                                   COMMAND                  CREATED              STATUS              PORTS                                       NAMES
-bbd235074c3d   opea/codegen-ui:${TAG}                                  "docker-entrypoint.s…"   About a minute ago   Up About a minute   0.0.0.0:5173->5173/tcp, :::5173->5173/tcp   codegen-gaudi-ui-server
-8d3872ca66fa   opea/codegen:${TAG}                                     "python codegen.py"      About a minute ago   Up About a minute   0.0.0.0:7778->7778/tcp, :::7778->7778/tcp   codegen-gaudi-backend-server
-b9fc39f51cdb   opea/llm-tgi:${TAG}                                     "bash entrypoint.sh"     About a minute ago   Up About a minute   0.0.0.0:9000->9000/tcp, :::9000->9000/tcp   llm-tgi-gaudi-server
+bbd235074c3d   opea/codegen-ui:${RELEASE_VERSION}                                  "docker-entrypoint.s…"   About a minute ago   Up About a minute   0.0.0.0:5173->5173/tcp, :::5173->5173/tcp   codegen-gaudi-ui-server
+8d3872ca66fa   opea/codegen:${RELEASE_VERSION}                                     "python codegen.py"      About a minute ago   Up About a minute   0.0.0.0:7778->7778/tcp, :::7778->7778/tcp   codegen-gaudi-backend-server
+b9fc39f51cdb   opea/llm-tgi:${RELEASE_VERSION}                                     "bash entrypoint.sh"     About a minute ago   Up About a minute   0.0.0.0:9000->9000/tcp, :::9000->9000/tcp   llm-tgi-gaudi-server
 39994e007f15   ghcr.io/huggingface/tgi-gaudi:2.0.1                     "text-generation-lau…"   About a minute ago   Up About a minute   0.0.0.0:8028->80/tcp, :::8028->80/tcp       tgi-gaudi-server
 ```
 
@@ -250,7 +267,7 @@ curl http://${host_ip}:8028/generate \
 
 Here is the output:
 
-```
+```bash
 {"generated_text":"\n\nIO iflow diagram:\n\n!\[IO flow diagram(s)\]\(TodoList.iflow.svg\)\n\n### TDD Kata walkthrough\n\n1. Start with a user story. We will add story tests later. In this case, we'll choose a story about adding a TODO:\n    ```ruby\n    as a user,\n    i want to add a todo,\n    so that i can get a todo list.\n\n    conformance:\n    - a new todo is added to the list\n    - if the todo text is empty, raise an exception\n    ```\n\n1. Write the first test:\n    ```ruby\n    feature Testing the addition of a todo to the list\n\n    given a todo list empty list\n    when a user adds a todo\n    the todo should be added to the list\n\n    inputs:\n    when_values: [[\"A\"]]\n\n    output validations:\n    - todo_list contains { text:\"A\" }\n    ```\n\n1. Write the first step implementation in any programming language you like. In this case, we will choose Ruby:\n    ```ruby\n    def add_"}
 ```
 
@@ -265,7 +282,7 @@ curl http://${host_ip}:9000/v1/chat/completions\
 
 The output is given one character at a time. It is too long to show 
 here but the last item will be
-```
+```bash
 data: [DONE]
 ```
 
@@ -279,14 +296,14 @@ curl http://${host_ip}:7778/v1/codegen -H "Content-Type: application/json" -d '{
 
 The output is given one character at a time. It is too long to show 
 here but the last item will be
-```
+```bash
 data: [DONE]
 ```
 
 ## Launch UI
 ### Svelte UI
 To access the frontend, open the following URL in your browser: http://{host_ip}:5173. By default, the UI runs on port 5173 internally. If you prefer to use a different host port to access the frontend, you can modify the port mapping in the `compose.yaml` file as shown below:
-```bash
+```yaml
   codegen-gaudi-ui-server:
     image: ${REGISTRY:-opea}/codegen-ui:${TAG:-latest}
     ...
@@ -296,7 +313,7 @@ To access the frontend, open the following URL in your browser: http://{host_ip}
 
 ### React-Based UI (Optional)
 To access the React-based frontend, modify the UI service in the `compose.yaml` file. Replace `codegen-gaudi-ui-server` service with the codegen-gaudi-react-ui-server service as per the config below:
-```bash
+```yaml
 codegen-gaudi-react-ui-server:
   image: ${REGISTRY:-opea}/codegen-react-ui:${TAG:-latest}
   container_name: codegen-gaudi-react-ui-server
@@ -313,7 +330,7 @@ codegen-gaudi-react-ui-server:
   restart: always
 ```
 Once the services are up, open the following URL in your browser: http://{host_ip}:5174. By default, the UI runs on port 80 internally. If you prefer to use a different host port to access the frontend, you can modify the port mapping in the `compose.yaml` file as shown below:
-```bash
+```yaml
   codegen-gaudi-react-ui-server:
     image: ${REGISTRY:-opea}/codegen-react-ui:${TAG:-latest}
     ...
@@ -332,13 +349,13 @@ docker logs <CONTAINER ID> -t
 You can also check the overall logs with the following command, where the
 `compose.yaml` is the megaservice docker-compose configuration file.
 
-Assumming you are still in this directory `GenAIExamples/CodeGen/docker_compose/intel/hpu/gaudi`,
+Assumming you are still in this directory `$WORKSPACE/GenAIExamples/CodeGen/docker_compose/intel/hpu/gaudi`,
 run the following command to check the logs:
 ```bash
 docker compose -f compose.yaml logs
 ```
 
-View the docker input parameters in  `./CodeGen/docker_compose/intel/hpu/gaudi/compose.yaml`
+View the docker input parameters in  `$WORKSPACE/GenAIExamples/CodeGen/docker_compose/intel/hpu/gaudi/compose.yaml`
 
 ```yaml
   tgi-service:
@@ -370,6 +387,6 @@ the newly selected model.
 ## Stop the services
 
 Once you are done with the entire pipeline and wish to stop and remove all the containers, use the command below:
-```
+```bash
 docker compose down
 ```

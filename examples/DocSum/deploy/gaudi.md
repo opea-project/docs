@@ -1,13 +1,11 @@
 # Single node on-prem deployment with TGI on Gaudi AI Accelerator
 
-
 This deployment section covers single-node on-prem deployment of the DocSum
 example with OPEA comps to deploy using the TGI service. We will be showcasing how
-to build an e2e DocSum solution with the Intel/neural-chat-7b-v3-3 model, deployed on 
- Intel® Tiber™ AI Cloud ([ITAC](https://www.intel.com/content/www/us/en/developer/tools/tiber/ai-cloud.html)). 
- To quickly learn about OPEA in just 5 minutes and set up the required hardware and 
- software, please follow the instructions in the [Getting Started](https://opea-project.github.io/latest/getting-started/README.html) 
-section. 
+to build an e2e DocSum solution with the Intel/neural-chat-7b-v3-3 model, 
+deployed on Intel® Gaudi AI Accelerators. To quickly learn about OPEA in just 5 minutes 
+and set up the required hardware and software, please follow the instructions in the 
+[Getting Started](../../../getting-started/README.md) section. 
 
 ## Overview
 
@@ -36,25 +34,41 @@ Below is the list of content we will be covering in this tutorial:
 
 ## Prerequisites
 
-The first step is to clone the GenAIExamples and GenAIComps. GenAIComps are
-fundamental necessary components used to build examples you find in
-GenAIExamples and deploy them as microservices. Also, set the `TAG` 
-environment variable with the version. 
+The first step is to clone the GenAIExamples and GenAIComps projects. GenAIComps are 
+fundamental necessary components used to build the examples you find in 
+GenAIExamples and deploy them as microservices. Set an environment 
+variable for the desired release version with the **number only** 
+(i.e. 1.0, 1.1, etc) and checkout using the tag with that version. 
 
 ```bash
+# Set workspace and navigate into it
+export WORKSPACE=<path>
+cd $WORKSPACE
+
+# Set desired release version - number only
+export RELEASE_VERSION=<insert-release-version>
+
+# GenAIComps
 git clone https://github.com/opea-project/GenAIComps.git
+cd GenAIComps
+git checkout tags/v${RELEASE_VERSION}
+cd ..
+
+# GenAIExamples
 git clone https://github.com/opea-project/GenAIExamples.git
-export TAG=1.2
+cd GenAIExamples
+git checkout tags/v${RELEASE_VERSION}
+cd ..
 ```
 
 The example requires you to set the `host_ip` to deploy the microservices on
 the endpoint enabled with ports. Set the host_ip env variable.
-```
+```bash
 export host_ip=$(hostname -I | awk '{print $1}')
 ```
 
 Make sure to set Proxies if you are behind a firewall.
-```
+```bash
 export no_proxy=${your_no_proxy},$host_ip
 export http_proxy=${your_http_proxy}
 export https_proxy=${your_http_proxy}
@@ -84,16 +98,18 @@ be pulled in from the Docker hub.
 :::::{tab-item} Build
 :sync: Build
 
-From within the `GenAIComps` folder, checkout the release tag.
-```
-cd GenAIComps
-git checkout tags/v${TAG}
+Follow the steps below to build the docker images from within the `GenAIComps` folder.
+**Note:** For RELEASE_VERSIONS older than 1.0, you will need to add a 'v' in front 
+of ${RELEASE_VERSION} to reference the correct image on Docker Hub.
+
+```bash
+cd $WORKSPACE/GenAIComps
 ```
 
 #### Build Whisper Service
 
 ```bash
-docker build -t opea/whisper:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/asr/src/integrations/dependency/whisper/Dockerfile .
+docker build -t opea/whisper:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/asr/src/integrations/dependency/whisper/Dockerfile .
 ```
 
 ### Build Mega Service images
@@ -106,15 +122,11 @@ remove microservices and customize the megaservice to suit your needs.
 Build the megaservice image for this use case
 
 ```bash
-cd ..
-cd GenAIExamples
-git checkout tags/v${TAG}
-cd DocSum
+cd $WORKSPACE/GenAIExamples/DocSum
 ```
 
 ```bash
-docker build -t opea/docsum:latest --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f Dockerfile .
-cd ../..
+docker build -t opea/docsum:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f Dockerfile .
 ```
 
 ### Build the UI Image
@@ -124,17 +136,15 @@ There are 3 UI options. Below are instructions to build each.
 *Gradio UI*
 
 ```bash
-cd GenAIExamples/DocSum/ui
-docker build -t opea/docsum-gradio-ui:${TAG} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f docker/Dockerfile.gradio .
-cd ../../..
+cd $WORKSPACE/GenAIExamples/DocSum/ui
+docker build -t opea/docsum-gradio-ui:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f docker/Dockerfile.gradio .
 ```
 
 *Svelte UI (Optional)*
 
 ```bash
-cd GenAIExamples/DocSum/ui
-docker build -t opea/docsum-ui:${TAG} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f docker/Dockerfile .
-cd ../../..
+cd $WORKSPACE/GenAIExamples/DocSum/ui
+docker build -t opea/docsum-ui:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f docker/Dockerfile .
 ```
 
 *React UI (Optional)* 
@@ -142,19 +152,18 @@ If you want a React-based frontend.
 
 ```bash
 export BACKEND_SERVICE_ENDPOINT="http://${host_ip}:8888/v1/docsum"
-docker build -t opea/docsum-react-ui:${TAG} --build-arg BACKEND_SERVICE_ENDPOINT=$BACKEND_SERVICE_ENDPOINT --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy  -f ./docker/Dockerfile.react .
-cd ../../..
+docker build -t opea/docsum-react-ui:${RELEASE_VERSION} --build-arg BACKEND_SERVICE_ENDPOINT=$BACKEND_SERVICE_ENDPOINT --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy  -f ./docker/Dockerfile.react .
 ```
 
 ### Sanity Check
 Check if you have the following set of docker images by running the command `docker images` before moving on to the next step. 
-The tags are based on what you set the environment variable `TAG` to. 
+The tags are based on what you set the environment variable `RELEASE_VERSION` to. 
 
-* `opea/whisper:${TAG}`
-* `opea/docsum:${TAG}`
-* `opea/docsum-gradio-ui:${TAG}`
-* `opea/docsum-ui:${TAG}` (optional)
-* `opea/docsum-react-ui:${TAG}` (optional)
+* `opea/whisper:${RELEASE_VERSION}`
+* `opea/docsum:${RELEASE_VERSION}`
+* `opea/docsum-gradio-ui:${RELEASE_VERSION}`
+* `opea/docsum-ui:${RELEASE_VERSION}` (optional)
+* `opea/docsum-react-ui:${RELEASE_VERSION}` (optional)
 
 :::::
 ::::::
@@ -176,10 +185,16 @@ Set the necessary environment variables to setup the use case by running the `se
 Here is where the environment variable `LLM_MODEL_ID` is set, and you can change it to another model 
 by specifying the HuggingFace model card ID.
 
+**Note:** If you wish to run the UI on a web browser on your laptop, you will need to modify `BACKEND_SERVICE_ENDPOINT` to use `localhost` or `127.0.0.1` instead of `host_ip` inside `set_env.sh` for the backend to properly receive data from the UI. Additionally, you will need to port-forward the port used for `BACKEND_SERVICE_ENDPOINT`. Specifically, for DocSum, append the following to your ssh command: 
+
 ```bash
-cd GenAIExamples/DocSum/docker_compose
+-L 8888:localhost:8888
+```
+
+Run the `set_env.sh` script.
+```bash
+cd $WORKSPACE/GenAIExamples/DocSum/docker_compose
 source ./set_env.sh
-cd ../../..
 ```
 
 ## Deploy the Use Case
@@ -189,7 +204,7 @@ YAML file.  The docker compose instructions should start all the
 above-mentioned services as containers.
 
 ```bash
-cd GenAIExamples/DocSum/docker_compose/intel/hpu/gaudi
+cd $WORKSPACE/GenAIExamples/DocSum/docker_compose/intel/hpu/gaudi
 docker compose -f compose.yaml up -d
 ```
 
@@ -221,13 +236,13 @@ The DocSum example starts 4 docker containers. Check that these docker
 containers are all running, i.e., all the containers  `STATUS` are  `Up`.
 You can do this with the `docker ps -a` command.
 
-```
+```bash
 CONTAINER ID   IMAGE                                                           COMMAND                  CREATED             STATUS                       PORTS                                       NAMES
-8ec82528bcbb   opea/docsum-gradio-ui:latest                                    "python docsum_ui_gr…"   About an hour ago   Up About an hour             0.0.0.0:5173->5173/tcp, :::5173->5173/tcp   docsum-gaudi-ui-server
-e22344ed80d5   opea/docsum:latest                                              "python docsum.py"       About an hour ago   Up About an hour             0.0.0.0:8888->8888/tcp, :::8888->8888/tcp   docsum-gaudi-backend-server
-bbb3c05a2878   opea/llm-docsum:latest                                          "bash entrypoint.sh"     About an hour ago   Up About an hour             0.0.0.0:9000->9000/tcp, :::9000->9000/tcp   llm-docsum-gaudi-server
+8ec82528bcbb   opea/docsum-gradio-ui:${RELEASE_VERSION}                                    "python docsum_ui_gr…"   About an hour ago   Up About an hour             0.0.0.0:5173->5173/tcp, :::5173->5173/tcp   docsum-gaudi-ui-server
+e22344ed80d5   opea/docsum:${RELEASE_VERSION}                                              "python docsum.py"       About an hour ago   Up About an hour             0.0.0.0:8888->8888/tcp, :::8888->8888/tcp   docsum-gaudi-backend-server
+bbb3c05a2878   opea/llm-docsum:${RELEASE_VERSION}                                          "bash entrypoint.sh"     About an hour ago   Up About an hour             0.0.0.0:9000->9000/tcp, :::9000->9000/tcp   llm-docsum-gaudi-server
 d20a8896d2a0   ghcr.io/huggingface/tgi-gaudi:2.3.1                             "text-generation-lau…"   About an hour ago   Up About an hour (healthy)   0.0.0.0:8008->80/tcp, :::8008->80/tcp       tgi-gaudi-server
-8213029b6b26   opea/whisper:latest                                             "python whisper_serv…"   About an hour ago   Up About an hour             0.0.0.0:7066->7066/tcp, :::7066->7066/tcp   whisper-server
+8213029b6b26   opea/whisper:${RELEASE_VERSION}                                             "python whisper_serv…"   About an hour ago   Up About an hour             0.0.0.0:7066->7066/tcp, :::7066->7066/tcp   whisper-server
 ```
 
 ## Interacting with DocSum for Deployment
@@ -248,7 +263,7 @@ curl http://${host_ip}:8008/generate \
 
 Here is the output:
 
-```
+```bash
 {"generated_text":"\nDeep learning is a sub-discipline of machine learning. Machine learning is"}
 
 ```
@@ -273,7 +288,7 @@ The output is the summary of the input given to this microservice.
 ```
 
 Here is the output:
-```
+```bash
  {"asr_result":"you"}
 ```
 
@@ -372,7 +387,7 @@ curl http://${host_ip}:8888/v1/docsum \
 ## Launch UI
 ### Gradio UI
 To access the frontend, open the following URL in your browser: http://{host_ip}:5173. By default, the UI runs on port 5173 internally. If you prefer to use a different host port to access the frontend, you can modify the port mapping in the `compose.yaml` file as shown below:
-```bash
+```yaml
   docsum-gaudi-ui-server:
   image: ${REGISTRY:-opea}/docsum-ui:${TAG:-latest}
   ...
@@ -381,7 +396,7 @@ To access the frontend, open the following URL in your browser: http://{host_ip}
 ```
 ### Svelte UI (Optional)
 To access the Svelte-based frontend, modify the UI service in the `compose.yaml` file. Replace `docsum-gradio-ui` service with the `docsum-ui` service as per the config below: 
-```bash
+```yaml
 docsum-ui:
  image: ${REGISTRY:-opea}/docsum-ui:${TAG:-latest}
  container_name: docsum-gaudi-ui-server
@@ -402,7 +417,7 @@ Open the following URL in your browser: http://{host_ip}:5173 to access the UI.
 
 ### React-Based UI (Optional)
 To access the React-based frontend, modify the UI service in the `compose.yaml` file. Replace `docsum-gradio-ui` service with the `docsum-react-ui` service as per the config below:
-```bash
+```yaml
 docsum-gaudi-react-ui-server:
   image: ${REGISTRY:-opea}/docsum-react-ui:${TAG:-latest}
   container_name: docsum-gaudi-react-ui-server
@@ -420,7 +435,7 @@ docsum-gaudi-react-ui-server:
 
 
 Once the services are up, open the following URL in your browser: http://{host_ip}:5174. By default, the UI runs on port 80 internally. If you prefer to use a different host port to access the frontend, you can modify the port mapping in the `compose.yaml` file as shown below:
-```bash
+```yaml
   docsum-gaudi-react-ui-server:
     image: ${REGISTRY:-opea}/docsum-react-ui:${TAG:-latest}
     ...
@@ -439,13 +454,13 @@ docker logs <CONTAINER ID> -t
 You can also check the overall logs with the following command, where the
 `compose.yaml` is the megaservice docker-compose configuration file.
 
-Assumming you are still in this directory `GenAIExamples/DocSum/docker_compose/intel/hpu/gaudi`,
+Assumming you are still in this directory `$WORKSPACE/GenAIExamples/DocSum/docker_compose/intel/hpu/gaudi`,
 run the following command to check the logs:
 ```bash
 docker compose -f compose.yaml logs
 ```
 
-View the docker input parameters in  `./DocSum/docker_compose/intel/hpu/gaudi/compose.yaml`
+View the docker input parameters in  `$WORKSPACE/GenAIExamples/DocSum/docker_compose/intel/hpu/gaudi/compose.yaml`
 
 ```yaml
 tgi-gaudi-server:
@@ -490,6 +505,6 @@ the newly selected model.
 ## Stop the services
 
 Once you are done with the entire pipeline and wish to stop and remove all the containers, use the command below:
-```
+```bash
 docker compose down
 ```
