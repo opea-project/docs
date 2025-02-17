@@ -1,0 +1,67 @@
+# Copyright (C) 2024 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
+name: Report Bug
+description: Used to report bug
+title: "[Bug]"
+labels: ["bug"]
+body:
+  - type: dropdown
+    id: version
+    attributes:
+      label: Version
+      multiple: true
+      options:
+        - v0.9
+        - v1.0
+      default: v1.0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: browsers
+    attributes:
+      label: What browsers are you seeing the problem on?
+      multiple: true
+      options:
+        - Firefox
+        - Chrome
+        - Safari
+        - Microsoft Edge
+        - Others (Please let us know in description)
+
+  - type: dropdown
+    id: section
+    attributes:
+      label: What section of the docs is the problem on?
+      multiple: true
+      options:
+        - GenAI Examples
+        - GenAI Microservices
+        - Deploying GenAI
+        - Evaluating GenAI
+        - Others (Please let us know in description)
+
+  - type: markdown
+    id: description
+    attributes:
+      label: Bug Description
+      description: What is the problem?
+      value: |
+        Thanks for taking the time to fill out this bug report. If you have a new idea, please fill a feature request instead.
+    validations:
+      required: true
+
+  - type: markdown
+    id: reproduce
+    attributes:
+      label: Reproduction steps
+      description: "How do you view this bug? Please walk us through it step by step."
+      value: |
+        1. Go to https://opea-project.github.io/
+        2.
+        3.
+        ...
+      render: bash
+    validations:
+      required: true
