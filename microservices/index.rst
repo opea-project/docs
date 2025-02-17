@@ -4,7 +4,7 @@
 GenAI Microservices
 ###################
 
-GenAI microservices leverag a service composer to
+GenAI microservices leverage a service composer to
 assemble a mega-service tailored for real-world Enterprise AI applications. All
 the microservices are containerized, allowing cloud native deployment. Checkout
 how the microservices are used in :ref:`GenAIExamples`.
