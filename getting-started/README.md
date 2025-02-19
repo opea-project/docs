@@ -138,12 +138,47 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 9. Note the public IP address of the machine once its launched. 
 
 10. Once the instance is launched, click on the subnet in the Primary VNIC section. Then click on the "Default Security List for vcn-xxxxxxxx-xxxx" , click on the "Add Ingress Rules".  Add the following information:
-    Source CIDR: 0.0.0.0/0  
-    Source Port Range : All 
-    Destination Port Range : 80 
-    Click on "Save"
+    - Source CIDR: **0.0.0.0/0**  
+    - Source Port Range: **All** 
+    - Destination Port Range: **80** 
+    - Click on "Save"
 
 11. Connect using ssh (`ssh -i <private_key>  ubuntu@<public_ip_address>`).
+
+:::
+:::{tab-item} Intel® Tiber™ AI Cloud
+:sync: ITAC
+
+1. Log in to [Intel® Tiber™ AI Cloud](cloud.intel.com) - Go to the "Compute" tab on the left and click on "Instances". In the center of the screen, click on the "Launch instance" button.
+
+2. Select your instance configuration, instance type, and machine image which will be Ubuntu.
+
+>**Note**: It is recommended to use the `VM-SPR-MED` powered by 4th Generation Intel® Xeon® Scalable processors or larger if you wish to use a CPU. For other hardware platforms such as Intel® Gaudi AI Accelerators, they can be found in the "Preview" tab on the left. Click on "Preview Instances", then the "Request instance" button. 
+
+3. Fill out the rest of the form such as giving your instance a name and answering any additional quesitons.
+
+4. Add your public key for SSH. You can select a key you have previously uploaded or upload your own key. The "Upload Key" button will also contain instructions to create a new SSH key.
+
+5. Click "Launch instance" to start your machine.
+
+6. Go back to the "Compute" tab and under "Instances", note down the private IP address of your new VM.
+
+7. Create a load balancer. This can be found in Compute->Load Balancers. Click on "Launch Load Balancer". Ignore any messages about signing up for access and close any pop-up windows if any. Fill out the form with the following info: 
+   - Name: **Name for your load balancer**
+   - Source IP: **The private IP address of your VM in Step 6**
+   - Listener Port: **80**
+   - Instance Port: **80**
+   - Monitor Type: **HTTP**
+   - Mode: **Round Robin**
+   - Instances: **The VM you created**
+   
+   >**Note**: The port used is 80 because this is the NGINX port for the GenAI Examples.
+
+   Click "Launch" when ready.
+
+8. Go back to Compute->Load Balancers to see your new load balancer. Note down the virtual IP address. This is what you will use to access the UI of your GenAI Example on a web browser.
+
+9. Connect to your VM using ssh (`ssh -i <private_key> -J guest@<proxy_jump_ip_address> ubuntu@<private_ip_address_of_vm`).
 
 :::
 ::::
@@ -213,7 +248,7 @@ Run `docker ps -a` as an additional check to verify that all the services are ru
 
 You can interact with ChatQnA via a browser interface:
 
-* To view the ChatQnA interface, open a browser and navigate to the UI by inserting your public facing IP address in the following: `http://{public_ip}:80’.
+* To view the ChatQnA interface, open a browser and navigate to the UI by inserting your public facing IP address in the following: `http://{public_ip}:80’. **For ITAC users**: use the virtual IP address of your load balancer instead.
 
 We can go ahead and ask a sample question, say 'What is OPEA?'.
 
