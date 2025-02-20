@@ -155,7 +155,7 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 
 2. Select your instance configuration, instance type, and machine image which will be Ubuntu.
 
->**Note**: It is recommended to use the `VM-SPR-MED` powered by 4th Generation Intel® Xeon® Scalable processors or larger if you wish to use a CPU. For other hardware platforms such as Intel® Gaudi AI Accelerators, they can be found in the "Preview" tab on the left. Click on "Preview Instances", then the "Request instance" button. 
+>**Note**: It is recommended to use the `VM-SPR-LRG` powered by 4th Generation Intel® Xeon® Scalable processors or larger with 64GB of memory and 64GB of disk if you wish to use a CPU to run an 8B-parameter model. For other hardware platforms such as Intel® Gaudi AI Accelerators, they can be found in the "Preview" tab on the left. Click on "Preview Instances", then the "Request instance" button. 
 
 3. Fill out the rest of the form such as giving your instance a name and answering any additional quesitons.
 
@@ -165,7 +165,9 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 
 6. Go back to the "Compute" tab and under "Instances", note down the private IP address of your new VM.
 
-7. Create a load balancer. This can be found in Compute->Load Balancers. Click on "Launch Load Balancer". Ignore any messages about signing up for access and close any pop-up windows if any. Fill out the form with the following info: 
+7. If you wish to access the UI using port forwarding, skip to Step 10. Otherwise, proceed to the next step to create a load balancer.
+
+8. Create a load balancer. This can be found in Compute->Load Balancers. Click on "Launch Load Balancer". Ignore any messages about signing up for access and close any pop-up windows if any. Fill out the form with the following info: 
    - Name: **Name for your load balancer**
    - Source IP: **The private IP address of your VM in Step 6**
    - Listener Port: **80**
@@ -178,9 +180,11 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 
    Click "Launch" when ready.
 
-8. Go back to Compute->Load Balancers to see your new load balancer. Note down the virtual IP address. This is what you will use to access the UI of your GenAI Example on a web browser.
+9. Go back to Compute->Load Balancers to see your new load balancer. Note down the virtual IP address. This is what you will use to access the UI of your GenAI Example on a web browser.
 
-9. Connect to your VM using ssh (`ssh -i <private_key> -J guest@<proxy_jump_ip_address> ubuntu@<private_ip_address_of_vm`).
+10. If you are NOT using a load balancer, connect to your VM using ssh and port forward port 80 (`ssh -i <private_key> -J guest@<proxy_jump_ip_address> -L 80:localhost:80 ubuntu@<private_ip_address_of_vm`).
+
+If you are using a load balancer, connect to your VM using ssh: (`ssh -i <private_key> -J guest@<proxy_jump_ip_address> ubuntu@<private_ip_address_of_vm`).
 
 :::
 ::::
@@ -253,7 +257,7 @@ You can interact with ChatQnA via a browser interface:
 
 * To view the ChatQnA interface, open a browser and navigate to the UI by inserting your public facing IP address in the following: `http://{public_ip}:80’. 
 
->**Note:** For users running on ITAC, use the virtual IP address of your load balancer instead.
+>**Note:** For users running on ITAC, open a browser to localhost:80 if you are using port forwarding OR the virtual IP address of your load balancer.
 
 We can go ahead and ask a sample question, say 'What is OPEA?'.
 
