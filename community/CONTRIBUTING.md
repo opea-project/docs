@@ -136,6 +136,9 @@ Thanks for considering contributing to OPEA project. The contribution process is
 
 5. After your component has been merged, you are likely interested in building an application with it, and perhaps contributing it also to OPEA! Please continue on to the [Contribute a GenAI Example](#contribute-a-genai-example) guide.
 
+### [Contributing A New Vector Database to OPEA](https://github.com/opea-project/docs/community/add_vectorDB.md)
+To contribute a new Vector Database to OPEA, you would need to modify minimally the OPEA sub-project [GenAIComps](https://github.com/opea-project/GenAIComps) that covers installation, launch, usage, and tests. For  completeness, submit a PR to the OPEA sub-project [GenAIExamples](https://github.com/opea-project/GenAIExamples) to illustrate customizing the ChatQnA example application.  [See the full documentation for greater detail](https://github.com/opea-project/docs/community/add_vectorDB.md).
+
 ### Contribute a GenAI Example
 
 Each of the samples in OPEA GenAIExamples is a commonly used solution. They each have scripts to ease deployment, and have been tested for performance and scalability with Docker Compose and Kubernetes. When contributing an example, a Docker Compose deployment is the minimum requirement. However, since OPEA is intended for enterprise applications, supporting Kubernetes deployment is highly encouraged. You can find [examples for Kubernetes deployment](https://github.com/opea-project/GenAIExamples/tree/main/ChatQnA/kubernetes/helm#readme) using Helm Charts.
