@@ -1,6 +1,6 @@
 # Single node on-prem deployment with TGI on Xeon Scalable processors
 
-This deployment section covers the single-node on-prem deployment of the CodeTrans example with OPEA comps using the Text Generation service based on TGI. The solution demonstrates building a code translation service using the `mistralai/Mistral-7B-Instruct-v0.3` model deployed on Intel® Xeon® Scalable processors. To quickly learn about OPEA in just 5 minutes and set up the required hardware and software, please follow the instructions in the [Getting Started](https://opea-project.github.io/latest/getting-started/README.html) section.
+This deployment section covers the single-node on-prem deployment of the CodeTrans example with OPEA comps using the Text Generation service based on TGI. The solution demonstrates building a code translation service using the `mistralai/Mistral-7B-Instruct-v0.3` model deployed on Intel® Xeon® Scalable processors. To quickly learn about OPEA in just 5 minutes and set up the required hardware and software, please follow the instructions in the [Getting Started](../../../getting-started/README.md) section.
 
 ## Overview
 
@@ -13,12 +13,33 @@ The solution demonstrates using the Mistral-7B-Instruct-v0.3 model on Intel Xeon
 
 ## Prerequisites
 
-The first step is to clone the GenAIExamples and GenAIComps. GenAIComps are fundamental components used to build examples you find in GenAIExamples and deploy them as microservices.
+TThe first step is to clone the GenAIExamples and GenAIComps projects. GenAIComps are 
+fundamental necessary components used to build the examples you find in 
+GenAIExamples and deploy them as microservices. Set an environment 
+variable for the desired release version with the **number only** 
+(i.e. 1.0, 1.1, etc) and checkout using the tag with that version. 
 
-```
+```bash
+# Set workspace
+export WORKSPACE=<path>
+cd $WORKSPACE
+
+# Set desired release version - number only
+export RELEASE_VERSION=<insert-release-version>
+
+# GenAIComps
 git clone https://github.com/opea-project/GenAIComps.git
+cd GenAIComps
+git checkout tags/v${RELEASE_VERSION}
+cd ..
+
+# GenAIExamples
 git clone https://github.com/opea-project/GenAIExamples.git
+cd GenAIExamples
+git checkout tags/v${RELEASE_VERSION}
+cd ..
 ```
+
 The examples utilize model weights from HuggingFace.
 Set up your [HuggingFace](https://huggingface.co/) account and 
 apply for model access to `Mistral-7B-Instruct-v0.3` which is a gated model. To obtain access for using the model, visit the [model site](https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3) and click on `Agree and access repository`. 
@@ -27,13 +48,13 @@ Next, generate [user access token](https://huggingface.co/docs/transformers.js/e
 
 Setup the HuggingFace token
 
-```
+```bash
 export HUGGINGFACEHUB_API_TOKEN="Your_Huggingface_API_Token"
 ```
 
 The example requires you to set the `host_ip` to deploy the microservices on the endpoint enabled with ports. Set the host_ip env variable.
 
-```
+```bash
 export host_ip=$(hostname -I | awk '{print $1}')
 ```
 
@@ -54,15 +75,17 @@ This step involves either building or pulling four required Docker images. Each 
 :::::{tab-item} Pull
 :sync: Pull
 
-If you decide to pull the docker containers and not build them locally, you can proceed to [Use Case Setup](#use-case-setup). where all the necessary containers will be pulled in from the docker hub.
+If you decide to pull the docker containers and not build them locally, you can proceed to the next step where all the necessary containers will be pulled in from Docker Hub.
 :::::
 :::::{tab-item} Build
 :sync: Build
 
-From within the `GenAIComps` folder, check out the release tag.
-```
-cd GenAIComps
-git checkout tags/v1.2
+Follow the steps below to build the docker images from within the `GenAIComps` folder.
+**Note:** For RELEASE_VERSIONS older than 1.0, you will need to add a 'v' in front 
+of ${RELEASE_VERSION} to reference the correct image on Docker Hub.
+
+```bash
+cd $WORKSPACE/GenAIComps
 ```
 
 ### Build LLM Image
@@ -70,7 +93,7 @@ git checkout tags/v1.2
 First, build the Text Generation LLM service image:
 
 ```bash
-docker  build  -t  opea/llm-textgen:latest  --build-arg  https_proxy=$https_proxy  \
+docker  build  -t  opea/llm-textgen:${RELEASE_VERSION}  --build-arg  https_proxy=$https_proxy  \
 --build-arg http_proxy=$http_proxy -f comps/llms/src/text-generation/Dockerfile .
 ```
 
@@ -81,7 +104,7 @@ docker  build  -t  opea/llm-textgen:latest  --build-arg  https_proxy=$https_prox
 Build the Nginx service image that will handle routing:
 
 ```bash
-docker  build  -t  opea/nginx:latest  --build-arg  https_proxy=$https_proxy  \
+docker  build  -t  opea/nginx:${RELEASE_VERSION}  --build-arg  https_proxy=$https_proxy  \
 --build-arg http_proxy=$http_proxy -f comps/third_parties/nginx/src/Dockerfile .
 
 ```
@@ -93,12 +116,11 @@ The Megaservice is a pipeline that channels data through different microservices
 Build the megaservice image for this use case.
 
 ```bash
-git  clone  https://github.com/opea-project/GenAIExamples.git
-cd  GenAIExamples/CodeTrans
-git checkout tags/v1.2
+cd $WORKSPACE/GenAIExamples/CodeTrans
 ```
-```
-docker  build  -t  opea/codetrans:latest  --build-arg  https_proxy=$https_proxy  \
+
+```bash
+docker  build  -t  opea/codetrans:${RELEASE_VERSION}  --build-arg  https_proxy=$https_proxy  \
 --build-arg http_proxy=$http_proxy -f Dockerfile .
 ```
 
@@ -107,8 +129,8 @@ docker  build  -t  opea/codetrans:latest  --build-arg  https_proxy=$https_proxy 
 Build the UI service image:
 
 ```bash
-cd  GenAIExamples/CodeTrans/ui
-docker  build  -t  opea/codetrans-ui:latest  --build-arg  https_proxy=$https_proxy  \
+cd $WORKSPACE/GenAIExamples/CodeTrans/ui
+docker  build  -t  opea/codetrans-ui:${RELEASE_VERSION}  --build-arg  https_proxy=$https_proxy  \
 --build-arg http_proxy=$http_proxy -f ./docker/Dockerfile .
 ```
 
@@ -116,10 +138,10 @@ docker  build  -t  opea/codetrans-ui:latest  --build-arg  https_proxy=$https_pro
 
 Before proceeding, verify that you have all required Docker images by running `docker images`. You should see the following images:
 
-* opea/llm-textgen:latest
-* opea/codetrans:latest
-* opea/codetrans-ui:latest
-* opea/nginx:latest
+* opea/llm-textgen:${RELEASE_VERSION}
+* opea/codetrans:${RELEASE_VERSION}
+* opea/codetrans-ui:${RELEASE_VERSION}
+* opea/nginx:${RELEASE_VERSION}
 
 :::::
 ::::::
@@ -136,13 +158,22 @@ The use case will use the following combination of the GenAIComps with the tools
 
 Tools and models mentioned in the table are configurable either through the environment variable or `compose.yaml`
 
-Set the necessary environment variables to set the use case.
+Set the necessary environment variables to setup the use case by running the `set_env.sh` script.
+Here is where the environment variable `LLM_MODEL_ID` is set, and you can change it to another model 
+by specifying the HuggingFace model card ID.
+
+**Note:** If you wish to run the UI on a web browser on your laptop, you will need to modify `BACKEND_SERVICE_IP` to use `localhost` or `127.0.0.1` instead of `host_ip` inside `set_env.sh` for the backend to properly receive data from the UI. Additionally, you will need to port-forward the port used for `BACKEND_SERVICE_IP`. Specifically, for CodeTrans, append the following to your ssh command: 
 
 ```bash
-cd GenAIExamples/CodeTrans/docker_compose
-git checkout tags/v1.2
+-L 7777:localhost:7777
+```
+
+Run the `set_env.sh` script.
+```bash
+cd $WORKSPACE/GenAIExamples/CodeTrans/docker_compose
 source ./set_env.sh
 ```
+
 Set up a desired port for Nginx:
 ```bash
 # Example: NGINX_PORT=80
@@ -154,7 +185,7 @@ export  NGINX_PORT=${your_nginx_port}
 In this tutorial, we will be deploying via docker compose with the provided YAML file. The docker compose instructions should start all the above-mentioned services as containers.
 
 ```bash
-cd intel/cpu/xeon
+cd $WORKSPACE/GenAIExamples/CodeTrans/docker_compose/intel/cpu/xeon
 docker compose up -d
 ```
 
@@ -177,13 +208,13 @@ For example, the CodeTrans example starts 5 docker containers (services), check 
 
 To do a quick sanity check, try `docker ps -a` to see if all the containers are running.
 
-```
+```bash
 | CONTAINER ID | IMAGE                                                             | COMMAND                   | CREATED         | STATUS                            | PORTS                                      | NAMES                           |
 |--------------|-------------------------------------------------------------------|---------------------------|----------------|------------------------------------|---------------------------------------------|---------------------------------|
-| 0744c6693a64 | opea/nginx:latest                                                | `/docker-entrypoint.…`    | 20 minutes ago | Up 9 minutes                       | 0.0.0.0:80->80/tcp, :::80->80/tcp           | codetrans-xeon-nginx-server     |
-| 1e9c8c900843 | opea/codetrans-ui:latest                                         | `docker-entrypoint.s…`    | 20 minutes ago | Up 9 minutes                       | 0.0.0.0:5173->5173/tcp, :::5173->5173/tcp   |            codetrans-xeon-ui-server        |
-| 3ed57de43648 | opea/codetrans:latest                                            | `python code_transla…`    | 20 minutes ago | Up 9 minutes                       | 0.0.0.0:7777->7777/tcp, :::7777->7777/tcp   | codetrans-xeon-backend-server   |
-| 29d0fe6382dd | opea/llm-textgen:latest                                          | `bash entrypoint.sh`      | 20 minutes ago | Up 9 minutes                       | 0.0.0.0:9000->9000/tcp, :::9000->9000/tcp   | llm-textgen-server              |
+| 0744c6693a64 | opea/nginx:${RELEASE_VERSION}                                                | `/docker-entrypoint.…`    | 20 minutes ago | Up 9 minutes                       | 0.0.0.0:80->80/tcp, :::80->80/tcp           | codetrans-xeon-nginx-server     |
+| 1e9c8c900843 | opea/codetrans-ui:${RELEASE_VERSION}                                         | `docker-entrypoint.s…`    | 20 minutes ago | Up 9 minutes                       | 0.0.0.0:5173->5173/tcp, :::5173->5173/tcp   |            codetrans-xeon-ui-server        |
+| 3ed57de43648 | opea/codetrans:${RELEASE_VERSION}                                            | `python code_transla…`    | 20 minutes ago | Up 9 minutes                       | 0.0.0.0:7777->7777/tcp, :::7777->7777/tcp   | codetrans-xeon-backend-server   |
+| 29d0fe6382dd | opea/llm-textgen:${RELEASE_VERSION}                                          | `bash entrypoint.sh`      | 20 minutes ago | Up 9 minutes                       | 0.0.0.0:9000->9000/tcp, :::9000->9000/tcp   | llm-textgen-server              |
 | e1b37ad9e078 | ghcr.io/huggingface/text-generation-inference:2.4.0-intel-cpu    | `text-generation-lau…`    | 20 minutes ago | Up 13 minutes (healthy)            | 0.0.0.0:8008->80/tcp, [::]:8008->80/tcp     | codetrans-tgi-service           |
 
 ```
@@ -197,12 +228,12 @@ In this section, you will walk through the different ways to interact with the d
 In the first startup, this service will take more time to download the model files. After it's finished, the service will be ready.
 
 Try the command below to check whether the LLM serving is ready.
-```
+```bash
 docker logs ${CONTAINER_ID} | grep Connected
 ```
 If the service is ready, you will get a response like below.
 
-```
+```bash
 2024-09-03T02:47:53.402023Z INFO text_generation_router::server: router/src/server.rs:2311: Connected
 ```
 ```bash
@@ -214,7 +245,7 @@ curl  http://${host_ip}:8008/generate  \
 
 TGI service generates text for the input prompt. Here is the expected result from TGI:
  
-```
+```bash
 {"generated_text":"'''Python\nprint(\"Hello, World!\")"}
 ```
 **NOTE**: After launching TGI, it takes a few minutes for the TGI server to load the LLM model and warm up.
@@ -233,7 +264,7 @@ curl http://${host_ip}:9000/v1/chat/completions \
   -H 'Content-Type: application/json'
 ```
 The expected output is as shown below:
-```
+```bash
 data: {"id":"","choices":[{"finish_reason":"","index":0,"logprobs":null,"text":"\n"}],"created":1737123223,"model":"mistralai/Mistral-7B-Instruct-v0.3","object":"text_completion","system_fingerprint":"2.4.0-sha-0a655a0-intel-cpu","usage":null}
 data: {"id":"","choices":[{"finish_reason":"","index":0,"logprobs":null,"text":"\n"}],"created":1737123223,"model":"mistralai/Mistral-7B-Instruct-v0.3","object":"text_completion","system_fingerprint":"2.4.0-sha-0a655a0-intel-cpu","usage":null}
 data: {"id":"","choices":[{"finish_reason":"","index":0,"logprobs":null,"text":"``"}],"created":1737123223,"model":"mistralai/Mistral-7B-Instruct-v0.3","object":"text_completion","system_fingerprint":"2.4.0-sha-0a655a0-intel-cpu","usage":null}
@@ -264,7 +295,7 @@ curl  http://${host_ip}:7777/v1/codetrans  \
 -d  '{"language_from": "Golang","language_to": "Python","source_code": "package main\n\nimport \"fmt\"\nfunc main() {\n fmt.Println(\"Hello, World!\");\n}"}'
 ```
 When you send this request, you’ll receive a streaming response from the MegaService. It will appear line by line like so:
-```
+```bash
 data: {"id":"","choices":[{"finish_reason":"","index":0,"logprobs":null,"text":"\n"}],"created":1737121307,"model":"mistralai/Mistral-7B-Instruct-v0.3","object":"text_completion","system_fingerprint":"2.4.0-sha-0a655a0-intel-cpu","usage":null}
 data: {"id":"","choices":[{"finish_reason":"","index":0,"logprobs":null,"text":"\n"}],"created":1737121307,"model":"mistralai/Mistral-7B-Instruct-v0.3","object":"text_completion","system_fingerprint":"2.4.0-sha-0a655a0-intel-cpu","usage":null}
 data: {"id":"","choices":[{"finish_reason":"","index":0,"logprobs":null,"text":"        "}],"created":1737121307,"model":"mistralai/Mistral-7B-Instruct-v0.3","object":"text_completion","system_fingerprint":"2.4.0-sha-0a655a0-intel-cpu","usage":null}
@@ -286,7 +317,7 @@ data: {"id":"","choices":[{"finish_reason":"eos_token","index":0,"logprobs":null
 data: [DONE]
 ```
 Within this output, each line contains JSON that includes a `text` field. Once you combine the `text` values in order, you’ll reconstruct the translated code. In this example, the final code is simply:
-```
+```bash
 print("Hello, World!")
 ```
 This demonstrates how the MegaService streams each segment of the response, which you can then piece together to get the complete translation.
@@ -314,7 +345,7 @@ Check the log of the container using:
 
 Check the log using `docker logs e1b37ad9e078 -t`.
 
-```
+```bash
 2024-06-05T01:30:30.695934928Z error: a value is required for '--model-id <MODEL_ID>' but none was supplied
 
 2024-06-05T01:30:30.697123534Z
@@ -323,8 +354,8 @@ Check the log using `docker logs e1b37ad9e078 -t`.
 ```
 The log indicates the `MODEL_ID` is not set.
 
-View the docker input parameters in `./CodeTrans/docker_compose/intel/cpu/xeon/compose.yaml`
-```
+View the docker input parameters in `$WORKSPACE/GenAIExamples/CodeTrans/docker_compose/intel/cpu/xeon/compose.yaml`
+```yaml
 tgi-service:
     image: ghcr.io/huggingface/text-generation-inference:2.4.0-intel-cpu
     container_name: codetrans-tgi-service
@@ -353,8 +384,8 @@ Check environment variable `LLM_MODEL_ID` is set correctly, and spelled correctl
 Set the `LLM_MODEL_ID` then restart the containers.
 You can also check overall logs with the following command, where the
 `compose.yaml` is the MegaService docker-compose configuration file.
-```
-docker compose -f ./docker_compose/intel/cpu/xeon/compose.yaml logs
+```bash
+docker compose -f $WORKSPACE/GenAIExamples/CodeTrans/docker_compose/intel/cpu/xeon/compose.yaml logs
 ```
 ## Launch UI
 
@@ -366,7 +397,7 @@ Alternatively, you can access the UI directly using its internal port. This meth
 
 If you need to change the port used to access the UI directly (not through Nginx), modify the ports section of the `compose.yaml` file:
 
-```
+```yaml
 codetrans-xeon-ui-server:
   image: ${REGISTRY:-opea}/codetrans-ui:${TAG:-latest}
   container_name: codetrans-xeon-ui-server
@@ -382,6 +413,6 @@ Remember to replace YOUR_HOST_PORT with your preferred host port number. After m
 
 Once you are done with the entire pipeline and wish to stop and remove all the containers, use the command below:
 
-```
+```bash
 docker compose -f compose.yaml down
 ```
