@@ -155,7 +155,7 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 
 2. Select your instance configuration, instance type, and machine image which will be Ubuntu.
 
->**Note**: It is recommended to use the `VM-SPR-LRG` powered by 4th Generation Intel® Xeon® Scalable processors or larger with 64GB of memory and 64GB of disk if you wish to use a CPU to run an 8B-parameter model. For other hardware platforms such as Intel® Gaudi AI Accelerators, they can be found in the "Preview" tab on the left. Click on "Preview Instances", then the "Request instance" button. 
+>**Note**: It is recommended to use the `VM-SPR-LRG` powered by 4th Generation Intel® Xeon® Scalable processors with 64GB of memory and 64GB of disk or more if you wish to use a CPU to run an 8B-parameter model.
 
 3. Fill out the rest of the form such as giving your instance a name and answering any additional quesitons.
 
@@ -165,7 +165,7 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 
 6. Go back to the "Compute" tab and under "Instances", note down the private IP address of your new VM.
 
-7. If you wish to access the UI using port forwarding, skip to Step 10. Otherwise, proceed to the next step to create a load balancer.
+7. If you wish to make the UI accessible to others, proceed to the next step to create a load balancer. Otherwise, skip to Step 10 which will explain how to connect to your VM with port forwarding.
 
 8. Create a load balancer. This can be found in Compute->Load Balancers. Click on "Launch Load Balancer". Ignore any messages about signing up for access and close any pop-up windows if any. Fill out the form with the following info: 
    - Name: **Name for your load balancer**
@@ -182,9 +182,7 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 
 9. Go back to Compute->Load Balancers to see your new load balancer. Note down the virtual IP address. This is what you will use to access the UI of your GenAI Example on a web browser.
 
-10. If you are NOT using a load balancer, connect to your VM using ssh and port forward port 80 (`ssh -i <private_key> -J guest@<proxy_jump_ip_address> -L 80:localhost:80 ubuntu@<private_ip_address_of_vm`).
-
-If you are using a load balancer, connect to your VM using ssh: (`ssh -i <private_key> -J guest@<proxy_jump_ip_address> ubuntu@<private_ip_address_of_vm`).
+10. Connect to your VM using ssh and port forward port 80 if needed (`ssh -i <private_key> -J guest@<proxy_jump_ip_address> -L 80:localhost:80 ubuntu@<private_ip_address_of_vm`). If you are using a load balancer, you do not need to include `-L 80:localhost:80`.
 
 :::
 ::::
@@ -199,9 +197,11 @@ chmod +x install_docker.sh
 ```
 Configure Docker to run as a non-root user by following these [instructions](https://docs.docker.com/engine/install/linux-postinstall/)
 
-Clone the repo:
+Clone the repo. It is recommended to checkout a specific release version (i.e. 1.0, 1.1, 1.2, etc):
 ```bash
 git clone https://github.com/opea-project/GenAIExamples.git
+cd GenAIExamples
+git checkout tags/v${RELEASE_VERSION}
 ```
 
 Set the required environment variables:
@@ -210,11 +210,17 @@ export host_ip="localhost"
 export HUGGINGFACEHUB_API_TOKEN="Your_Huggingface_API_Token"
 ```
 
+Set up proxies if you are behind a firewall:
+```bash
+export no_proxy=${your_no_proxy},$host_ip
+export http_proxy=${your_http_proxy}
+export https_proxy=${your_http_proxy}
+```
+
 Set up other specific use-case environment variables in `set_env.sh` before running it. For example, this is where you can change the model(s) to run with.
 ```bash
-cd GenAIExamples/ChatQnA/docker_compose/intel/cpu/xeon/
+cd ChatQnA/docker_compose/intel/cpu/xeon/
 source set_env.sh
-export LOGFLAG=""
 ```
 
 Now we can start the services:
