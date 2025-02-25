@@ -115,7 +115,7 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 
 10. Click Go to resource -> Connect -> Connect -> SSH using Azure CLI. Accept the terms and then select "Configure + connect"
 
->**Note**: If you have issues connecting to the instance with SSH, you could use instead Bastion with your username and password.
+>**Note**: If you have issues connecting to the instance with SSH, you could instead access the same via the Bastion host with your username and password.
 
 :::
 :::{tab-item} Oracle Cloud Infrastructure
@@ -151,7 +151,7 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 :::{tab-item} Intel® Tiber™ AI Cloud
 :sync: ITAC
 
-1. Log in to [Intel® Tiber™ AI Cloud](https://ai.cloud.intel.com/) - Go to the "Compute" tab on the left and click on "Instances". In the center of the screen, click on the "Launch instance" button.
+1. Sign up to create an account or log in to [Intel® Tiber™ AI Cloud](https://ai.cloud.intel.com/). Check if you have sufficient cloud credits and purchase or redeem a coupon if needed. Go to the "Compute" tab on the left and click on "Instances". In the center of the screen, click on the "Launch instance" button.
 
 2. Select your instance configuration, instance type, and machine image which will be Ubuntu.
 
@@ -159,7 +159,7 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 
 3. Fill out the rest of the form such as giving your instance a name and answering any additional quesitons.
 
-4. Add your public key for SSH. You can select a key you have previously uploaded or upload your own key. The "Upload Key" button will also contain instructions to create a new SSH key.
+4. Add your public key for SSH. You can select a key you have previously uploaded or upload a key. The "Upload Key" button also provides instructions on how to create a new SSH key.
 
 5. Click "Launch instance" to start your machine.
 
@@ -174,11 +174,11 @@ Before moving forward, it's important to familiarize yourself with two key eleme
    - Instance Port: **80**
    - Monitor Type: **HTTP**
    - Mode: **Round Robin**
-   - Instances: **The VM you created**
+   - Instances: **Select the name of the VM you created**
 
    >**Note**: The port used is 80 because this is the NGINX port for the GenAI Examples.
 
-   Click "Launch" when ready.
+   Click "Launch".
 
 9. Go back to Compute->Load Balancers to see your new load balancer. Note down the virtual IP address. This is what you will use to access the UI of your GenAI Example on a web browser.
 
@@ -199,6 +199,7 @@ Configure Docker to run as a non-root user by following these [instructions](htt
 
 Clone the repo. It is recommended to checkout a specific release version (i.e. 1.0, 1.1, 1.2, etc):
 ```bash
+export RELEASE_VERSION=<your-release-version>
 git clone https://github.com/opea-project/GenAIExamples.git
 cd GenAIExamples
 git checkout tags/v${RELEASE_VERSION}
@@ -242,7 +243,7 @@ INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:80 (Press CTRL+C to quit)
 ```
 
-Run `docker ps -a` as an additional check to verify that all the services are running as shown:
+Run `docker ps -a` as an additional check to verify that all the services are running as shown. Notice the version of the docker images matches the RELEASE_VERSION you specified. 
 
 ```bash
 | CONTAINER ID | IMAGE                                                 | COMMAND                 | CREATED     | STATUS     | PORTS                                                                                 | NAMES                        |
