@@ -592,7 +592,7 @@ Here is the output:
 {"id":"e1eb0e44f56059fc01aa0334b1dac313","query":"Human: Answer the question based only on the following context:\n    Deep learning is...\n    Question: What is Deep Learning?","max_new_tokens":1024,"top_k":10,"top_p":0.95,"typical_p":0.95,"temperature":0.01,"repetition_penalty":1.03,"streaming":true}
 
 ```
-You may notice reranking microservice are with state ('ID' and other meta data),
+You may notice retriever microservice are with state ('ID' and other meta data),
 while reranking service are not.
 
 ### vLLM and TGI Service
