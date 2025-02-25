@@ -88,6 +88,7 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 10. Enable inbound traffic for port 80. For more information on editing inbound/outbound rules, click [here](https://cloud.ibm.com/docs/vpc?topic=vpc-updating-the-default-security-group&interface=ui)
 
 11. ssh into the instance using the floating IP (`ssh -i <key> ubuntu@<floating-ip>`)
+
 :::
 :::{tab-item} Microsoft Azure
 :sync: Azure
@@ -114,7 +115,8 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 
 10. Click Go to resource -> Connect -> Connect -> SSH using Azure CLI. Accept the terms and then select "Configure + connect"
 
->**Note**: If you have issues connecting to the instance with SSH, you could use instead Bastion with your username and password.
+>**Note**: If you have issues connecting to the instance with SSH, you could instead access the same via the Bastion host with your username and password.
+
 :::
 :::{tab-item} Oracle Cloud Infrastructure
 :sync: OCI
@@ -138,12 +140,49 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 9. Note the public IP address of the machine once its launched. 
 
 10. Once the instance is launched, click on the subnet in the Primary VNIC section. Then click on the "Default Security List for vcn-xxxxxxxx-xxxx" , click on the "Add Ingress Rules".  Add the following information:
-    Source CIDR: 0.0.0.0/0  
-    Source Port Range : All 
-    Destination Port Range : 80 
-    Click on "Save"
+    - Source CIDR: **0.0.0.0/0**  
+    - Source Port Range: **All** 
+    - Destination Port Range: **80** 
+    - Click on "Save"
 
 11. Connect using ssh (`ssh -i <private_key>  ubuntu@<public_ip_address>`).
+
+:::
+:::{tab-item} Intel® Tiber™ AI Cloud
+:sync: ITAC
+
+1. Sign up to create an account or log in to [Intel® Tiber™ AI Cloud](https://ai.cloud.intel.com/). Check if you have sufficient cloud credits and purchase or redeem a coupon if needed. Go to the "Compute" tab on the left and click on "Instances". In the center of the screen, click on the "Launch instance" button.
+
+2. Select your instance configuration, instance type, and machine image which will be Ubuntu.
+
+>**Note**: It is recommended to use the `VM-SPR-LRG` powered by 4th Generation Intel® Xeon® Scalable processors with 64GB of memory and 64GB of disk or more if you wish to use a CPU to run an 8B-parameter model.
+
+3. Fill out the rest of the form such as giving your instance a name and answering any additional quesitons.
+
+4. Add your public key for SSH. You can select a key you have previously uploaded or upload a key. The "Upload Key" button also provides instructions on how to create a new SSH key.
+
+5. Click "Launch instance" to start your machine.
+
+6. Go back to the "Compute" tab and under "Instances", note down the private IP address of your new VM.
+
+7. If you wish to make the UI accessible to others, proceed to the next step to create a load balancer. Otherwise, skip to Step 10 which will explain how to connect to your VM with port forwarding.
+
+8. Create a load balancer. This can be found in Compute->Load Balancers. Click on "Launch Load Balancer". Ignore any messages about signing up for access and close any pop-up windows if any. Fill out the form with the following info: 
+   - Name: **Name for your load balancer**
+   - Source IP: **The private IP address of your VM in Step 6**
+   - Listener Port: **80**
+   - Instance Port: **80**
+   - Monitor Type: **HTTP**
+   - Mode: **Round Robin**
+   - Instances: **Select the name of the VM you created**
+
+   >**Note**: The port used is 80 because this is the NGINX port for the GenAI Examples.
+
+   Click "Launch".
+
+9. Go back to Compute->Load Balancers to see your new load balancer. Note down the virtual IP address. This is what you will use to access the UI of your GenAI Example on a web browser.
+
+10. Connect to your VM using ssh and port forward port 80 if needed (`ssh -i <private_key> -J guest@<proxy_jump_ip_address> -L 80:localhost:80 ubuntu@<private_ip_address_of_vm`). If you are using a load balancer, you do not need to include `-L 80:localhost:80`.
 
 :::
 ::::
@@ -158,62 +197,74 @@ chmod +x install_docker.sh
 ```
 Configure Docker to run as a non-root user by following these [instructions](https://docs.docker.com/engine/install/linux-postinstall/)
 
-Clone the repo and navigate to ChatQnA
-
+Clone the repo. It is recommended to checkout a specific release version (i.e. 1.0, 1.1, 1.2, etc):
 ```bash
+export RELEASE_VERSION=<your-release-version>
 git clone https://github.com/opea-project/GenAIExamples.git
-cd GenAIExamples/ChatQnA
+cd GenAIExamples
+git checkout tags/v${RELEASE_VERSION}
 ```
+
 Set the required environment variables:
 ```bash
 export host_ip="localhost"
 export HUGGINGFACEHUB_API_TOKEN="Your_Huggingface_API_Token"
 ```
 
-Set up other specific use-case environment variables:
+Set up proxies if you are behind a firewall:
 ```bash
-cd docker_compose/intel/cpu/xeon/
-source set_env.sh
-export LOGFLAG=""
+export no_proxy=${your_no_proxy},$host_ip
+export http_proxy=${your_http_proxy}
+export https_proxy=${your_http_proxy}
 ```
-Now we can start the services
+
+Set up other specific use-case environment variables in `set_env.sh` before running it. For example, this is where you can change the model(s) to run with.
 ```bash
-docker compose up -d
+cd ChatQnA/docker_compose/intel/cpu/xeon/
+source set_env.sh
+```
+
+Now we can start the services:
+```bash
+docker compose -f compose.yaml up -d
 ```
 >**Note**: It takes a few minutes for the services to start. Check the logs for the services to ensure that ChatQnA is running before proceeding further.
 
-For example to check the logs for the `tgi-service`:
+For example to check the logs for the `vllm-service`:
 
 ```bash
-docker logs tgi-service | grep Connected
+docker logs vllm-service | grep Complete
 ```
-Proceed further **only after** the output shows `Connected` as shown:
-```
-tgi-service | 2024-10-18T22:41:18.973042Z INFO text_generation_router::server: router/src/server.rs:2311: Connected
+Proceed further **only after** the output shows `Application startup complete.` as shown:
+```bash
+INFO:     Started server process [1]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:80 (Press CTRL+C to quit)
 ```
 
-Run `docker ps -a` as an additional check to verify that all the services are running as shown:
+Run `docker ps -a` as an additional check to verify that all the services are running as shown. Notice the version of the docker images matches the RELEASE_VERSION you specified. 
 
-```
-| CONTAINER ID | IMAGE                                                                  | COMMAND                | CREATED      | STATUS      | PORTS                                                                                    | NAMES                        |
-|--------------|------------------------------------------------------------------------|------------------------|--------------|-------------|------------------------------------------------------------------------------------------|------------------------------|
-| 3a65ff9e16bd | opea/nginx:latest                                                      | `/docker-entrypoint.\…`| 14 hours ago | Up 14 hours | 0.0.0.0:80->80/tcp, :::80->80/tcp                                                        | chatqna-xeon-nginx-server    |
-| 7563b2ee1cd9 | opea/chatqna-ui:latest                                                 | `docker-entrypoint.s\…`| 14 hours ago | Up 14 hours | 0.0.0.0:5173->5173/tcp, :::5173->5173/tcp                                                | chatqna-xeon-ui-server       |
-| 9ea57a660cd6 | opea/chatqna:latest                                                    | `python chatqna.py`    | 14 hours ago | Up 14 hours | 0.0.0.0:8888->8888/tcp, :::8888->8888/tcp                                                | chatqna-xeon-backend-server  |
-| 451bacaac3e6 | opea/retriever-redis:latest                                            | `python retriever_re\…`| 14 hours ago | Up 14 hours | 0.0.0.0:7000->7000/tcp, :::7000->7000/tcp                                                | retriever-redis-server       |
-| c1f952ef5c08 | opea/dataprep-redis:latest                                             | `python prepare_doc_\…`| 14 hours ago | Up 14 hours | 0.0.0.0:6007->6007/tcp, :::6007->6007/tcp                                                | dataprep-redis-server        |
-| 2a874ed8ce6f | redis/redis-stack:7.2.0-v9                                             | `/entrypoint.sh`       | 14 hours ago | Up 14 hours | 0.0.0.0:6379->6379/tcp, :::6379->6379/tcp, 0.0.0.0:8001->8001/tcp, :::8001->8001/tcp     | redis-vector-db              |
-| ac7b62306eb8 | ghcr.io/huggingface/text-embeddings-inference:cpu-1.5                  | `text-embeddings-rou\…`| 14 hours ago | Up 14 hours | 0.0.0.0:8808->80/tcp, [::]:8808->80/tcp                                                  | tei-reranking-server         |
-| 521cc7faa00e | ghcr.io/huggingface/text-generation-inference:sha-e4201f4-intel-cpu    | `text-generation-lau\…`| 14 hours ago | Up 14 hours | 0.0.0.0:9009->80/tcp, [::]:9009->80/tcp                                                  | tgi-service                  |
-| 9faf553d3939 | ghcr.io/huggingface/text-embeddings-inference:cpu-1.5                  | `text-embeddings-rou\…`| 14 hours ago | Up 14 hours | 0.0.0.0:6006->80/tcp, [::]:6006->80/tcp                                                  | tei-embedding-server         |
-
+```bash
+| CONTAINER ID | IMAGE                                                 | COMMAND                 | CREATED     | STATUS     | PORTS                                                                                 | NAMES                        |
+|--------------|--------------------------------------------------------|------------------------|--------------|-------------|------------------------------------------------------------------------------------------|------------------------------|
+| d992b34fda27 | opea/nginx:1.2                                         | "/docker-entrypoint.…" | 6 days ago | Up 6 days | 0.0.0.0:80->80/tcp, :::80->80/tcp                                                     | chatqna-xeon-nginx-server    |
+| 2d297d595650 | opea/chatqna-ui:1.2                                    | "docker-entrypoint.s…" | 6 days ago | Up 6 days | 0.0.0.0:5173->5173/tcp, :::5173->5173/tcp                                             | chatqna-xeon-ui-server    |
+| 0b9b2be1feef | opea/chatqna-without-rerank:1.2                        | "python chatqna.py -…" | 6 days ago | Up 6 days | 0.0.0.0:8888->8888/tcp, :::8888->8888/tcp                                             | chatqna-xeon-backend-server    |
+| b64ba100723c | opea/dataprep:1.2                                      | "sh -c 'python $( [ …" | 6 days ago | Up 6 days | 0.0.0.0:6007->5000/tcp, [::]:6007->5000/tcp                                             | dataprep-redis-server    |
+| a9b93207988d | opea/retriever:1.2                                     | "python opea_retriev…" | 6 days ago | Up 6 days | 0.0.0.0:7000->7000/tcp, :::7000->7000/tcp                                             | retriever-redis-server    |
+| 4bf653d83cba | redis/redis-stack:7.2.0-v9                             | "/entrypoint.sh"       | 6 days ago | Up 6 days | 0.0.0.0:6379->6379/tcp, :::6379->6379/tcp, 0.0.0.0:8001->8001/tcp, :::8001->8001/tcp   | redis-vector-db    |
+| b2774012be67 | ghcr.io/huggingface/text-embeddings-inference:cpu-1.5  | "text-embeddings-rou…" | 6 days ago | Up 6 days | 0.0.0.0:6006->80/tcp, [::]:6006->80/tcp                                             | tei-embedding-server    |
+| 6407712b6f9b | opea/vllm:1.2                                          | "python3 -m vllm.ent…" | 6 days ago | Up 6 days | 0.0.0.0:9009->80/tcp, [::]:9009->80/tcp                                             | vllm-service    |
 ```
 
 ### Interact with ChatQnA
 
 You can interact with ChatQnA via a browser interface:
 
-* To view the ChatQnA interface, open a browser and navigate to the UI by inserting your public facing IP address in the following: `http://{public_ip}:80’.
+* To view the ChatQnA interface, open a browser and navigate to the UI by inserting your public facing IP address in the following: `http://{public_ip}:80’. 
+
+>**Note:** For users running on ITAC, open a browser to localhost:80 if you are using port forwarding OR the virtual IP address of your load balancer.
 
 We can go ahead and ask a sample question, say 'What is OPEA?'.
 
