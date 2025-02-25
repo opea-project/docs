@@ -129,7 +129,7 @@ V1.0
 
 ### Part 2. 'Agent' genAI Component definition
 
- 'Agent' genAI Component is regarded as the resource management unit in “Agent” design.  It will be launched as one microservice and can be instantiated as ‘Agent’, ‘Planner’ or ‘Executor’ according to configuration. Tools will be registered to 'Agent' microservice during launch or runetime.
+ 'Agent' genAI Component is regarded as the resource management unit in “Agent” design.  It will be launched as one microservice and can be instantiated as ‘Agent’, ‘Planner’ or ‘Executor’ according to configuration. Tools will be registered to 'Agent' microservice during launch or runtime.
 
  ![image](https://github.com/user-attachments/assets/38e83fa4-57d8-4146-9061-e5153472b5f4)
 
