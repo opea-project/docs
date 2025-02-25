@@ -1,5 +1,25 @@
 #!/bin/bash
 
+if [[ $# < 1 ]]; then
+  echo "Miss parameter"
+  echo "$0 [version]"
+  echo "   like: 1.2, which is defined in html_context.versions of conf.py"
+  echo ""
+  echo "How to build online doc for history release?"
+  echo ""
+  echo "  Prepare: add tag in all repos with format 'v*.*', like v1.2"
+  echo ""
+  echo "  1. Add history release version (like 1.2) in html_context.versions of conf.py."
+  echo "  2. Execute this script with release version (like $0 1.2). Build the history release document and output to release folder, like 1.2."
+  echo "  3. Execute scripts\build.sh. Update the 'latest' to add new release link in 'Document Versions'."
+  echo "  4. Git push the content of opea-project.github.io."
+  exit 1
+fi
+
+version=$1
+TAG="v${version}"
+
+echo "TAG=${TAG}"
 pwd
 cd scripts
 
@@ -34,12 +54,18 @@ for repo_name in docs GenAIComps GenAIEval GenAIExamples GenAIInfra opea-project
   else
     echo "repo ${repo_name} exists, skipping cloning"
   fi
+  cd ${repo_name}
+  echo "checkout ${TAG} in ${repo_name}"
+  pwd
+  git checkout ${TAG}
+  cd ..
 done
 
 echo "Build HTML"
 cd docs
 make clean
-make html
+make DOC_TAG=release RELEASE=${version} html
+#make DOC_TAG=release RELEASE=${version} publish
 retval=$?
 echo "result = $retval"
 if [ $retval -ne 0 ]; then
@@ -60,16 +86,13 @@ echo "Update github.io"
 
 RELEASE_FOLDER=../opea-project.github.io
 BUILDDIR=_build
-PUBLISHDIR=${RELEASE_FOLDER}/latest
+PUBLISHDIR=${RELEASE_FOLDER}/${version}
 
 echo "Clear all content in ${PUBLISHDIR}"
-rm -rf ${PUBLISHDIR}/*
 
+mkdir -p ${PUBLISHDIR}
+rm -rf ${PUBLISHDIR}/*
 echo "Copy html content to ${PUBLISHDIR}"
 cp -r ${BUILDDIR}/html/*  ${PUBLISHDIR}
-cp scripts/publish-README.md ${PUBLISHDIR}/../README.md
-bash scripts/publish-redirect.sh ${PUBLISHDIR}/../index.html latest/index.html
-sed 's/<head>/<head>\n  <base href="https:\/\/opea-project.github.io\/latest\/">/' ${BUILDDIR}/html/404.html > ${PUBLISHDIR}/../404.html
 
 echo "Copied html content to ${PUBLISHDIR}"
-

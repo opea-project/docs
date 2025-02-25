@@ -50,7 +50,7 @@ ls -d1 */ | \
 
 cd ../GenAIComps/comps
 
-ls -d1 [a-zA-Z]*/ | \
+ls -d1 [a-zA-Z0-9]*/ | \
    awk \
      -v repo="GenAIComps" \
      -e '{dirname=substr($0,1,length($0)-1); title=toupper(substr(dirname,1,1)) substr(dirname,2) " Microservice"; \

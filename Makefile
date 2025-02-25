@@ -8,7 +8,7 @@ else
 endif
 
 # You can set these variables from the command line.
-SPHINXOPTS    ?= -q
+SPHINXOPTS    ?= -q -j auto
 SPHINXBUILD   = sphinx-build
 SPHINXPROJ    = "OPEA Project"
 BUILDDIR      ?= _build

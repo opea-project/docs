@@ -31,6 +31,19 @@ Installation Guides
    ../guide/installation/*
    ../guide/installation/**/*
 
+Cloud Service Provider
+**********************
+
+
+.. rst-class:: rst-columns
+
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   /GenAIInfra/cloud-service-provider/*
+   /GenAIInfra/cloud-service-provider/**/*
+
 Authentication and Authorization
 ********************************
 
@@ -109,3 +122,15 @@ Scripts
    /GenAIInfra/scripts/README
    /GenAIInfra/scripts/*
    /GenAIInfra/scripts/**/*
+
+Contributing
+************
+
+.. rst-class:: rst-columns
+
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   /GenAIInfra/dev/*
+   /GenAIInfra/dev/**/*

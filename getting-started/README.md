@@ -1,13 +1,12 @@
 # Getting Started with OPEA
-In this document, we provide a tailored guide to deploying the ChatQnA application in OPEA GenAI Examples across multiple cloud platforms, including IBM Cloud, Amazon Web Services (AWS), and others,  enabling you to choose the best fit for your specific needs and requirements. For additional deployment targets, see the [ChatQnA Sample Guide](https://opea-project.github.io/latest/examples/ChatQnA/ChatQnA_Guide.html).
-
+In this document, we provide a tailored guide to deploying the ChatQnA application in OPEA GenAI Examples across multiple cloud platforms, including Amazon Web Services (AWS), Google Cloud Platform (GCP), IBM Cloud, Microsoft Azure and Oracle Cloud Infrastructure, enabling you to choose the best fit for your specific needs and requirements. For additional deployment targets, see the [ChatQnA Sample Guide](https://opea-project.github.io/latest/examples/ChatQnA/ChatQnA_Guide.html).
 
 ## Understanding OPEA's Core Components
 
 Before moving forward, it's important to familiarize yourself with two key elements of OPEA: GenAIComps and GenAIExamples.
 
 - GenAIComps is a collection of microservice components that form a service-based toolkit. This includes a variety of services such as llm (large language models), embedding, and reranking, among others.
-- While GenAIComps offers a range of microservices, GenAIExamples provides practical, deployable solutions to help users implement these services effectively. Examples include ChatQnA and DocSum, which leverage the microservices for specific applications.
+- GenAIExamples provides practical and deployable solutions to help users implement these services effectively. Examples include ChatQnA and DocSum, which leverage the microservices for specific applications.
 
 
 ## Prerequisites
@@ -15,7 +14,7 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 ## Create and Configure a Virtual Server
 
 ::::{tab-set}
-:::{tab-item} AWS
+:::{tab-item} Amazon Web Services
 :sync: AWS
 
 **Step 1: Create Your Virtual Server**
@@ -62,34 +61,7 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 5. Select **Save rules** to commit your changes.
 
 :::
-:::{tab-item} Azure
-:sync: Azure
-
-1. Navigate to [Microsoft Azure](portal.azure.com) – Select the "Skip" button on the bottom right to land on the service offerings page. Search for "Virtual Machines" in the search bar and select it. Click the "Create" button and select "Azure Virtual Machine".
-
-2. Select an existing "Resource group" from the drop down or click "Create" for a new Resource group and give it a name. If you have issues refer to [cannot create resource groups](https://learn.microsoft.com/en-us/answers/questions/1520133/cannot-create-resource-groups).
-
-3. Provide a name to the VM and select the base OS as `Ubuntu 24.04 LTS`
-
-4. Select x64 in VM architecture.
-
-5. Select an Instance type that is based on Intel hardware.
-
->**Note**: We recommend selecting a `Standard_D16ds_v5` instance or larger with an Intel(R) 3rd/4th  Gen Xeon(C) Scalable Processor. You can find this family of instances in the (US) West US Region. Visit for more information [virtual machines on Azure](https://azure.microsoft.com/en-us/partners/directory/intel-corporation).
-
-6. Select Password as Authentication type and create username and password for your instance.
-
-7. Choose the Allow selected ports in Inbound port rule section and select HTTP.
-
-8. Click "Next: Disk" button and select OS disk size as 128GiB.
-
-9. Click on "Review + Create" to launch the VM.
-
-10. Click Go to resource -> Connect -> Connect -> SSH using Azure CLI. Accept the terms and then select "Configure + connect"
-
->**Note**: If you have issues connecting to the instance with SSH, you could use instead Bastion with your username and password.
-:::
-:::{tab-item} GCP
+:::{tab-item} Google Cloud Platform
 :sync: GCP
 
 1. Navigate to [GCP console](https://console.cloud.google.com/) – Click the "Create a VM" button.
@@ -137,10 +109,38 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 11. ssh into the instance using the floating IP (`ssh -i <key> ubuntu@<floating-ip>`)
 
 :::
-:::{tab-item} OCI
+:::{tab-item} Microsoft Azure
+:sync: Azure
+
+1. Navigate to [Microsoft Azure](portal.azure.com) – Select the "Skip" button on the bottom right to land on the service offerings page. Search for "Virtual Machines" in the search bar and select it. Click the "Create" button and select "Azure Virtual Machine".
+
+2. Select an existing "Resource group" from the drop down or click "Create" for a new Resource group and give it a name. If you have issues refer to [cannot create resource groups](https://learn.microsoft.com/en-us/answers/questions/1520133/cannot-create-resource-groups).
+
+3. Provide a name to the VM and select the base OS as `Ubuntu 24.04 LTS`
+
+4. Select x64 in VM architecture.
+
+5. Select an Instance type that is based on Intel hardware.
+
+>**Note**: We recommend selecting a `Standard_D16ds_v5` instance or larger with an Intel(R) 3rd/4th  Gen Xeon(C) Scalable Processor. You can find this family of instances in the (US) West US Region. Visit for more information [virtual machines on Azure](https://azure.microsoft.com/en-us/partners/directory/intel-corporation).
+
+6. Select Password as Authentication type and create username and password for your instance.
+
+7. Choose the Allow selected ports in Inbound port rule section and select HTTP.
+
+8. Click "Next: Disk" button and select OS disk size as 128GiB.
+
+9. Click on "Review + Create" to launch the VM.
+
+10. Click Go to resource -> Connect -> Connect -> SSH using Azure CLI. Accept the terms and then select "Configure + connect"
+
+>**Note**: If you have issues connecting to the instance with SSH, you could instead access the same via the Bastion host with your username and password.
+
+:::
+:::{tab-item} Oracle Cloud Infrastructure
 :sync: OCI
 
-1. Navigate to [Oracle Cloud Console](https://www.oracle.com/cloud/sign-in.html?redirect_uri=https%3A%2F%2Fcloud.oracle.com%2F) – Then navigate to [Compute Instances](https://cloud.oracle.com/compute/instances). Click the "Create Instance" button. 
+1. Login to [Oracle Cloud Console](https://www.oracle.com/cloud/sign-in.html?redirect_uri=https%3A%2F%2Fcloud.oracle.com%2F) – Then navigate to [Compute Instances](https://cloud.oracle.com/compute/instances). Click the "Create Instance" button. 
 
 2. Provide a name to the VM and select the placement in the availability domains. 
 
@@ -159,19 +159,56 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 9. Note the public IP address of the machine once its launched. 
 
 10. Once the instance is launched, click on the subnet in the Primary VNIC section. Then click on the "Default Security List for vcn-xxxxxxxx-xxxx" , click on the "Add Ingress Rules".  Add the following information:
-    Source CIDR: 0.0.0.0/0  
-    Source Port Range : All 
-    Destination Port Range : 80 
-    Click on "Save"
+    - Source CIDR: **0.0.0.0/0**  
+    - Source Port Range: **All** 
+    - Destination Port Range: **80** 
+    - Click on "Save"
 
 11. Connect using ssh (`ssh -i <private_key>  ubuntu@<public_ip_address>`).
+
+:::
+:::{tab-item} Intel® Tiber™ AI Cloud
+:sync: ITAC
+
+1. Sign up to create an account or log in to [Intel® Tiber™ AI Cloud](https://ai.cloud.intel.com/). Check if you have sufficient cloud credits and purchase or redeem a coupon if needed. Go to the "Compute" tab on the left and click on "Instances". In the center of the screen, click on the "Launch instance" button.
+
+2. Select your instance configuration, instance type, and machine image which will be Ubuntu.
+
+>**Note**: It is recommended to use the `VM-SPR-LRG` powered by 4th Generation Intel® Xeon® Scalable processors with 64GB of memory and 64GB of disk or more if you wish to use a CPU to run an 8B-parameter model.
+
+3. Fill out the rest of the form such as giving your instance a name and answering any additional quesitons.
+
+4. Add your public key for SSH. You can select a key you have previously uploaded or upload a key. The "Upload Key" button also provides instructions on how to create a new SSH key.
+
+5. Click "Launch instance" to start your machine.
+
+6. Go back to the "Compute" tab and under "Instances", note down the private IP address of your new VM.
+
+7. If you wish to make the UI accessible to others, proceed to the next step to create a load balancer. Otherwise, skip to Step 10 which will explain how to connect to your VM with port forwarding.
+
+8. Create a load balancer. This can be found in Compute->Load Balancers. Click on "Launch Load Balancer". Ignore any messages about signing up for access and close any pop-up windows if any. Fill out the form with the following info: 
+   - Name: **Name for your load balancer**
+   - Source IP: **The private IP address of your VM in Step 6**
+   - Listener Port: **80**
+   - Instance Port: **80**
+   - Monitor Type: **HTTP**
+   - Mode: **Round Robin**
+   - Instances: **Select the name of the VM you created**
+
+   >**Note**: The port used is 80 because this is the NGINX port for the GenAI Examples.
+
+   Click "Launch".
+
+9. Go back to Compute->Load Balancers to see your new load balancer. Note down the virtual IP address. This is what you will use to access the UI of your GenAI Example on a web browser.
+
+10. Connect to your VM using ssh and port forward port 80 if needed (`ssh -i <private_key> -J guest@<proxy_jump_ip_address> -L 80:localhost:80 ubuntu@<private_ip_address_of_vm`). If you are using a load balancer, you do not need to include `-L 80:localhost:80`.
 
 :::
 ::::
 
 
 ## Deploy the ChatQnA Solution
-Use the command below to install docker on a clean virtual machine
+Use the command below to install docker:
 ```bash
 wget https://raw.githubusercontent.com/opea-project/GenAIExamples/refs/heads/main/ChatQnA/docker_compose/install_docker.sh
 chmod +x install_docker.sh
@@ -179,61 +216,74 @@ chmod +x install_docker.sh
 ```
 Configure Docker to run as a non-root user by following these [instructions](https://docs.docker.com/engine/install/linux-postinstall/)
 
-Clone the repo and navigate to ChatQnA
-
+Clone the repo. It is recommended to checkout a specific release version (i.e. 1.0, 1.1, 1.2, etc):
 ```bash
+export RELEASE_VERSION=<your-release-version>
 git clone https://github.com/opea-project/GenAIExamples.git
-cd GenAIExamples/ChatQnA
+cd GenAIExamples
+git checkout tags/v${RELEASE_VERSION}
 ```
+
 Set the required environment variables:
 ```bash
 export host_ip="localhost"
 export HUGGINGFACEHUB_API_TOKEN="Your_Huggingface_API_Token"
 ```
 
-Set up other specific use-case environment variables:
+Set up proxies if you are behind a firewall:
 ```bash
-cd docker_compose/intel/cpu/xeon/
+export no_proxy=${your_no_proxy},$host_ip
+export http_proxy=${your_http_proxy}
+export https_proxy=${your_http_proxy}
+```
+
+Set up other specific use-case environment variables in `set_env.sh` before running it. For example, this is where you can change the model(s) to run with.
+```bash
+cd ChatQnA/docker_compose/intel/cpu/xeon/
 source set_env.sh
 ```
-Now we can start the services
+
+Now we can start the services:
 ```bash
-docker compose up -d
+docker compose -f compose.yaml up -d
 ```
 >**Note**: It takes a few minutes for the services to start. Check the logs for the services to ensure that ChatQnA is running before proceeding further.
 
-For example to check the logs for the `tgi-service`:
+For example to check the logs for the `vllm-service`:
 
 ```bash
-docker logs tgi-service | grep Connected
+docker logs vllm-service | grep Complete
 ```
-The output shows `Connected` as shown:
-```
-tgi-service | 2024-10-18T22:41:18.973042Z INFO text_generation_router::server: router/src/server.rs:2311: Connected
+Proceed further **only after** the output shows `Application startup complete.` as shown:
+```bash
+INFO:     Started server process [1]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:80 (Press CTRL+C to quit)
 ```
 
-Run `docker ps -a` as an additional check to verify that all the services are running as shown:
+Run `docker ps -a` as an additional check to verify that all the services are running as shown. Notice the version of the docker images matches the RELEASE_VERSION you specified. 
 
-```
-| CONTAINER ID | IMAGE                                                                  | COMMAND                | CREATED      | STATUS      | PORTS                                                                                    | NAMES                        |
-|--------------|------------------------------------------------------------------------|------------------------|--------------|-------------|------------------------------------------------------------------------------------------|------------------------------|
-| 3a65ff9e16bd | opea/nginx:latest                                                      | `/docker-entrypoint.\…`| 14 hours ago | Up 14 hours | 0.0.0.0:80->80/tcp, :::80->80/tcp                                                        | chatqna-xeon-nginx-server    |
-| 7563b2ee1cd9 | opea/chatqna-ui:latest                                                 | `docker-entrypoint.s\…`| 14 hours ago | Up 14 hours | 0.0.0.0:5173->5173/tcp, :::5173->5173/tcp                                                | chatqna-xeon-ui-server       |
-| 9ea57a660cd6 | opea/chatqna:latest                                                    | `python chatqna.py`    | 14 hours ago | Up 14 hours | 0.0.0.0:8888->8888/tcp, :::8888->8888/tcp                                                | chatqna-xeon-backend-server  |
-| 451bacaac3e6 | opea/retriever-redis:latest                                            | `python retriever_re\…`| 14 hours ago | Up 14 hours | 0.0.0.0:7000->7000/tcp, :::7000->7000/tcp                                                | retriever-redis-server       |
-| c1f952ef5c08 | opea/dataprep-redis:latest                                             | `python prepare_doc_\…`| 14 hours ago | Up 14 hours | 0.0.0.0:6007->6007/tcp, :::6007->6007/tcp                                                | dataprep-redis-server        |
-| 2a874ed8ce6f | redis/redis-stack:7.2.0-v9                                             | `/entrypoint.sh`       | 14 hours ago | Up 14 hours | 0.0.0.0:6379->6379/tcp, :::6379->6379/tcp, 0.0.0.0:8001->8001/tcp, :::8001->8001/tcp     | redis-vector-db              |
-| ac7b62306eb8 | ghcr.io/huggingface/text-embeddings-inference:cpu-1.5                  | `text-embeddings-rou\…`| 14 hours ago | Up 14 hours | 0.0.0.0:8808->80/tcp, [::]:8808->80/tcp                                                  | tei-reranking-server         |
-| 521cc7faa00e | ghcr.io/huggingface/text-generation-inference:sha-e4201f4-intel-cpu    | `text-generation-lau\…`| 14 hours ago | Up 14 hours | 0.0.0.0:9009->80/tcp, [::]:9009->80/tcp                                                  | tgi-service                  |
-| 9faf553d3939 | ghcr.io/huggingface/text-embeddings-inference:cpu-1.5                  | `text-embeddings-rou\…`| 14 hours ago | Up 14 hours | 0.0.0.0:6006->80/tcp, [::]:6006->80/tcp                                                  | tei-embedding-server         |
-
+```bash
+| CONTAINER ID | IMAGE                                                 | COMMAND                 | CREATED     | STATUS     | PORTS                                                                                 | NAMES                        |
+|--------------|--------------------------------------------------------|------------------------|--------------|-------------|------------------------------------------------------------------------------------------|------------------------------|
+| d992b34fda27 | opea/nginx:1.2                                         | "/docker-entrypoint.…" | 6 days ago | Up 6 days | 0.0.0.0:80->80/tcp, :::80->80/tcp                                                     | chatqna-xeon-nginx-server    |
+| 2d297d595650 | opea/chatqna-ui:1.2                                    | "docker-entrypoint.s…" | 6 days ago | Up 6 days | 0.0.0.0:5173->5173/tcp, :::5173->5173/tcp                                             | chatqna-xeon-ui-server    |
+| 0b9b2be1feef | opea/chatqna-without-rerank:1.2                        | "python chatqna.py -…" | 6 days ago | Up 6 days | 0.0.0.0:8888->8888/tcp, :::8888->8888/tcp                                             | chatqna-xeon-backend-server    |
+| b64ba100723c | opea/dataprep:1.2                                      | "sh -c 'python $( [ …" | 6 days ago | Up 6 days | 0.0.0.0:6007->5000/tcp, [::]:6007->5000/tcp                                             | dataprep-redis-server    |
+| a9b93207988d | opea/retriever:1.2                                     | "python opea_retriev…" | 6 days ago | Up 6 days | 0.0.0.0:7000->7000/tcp, :::7000->7000/tcp                                             | retriever-redis-server    |
+| 4bf653d83cba | redis/redis-stack:7.2.0-v9                             | "/entrypoint.sh"       | 6 days ago | Up 6 days | 0.0.0.0:6379->6379/tcp, :::6379->6379/tcp, 0.0.0.0:8001->8001/tcp, :::8001->8001/tcp   | redis-vector-db    |
+| b2774012be67 | ghcr.io/huggingface/text-embeddings-inference:cpu-1.5  | "text-embeddings-rou…" | 6 days ago | Up 6 days | 0.0.0.0:6006->80/tcp, [::]:6006->80/tcp                                             | tei-embedding-server    |
+| 6407712b6f9b | opea/vllm:1.2                                          | "python3 -m vllm.ent…" | 6 days ago | Up 6 days | 0.0.0.0:9009->80/tcp, [::]:9009->80/tcp                                             | vllm-service    |
 ```
 
 ### Interact with ChatQnA
 
 You can interact with ChatQnA via a browser interface:
 
-* To view the ChatQnA interface, open a browser and navigate to the UI by inserting your public facing IP address in the following: `http://{public_ip}:80’.
+* To view the ChatQnA interface, open a browser and navigate to the UI by inserting your public facing IP address in the following: `http://{public_ip}:80’. 
+
+>**Note:** For users running on ITAC, open a browser to localhost:80 if you are using port forwarding OR the virtual IP address of your load balancer.
 
 We can go ahead and ask a sample question, say 'What is OPEA?'.
 
@@ -243,25 +293,12 @@ A snapshot of the interface looks as follows:
 
 Given that any information about OPEA was not in the training data for the model, we see the model hallucinating and coming up with a response. We can upload a document (PDF) with information and observe how the response changes.
 
-> **Note:** this example leverages the [OPEA document](assets/what_is_opea.pdf) for its RAG based content. You can download the [OPEA document](assets/what_is_opea.pdf) and upload it using the UI.
+> **Note:** this example leverages the OPEA document for its RAG based content. You can download the [OPEA document](assets/what_is_opea.pdf) and upload it using the UI.
 
 ![Chat Interface with RAG](assets/chat_ui_response_rag.png)
 
 We observe that the response is relevant and is based on the PDF uploaded. See the [ChatQnA Sample Guide](https://opea-project.github.io/latest/examples/ChatQnA/ChatQnA_Guide.html)
 to learn how you can customize the example with your own content.
-
-To interact with the ChatQnA application via a `curl` command:
-
-```bash
-curl http://${host_ip}:8888/v1/chatqna \
-    -H "Content-Type: application/json" \
-    -d '{
-        "messages": "What is the revenue of Nike in 2023?"
-    }'
-```
-ChatQnA provides the answer to your query as a text stream.
-
-Modify the `message` parameter in the `curl` command to continue interacting with ChatQnA.
 
 ## What’s Next
 
