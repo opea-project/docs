@@ -6,6 +6,7 @@ slice-n-dice ways to enable RAG with vectordb and LLM models, but here we will
 be covering one option of doing it for convenience : we will be showcasing  how
 to build an e2e chatQnA with Redis VectorDB and the llama-3 model,
 deployed on the client CPU.  
+
 ## Overview
 
 There are several ways to setup a ChatQnA use case. Here in this tutorial, we
@@ -23,47 +24,53 @@ the llama-3 model on Intel Client PCs. We will go through
 how to setup docker container to start microservices and megaservice. 
 The solution will then utilize a sample Nike dataset which is in PDF format. Users 
 can then ask a question about Nike and get a chat-like response by default for 
-up to 1024 tokens. The solution is deployed with a UI. There are 2 modes you can use:
-1. Basic UI
-2. Conversational UI
-
-Conversational UI is optional, but a feature supported in this example if you are interested to use.
+up to 1024 tokens. The solution is deployed with a UI.
 
 ## Prerequisites 
 
-First step is to clone the GenAIExamples and GenAIComps. GenAIComps are 
-fundamental necessary components used to build examples you find in 
-GenAIExamples and deploy them as microservices.
+The first step is to clone the GenAIExamples and GenAIComps projects. GenAIComps are 
+fundamental necessary components used to build the examples you find in 
+GenAIExamples and deploy them as microservices. Set an environment 
+variable for the desired release version with the **number only** 
+(i.e. 1.0, 1.1, etc) and checkout using the tag with that version. 
 
-```
-mkdir ~/OPEA -p
-cd ~/OPEA
+```bash
+# Set workspace
+export WORKSPACE=<path>
+cd $WORKSPACE
+
+# Set desired release version - number only
+export RELEASE_VERSION=<insert-release-version>
+
+# GenAIComps
 git clone https://github.com/opea-project/GenAIComps.git
-git clone https://github.com/opea-project/GenAIExamples.git
-```
+cd GenAIComps
+git checkout tags/v${RELEASE_VERSION}
+cd ..
 
-Checkout the release tag
-```
-cd ~/OPEA/GenAIComps
-git checkout tags/v1.0
+# GenAIExamples
+git clone https://github.com/opea-project/GenAIExamples.git
+cd GenAIExamples
+git checkout tags/v${RELEASE_VERSION}
+cd ..
 ```
 
 Setup your [HuggingFace](https://huggingface.co/) account and generate
 [user access token](https://huggingface.co/docs/transformers.js/en/guides/private#step-1-generating-a-user-access-token).
 
 Setup the HuggingFace token
-```
+```bash
 export HUGGINGFACEHUB_API_TOKEN="Your_Huggingface_API_Token"
 ```
 
 The example requires you to set the `host_ip` to deploy the microservices on
 endpoint enabled with ports. Set the host_ip env variable
-```
+```bash
 export host_ip=$(hostname -I | awk '{print $1}')
 ```
 
 Make sure to setup Proxies if you are behind a firewall
-```
+```bash
 export no_proxy=${your_no_proxy},$host_ip
 export http_proxy=${your_http_proxy}
 export https_proxy=${your_http_proxy}
@@ -80,7 +87,7 @@ Please follow the instructions to set up Ollama on your PC. This will set the en
 
 Install Ollama service with one command:
 
-```
+```bash
 curl -fsSL https://ollama.com/install.sh | sh
 ```
 
@@ -89,7 +96,7 @@ curl -fsSL https://ollama.com/install.sh | sh
 Ollama Service Configuration file is /etc/systemd/system/ollama.service. Edit the file to set OLLAMA_HOST environment.
 Replace **<host_ip>** with your host IPV4 (please use external public IP). For example the host_ip is 10.132.x.y, then `Environment="OLLAMA_HOST=10.132.x.y:11434"'.
 
-```
+```bash
 Environment="OLLAMA_HOST=host_ip:11434"
 ```
 
@@ -97,34 +104,34 @@ Environment="OLLAMA_HOST=host_ip:11434"
 
 If your system access network through proxy, add https_proxy in Ollama Service Configuration file
 
-```
+```bash
 Environment="https_proxy=Your_HTTPS_Proxy"
 ```
 
 #### Restart Ollama services
 
-```
-$ sudo systemctl daemon-reload
-$ sudo systemctl restart ollama.service
+```bash
+sudo systemctl daemon-reload
+sudo systemctl restart ollama.service
 ```
 
 #### Check the service started
 
-```
+```bash
 netstat -tuln | grep  11434
 ```
 
 The output are:
 
-```
+```bash
 tcp        0      0 10.132.x.y:11434      0.0.0.0:*               LISTEN
 ```
 
 #### Pull Ollama LLM model
 
-Run the command to download LLM models. The <host_ip> is the one set in [Ollama Service Configuration](#Set-Ollama-Service-Configuration)
+Run the command to download LLM models. The <host_ip> is the one set in the `Set Ollama Service Configuration`.
 
-```
+```bash
 export host_ip=<host_ip>
 export OLLAMA_HOST=http://${host_ip}:11434
 ollama pull llama3.2
@@ -134,7 +141,7 @@ After downloaded the models, you can list the models by `ollama list`.
 
 The output should be similar to the following:
 
-```
+```bash
 NAME            ID                SIZE      MODIFIED
 llama3.2:latest   a80c4f17acd5    2.0 GB    2 minutes ago
 ```
@@ -149,7 +156,7 @@ curl http://${host_ip}:11434/api/generate -d '{"model": "llama3.2", "prompt":"Wh
 
 The outputs are similar to these:
 
-```
+```bash
 {"model":"llama3.2","created_at":"2024-10-12T12:55:28.098813868Z","response":"Deep","done":false}
 {"model":"llama3.2","created_at":"2024-10-12T12:55:28.124514468Z","response":" learning","done":false}
 {"model":"llama3.2","created_at":"2024-10-12T12:55:28.149754216Z","response":" is","done":false}
@@ -168,46 +175,63 @@ The outputs are similar to these:
 
 ## Prepare (Building / Pulling) Docker images
 
-This step will involve building/pulling ( maybe in future) relevant docker
+This step will involve building/pulling relevant docker
 images with step-by-step process along with sanity check in the end. For
 ChatQnA, the following docker images will be needed: embedding, retriever,
 rerank, LLM and dataprep. Additionally, you will need to build docker images for
-ChatQnA megaservice, and UI (conversational React UI is optional). In total,
-there are 8 required and an optional docker images.
+ChatQnA megaservice, and UI. In total, there are 7 required docker images.
 
 The docker images needed to setup the example needs to be build local, however
 the images will be pushed to docker hub soon by Intel.
 
 ### Build/Pull Microservice images
 
-From within the `GenAIComps` folder
+::::::{tab-set}
+
+:::::{tab-item} Pull
+:sync: Pull
+
+If you decide to pull the docker containers and not build them locally,
+you can proceed to the next step where all the necessary containers will
+be pulled in from Docker Hub.
+
+:::::
+:::::{tab-item} Build
+:sync: Build
+
+Follow the steps below to build the docker images from within the `GenAIComps` folder.
+**Note:** For RELEASE_VERSIONS older than 1.0, you will need to add a 'v' in front 
+of ${RELEASE_VERSION} to reference the correct image on Docker Hub.
+
+```bash
+cd $WORKSPACE/GenAIComps
+```
 
 #### Build Dataprep Image
 
-```
-cd ~/OPEA/GenAIComps
-docker build --no-cache -t opea/dataprep-redis:latest --build-arg https_proxy=$https_proxy \
+```bash
+docker build --no-cache -t opea/dataprep-redis:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy \
   --build-arg http_proxy=$http_proxy -f comps/dataprep/redis/langchain/Dockerfile .
 ```
 
 #### Build Embedding Image
 
-```
-docker build --no-cache -t opea/embedding-tei:latest --build-arg https_proxy=$https_proxy \
+```bash
+docker build --no-cache -t opea/embedding-tei:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy \
   --build-arg http_proxy=$http_proxy -f comps/embeddings/tei/langchain/Dockerfile .
 ```
 
 #### Build Retriever Image
 
-```
- docker build --no-cache -t opea/retriever-redis:latest --build-arg https_proxy=$https_proxy \
+```bash
+ docker build --no-cache -t opea/retriever-redis:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy \
   --build-arg http_proxy=$http_proxy -f comps/retrievers/redis/langchain/Dockerfile .
 ```
 
 #### Build Rerank Image
 
-```
-docker build --no-cache -t opea/reranking-tei:latest --build-arg https_proxy=$https_proxy \
+```bash
+docker build --no-cache -t opea/reranking-tei:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy \
   --build-arg http_proxy=$http_proxy -f comps/reranks/tei/Dockerfile .
 ```
 
@@ -221,8 +245,8 @@ docker build --no-cache -t opea/reranking-tei:latest --build-arg https_proxy=$ht
 
 Next, we'll build the Ollama microservice docker. This will set the entry point
 needed for Ollama to suit the ChatQnA examples
-```
-docker build --no-cache -t opea/llm-ollama:latest --build-arg https_proxy=$https_proxy \
+```bash
+docker build --no-cache -t opea/llm-ollama:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy \
    --build-arg http_proxy=$http_proxy -f comps/llms/text-generation/ollama/langchain/Dockerfile .
 ```
 
@@ -242,13 +266,12 @@ megaservice to suit the needs.
 
 Build the megaservice image for this use case
 
-```
-cd ~/OPEA/GenAIExamples/ChatQnA
-git checkout tags/v1.0
+```bash
+cd $WORKSPACE/GenAIExamples/ChatQnA
 ```
 
-```
-docker build --no-cache -t opea/chatqna:latest --build-arg https_proxy=$https_proxy \
+```bash
+docker build --no-cache -t opea/chatqna:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy \
   --build-arg http_proxy=$http_proxy -f Dockerfile .
 ```
 
@@ -256,23 +279,12 @@ docker build --no-cache -t opea/chatqna:latest --build-arg https_proxy=$https_pr
 
 #### Build the UI Image
 
-As mentioned, you can build 2 modes of UI
+*UI*
 
-*Basic UI*
-
-```
-cd ~/OPEA/GenAIExamples/ChatQnA/ui/
-docker build --no-cache -t opea/chatqna-ui:latest --build-arg https_proxy=$https_proxy \
+```bash
+cd $WORKSPACE/GenAIExamples/ChatQnA/ui/
+docker build --no-cache -t opea/chatqna-ui:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy \
   --build-arg http_proxy=$http_proxy -f ./docker/Dockerfile .
-```
-
-*Conversation UI*
-If you want a conversational experience with chatqna megaservice.
-
-```
-cd ~/OPEA/GenAIExamples/ChatQnA/ui/
-docker build --no-cache -t opea/chatqna-conversation-ui:latest --build-arg https_proxy=$https_proxy \
-  --build-arg http_proxy=$http_proxy -f ./docker/Dockerfile.react .
 ```
 
 ### Sanity Check
@@ -282,18 +294,19 @@ Check if you have the below set of docker images, before moving on to the next s
 :::{tab-item} Ollama
 :sync: Ollama
 
-* opea/dataprep-redis:latest
-* opea/embedding-tei:latest
-* opea/retriever-redis:latest
-* opea/reranking-tei:latest
-* opea/llm-ollama:latest
-* opea/chatqna:latest
-* opea/chatqna-ui:latest
+* opea/dataprep-redis:${RELEASE_VERSION}
+* opea/embedding-tei:${RELEASE_VERSION}
+* opea/retriever-redis:${RELEASE_VERSION}
+* opea/reranking-tei:${RELEASE_VERSION}
+* opea/llm-ollama:${RELEASE_VERSION}
+* opea/chatqna:${RELEASE_VERSION}
+* opea/chatqna-ui:${RELEASE_VERSION}
 :::
 
 ::::
 
-
+:::::
+::::::
 
 
 ## Use Case Setup
@@ -320,50 +333,13 @@ environment variable or `compose.yaml` file.
 :::
 ::::
 
-Set the necessary environment variables to setup the use case case
+Set the necessary environment variables to setup the use case. If you want to swap 
+out models, modify `set_env.sh` before running.
 
-> Note: Replace `host_ip` with your external IP address. Do **NOT** use localhost
-> for the below set of environment variables
-
-### Dataprep
-
-    export DATAPREP_SERVICE_ENDPOINT="http://${host_ip}:6007/v1/dataprep"
-    export DATAPREP_GET_FILE_ENDPOINT="http://${host_ip}:6007/v1/dataprep/get_file"
-    export DATAPREP_DELETE_FILE_ENDPOINT="http://${host_ip}:6007/v1/dataprep/delete_file"
-
-### VectorDB
-
-    export REDIS_URL="redis://${host_ip}:6379"
-    export INDEX_NAME="rag-redis"
-
-### Embedding Service
-
-    export EMBEDDING_MODEL_ID="BAAI/bge-base-en-v1.5"
-    export EMBEDDING_SERVICE_HOST_IP=${host_ip}
-    export RETRIEVER_SERVICE_HOST_IP=${host_ip}
-    export TEI_EMBEDDING_ENDPOINT="http://${host_ip}:6006"
-
-### Reranking Service
-
-    export RERANK_MODEL_ID="BAAI/bge-reranker-base"
-    export TEI_RERANKING_ENDPOINT="http://${host_ip}:8808"
-    export RERANK_SERVICE_HOST_IP=${host_ip}
-
-### LLM Service
-::::{tab-set}
-:::{tab-item} Ollama
-:sync: Ollama
-
-    export LLM_SERVICE_HOST_IP=${host_ip}
-    export OLLAMA_ENDPOINT=http://${host_ip}:11434
-    export OLLAMA_MODEL="llama3"
-:::
-::::
-
-### Megaservice
-
-    export MEGA_SERVICE_HOST_IP=${host_ip}
-    export BACKEND_SERVICE_ENDPOINT="http://${host_ip}:8888/v1/chatqna"
+```bash
+cd $WORKSPACE/GenAIExamples/ChatQnA/docker_compose/intel/cpu/aipc
+source ./set_env.sh
+```
 
 ## Deploy the use case
 
@@ -375,8 +351,8 @@ above mentioned services as containers.
 :::{tab-item} Ollama
 :sync: Ollama
 
-```
-cd GenAIExamples/ChatQnA/docker_compose/intel/cpu/aipc
+```bash
+cd $WORKSPACE/GenAIExamples/ChatQnA/docker_compose/intel/cpu/aipc
 docker compose -f compose.yaml up -d
 ```
 :::
@@ -408,25 +384,23 @@ The warning messages print out the variables if they are **NOT** set.
 
 #### Check the container status
 
-Check if all the containers  launched via docker compose has started
+Check if all the containers launched via docker compose has started.
 
-For example, the ChatQnA example starts 11 docker (services), check these docker
-containers are all running, i.e, all the containers  `STATUS`  are  `Up`
-To do a quick sanity check, try `docker ps -a` to see if all the containers are running
+For example, the ChatQnA example starts 11 docker (services), check these docker containers are all running. That is, all the containers `STATUS` are `Up`. To do a quick sanity check, try `docker ps -a` to see if all the containers are running.
 
 ::::{tab-set}
 
 :::{tab-item} Ollama
 :sync: Ollama
 
-```
+```bash
 CONTAINER ID   IMAGE                                                   COMMAND                  CREATED          STATUS                      PORTS                                                                                  NAMES
-5db065a9fdf9   opea/chatqna-ui:latest                                  "docker-entrypoint.s…"   29 seconds ago   Up 25 seconds               0.0.0.0:5173->5173/tcp, :::5173->5173/tcp                                              chatqna-aipc-ui-server
-6fa87927d00c   opea/chatqna:latest                                     "python chatqna.py"      29 seconds ago   Up 25 seconds               0.0.0.0:8888->8888/tcp, :::8888->8888/tcp                                              chatqna-aipc-backend-server
-bdc93be9ce0c   opea/retriever-redis:latest                             "python retriever_re…"   29 seconds ago   Up 3 seconds                0.0.0.0:7000->7000/tcp, :::7000->7000/tcp                                              retriever-redis-server
-add761b504bc   opea/reranking-tei:latest                               "python reranking_te…"   29 seconds ago   Up 26 seconds               0.0.0.0:8000->8000/tcp, :::8000->8000/tcp                                              reranking-tei-aipc-server
-d6b540a423ac   opea/dataprep-redis:latest                              "python prepare_doc_…"   29 seconds ago   Up 26 seconds               0.0.0.0:6007->6007/tcp, :::6007->6007/tcp                                              dataprep-redis-server
-6662d857a154   opea/embedding-tei:latest                               "python embedding_te…"   29 seconds ago   Up 26 seconds               0.0.0.0:6000->6000/tcp, :::6000->6000/tcp                                              embedding-tei-server
+5db065a9fdf9   opea/chatqna-ui:${RELEASE_VERSION}                                  "docker-entrypoint.s…"   29 seconds ago   Up 25 seconds               0.0.0.0:5173->5173/tcp, :::5173->5173/tcp                                              chatqna-aipc-ui-server
+6fa87927d00c   opea/chatqna:${RELEASE_VERSION}                                     "python chatqna.py"      29 seconds ago   Up 25 seconds               0.0.0.0:8888->8888/tcp, :::8888->8888/tcp                                              chatqna-aipc-backend-server
+bdc93be9ce0c   opea/retriever-redis:${RELEASE_VERSION}                             "python retriever_re…"   29 seconds ago   Up 3 seconds                0.0.0.0:7000->7000/tcp, :::7000->7000/tcp                                              retriever-redis-server
+add761b504bc   opea/reranking-tei:${RELEASE_VERSION}                               "python reranking_te…"   29 seconds ago   Up 26 seconds               0.0.0.0:8000->8000/tcp, :::8000->8000/tcp                                              reranking-tei-aipc-server
+d6b540a423ac   opea/dataprep-redis:${RELEASE_VERSION}                              "python prepare_doc_…"   29 seconds ago   Up 26 seconds               0.0.0.0:6007->6007/tcp, :::6007->6007/tcp                                              dataprep-redis-server
+6662d857a154   opea/embedding-tei:${RELEASE_VERSION}                               "python embedding_te…"   29 seconds ago   Up 26 seconds               0.0.0.0:6000->6000/tcp, :::6000->6000/tcp                                              embedding-tei-server
 8b226edcd9db   ghcr.io/huggingface/text-embeddings-inference:cpu-1.5   "text-embeddings-rou…"   29 seconds ago   Up 27 seconds               0.0.0.0:8808->80/tcp, :::8808->80/tcp                                                  tei-reranking-server
 e1fc81b1d542   redis/redis-stack:7.2.0-v9                              "/entrypoint.sh"         29 seconds ago   Up 27 seconds               0.0.0.0:6379->6379/tcp, :::6379->6379/tcp, 0.0.0.0:8001->8001/tcp, :::8001->8001/tcp   redis-vector-db
 051e0d68e263   ghcr.io/huggingface/text-embeddings-inference:cpu-1.5   "text-embeddings-rou…"   29 seconds ago   Up 27 seconds               0.0.0.0:6006->80/tcp, :::6006->80/tcp                                                  tei-embedding-server
@@ -446,24 +420,26 @@ commands. The dataprep microservice extracts the texts from variety of data
 sources, chunks the data, embeds each chunk using embedding microservice and
 store the embedded vectors in the redis vector database.
 
-Download pdf file:
+`nke-10k-2023.pdf` is Nike's annual report on a form 10-K. Run in a terminal window this command to download the file:
 
-```
-wget https://raw.githubusercontent.com/opea-project/GenAIComps/main/comps/retrievers/redis/data/nke-10k-2023.pdf
+```bash
+wget https://github.com/opea-project/GenAIComps/blob/v1.1/comps/retrievers/redis/data/nke-10k-2023.pdf
 ```
 
-Local File `nke-10k-2023.pdf` Upload with dataprep:
-This command updates a knowledge base by uploading a local file for processing.
+Upload the file:
 
-```
+```bash
 curl -X POST "http://${host_ip}:6007/v1/dataprep" \
      -H "Content-Type: multipart/form-data" \
      -F "files=@./nke-10k-2023.pdf"
 ```
 
-Alternatively, you can add knowledge base via HTTP Links:
+This command updates a knowledge base by uploading a local file for processing.
+Update the file path according to your environment.
 
-```
+Add Knowledge Base via HTTP Links:
+
+```bash
 curl -X POST "http://${host_ip}:6007/v1/dataprep" \
      -H "Content-Type: multipart/form-data" \
      -F 'link_list=["https://opea.dev"]'
@@ -473,7 +449,7 @@ This command updates a knowledge base by submitting a list of HTTP links for pro
 
 Also, you are able to get the file list that you uploaded:
 
-```
+```bash
 curl -X POST "http://${host_ip}:6007/v1/dataprep/get_file" \
      -H "Content-Type: application/json"
 
@@ -482,7 +458,7 @@ curl -X POST "http://${host_ip}:6007/v1/dataprep/get_file" \
 To delete the file/link you uploaded you can use the following commands:
 
 #### Delete link
-```
+```bash
 # The dataprep service will add a .txt postfix for link file
 
 curl -X POST "http://${host_ip}:6007/v1/dataprep/delete_file" \
@@ -492,7 +468,7 @@ curl -X POST "http://${host_ip}:6007/v1/dataprep/delete_file" \
 
 #### Delete file
 
-```
+```bash
 curl -X POST "http://${host_ip}:6007/v1/dataprep/delete_file" \
      -d '{"file_path": "nke-10k-2023.pdf"}' \
      -H "Content-Type: application/json"
@@ -500,7 +476,7 @@ curl -X POST "http://${host_ip}:6007/v1/dataprep/delete_file" \
 
 #### Delete all uploaded files and links
 
-```
+```bash
 curl -X POST "http://${host_ip}:6007/v1/dataprep/delete_file" \
      -d '{"file_path": "all"}' \
      -H "Content-Type: application/json"
@@ -511,7 +487,7 @@ The TEI embedding service takes in a string as input, embeds the string into a
 vector of a specific length determined by the embedding model and returns this
 embedded vector.
 
-```
+```bash
 curl ${host_ip}:6006/embed \
     -X POST \
     -d '{"inputs":"What is Deep Learning?"}' \
@@ -528,7 +504,7 @@ input parameters, it takes in a string, embeds it into a vector using the TEI
 embedding service and adds other default parameters that are required for the
 retrieval microservice and returns it.
 
-```
+```bash
 curl http://${host_ip}:6000/v1/embeddings\
   -X POST \
   -d '{"text":"hello"}' \
@@ -544,7 +520,7 @@ model EMBEDDING_MODEL_ID="BAAI/bge-base-en-v1.5", which vector size is 768.
 Check the vector dimension of your embedding model and set
 `your_embedding` dimension equal to it.
 
-```
+```bash
 export your_embedding=$(python3 -c "import random; embedding = [random.uniform(-1, 1) for _ in range(768)]; print(embedding)")
 
 curl http://${host_ip}:7000/v1/retrieval \
@@ -558,7 +534,7 @@ request, initial query or the input to the retrieval microservice, a list of top
 `n` retrieved documents relevant to the input query, and top_n where n refers to
 the number of documents to be returned.
 The output is retrieved text that relevant to the input data:
-```
+```bash
 {"id":"27210945c7c6c054fa7355bdd4cde818","retrieved_docs":[{"id":"0c1dd04b31ab87a5468d65f98e33a9f6","text":"Company: Nike. financial instruments are subject to master netting arrangements that allow for the offset of assets and liabilities in the event of default or early termination of the contract.\nAny amounts of cash collateral received related to these instruments associated with the Company's credit-related contingent features are recorded in Cash and\nequivalents and Accrued liabilities, the latter of which would further offset against the Company's derivative asset balance. Any amounts of cash collateral posted related\nto these instruments associated with the Company's credit-related contingent features are recorded in Prepaid expenses and other current assets, which would further\noffset against the Company's derivative liability balance. Cash collateral received or posted related to the Company's credit-related contingent features is presented in the\nCash provided by operations component of the Consolidated Statements of Cash Flows. The Company does not recognize amounts of non-cash collateral received, such\nas securities, on the Consolidated Balance Sheets. For further information related to credit risk, refer to Note 12 — Risk Management and Derivatives.\n2023 FORM 10-K 68Table of Contents\nThe following tables present information about the Company's derivative assets and liabilities measured at fair value on a recurring basis and indicate the level in the fair\nvalue hierarchy in which the Company classifies the fair value measurement:\nMAY 31, 2023\nDERIVATIVE ASSETS\nDERIVATIVE LIABILITIES"},{"id":"1d742199fb1a86aa8c3f7bcd580d94af","text": ... }
 
 ```
@@ -570,7 +546,7 @@ service. It consumes the query and list of documents and returns the document
 index based on decreasing order of the similarity score. The document
 corresponding to the returned index with the highest score is the most relevant
 document for the input query.
-```
+```bash
 curl http://${host_ip}:8808/rerank \
     -X POST \
     -d '{"query":"What is Deep Learning?", "texts": ["Deep Learning is not...", "Deep learning is..."]}' \
@@ -586,7 +562,7 @@ Output is:  `[{"index":1,"score":0.9988041},{"index":0,"score":0.022948774}]`
 The reranking microservice consumes the TEI Reranking service and pads the
 response with default parameters required for the LLM microservice.
 
-```
+```bash
 curl http://${host_ip}:8000/v1/reranking\
   -X POST \
   -d '{"initial_query":"What is Deep Learning?", "retrieved_docs": \
@@ -600,7 +576,7 @@ with other default parameter such as the temperature, `repetition_penalty`,
 `chat_template` and so on. We can also get top n documents by setting `top_n` as one
 of the input parameters. For example:
 
-```
+```bash
 curl http://${host_ip}:8000/v1/reranking\
   -X POST \
   -d '{"initial_query":"What is Deep Learning?" ,"top_n":2, "retrieved_docs": \
@@ -610,7 +586,7 @@ curl http://${host_ip}:8000/v1/reranking\
 
 Here is the output:
 
-```
+```bash
 {"id":"e1eb0e44f56059fc01aa0334b1dac313","query":"Human: Answer the question based only on the following context:\n    Deep learning is...\n    Question: What is Deep Learning?","max_new_tokens":1024,"top_k":10,"top_p":0.95,"typical_p":0.95,"temperature":0.01,"repetition_penalty":1.03,"streaming":true}
 
 ```
@@ -624,14 +600,14 @@ while reranking service are not.
 :::{tab-item} Ollama
 :sync: Ollama
 
-```
+```bash
 curl http://${host_ip}:11434/api/generate -d '{"model": "llama3", "prompt":"What is Deep Learning?"}'
 ```
 
 Ollama service generates text for the input prompt. Here is the expected result
 from Ollama:
 
-```
+```bash
 {"model":"llama3","created_at":"2024-09-05T08:47:17.160752424Z","response":"Deep","done":false}
 {"model":"llama3","created_at":"2024-09-05T08:47:18.229472564Z","response":" learning","done":false}
 {"model":"llama3","created_at":"2024-09-05T08:47:19.594268648Z","response":" is","done":false}
@@ -657,7 +633,7 @@ from Ollama:
 
 
 ### LLM Microservice
-```
+```bash
 curl http://${host_ip}:9000/v1/chat/completions\
   -X POST \
   -d '{"query":"What is Deep Learning?","max_new_tokens":17,"top_k":10,"top_p":0.95,\
@@ -668,7 +644,7 @@ curl http://${host_ip}:9000/v1/chat/completions\
 
 You will get the below generated text from LLM:
 
-```
+```bash
 data: b'\n'
 data: b'\n'
 data: b'Deep'
@@ -691,7 +667,7 @@ data: [DONE]
 
 ### MegaService
 
-```
+```bash
 curl http://${host_ip}:8888/v1/chatqna -H "Content-Type: application/json" -d '{
      "model":  "'"${OLLAMA_MODEL}"'",
      "messages": "What is the revenue of Nike in 2023?"
@@ -701,7 +677,7 @@ curl http://${host_ip}:8888/v1/chatqna -H "Content-Type: application/json" -d '{
 
 Here is the output for your reference:
 
-```
+```bash
 data: b'\n'
 data: b'An'
 data: b'swer'
@@ -760,51 +736,21 @@ compose.yaml is the mega service docker-compose configuration file.
 :::{tab-item} Ollama
 :sync: Ollama
 
-```
-docker compose -f ./docker_compose/intel/cpu/apic/compose.yaml logs
+```bash
+docker compose -f compose.yaml logs
 ```
 :::
 ::::
 
 ## Launch UI
 
-### Basic UI
-
-To access the frontend, open the following URL in your browser: http://{host_ip}:5173. By default, the UI runs on port 5173 internally. If you prefer to use a different host port to access the frontend, you can modify the port mapping in the compose.yaml file as shown below:
-```
+To access the frontend, open the following URL in your browser: http://{host_ip}:5173. By default, the UI runs on port 5173 internally. If you prefer to use a different host port to access the frontend, you can modify the port mapping in the `compose.yaml` file as shown below:
+```yaml
   chaqna-aipc-ui-server:
-    image: opea/chatqna-ui:latest
+    image: opea/chatqna-ui${TAG:-latest}
     ...
     ports:
-      - "80:5173"
-```
-
-### Conversational UI
-
-To access the Conversational UI (react based) frontend, modify the UI service in the compose.yaml file. Replace chaqna-aipc-ui-server service with the chatqna-aipc-conversation-ui-server service as per the config below:
-```
-chaqna-aipc-conversation-ui-server:
-  image: opea/chatqna-conversation-ui:latest
-  container_name: chatqna-aipc-conversation-ui-server
-  environment:
-    - APP_BACKEND_SERVICE_ENDPOINT=${BACKEND_SERVICE_ENDPOINT}
-    - APP_DATA_PREP_SERVICE_URL=${DATAPREP_SERVICE_ENDPOINT}
-  ports:
-    - "5174:80"
-  depends_on:
-    - chaqna-aipc-backend-server
-  ipc: host
-  restart: always
-```
-
-Once the services are up, open the following URL in your browser: http://{host_ip}:5174. By default, the UI runs on port 80 internally. If you prefer to use a different host port to access the frontend, you can modify the port mapping in the compose.yaml file as shown below:
-
-```
-  chaqna-aipc-conversation-ui-server:
-    image: opea/chatqna-conversation-ui:latest
-    ...
-    ports:
-      - "80:80"
+      - "5173:5173"
 ```
 
 ### Stop the services
@@ -815,7 +761,7 @@ Once you are done with the entire pipeline and wish to stop and remove all the c
 :::{tab-item} Ollama
 :sync: Ollama
 
-```
+```bash
 docker compose -f compose.yaml down
 ```
 :::
