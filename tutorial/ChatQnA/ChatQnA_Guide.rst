@@ -1,6 +1,6 @@
 .. _ChatQnA_Guide:
 
-ChatQnA Sample Guide
+ChatQnA
 ####################
 
 .. note:: This guide is in its early development and is a work-in-progress with
@@ -45,7 +45,7 @@ The ChatQnA example is designed to be a simple, yet powerful, demonstration of
 the RAG architecture. It is a great starting point for developers looking to
 build chatbots that can provide accurate and up-to-date information to users.
 
-To facilitate sharing of individual services across multiple GenAI applications, use the GenAI Microservices Connector (GMC) to deploy your application. Apart from service sharing , it also supports specifying sequential, parallel, and alternative steps in a GenAI pipeline. In so doing, it supports dynamic switching between models used in any stage of a GenAI pipeline.  For example, within the ChatQnA pipeline, using GMC one could switch the model used in the embedder, re-ranker, and/or the LLM. 
+To facilitate sharing of individual services across multiple GenAI applications, use the GenAI Microservices Connector (GMC) to deploy your application. Apart from service sharing , it also supports specifying sequential, parallel, and alternative steps in a GenAI pipeline. In so doing, it supports dynamic switching between models used in any stage of a GenAI pipeline.  For example, within the ChatQnA pipeline, using GMC one could switch the model used in the embedder, re-ranker, and/or the LLM.
 Upstream Vanilla Kubernetes or Red Hat OpenShift Container
 Platform (RHOCP) can be used with or without GMC, while use with GMC provides additional features.
 
@@ -204,9 +204,9 @@ The gateway serves as the interface for users to access. The gateway routes inco
 Deployment
 **********
 
-Here are some deployment options depending on your hardware and environment. 
-It includes both single-node and orchestrated multi-node configurations. 
-Choose the one that best fits your requirements. 
+Here are some deployment options depending on your hardware and environment.
+It includes both single-node and orchestrated multi-node configurations.
+Choose the one that best fits your requirements.
 
 Single Node
 ***********
@@ -218,7 +218,7 @@ Single Node
    Gaudi AI Accelerator <deploy/gaudi>
    Nvidia GPU <deploy/nvidia>
    AI PC <deploy/aipc>
-   
+
 ----
 
 Kubernetes
@@ -238,7 +238,7 @@ Cloud Native
 Troubleshooting
 ***************
 
-1. Browser interface https link failed 
+1. Browser interface https link failed
 
    Q:For example, started ChatQnA example in IBM Cloud and trying to access the UI interface. By default, typing the :5173 resolves to https://:5173. Chrome shows the following warning message：xx.xx.xx.xx doesn't support a secure connection
 
@@ -314,7 +314,7 @@ Here is another example of exporting metrics data from a TGI microservice (insid
 
    scrape_configs:
      - job_name: "tgi"
-   
+
        static_configs:
          - targets: ["llm-dependency-svc.default.svc.cluster.local:9009"]
 
@@ -339,7 +339,7 @@ The TGI metrics can be accessed at:
 
 .. code-block:: bash
 
-   http://${host_ip}:9009/metrics 
+   http://${host_ip}:9009/metrics
 
 Set Up the Grafana Dashboard
 ============================
@@ -382,7 +382,7 @@ Run the Grafana server, without hanging-up the process:
 
 Log in to Grafana using the default credentials:
 
-.. code-block:: 
+.. code-block::
 
    username: admin
    password: admin

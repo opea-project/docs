@@ -1,5 +1,5 @@
 # Getting Started with OPEA
-In this document, we provide a tailored guide to deploying the ChatQnA application in OPEA GenAI Examples across multiple cloud platforms, including Amazon Web Services (AWS), Google Cloud Platform (GCP), IBM Cloud, Microsoft Azure and Oracle Cloud Infrastructure, enabling you to choose the best fit for your specific needs and requirements. For additional deployment targets, see the [ChatQnA Sample Guide](https://opea-project.github.io/latest/examples/ChatQnA/ChatQnA_Guide.html).
+In this document, we provide a tailored guide to deploying the ChatQnA application in OPEA GenAI Examples across multiple cloud platforms, including Amazon Web Services (AWS), Google Cloud Platform (GCP), IBM Cloud, Microsoft Azure and Oracle Cloud Infrastructure, enabling you to choose the best fit for your specific needs and requirements. For additional deployment targets, see the [ChatQnA](/tutorial/ChatQnA/ChatQnA_Guide.rst).
 
 ## Understanding OPEA's Core Components
 
@@ -140,28 +140,28 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 :::{tab-item} Oracle Cloud Infrastructure
 :sync: OCI
 
-1. Login to [Oracle Cloud Console](https://www.oracle.com/cloud/sign-in.html?redirect_uri=https%3A%2F%2Fcloud.oracle.com%2F) – Then navigate to [Compute Instances](https://cloud.oracle.com/compute/instances). Click the "Create Instance" button. 
+1. Login to [Oracle Cloud Console](https://www.oracle.com/cloud/sign-in.html?redirect_uri=https%3A%2F%2Fcloud.oracle.com%2F) – Then navigate to [Compute Instances](https://cloud.oracle.com/compute/instances). Click the "Create Instance" button.
 
-2. Provide a name to the VM and select the placement in the availability domains. 
+2. Provide a name to the VM and select the placement in the availability domains.
 
-3. In Image and Shape section click "Change Image" > "Ubuntu" and then select `Canonical  Ubuntu 24.04`. Submit using the "Select  Image"  button at the bottom. 
+3. In Image and Shape section click "Change Image" > "Ubuntu" and then select `Canonical  Ubuntu 24.04`. Submit using the "Select  Image"  button at the bottom.
 
-4. Click the "Change Shape"   >  "Bare Metal Machine"  then select the `BM.Standard3.64`. Submit using the "Select Shape" button at the bottom. 
+4. Click the "Change Shape"   >  "Bare Metal Machine"  then select the `BM.Standard3.64`. Submit using the "Select Shape" button at the bottom.
 
-5. Select the VCN and the public subnet that the server needs to reside in.  If a new VCN/Subnet needs to be created then select the "Create new virtual cloud network"  and the "Create new public subnet" to create a subnet that is exposed to the internet.  
+5. Select the VCN and the public subnet that the server needs to reside in.  If a new VCN/Subnet needs to be created then select the "Create new virtual cloud network"  and the "Create new public subnet" to create a subnet that is exposed to the internet.
 
-6. Next, save a private key by or upload an existing public key. 
+6. Next, save a private key by or upload an existing public key.
 
-7. Specify a boot volume size of 100 GiB with 30 VPU units of performance. 
+7. Specify a boot volume size of 100 GiB with 30 VPU units of performance.
 
-8. Click Create to launch the instance.  
+8. Click Create to launch the instance.
 
-9. Note the public IP address of the machine once its launched. 
+9. Note the public IP address of the machine once its launched.
 
 10. Once the instance is launched, click on the subnet in the Primary VNIC section. Then click on the "Default Security List for vcn-xxxxxxxx-xxxx" , click on the "Add Ingress Rules".  Add the following information:
-    - Source CIDR: **0.0.0.0/0**  
-    - Source Port Range: **All** 
-    - Destination Port Range: **80** 
+    - Source CIDR: **0.0.0.0/0**
+    - Source Port Range: **All**
+    - Destination Port Range: **80**
     - Click on "Save"
 
 11. Connect using ssh (`ssh -i <private_key>  ubuntu@<public_ip_address>`).
@@ -186,7 +186,7 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 
 7. If you wish to make the UI accessible to others, proceed to the next step to create a load balancer. Otherwise, skip to Step 10 which will explain how to connect to your VM with port forwarding.
 
-8. Create a load balancer. This can be found in Compute->Load Balancers. Click on "Launch Load Balancer". Ignore any messages about signing up for access and close any pop-up windows if any. Fill out the form with the following info: 
+8. Create a load balancer. This can be found in Compute->Load Balancers. Click on "Launch Load Balancer". Ignore any messages about signing up for access and close any pop-up windows if any. Fill out the form with the following info:
    - Name: **Name for your load balancer**
    - Source IP: **The private IP address of your VM in Step 6**
    - Listener Port: **80**
@@ -262,7 +262,7 @@ INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:80 (Press CTRL+C to quit)
 ```
 
-Run `docker ps -a` as an additional check to verify that all the services are running as shown. Notice the version of the docker images matches the RELEASE_VERSION you specified. 
+Run `docker ps -a` as an additional check to verify that all the services are running as shown. Notice the version of the docker images matches the RELEASE_VERSION you specified.
 
 ```bash
 | CONTAINER ID | IMAGE                                                 | COMMAND                 | CREATED     | STATUS     | PORTS                                                                                 | NAMES                        |
@@ -281,7 +281,7 @@ Run `docker ps -a` as an additional check to verify that all the services are ru
 
 You can interact with ChatQnA via a browser interface:
 
-* To view the ChatQnA interface, open a browser and navigate to the UI by inserting your public facing IP address in the following: `http://{public_ip}:80’. 
+* To view the ChatQnA interface, open a browser and navigate to the UI by inserting your public facing IP address in the following: `http://{public_ip}:80’.
 
 >**Note:** For users running on ITAC, open a browser to localhost:80 if you are using port forwarding OR the virtual IP address of your load balancer.
 
@@ -297,12 +297,12 @@ Given that any information about OPEA was not in the training data for the model
 
 ![Chat Interface with RAG](assets/chat_ui_response_rag.png)
 
-We observe that the response is relevant and is based on the PDF uploaded. See the [ChatQnA Sample Guide](https://opea-project.github.io/latest/examples/ChatQnA/ChatQnA_Guide.html)
+We observe that the response is relevant and is based on the PDF uploaded. See the [ChatQnA](/tutorial/ChatQnA/ChatQnA_Guide.rst)
 to learn how you can customize the example with your own content.
 
 ## What’s Next
 
-- Try  [GenAIExamples](/examples/index.rst) in-detail starting with [ChatQnA](/examples/ChatQnA/ChatQnA_Guide.rst) example; this is a great example to orient yourself to the OPEA ecosystem.
+- Try [GenAIExamples](/examples/index.rst) in-detail starting with mores example.
 - Try [GenAIComps](/microservices/index.rst) to build microservices.
 
 ### Get Involved
@@ -321,7 +321,7 @@ Have you ideas and skills to build out genAI components, microservices, and solu
 * Attend any of our community events and hackathons. https://wiki.lfaidata.foundation/display/DL/OPEA+Community+Events
 
 Current GenAI Examples
-- Simple chatbot that uses retrieval augmented generation (RAG) architecture. [ChatQnA](/examples/ChatQnA/ChatQnA_Guide.rst)
+- Simple chatbot that uses retrieval augmented generation (RAG) architecture. [ChatQnA](/tutorial/ChatQnA/ChatQnA_Guide.rst)
 - Code generation, from enabling non-programmers to generate code to improving productivity with code completion of complex applications. [CodeGen](https://opea-project.github.io/latest/GenAIExamples/CodeGen/README.html)
 - Make your applications more flexible by porting to different languages. [CodeTrans](https://opea-project.github.io/latest/GenAIExamples/CodeTrans/README.html)
 - Create summaries of news articles, research papers, technical documents, etc. to streamline content systems. [DocSum](https://opea-project.github.io/latest/GenAIExamples/DocSum/README.html)
