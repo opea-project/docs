@@ -15,7 +15,8 @@ The AgentQnA workflow in GenAIExamples leverages large language models (LLMs) as
 - **Access to Open-source SLMs on CPU Servers**: Enables the use of open-source SLMs through Ollama on x86 CPU servers. State-of-the-art open-source SLMs are suitable for less complex agent workflows. A critical task for agents is accurately invoking the correct tools for specific tasks. As demonstrated in the [Berkeley Function-Calling Leaderboard](https://gorilla.cs.berkeley.edu/leaderboard.html), Llama 70B and 8B models perform similarly in tool-calling tasks, indicating that smaller language models can effectively support agent workflows.
 - **Cost Reduction**: Eliminates the need for paid cloud-based API services by running open-source SLMs locally on-prem CPUs.
 - **Data Privacy**: Ensures data privacy by processing data locally.
-- **Performance Optimization**: Leverages the computational power of x86 CPU servers for efficient LLM execution.
+- **Compute Efficiency**: Leverages the computational power of x86 CPU servers for efficient LLM execution.
+- **Lower Network Latency and Bandwidth Needs**: By processing data locally, the reliance on external cloud services is minimized, resulting in reduced network latency and bandwidth usage. This ensures faster response times and more efficient data handling.
 
 ### Goals
 
@@ -32,7 +33,7 @@ The AgentQnA workflow in GenAIExamples leverages large language models (LLMs) as
 ## Motivation
 
 ### SLMs Performance on CPU
-Open-source small language models (SLMs) are optimized to run efficiently on CPUs, including Intel Xeon processors. These models are designed to balance performance and resource usage, making them suitable for deployment in environments where GPU resources are limited or unavailable. By leveraging the computational capabilities of x86  CPU servers, SLMs can achieve satisfactory performance for various agent tasks within the AgentQnA workflow. Given the right prompt, smaller Llama models are fairly accurate in tool calling which is an essential feature for agents.
+Open-source small language models (SLMs) are optimized to run efficiently on CPU servers, including Intel Xeon processors. These models are designed to balance performance and resource usage, making them suitable for deployment in environments where GPU resources are limited or unavailable. By leveraging the computational capabilities of x86  CPU servers, SLMs can achieve satisfactory performance for various agent tasks within the AgentQnA workflow. Given the right prompt, smaller Llama models are fairly accurate in tool calling which is an essential feature for agents.
 
 ### Ollama Popularity and Wide Range of Models
 Ollama provides a comprehensive set of libraries and tools to facilitate the deployment and management of open-source language models. These libraries are designed to integrate seamlessly with existing workflows, enabling developers to easily incorporate SLMs into their applications. Ollama's model libraries support a wide range of open-source models, ensuring compatibility and ease of use for different use cases. 
@@ -142,8 +143,8 @@ The proposed design for Ollama serving support entails following changes:
 ### 1. Ollama serving container:
 - **Models hosted in Ollama container**: Build and run a container on Xeon platform that hosts Ollama models as an alternative LLM service engine. Hosted models can be accessed by Agent microservice at a given host ip and port. 
 
-### 2. Support for latest Llama SLMs:
-- **Add Llama 3.1 and 3.2 small models for Xeon**: SLMs from Lllama 3.1 and 3.2 models will be added and validated for the AgentQnA workflow.
+### 2. Support for latest open-source SLMs from the Llama family and DeepSeek:
+- **Add Llama 3.1, 3.2, and DeepSeek-R1 small models for Xeon**: Small language models (SLMs) from the Llama 3.1 and 3.2 model families, as well as the DeepSeek-R1 model, will be added and validated for the AgentQnA workflow.
 
 ### 3. Compatibility
 
@@ -169,11 +170,11 @@ The proposed design for Ollama serving support entails following changes:
 
 5. **Compliance with Regulations**:
    - **Scenario**: A legal firm needs to process confidential client information while adhering to strict regulatory requirements.
-   - **Solution**: Running Ollama service locally ensures that all data processing happens locally, helping the firm comply with regulations and maintain client confidentiality.
+   - **Solution**: Running the Ollama service locally ensures that all data processing occurs within the firm's infrastructure, aiding in regulatory compliance and maintaining client confidentiality. This setup ensures that neither prompts nor any proprietary data stored in a vector database need to leave the enterprise.
 
 6. **Enhanced Reliability**:
    - **Scenario**: A manufacturing company relies on AI-driven predictive maintenance to avoid equipment downtime.
-   - **Solution**: By using Ollama service locally on-prem CPU servers, the company can run LLM agents locally, ensuring reliable and uninterrupted operation even in environments with limited internet connectivity.
+   - **Solution**: Running the Ollama service locally ensures that all data processing occurs within the firm's infrastructure, aiding in regulatory compliance and maintaining client confidentiality. This setup ensures that neither prompts nor proprietary data inserted to a vector database need to leave the enterprise.
 
   
   The proposed design for Ollama serving support on-prem x86 CPU servers integrates Ollama as an additional LLM service alongside existing services like vLLM and TGI. This setup enhances data privacy by keeping processing local, reduces operational costs by leveraging on-premise hardware, and provides flexibility and control over AI deployments. The workflow includes embedding, retrieval, and re-ranking microservices, ensuring efficient and secure handling of user queries and data preparation.
