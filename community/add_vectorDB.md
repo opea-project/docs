@@ -2,10 +2,10 @@
 
 The [Open Platform for Enterprise AI (OPEA)](https://opea.dev) is an open source project under Linux Foundation AI and Data that seeks to reduce the barriers to GenAI adoption in enterprises by bridging AI and cloud native technologies through sample application blueprints, a rich set of microservice components including Vector Databases, deployment options and more. 
 
-To contribute a new Vector Database to OPEA, you would need to modify minimally the OPEA sub-project [GenAIComps](https://github.com/opea-project/GenAIComps) that covers installation, launch, usage, and tests. For  completeness, submit a PR to the OPEA sub-project [GenAIExamples](https://github.com/opea-project/GenAIExamples) to illustrate customizing the ChatQnA example application.  We cover each these in greater detail below.
+To contribute a new Vector Database to OPEA, you would need to modify minimally the OPEA sub-project [GenAIComps](https://github.com/opea-project/GenAIComps) that covers installation, launch, usage, and tests. For  completeness, submit a PR to the OPEA sub-project [GenAIExamples](https://github.com/opea-project/GenAIExamples) to illustrate customizing the ChatQnA example application.  We cover each of these in greater detail below.
 
 ## Contributing a new Vector Database to GenAIComps
-**The OPEA dataprep service leverages Vector databases.**  Currently 10 vector store options are available in OPEA and listed at: [OPEA Index of Vector Database Options](https://github.com/opea-project/GenAIComps/tree/main/comps/dataprep). The options currently include Redis, Milvus, Qdrant, Pinecone, OpenSearch, and neo4j. The options differ in features such as  handling large data volumes, multi-modality support, available indexing schemes, auto indexing (in response to underlying  datastore updates), whether open source and/or offered as commercially supported services.
+**The OPEA dataprep service leverages a vector database.**  Currently 10 vector store options are available in OPEA and listed at: [OPEA Index of Vector Database Options](https://github.com/opea-project/GenAIComps/tree/main/comps/dataprep). The options currently include Redis, Milvus, Qdrant, Pinecone, OpenSearch, and Neo4J to name a few. The options differ in features such as their ability to handle large volumes of data, support for multi-modal input, indexing schemes available, ability to auto re-index (in response to underlying  datastore updates), whether open source and/or offered as a commercially supported service.
 
 Your Pull Request (PR) to [GenAIComps](https://github.com/opea-project/GenAIComps) must cover how to:
 1.	install your vector database,
@@ -33,7 +33,7 @@ Here are some examples:
 4.	**The Vector Database README needs to cover:**
     -	**A brief introduction** to the vector database solution including links to its public home and documentation site.  
     -	**Installation and Launch instructions**<br> 
-There are multiple options to install and launch a vector database and any method is acceptable. For the images themselves, you could provide “build from source instructions” or steps to retrieve rebuilt images from a public or private registry. You may provide a Helm chart or docker file or docker compose file, instructions to launch in a Kubernetes environment
+Often there are multiple options to install and launch a vector database and any method is acceptable. For the images themselves, you could provide “build from source instructions” or steps to retrieve prebuilt images from a public or private registry. You may provide a Helm chart or docker file or docker compose file, along with instructions on how to launch the same in a Kubernetes environment
         1.	**Necessary environment variables**
         2.	**Mention any namespace** that needs to be defined and used
         3.	**Image**
@@ -62,7 +62,7 @@ Provide information on how to verify that the vector database service is up and 
         2.	How to verify that the service is no longer running and that resources are recouped. 
 
 ## ChatQnA GenAIExample Vector Database Usage 
-The OPEA sub-project [GenAIExamples](https://github.com/opea-project/GenAIExamples) houses multiple GenAI RAG  sample applications such as chat bots, document summarization, code generation, and code translation to name a few. The [ChatQnA application](https://github.com/opea-project/GenAIExamples/tree/main/ChatQnA) is the primary example and contains instructions to deploy on a variety of hardware (such as Intel CPUs and Gaudi accelerator and AMD’s ROCm), using different environments such as Docker and Kubernetes, including how to customize an application pipeline through the use of different vector database backends.   
+The OPEA sub-project [GenAIExamples](https://github.com/opea-project/GenAIExamples) houses multiple GenAI RAG sample applications such as chatbots, document summarization, code generation, and code translation to name a few. The [ChatQnA application](https://github.com/opea-project/GenAIExamples/tree/main/ChatQnA) is the primary example and contains instructions to deploy on a variety of hardware (such as Intel CPUs and Gaudi accelerator and AMD’s ROCm), in environments such as Docker and Kubernetes, including how to customize an application pipeline through the use of different vector database backends.   
 1. **Provide ChatQnA docker compose file**<br>
 Navigate to the [GenAIExamples](https://github.com/opea-project/GenAIExamples) OPEA subproject to provide a docker compose file example of the [ChatQnA application](https://github.com/opea-project/GenAIExamples/tree/main/ChatQnA) using your vector database. The directory 
 [docker compose files for ChatQnA application variants running on CPUs](https://github.com/opea-project/GenAIExamples/tree/main/ChatQnA/docker_compose/intel/cpu/xeon)  contains docker compose file variants that span, among other things, using different vector database backends. See examples:
