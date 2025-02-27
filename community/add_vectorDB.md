@@ -8,21 +8,21 @@ To contribute a new Vector Database to OPEA, you would need to modify minimally 
 **The OPEA dataprep service leverages Vector databases.**  Currently 10 vector store options are available in OPEA and listed at: [OPEA Index of Vector Database Options](https://github.com/opea-project/GenAIComps/tree/main/comps/dataprep). The options currently include Redis, Milvus, Qdrant, Pinecone, OpenSearch, and neo4j. The options differ in features such as  handling large data volumes, multi-modality support, available indexing schemes, auto indexing (in response to underlying  datastore updates), whether open source and/or offered as commercially supported services.
 
 Your Pull Request (PR) to [GenAIComps](https://github.com/opea-project/GenAIComps) must cover how to:
-1.	 install your vector database,
-2.	 launch it, 
+1.	install your vector database,
+2.	launch it, 
 3.	determine whether the service is up and running, 
 4.	use it, 
 5.	and provide test scripts for integration into the OPEA CICD. 
 
-*We indicate below which files and directories these contributions must land to ensure users and developers can find them easily.*
+*We indicate below which files need to be provided and in which directories they must land to ensure users and developers can find them easily.*
 
 1.	**Update [OPEA data prep vector database readme file](https://github.com/opea-project/GenAIComps/tree/main/comps/dataprep#readme)**<br>
 Follow the pattern *option name with link to a readme file.*  
 
 ![screenshot of Dataprep README](dataprep-fig1.png)
 
-2.	**Create a README_\<vector database\>.md or README_\<vector database name\>_\<toolchain\>.md.**<br>
-Neo4J has two READMEs, one for Langchain and the other for LlamaIndex.<br>
+2.	**Create a README_\<vector database name\>.md or README_\<vector database name\>_\<toolchain\>.md.**<br>
+Neo4J has two READMEs, one for LangChain and the other for LlamaIndex.<br>
 Here are some examples:
     - [README_redis.md](https://github.com/opea-project/GenAIComps/blob/main/comps/dataprep/src/README_redis.md)
     - [README_qdrant.md](https://github.com/opea-project/GenAIComps/blob/main/comps/dataprep/src/README_qdrant.md)
@@ -58,8 +58,8 @@ Provide information on how to verify that the vector database service is up and 
         4.	Curl or other call to list documents
         5.	Curl or other call to delete documents
     - **Clean up instructions**
-        1.	Delete the service in Docker or Kubernetes
-        2.	Verify that it no longer is running and resources are thus recouped. 
+        1.	How to delete the service in Docker or Kubernetes
+        2.	How to verify that the service is no longer running and that resources are recouped. 
 
 ## ChatQnA GenAIExample Vector Database Usage 
 The OPEA sub-project [GenAIExamples](https://github.com/opea-project/GenAIExamples) houses multiple GenAI RAG  sample applications such as chat bots, document summarization, code generation, and code translation to name a few. The [ChatQnA application](https://github.com/opea-project/GenAIExamples/tree/main/ChatQnA) is the primary example and contains instructions to deploy on a variety of hardware (such as Intel CPUs and Gaudi accelerator and AMD’s ROCm), using different environments such as Docker and Kubernetes, including how to customize an application pipeline through the use of different vector database backends.   
