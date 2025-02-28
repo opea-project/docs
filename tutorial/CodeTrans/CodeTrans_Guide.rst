@@ -1,6 +1,6 @@
 .. _CodeTrans_Guide:
 
-Code Translation Sample Guide
+Code Translations
 ##############################
 
 .. note:: This guide is in its early development and is a work-in-progress with
@@ -9,8 +9,8 @@ Code Translation Sample Guide
 Overview
 ********
 
-This example showcases a code translation system that converts code from one programming language to another while preserving the original logic and functionality. The primary component is the CodeTrans MegaService, which encompasses an LLM microservice that performs the actual translation. 
-A lightweight Gateway service and a User Interface allow users to submit their source code in a given language and receive the translated output in another language. 
+This example showcases a code translation system that converts code from one programming language to another while preserving the original logic and functionality. The primary component is the CodeTrans MegaService, which encompasses an LLM microservice that performs the actual translation.
+A lightweight Gateway service and a User Interface allow users to submit their source code in a given language and receive the translated output in another language.
 
 Purpose
 *******
@@ -32,7 +32,7 @@ How It Works
 2. The user’s request is sent to the CodeTrans Gateway, which orchestrates the call to the LLM MicroService. The gateway handles details like constructing prompts and managing responses.
 
 
-3. The large language model processes the user’s code snippet, analyzing syntax and semantics before generating an equivalent snippet in the target language. 
+3. The large language model processes the user’s code snippet, analyzing syntax and semantics before generating an equivalent snippet in the target language.
 
 4. The gateway formats the model’s output and returns the translated code to the user, either via an API response or rendered within the UI.
 

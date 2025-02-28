@@ -1,6 +1,6 @@
 .. _DocSum_Guide:
 
-Docsum Sample Guide
+DocSum
 #####################
 
 .. note:: This guide is in its early development and is a work-in-progress with
@@ -28,7 +28,7 @@ How It Works
 ************
 
 The Docsum example uses an open-source model served using a framework such as Text Generation Inference (TGI) or vLLM  to construct a summary
-of the input provided. It can process textual, audio, and video input from a variety of sources as shown in the diagram below. 
+of the input provided. It can process textual, audio, and video input from a variety of sources as shown in the diagram below.
 
 .. figure:: /GenAIExamples/DocSum/assets/img/docsum_architecture.png
    :alt: DocSum Architecture Diagram
