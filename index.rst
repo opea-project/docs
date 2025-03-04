@@ -69,6 +69,7 @@ Source code for the OPEA Project is maintained in the
    Documentation Home <self>
    introduction/index
    getting-started/README
+   tutorial/index
    examples/index
    microservices/index
    deploy/index

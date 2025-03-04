@@ -1,5 +1,5 @@
 # Getting Started with OPEA
-In this document, we provide a tailored guide to deploying the ChatQnA application in OPEA GenAI Examples across multiple cloud platforms, including Amazon Web Services (AWS), Google Cloud Platform (GCP), IBM Cloud, Microsoft Azure and Oracle Cloud Infrastructure, enabling you to choose the best fit for your specific needs and requirements. For additional deployment targets, see the [ChatQnA Sample Guide](https://opea-project.github.io/latest/examples/ChatQnA/ChatQnA_Guide.html).
+In this document, we provide a tailored guide to deploying the ChatQnA application in OPEA GenAI Examples across multiple cloud platforms, including Amazon Web Services (AWS), Google Cloud Platform (GCP), IBM Cloud, Microsoft Azure and Oracle Cloud Infrastructure, enabling you to choose the best fit for your specific needs and requirements. For additional deployment targets, see the [ChatQnA](/tutorial/ChatQnA/ChatQnA_Guide.rst).
 
 ## Understanding OPEA's Core Components
 
@@ -17,29 +17,48 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 :::{tab-item} Amazon Web Services
 :sync: AWS
 
-1. Navigate to [AWS console](https://console.aws.amazon.com/console/home) – Search EC2 in the search bar and select it. Click the "Launch Instance" button highlighted in orange.
+**Step 1: Create Your Virtual Server**
 
-2. Provide a name to the VM.
+1. Open the [AWS console](https://console.aws.amazon.com/console/home) and search for **EC2** in the search bar. 
 
-3. In Quick Start, select the base OS as Ubuntu (`ami-id : ami-04dd23e62ed049936`).
+2. Select **Launch instance** to start creating a virtual server.
 
-4. Select an Instance type that is based on Intel hardware.
+3. Under **Name and tags**, name your virtual server in the **Name** field.
 
->**Note**: We recommend selecting a `m7i.4xlarge` or larger instance with an Intel(R) 4th Gen Xeon(C) Scalable Processor. For more information on virtual servers on AWS visit [here](https://aws.amazon.com/intel/).
+4. Under **Quick Start**, choose Ubuntu (`ami-id : ami-04dd23e62ed049936`) as the base OS.
 
-5. Next, create a new key pair, give it a name or select one from the existing key pairs.
+5. In **Instance type**, select an instance for your Intel processor.
 
-6. Under Network settings select an existing security group. If there is none, create a new one by selecting the Create security group radio button and select the Allow SSH traffic and Allow HTTP traffic check box.
+   >**Note**: We recommend `m7i.4xlarge` or larger instance for an Intel® 4th Gen Xeon© Scalable Processor. For more information on virtual servers on AWS, visit the [AWS and Intel page](https://aws.amazon.com/intel/).
 
-7. Configure the storage to 100 GiB and click "Launch Instance".
+6. Create a new key pair for SSH access by naming it, or select an existing key pair from the dropdown list.
 
-8. Click on the "connect" button on the top right and connect using your preferred method.
+7. Under **Network Settings**:
 
-9. Look up Security Groups in the search bar and select the security group used when creating the instance.
+   -  Choose an existing security group, or
+   -  Select **Create security group** and enable **Allow SSH traffic** and **Allow HTTP traffic**.
 
-10. Click on the Edit inbound rules on the right side of the window.
+8. In **Storage**, set the size to 100 GiB.
 
-11.  Select Add rule at the bottom, and create a rule with type as Custom TCP , port range as 80 and source as 0.0.0.0/0 . Learn more about [editing inbound/outbound rules](https://docs.aws.amazon.com/finspace/latest/userguide/step5-config-inbound-rule.html)
+9. Select **Launch instance** to launch your virtual server. A **Success** banner confirms the launch.
+
+**Step 2: Connect and Configure Your Virtual Server**
+
+1. Select **Connect**, and connect using your preferred connection method.
+
+2. Search for **Security Groups** in the search bar and select the security group used when creating the instance.
+
+3. Select **Edit inbound rules** on the right side of the window.
+
+4. To add a rule, select **Add rule** and enter the following:
+
+   -  Type: Custom TCP
+   -  Port Range: 80
+   -  Source: 0.0.0.0/0 
+
+   >**Note**: To learn more, see [editing inbound or outbound rules](https://docs.aws.amazon.com/finspace/latest/userguide/step5-config-inbound-rule.html) from AWS documentation.
+
+5. Select **Save rules** to commit your changes.
 
 :::
 :::{tab-item} Google Cloud Platform
@@ -121,28 +140,28 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 :::{tab-item} Oracle Cloud Infrastructure
 :sync: OCI
 
-1. Login to [Oracle Cloud Console](https://www.oracle.com/cloud/sign-in.html?redirect_uri=https%3A%2F%2Fcloud.oracle.com%2F) – Then navigate to [Compute Instances](https://cloud.oracle.com/compute/instances). Click the "Create Instance" button. 
+1. Login to [Oracle Cloud Console](https://www.oracle.com/cloud/sign-in.html?redirect_uri=https%3A%2F%2Fcloud.oracle.com%2F) – Then navigate to [Compute Instances](https://cloud.oracle.com/compute/instances). Click the "Create Instance" button.
 
-2. Provide a name to the VM and select the placement in the availability domains. 
+2. Provide a name to the VM and select the placement in the availability domains.
 
-3. In Image and Shape section click "Change Image" > "Ubuntu" and then select `Canonical  Ubuntu 24.04`. Submit using the "Select  Image"  button at the bottom. 
+3. In Image and Shape section click "Change Image" > "Ubuntu" and then select `Canonical  Ubuntu 24.04`. Submit using the "Select  Image"  button at the bottom.
 
-4. Click the "Change Shape"   >  "Bare Metal Machine"  then select the `BM.Standard3.64`. Submit using the "Select Shape" button at the bottom. 
+4. Click the "Change Shape"   >  "Bare Metal Machine"  then select the `BM.Standard3.64`. Submit using the "Select Shape" button at the bottom.
 
-5. Select the VCN and the public subnet that the server needs to reside in.  If a new VCN/Subnet needs to be created then select the "Create new virtual cloud network"  and the "Create new public subnet" to create a subnet that is exposed to the internet.  
+5. Select the VCN and the public subnet that the server needs to reside in.  If a new VCN/Subnet needs to be created then select the "Create new virtual cloud network"  and the "Create new public subnet" to create a subnet that is exposed to the internet.
 
-6. Next, save a private key by or upload an existing public key. 
+6. Next, save a private key by or upload an existing public key.
 
-7. Specify a boot volume size of 100 GiB with 30 VPU units of performance. 
+7. Specify a boot volume size of 100 GiB with 30 VPU units of performance.
 
-8. Click Create to launch the instance.  
+8. Click Create to launch the instance.
 
-9. Note the public IP address of the machine once its launched. 
+9. Note the public IP address of the machine once its launched.
 
 10. Once the instance is launched, click on the subnet in the Primary VNIC section. Then click on the "Default Security List for vcn-xxxxxxxx-xxxx" , click on the "Add Ingress Rules".  Add the following information:
-    - Source CIDR: **0.0.0.0/0**  
-    - Source Port Range: **All** 
-    - Destination Port Range: **80** 
+    - Source CIDR: **0.0.0.0/0**
+    - Source Port Range: **All**
+    - Destination Port Range: **80**
     - Click on "Save"
 
 11. Connect using ssh (`ssh -i <private_key>  ubuntu@<public_ip_address>`).
@@ -167,7 +186,7 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 
 7. If you wish to make the UI accessible to others, proceed to the next step to create a load balancer. Otherwise, skip to Step 10 which will explain how to connect to your VM with port forwarding.
 
-8. Create a load balancer. This can be found in Compute->Load Balancers. Click on "Launch Load Balancer". Ignore any messages about signing up for access and close any pop-up windows if any. Fill out the form with the following info: 
+8. Create a load balancer. This can be found in Compute->Load Balancers. Click on "Launch Load Balancer". Ignore any messages about signing up for access and close any pop-up windows if any. Fill out the form with the following info:
    - Name: **Name for your load balancer**
    - Source IP: **The private IP address of your VM in Step 6**
    - Listener Port: **80**
@@ -243,7 +262,7 @@ INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:80 (Press CTRL+C to quit)
 ```
 
-Run `docker ps -a` as an additional check to verify that all the services are running as shown. Notice the version of the docker images matches the RELEASE_VERSION you specified. 
+Run `docker ps -a` as an additional check to verify that all the services are running as shown. Notice the version of the docker images matches the RELEASE_VERSION you specified.
 
 ```bash
 | CONTAINER ID | IMAGE                                                 | COMMAND                 | CREATED     | STATUS     | PORTS                                                                                 | NAMES                        |
@@ -262,7 +281,7 @@ Run `docker ps -a` as an additional check to verify that all the services are ru
 
 You can interact with ChatQnA via a browser interface:
 
-* To view the ChatQnA interface, open a browser and navigate to the UI by inserting your public facing IP address in the following: `http://{public_ip}:80’. 
+* To view the ChatQnA interface, open a browser and navigate to the UI by inserting your public facing IP address in the following: `http://{public_ip}:80’.
 
 >**Note:** For users running on ITAC, open a browser to localhost:80 if you are using port forwarding OR the virtual IP address of your load balancer.
 
@@ -278,12 +297,12 @@ Given that any information about OPEA was not in the training data for the model
 
 ![Chat Interface with RAG](assets/chat_ui_response_rag.png)
 
-We observe that the response is relevant and is based on the PDF uploaded. See the [ChatQnA Sample Guide](https://opea-project.github.io/latest/examples/ChatQnA/ChatQnA_Guide.html)
+We observe that the response is relevant and is based on the PDF uploaded. See the [ChatQnA](/tutorial/ChatQnA/ChatQnA_Guide.rst)
 to learn how you can customize the example with your own content.
 
 ## What’s Next
 
-- Try  [GenAIExamples](/examples/index.rst) in-detail starting with [ChatQnA](/examples/ChatQnA/ChatQnA_Guide.rst) example; this is a great example to orient yourself to the OPEA ecosystem.
+- Try [GenAIExamples](/examples/index.rst) in-detail starting with mores example.
 - Try [GenAIComps](/microservices/index.rst) to build microservices.
 
 ### Get Involved
@@ -302,7 +321,7 @@ Have you ideas and skills to build out genAI components, microservices, and solu
 * Attend any of our community events and hackathons. https://wiki.lfaidata.foundation/display/DL/OPEA+Community+Events
 
 Current GenAI Examples
-- Simple chatbot that uses retrieval augmented generation (RAG) architecture. [ChatQnA](/examples/ChatQnA/ChatQnA_Guide.rst)
+- Simple chatbot that uses retrieval augmented generation (RAG) architecture. [ChatQnA](/tutorial/ChatQnA/ChatQnA_Guide.rst)
 - Code generation, from enabling non-programmers to generate code to improving productivity with code completion of complex applications. [CodeGen](https://opea-project.github.io/latest/GenAIExamples/CodeGen/README.html)
 - Make your applications more flexible by porting to different languages. [CodeTrans](https://opea-project.github.io/latest/GenAIExamples/CodeTrans/README.html)
 - Create summaries of news articles, research papers, technical documents, etc. to streamline content systems. [DocSum](https://opea-project.github.io/latest/GenAIExamples/DocSum/README.html)
