@@ -51,6 +51,7 @@ Contributing Guides
 
    CONTRIBUTING
    codeowner
+   codeowner_emeritus
    SECURITY
 
 Roadmaps
