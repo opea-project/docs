@@ -13,6 +13,7 @@ Provide following tutorials to cover common user cases:
    CodeGen/CodeGen_Guide
    CodeTrans/CodeTrans_Guide
    DocSum/DocSum_Guide
+   VideoQnA/VideoQnA_Guide
 
 -----
 
