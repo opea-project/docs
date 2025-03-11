@@ -8,6 +8,7 @@ Come learn, try, develop, and share your stories! Please submit PRs, organizing 
 .. list-table:: Trending Blogs
    :widths: 10 50 40
    :header-rows: 1
+
    * - Date
      - URL
      - Authors
