@@ -50,6 +50,7 @@ Contributing Guides
    :maxdepth: 1
 
    CONTRIBUTING
+   add_vectorDB
    codeowner
    SECURITY
 
