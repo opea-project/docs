@@ -136,8 +136,8 @@ Thanks for considering contributing to OPEA project. The contribution process is
 
 5. After your component has been merged, you are likely interested in building an application with it, and perhaps contributing it also to OPEA! Please continue on to the [Contribute a GenAI Example](#contribute-a-genai-example) guide.
 
-### [Contributing A New Vector Database to OPEA](https://github.com/opea-project/docs/blob/main/community/add_vectorDB.md)
-To contribute a new Vector Database to OPEA, you would need to modify minimally the OPEA sub-project [GenAIComps](https://github.com/opea-project/GenAIComps) that covers installation, launch, usage, and tests. For  completeness, submit a PR to the OPEA sub-project [GenAIExamples](https://github.com/opea-project/GenAIExamples) to illustrate customizing the ChatQnA example application.  [See the full documentation for greater detail](https://github.com/opea-project/docs/blob/main/community/add_vectorDB.md).
+### Contributing A New Vector Database to OPEA
+To contribute a new Vector Database to OPEA, you would need to modify minimally the OPEA sub-project [GenAIComps](https://github.com/opea-project/GenAIComps) that covers installation, launch, usage, and tests. For  completeness, submit a PR to the OPEA sub-project [GenAIExamples](https://github.com/opea-project/GenAIExamples) to illustrate customizing the ChatQnA example application. [See the full documentation for greater detail](https://github.com/opea-project/docs/blob/main/community/add_vectorDB.md).
 
 ### Contribute a GenAI Example
 
