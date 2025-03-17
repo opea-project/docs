@@ -41,7 +41,7 @@ A developer wants to convert a Python script to Java but unknowingly provides co
 How the CodeTrans Helps:
 
 - Pre-LLM Agent executes the provided Python code.
-- If the code has syntax or runtime errors, the agent stops the process and returns an error message:
+- If the code has syntax errors, the agent stops the process and returns an error message:
     - ❌ "Your input code contains errors. Please review and correct it before proceeding."
 - The developer can then fix the issues and resubmit valid code, ensuring that only runnable code is sent to the LLM for translation.
 
@@ -105,6 +105,7 @@ graph LR
     end
 
     CodeExecutionTool([Code Execution Tool]):::blue
+    Output[Translated Code]:::orchid
 
     direction LR
     Frontend -->|Send Request| Megaservice
@@ -115,6 +116,7 @@ graph LR
 
     Agent1 -->|Validated input code| CodeExecutionTool
     Agent2 -->|Validate genereated code| CodeExecutionTool
+    Agent2 -->|Output validated code| Output
 ```
 
 ### Components and Functionality
@@ -136,7 +138,7 @@ graph LR
 
     Pre-LLM Agent:
     - Validates code correctness, structures input/output, executes the code, and evaluates the result.
-    - Runs the user-provided code to check for syntax or runtime errors.
+    - Runs the user-provided code to check for syntax or logical errors.
     - If errors are detected, the agent returns an error message, requiring the user to fix the code before proceeding.
 
     LLM Microservice:
@@ -159,7 +161,7 @@ graph LR
 | Output Code Validation | Ensures reliable and accurate code conversion. |
 | Automated Debug Feedback | Reduces trial-and-error, improving LLM accuracy. |
 | Secure Execution Environment | Protects the system from malicious code. |
-| Error Classification | Identifies syntax, logic, and runtime errors for better debugging. |
+| Error Classification | Identifies syntax, logic errors for better debugging. |
 
 
 ## Comparison with Existing CodeTrans
