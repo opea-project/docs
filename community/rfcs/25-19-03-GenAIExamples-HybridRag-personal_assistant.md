@@ -3,6 +3,7 @@ This RFC introduces the HybridRAG framework, a novel approach to building advanc
 1.	GraphRAG: Utilizes Knowledge Graphs (KGs) for information retrieval
 2.	VectorRAG: Employs vector-based retrieval methods
 
+
 The integration of these techniques has demonstrated superior performance in generating accurate and contextually relevant answers compared to using either method alone.
 
 Key Features of HybridRAG
