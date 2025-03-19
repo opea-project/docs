@@ -22,6 +22,7 @@ Some examples highlight the versatility and potential impact of the HybridRAG fr
 [Siddhi Velankar] (https://github.com/siddhivelankar23)
 
 ## Status
+
 Under Review
 
 ## Objective
@@ -55,7 +56,6 @@ Hybrid Integration:
 - Outperforms individual approaches in retrieval accuracy and answer quality.
 
 HybridRAG’s hybrid architecture also supports secure on-premise/cloud deployments, critical for sensitive sectors like healthcare. This approach represents a strategic evolution in enterprise AI, enabling systems to reason across data types while maintaining scalability and compliance.
-
 
 ## Design Proposal
 This RFC proposes a Hybrid Retrieval-Augmented Generation (Hybrid-RAG) architecture detailed in the following figure.
