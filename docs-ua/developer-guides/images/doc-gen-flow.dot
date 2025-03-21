@@ -1,0 +1,20 @@
+# Doc Generation flow
+# dot -Tpng -odoc-gen-flow.png doc-gen-flow.dot
+
+digraph docgen {
+   node [ fontname="verdana"]
+   bgcolor=transparent; rankdir=LR;
+   rst [shape="rectangle" label="restructuredText\nfiles"]
+   md [shape="rectangle" label="markdown\nfiles"]
+   images [shape="rectangle" label=".png, .jpg\nimages"]
+   conf [shape="rectangle" label="conf.py\nconfiguration"]
+   rtd [shape="rectangle" label="read-the-docs\ntheme"]
+   html [shape="rectangle" label="HTML\nweb site"]
+   sphinx[shape="ellipse" label="sphinx +\ndocutils"]
+   images -> sphinx
+   rst -> sphinx
+   md -> sphinx
+   conf -> sphinx
+   rtd -> sphinx
+   sphinx -> html
+   }
