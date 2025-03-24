@@ -1,0 +1,16 @@
+{% extends "!layout.html" %}
+{% block document %}
+  {% if not is_release %}
+    <!-- div class="admonition important">
+        <p class="admonition-title">Important</p>
+        <p>This is the latest documentation for the development branch of
+        the OPEA Project (main).<br/>Use the drop-down menu on the left to select
+        documentation for a stable release.</p>
+    </div -->
+  {% endif %}
+  {{ super() }}
+{% endblock %}
+{% block menu %}
+  {% include "aversions.html" %}
+  {{ super() }}
+{% endblock %}

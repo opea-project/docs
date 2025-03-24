@@ -1,0 +1,43 @@
+Here's an example of markdown with two tab sets that are synchronized when
+chosen by the viewer:
+
+::::{tab-set}
+
+:::{tab-item} Linux
+:sync: Linux
+
+This content will show on the Linux tab
+:::
+:::{tab-item} macOS
+:sync: macOS
+
+This content will show on the macOS tab
+:::
+:::{tab-item} Windows
+:sync: Windows
+
+This content will show on the Windows tab
+:::
+::::
+
+Some more content here followed by another tab set:
+
+::::{tab-set}
+
+:::{tab-item} Linux
+:sync: Linux
+
+This is more content that will show on this Linux tab
+:::
+:::{tab-item} macOS
+:sync: macOS
+
+This is more content that will show on this macOS tab
+:::
+:::{tab-item} Windows
+:sync: Windows
+
+This is more content that will show on this Windows tab
+:::
+::::
+
