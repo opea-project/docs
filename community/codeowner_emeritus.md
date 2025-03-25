@@ -9,8 +9,3 @@ The table below acknowledges the OPEA code owners who have left, and whose valua
 | GenAIInfra                  | `*`                           |  iris.ding@intel.com                |
 | GenAIInfra                  | `/microservices-connector/`   |  kefei.zhang@intel.com              |
 | GenAIInfra                  | `/microservices-connector/`   |  huailong.zhang@intel.com           |
-
-
-
-
-
