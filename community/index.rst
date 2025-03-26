@@ -52,6 +52,7 @@ Contributing Guides
    CONTRIBUTING
    add_vectorDB
    codeowner
+   codeowner_emeritus
    SECURITY
 
 Roadmaps
