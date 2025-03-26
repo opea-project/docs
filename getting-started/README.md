@@ -174,7 +174,7 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 
 2. Select your instance configuration, instance type, and machine image which will be Ubuntu.
 
->**Note**: It is recommended to use the `VM-SPR-LRG` powered by 4th Generation Intel® Xeon® Scalable processors with 64GB of memory and 64GB of disk or more if you wish to use a CPU to run an 8B-parameter model.
+>**Note**: It is recommended to use the `VM-SPR-LRG` powered by 4th Generation Intel® Xeon® Scalable processors with 64GB of memory and 64GB of disk or more if you wish to use a CPU to run an 8B-parameter model. Click [here](https://console.cloud.intel.com/compute/reserve?backTo=catalog) to request the recommended VM instance. You can request a single VM to do a single node docker deploy or obtain a kubernetes cluster of one or more nodes.
 
 3. Fill out the rest of the form such as giving your instance a name and answering any additional quesitons.
 
