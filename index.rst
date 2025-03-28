@@ -76,8 +76,10 @@ Source code for the OPEA Project is maintained in the
    eval/index
    developer-guides/index
    community/index
+   publish/index
    release_notes/index
    CONTRIBUTING
    faq
+   blogs/index
 
 .. _OPEA Project GitHub repository: https://github.com/opea-project
