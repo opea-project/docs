@@ -174,7 +174,7 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 
 2. Select your instance configuration, instance type, and machine image which will be Ubuntu.
 
->**Note**: It is recommended to use the `VM-SPR-LRG` powered by 4th Generation Intel® Xeon® Scalable processors with 64GB of memory and 64GB of disk or more if you wish to use a CPU to run an 8B-parameter model. Click [here](https://console.cloud.intel.com/compute/reserve?backTo=catalog) to request the recommended VM instance. You can request a single VM to do a single node docker deploy or obtain a kubernetes cluster of one or more nodes.
+>**Note**: It is recommended to use the `VM-SPR-LRG` powered by 4th Generation Intel® Xeon® Scalable processors with 64GB of memory and 64GB of disk or more if you wish to use a CPU to run an 8B-parameter model. Intel® Gaudi® AI Accelerators can also be used after requesting access. Click [here](https://console.cloud.intel.com/compute/reserve?backTo=catalog) to request the recommended VM instance. You can request a single VM to do a single node docker deploy or obtain a kubernetes cluster of one or more nodes.
 
 3. Fill out the rest of the form such as giving your instance a name and answering any additional quesitons.
 
@@ -186,7 +186,7 @@ Before moving forward, it's important to familiarize yourself with two key eleme
 
 7. If you wish to make the UI accessible to others, proceed to the next step to create a load balancer. Otherwise, skip to Step 10 which will explain how to connect to your VM with port forwarding.
 
-8. Create a load balancer. This can be found in Compute->Load Balancers. Click on "Launch Load Balancer". Ignore any messages about signing up for access and close any pop-up windows if any. Fill out the form with the following info:
+8. Create a load balancer. This can be found in Compute->Load Balancers. Click on "Launch Load Balancer". Request for access if needed. Fill out the form with the following info:
    - Name: **Name for your load balancer**
    - Source IP: **The private IP address of your VM in Step 6**
    - Listener Port: **80**
@@ -195,13 +195,17 @@ Before moving forward, it's important to familiarize yourself with two key eleme
    - Mode: **Round Robin**
    - Instances: **Select the name of the VM you created**
 
-   >**Note**: The port used is 80 because this is the NGINX port for the GenAI Examples.
+>**Note**: The port used is 80 because this is the NGINX port for the GenAI Examples.
 
-   Click "Launch".
+Click "Launch".
 
 9. Go back to Compute->Load Balancers to see your new load balancer. Note down the virtual IP address. This is what you will use to access the UI of your GenAI Example on a web browser.
 
-10. Connect to your VM using ssh and port forward port 80 if needed (`ssh -i <private_key> -J guest@<proxy_jump_ip_address> -L 80:localhost:80 ubuntu@<private_ip_address_of_vm`). If you are using a load balancer, you do not need to include `-L 80:localhost:80`.
+10. Go to Instances, click on the name of your instance, and then click on "How to Connect via SSH". Follow the instructions to set up your SSH config and locate your key. On the final step to run an SSH command to connect to your VM, add the *-i* argument with your private key and *-L* to forward port 80 if needed. You can follow the command template below:
+
+`ssh -i <private_key> -J guest@<proxy_jump_ip_address> -L 80:localhost:80 ubuntu@<private_ip_address_of_vm`
+
+If you are using a load balancer, you do not need to include `-L 80:localhost:80`.
 
 :::
 ::::
@@ -247,7 +251,7 @@ Now we can start the services:
 ```bash
 docker compose -f compose.yaml up -d
 ```
->**Note**: It takes a few minutes for the services to start. Check the logs for the services to ensure that ChatQnA is running before proceeding further.
+>**Note**: It takes a few minutes for the services to start. Check the logs for the services to ensure that ChatQnA is running before proceeding further. If you encounter an error related to a port already being in use, either 1) modify the `compose.yaml` to use another port or 2) stop the service using that port before retrying the `docker compose` command.  
 
 For example to check the logs for the `vllm-service`:
 
@@ -265,8 +269,8 @@ INFO:     Uvicorn running on http://0.0.0.0:80 (Press CTRL+C to quit)
 Run `docker ps -a` as an additional check to verify that all the services are running as shown. Notice the version of the docker images matches the RELEASE_VERSION you specified.
 
 ```bash
-| CONTAINER ID | IMAGE                                                 | COMMAND                 | CREATED     | STATUS     | PORTS                                                                                 | NAMES                        |
-|--------------|--------------------------------------------------------|------------------------|--------------|-------------|------------------------------------------------------------------------------------------|------------------------------|
+| CONTAINER ID | IMAGE                                                  | COMMAND                 | CREATED    | STATUS     | PORTS                                                                                 | NAMES                        |
+|--------------|--------------------------------------------------------|------------------------|------------|------------|------------------------------------------------------------------------------------------|------------------------------|
 | d992b34fda27 | opea/nginx:1.2                                         | "/docker-entrypoint.…" | 6 days ago | Up 6 days | 0.0.0.0:80->80/tcp, :::80->80/tcp                                                     | chatqna-xeon-nginx-server    |
 | 2d297d595650 | opea/chatqna-ui:1.2                                    | "docker-entrypoint.s…" | 6 days ago | Up 6 days | 0.0.0.0:5173->5173/tcp, :::5173->5173/tcp                                             | chatqna-xeon-ui-server    |
 | 0b9b2be1feef | opea/chatqna-without-rerank:1.2                        | "python chatqna.py -…" | 6 days ago | Up 6 days | 0.0.0.0:8888->8888/tcp, :::8888->8888/tcp                                             | chatqna-xeon-backend-server    |
