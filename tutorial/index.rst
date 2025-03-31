@@ -9,6 +9,7 @@ Provide following tutorials to cover common user cases:
    :maxdepth: 1
 
    AgentQnA/AgentQnA_Guide
+   AudioQnA/AudioQnA_Guide.rst
    ChatQnA/ChatQnA_Guide
    CodeGen/CodeGen_Guide
    CodeTrans/CodeTrans_Guide
