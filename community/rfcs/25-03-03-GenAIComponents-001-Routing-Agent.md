@@ -26,6 +26,7 @@ Create an intelligent routing layer that:
 1. Query Analyzer: Supports several known classifiers (matrix factorization, BERT, etc) and Semantic understanding and intent classification
 2. Routing Engine: Provides dynamic model selection based on query complexity
 3. Monitoring: Real-time metrics collection (latency, cost, accuracy)
+4. This code is based on RouteLLM, which is available at https://github.com/lm-sys/RouteLLM
 
 ### Key Features:
 - Dynamic model selection based on query complexity
