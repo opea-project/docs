@@ -135,10 +135,10 @@ responses:
    vector database based on the vector representation of the user query.
 #. **Reranker**: The Rerank MicroService reranks the relevant documents to select 
    the most related documents.
-# **Vector Database**: The Vector Database stores data as vectors, allowing the 
+#. **Vector Database**: The Vector Database stores data as vectors, allowing the 
    system to swiftly access the most pertinent documents or data points based on 
    semantic similarity.
-# **Data Preparation**: The Data Preparation MicroService prepares the data for the 
+#. **Data Preparation**: The Data Preparation MicroService prepares the data for the 
    vector database.
 
 Deployment
