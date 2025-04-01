@@ -30,8 +30,6 @@ It will have the below file structure under the new VectorDB folder.
     This third-party Vector database setup should be described in README.md file under:
     GenAIComps/comps/third_parties/<Vector_ DB>/src 
     
-    Following is the outline of README.md 
-
     Make sure the Vector database setup is complete, and you can start the database server on a port.
 
 ## Dataprep
