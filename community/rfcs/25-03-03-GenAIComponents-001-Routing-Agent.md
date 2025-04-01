@@ -11,7 +11,7 @@ Proposed
 
 ## Objective
 Create an intelligent routing layer that:
-- Analyzes input queries in real-time
+- Analyzes text-based input queries in real-time
 - Selects optimal model based on criteria like cost, latency, and capability requirements
 - Supports multiple cloud providers and self-hosted models
 
