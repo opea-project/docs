@@ -31,8 +31,8 @@ extensions = [
    #'sphinx_md',
 ]
 
-myst_enable_extensions = ["colon_fence"]
-myst_fence_as_directive = ["mermaid"]
+myst_enable_extensions = {"colon_fence"}
+myst_fence_as_directive = {"mermaid"}
 
 # sphinx_md config
 sphinx_md_useGitHubURL = True
