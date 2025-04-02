@@ -103,7 +103,7 @@ docker compose -f compose.yaml up -d
 :::
 ::::
 
-#### Check Env Variables
+### Check Env Variables
 After running `docker compose`, check for warning messages for environment variables that are **NOT** set. Address them if needed.
 
 ::::{tab-set}

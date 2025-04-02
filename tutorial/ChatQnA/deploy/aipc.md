@@ -196,7 +196,7 @@ docker compose -f compose.yaml up -d
 :::
 ::::
 
-#### Check Env Variables
+### Check Env Variables
 After running `docker compose`, check for warning messages for environment variables that are **NOT** set. Address them if needed. 
 
 ::::{tab-set}
@@ -216,7 +216,7 @@ After running `docker compose`, check for warning messages for environment varia
 :::
 ::::
 
-#### Check the container status
+### Check the container status
 
 Check if all the containers launched via `docker compose` are running i.e. each container's `STATUS` is `Up` and `Healthy`.
 
