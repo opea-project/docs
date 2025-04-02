@@ -36,7 +36,7 @@ git checkout tags/v${RELEASE_VERSION}
 cd ..
 ```
 
-Set up the HuggingFace token:
+Set up a [HuggingFace](https://huggingface.co/) account and generate a [user access token](https://huggingface.co/docs/transformers.js/en/guides/private#step-1-generating-a-user-access-token). Then set an environment variable with the HuggingFace token:
 ```bash
 export HUGGINGFACEHUB_API_TOKEN="Your_Huggingface_API_Token"
 ```
@@ -44,6 +44,12 @@ export HUGGINGFACEHUB_API_TOKEN="Your_Huggingface_API_Token"
 The example requires setting the `host_ip` to "localhost" to deploy the microservices on endpoints enabled with ports.
 ```bash
 export host_ip="localhost"
+```
+
+Set the NGINX port.
+```bash
+# Example: NGINX_PORT=80
+export NGINX_PORT=<Nginx_Port>
 ```
 
 For machines behind a firewall, set up the proxy environment variables:
@@ -95,7 +101,7 @@ cd $WORKSPACE/GenAIExamples/ChatQnA/docker_compose/intel/cpu/xeon
 source ./set_env.sh
 ```
 
-## Deploy the use case
+## Deploy the Use Case
 
 Run `docker compose` with the provided YAML file to start all the services mentioned above as containers.
 
@@ -150,7 +156,7 @@ After running `docker compose`, check for warning messages for environment varia
 :::
 ::::
 
-### Check container statuses
+### Check Container Statuses
 
 Check if all the containers launched via `docker compose` are running i.e. each container's `STATUS` is `Up` and `Healthy`.
 
@@ -203,7 +209,7 @@ Each docker container's log can also be checked using:
 docker logs <CONTAINER_ID OR CONTAINER_NAME>
 ```
 
-## Validate microservices
+## Validate Microservices
 
 This section will walk through the different ways to interact with the microservices deployed.
 
@@ -235,8 +241,7 @@ curl http://${host_ip}:7000/v1/retrieval \
   -H 'Content-Type: application/json'
 ```
 
-The output of the retriever microservice comprises of the a unique id for the request, initial query or the input to the retrieval microservice, a list of top
-`n` retrieved documents relevant to the input query, and top_n where n refers to the number of documents to be returned.
+The output of the retriever microservice comprises of the a unique id for the request, initial query or the input to the retrieval microservice, a list of top `n` retrieved documents relevant to the input query, and top_n where n refers to the number of documents to be returned.
 
 The output is retrieved text that is relevant to the input data:
 ```bash
@@ -245,8 +250,7 @@ The output is retrieved text that is relevant to the input data:
 
 ### TEI Reranking Service
 
-The TEI Reranking Service reranks the documents returned by the retrieval service. It consumes the query and list of documents and returns the document
-index in decreasing order of the similarity score. The document corresponding to the index with the highest score is the most relevant document for the input query.
+The TEI Reranking Service reranks the documents returned by the retrieval service. It consumes the query and list of documents and returns the document index in decreasing order of the similarity score. The document corresponding to the index with the highest score is the most relevant document for the input query.
 
 ```bash
 curl http://${host_ip}:8808/rerank \
@@ -358,6 +362,7 @@ curl -X POST "http://${host_ip}:6007/v1/dataprep/delete_file" \
 
 ### ChatQnA MegaService
 
+This will ensure the megaservice is working properly. 
 ```bash
 curl http://${host_ip}:8888/v1/chatqna -H "Content-Type: application/json" -d '{
      "messages": "What is the revenue of Nike in 2023?"
@@ -401,11 +406,22 @@ data: b'</s>'
 data: [DONE]
 ```
 
+### NGINX Service
+
+This will ensure the NGINX ervice is working properly.
+```bash
+curl http://${host_ip}:${NGINX_PORT}/v1/chatqna \
+    -H "Content-Type: application/json" \
+    -d '{"messages": "What is the revenue of Nike in 2023?"}'
+```
+
+The output will be similar to that of the ChatQnA megaservice.
+
 ## Launch UI
 
 ### Basic UI
 
-To access the frontend, open the following URL in a web browser: http://{host_ip}:80. By default, the UI runs on port 5173 internally. A different host port can be used to access the frontend. Simply modify the port mapping in the `compose.yaml` file as shown below:
+To access the frontend, open the following URL in a web browser: http://{host_ip}:{NGINX_PORT}. By default, the UI runs on port 5173 internally. A different host port can be used to access the frontend. Simply modify the port mapping in the `compose.yaml` file as shown below:
 ```yaml
   chatqna-xeon-ui-server:
     image: opea/chatqna-ui:${TAG:-latest}
@@ -434,7 +450,7 @@ chaqtna-xeon-conversation-ui-server:
 
 In addition, modify the `chatqna-xeon-nginx-server` `depends_on` field to include `chatqna-xeon-conversation-ui-server` instead of `chatqna-xeon-ui-server`.
 
-Once the services are up, open the following URL in a web browser: http://{host_ip}:5174. By default, the UI runs on port 80 internally. A different host port can be used to access the frontend. Simply modify the port mapping in the `compose.yaml` file as shown below:
+Once the services are up, open the following URL in a web browser: http://{host_ip}:5174. By default, the UI runs on port {NGINX_PORT} internally. A different host port can be used to access the frontend. Simply modify the port mapping in the `compose.yaml` file as shown below:
 ```yaml
   chatqna-xeon-conversation-ui-server:
     image: opea/chatqna-conversation-ui:${TAG:-latest}
@@ -443,7 +459,7 @@ Once the services are up, open the following URL in a web browser: http://{host_
       - "80:80"
 ```
 
-## Stop the services
+## Stop the Services
 
 To stop and remove all the containers, use the command below:
 ::::{tab-set}

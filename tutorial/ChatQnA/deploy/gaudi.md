@@ -36,7 +36,7 @@ git checkout tags/v${RELEASE_VERSION}
 cd ..
 ```
 
-Set up the HuggingFace token:
+Set up a [HuggingFace](https://huggingface.co/) account and generate a [user access token](https://huggingface.co/docs/transformers.js/en/guides/private#step-1-generating-a-user-access-token). Then set an environment variable with the HuggingFace token:
 ```bash
 export HUGGINGFACEHUB_API_TOKEN="Your_Huggingface_API_Token"
 ```
@@ -44,6 +44,12 @@ export HUGGINGFACEHUB_API_TOKEN="Your_Huggingface_API_Token"
 The example requires setting the `host_ip` to "localhost" to deploy the microservices on endpoints enabled with ports.
 ```bash
 export host_ip="localhost"
+```
+
+Set the NGINX port.
+```bash
+# Example: NGINX_PORT=80
+export NGINX_PORT=<Nginx_Port>
 ```
 
 For machines behind a firewall, set up the proxy environment variables:
@@ -72,8 +78,6 @@ ChatQnA will use the following GenAIComps and corresponding tools. Tools and mod
 |LLM                  |   vLLM       | meta-llama/Meta-Llama-3-8B-Instruct | OPEA Microservice |
 |UI                   |              | NA                       | Gateway Service |
 
-Tools and models mentioned in the table are configurable either through the
-environment variable or `compose.yaml` file.
 :::
 :::{tab-item} TGI
 :sync: TGI
@@ -97,7 +101,7 @@ cd $WORKSPACE/GenAIExamples/ChatQnA/docker_compose/intel/hpu/gaudi
 source ./set_env.sh
 ```
 
-## Deploy the use case
+## Deploy the Use Case
 
 Run `docker compose` with the provided YAML file to start all the services mentioned above as containers.
 
@@ -160,7 +164,7 @@ After running `docker compose`, check for warning messages for environment varia
 :::
 ::::
 
-### Check container statuses
+### Check Container Statuses
 
 Check if all the containers launched via `docker compose` are running i.e. each container's `STATUS` is `Up` and `Healthy`.
 
@@ -201,20 +205,18 @@ bfe41a5353b6   ghcr.io/huggingface/tei-gaudi:1.5.0                     "text-emb
 :::
 :::{tab-item} TGI
 :sync: TGI
-TODO: update
 ```bash
-CONTAINER ID   IMAGE                                                   COMMAND                  CREATED         STATUS         PORTS                                                                                  NAMES
-0355d705484a   opea/chatqna-ui:${RELEASE_VERSION}                                  "docker-entrypoint.s…"   2 minutes ago   Up 2 minutes   0.0.0.0:5173->5173/tcp, :::5173->5173/tcp                                              chatqna-gaudi-ui-server
-29a7a43abcef   opea/chatqna:${RELEASE_VERSION}                                     "python chatqna.py"      2 minutes ago   Up 2 minutes   0.0.0.0:8888->8888/tcp, :::8888->8888/tcp                                              chatqna-gaudi-backend-server
-1eb6f5ad6f85   opea/llm-tgi:${RELEASE_VERSION}                                     "bash entrypoint.sh"     2 minutes ago   Up 2 minutes   0.0.0.0:9000->9000/tcp, :::9000->9000/tcp                                              llm-tgi-gaudi-server
-ad27729caf68   opea/reranking-tei:${RELEASE_VERSION}                               "python reranking_te…"   2 minutes ago   Up 2 minutes   0.0.0.0:8000->8000/tcp, :::8000->8000/tcp                                              reranking-tei-gaudi-server
-84f02cf2a904   opea/dataprep-redis:${RELEASE_VERSION}                              "python prepare_doc_…"   2 minutes ago   Up 2 minutes   0.0.0.0:6007->6007/tcp, :::6007->6007/tcp                                              dataprep-redis-server
-367459f6e65b   opea/embedding-tei:${RELEASE_VERSION}                               "python embedding_te…"   2 minutes ago   Up 2 minutes   0.0.0.0:6000->6000/tcp, :::6000->6000/tcp                                              embedding-tei-server
-8c78cde9f588   opea/retriever-redis:${RELEASE_VERSION}                             "python retriever_re…"   2 minutes ago   Up 2 minutes   0.0.0.0:7000->7000/tcp, :::7000->7000/tcp                                              retriever-redis-server
-fa80772de92c   ghcr.io/huggingface/tgi-gaudi:2.0.1                     "text-generation-lau…"   2 minutes ago   Up 2 minutes   0.0.0.0:8005->80/tcp, :::8005->80/tcp                                                  tgi-gaudi-server
-581687a2cc1a   opea/tei-gaudi:${RELEASE_VERSION}                                   "text-embeddings-rou…"   2 minutes ago   Up 2 minutes   0.0.0.0:8090->80/tcp, :::8090->80/tcp                                                  tei-embedding-gaudi-server
-c59178629901   redis/redis-stack:7.2.0-v9                              "/entrypoint.sh"         2 minutes ago   Up 2 minutes   0.0.0.0:6379->6379/tcp, :::6379->6379/tcp, 0.0.0.0:8001->8001/tcp, :::8001->8001/tcp   redis-vector-db
-5c3a78144498   ghcr.io/huggingface/text-embeddings-inference:cpu-1.5   "text-embeddings-rou…"   2 minutes ago   Up 2 minutes   0.0.0.0:8808->80/tcp, :::8808->80/tcp                                                  tei-reranking-gaudi-server
+CONTAINER ID   IMAGE                                                   COMMAND                  CREATED          STATUS          PORTS                                                                                                                                                                                 NAMES
+353775bfa0dc   opea/nginx:1.2                                          "/docker-entrypoint.…"   52 seconds ago   Up 50 seconds   0.0.0.0:8010->80/tcp, [::]:8010->80/tcp                                                                                                                                               chatqna-gaudi-nginx-server
+c4f75d75f18e   opea/chatqna-ui:1.2                                     "docker-entrypoint.s…"   52 seconds ago   Up 50 seconds   0.0.0.0:5173->5173/tcp, [::]:5173->5173/tcp                                                                                                                                           chatqna-gaudi-ui-server
+4c5dc803c8c8   opea/chatqna:1.2                                        "python chatqna.py"      52 seconds ago   Up 51 seconds   0.0.0.0:8888->8888/tcp, [::]:8888->8888/tcp                                                                                                                                           chatqna-gaudi-backend-server
+6bdfebe016c0   opea/dataprep:1.2                                       "sh -c 'python $( [ …"   52 seconds ago   Up 51 seconds   0.0.0.0:6007->5000/tcp, [::]:6007->5000/tcp                                                                                                                                           dataprep-redis-server
+6fb5264a8465   opea/retriever:1.2                                      "python opea_retriev…"   52 seconds ago   Up 51 seconds   0.0.0.0:7000->7000/tcp, [::]:7000->7000/tcp                                                                                                                                           retriever-redis-server
+1f4f4f691d36   ghcr.io/huggingface/tgi-gaudi:2.0.6                     "text-generation-lau…"   55 seconds ago   Up 51 seconds   0.0.0.0:8005->80/tcp, [::]:8005->80/tcp                                                                                                                                               tgi-gaudi-server
+9c50dfc17428   ghcr.io/huggingface/tei-gaudi:1.5.0                     "text-embeddings-rou…"   55 seconds ago   Up 51 seconds   0.0.0.0:8808->80/tcp, [::]:8808->80/tcp                                                                                                                                               tei-reranking-gaudi-server
+a8de74b4594d   ghcr.io/huggingface/text-embeddings-inference:cpu-1.5   "text-embeddings-rou…"   55 seconds ago   Up 51 seconds   0.0.0.0:8090->80/tcp, [::]:8090->80/tcp                                                                                                                                               tei-embedding-gaudi-server
+e01438eafa7d   redis/redis-stack:7.2.0-v9                              "/entrypoint.sh"         55 seconds ago   Up 51 seconds   0.0.0.0:6379->6379/tcp, [::]:6379->6379/tcp, 0.0.0.0:8001->8001/tcp, [::]:8001->8001/tcp                                                                                              redis-vector-db
+b8ecf10c0c2d   jaegertracing/all-in-one:latest                         "/go/bin/all-in-one-…"   55 seconds ago   Up 51 seconds   0.0.0.0:4317-4318->4317-4318/tcp, [::]:4317-4318->4317-4318/tcp, 14250/tcp, 0.0.0.0:9411->9411/tcp, [::]:9411->9411/tcp, 0.0.0.0:16686->16686/tcp, [::]:16686->16686/tcp, 14268/tcp   jaeger
 ```
 
 :::
@@ -226,7 +228,7 @@ Each docker container's log can also be checked using:
 docker logs <CONTAINER_ID OR CONTAINER_NAME>
 ```
 
-## Validate microservices
+## Validate Microservices
 
 This section will walk through the different ways to interact with the microservices deployed.
 
@@ -258,8 +260,7 @@ curl http://${host_ip}:7000/v1/retrieval \
   -H 'Content-Type: application/json'
 ```
 
-The output of the retriever microservice comprises of the a unique id for the request, initial query or the input to the retrieval microservice, a list of top
-`n` retrieved documents relevant to the input query, and top_n where n refers to the number of documents to be returned.
+The output of the retriever microservice comprises of the a unique id for the request, initial query or the input to the retrieval microservice, a list of top `n` retrieved documents relevant to the input query, and top_n where n refers to the number of documents to be returned.
 
 The output is retrieved text that is relevant to the input data:
 ```bash
@@ -268,8 +269,7 @@ The output is retrieved text that is relevant to the input data:
 
 ### TEI Reranking Service
 
-The TEI Reranking Service reranks the documents returned by the retrieval service. It consumes the query and list of documents and returns the document
-index in decreasing order of the similarity score. The document corresponding to the index with the highest score is the most relevant document for the input query.
+The TEI Reranking Service reranks the documents returned by the retrieval service. It consumes the query and list of documents and returns the document index in decreasing order of the similarity score. The document corresponding to the index with the highest score is the most relevant document for the input query.
 
 ```bash
 curl http://${host_ip}:8808/rerank \
@@ -398,15 +398,14 @@ curl -X POST "http://${host_ip}:6007/v1/dataprep/delete_file" \
 ```
 
 ### ChatQnA MegaService
-
+This will ensure the megaservice is working properly. 
 ```bash
 curl http://${host_ip}:8888/v1/chatqna -H "Content-Type: application/json" -d '{
      "messages": "What is the revenue of Nike in 2023?"
      }'
 ```
 
-Here is the output for your reference:
-
+Here is the output for reference:
 ```bash
 data: b'\n'
 data: b'An'
@@ -443,6 +442,17 @@ data: b'</s>'
 data: [DONE]
 ```
 
+### NGINX Service
+
+This will ensure the NGINX ervice is working properly.
+```bash
+curl http://${host_ip}:${NGINX_PORT}/v1/chatqna \
+    -H "Content-Type: application/json" \
+    -d '{"messages": "What is the revenue of Nike in 2023?"}'
+```
+
+The output will be similar to that of the ChatQnA megaservice.
+
 #### (Optional) Guardrail Microservice
 If the Guardrail microservice is enabled, test it using the command below:
 ```bash
@@ -455,7 +465,7 @@ curl http://${host_ip}:9090/v1/guardrails\
 ## Launch UI
 
 ### Basic UI
-To access the frontend, open the following URL in a web browser: http://{host_ip}:80. By default, the UI runs on port 5173 internally. A different host port can be used to access the frontend. Simply modify the port mapping in the `compose.yaml` file as shown below:
+To access the frontend, open the following URL in a web browser: http://{host_ip}:{NGINX_PORT}. By default, the UI runs on port 5173 internally. A different host port can be used to access the frontend. Simply modify the port mapping in the `compose.yaml` file as shown below:
 ```yaml
   chatqna-gaudi-ui-server:
     image: opea/chatqna-ui:${TAG:-latest}
@@ -484,7 +494,7 @@ chaqtna-gaudi-conversation-ui-server:
 
 In addition, modify the `chatqna-gaudi-nginx-server` `depends_on` field to include `chatqna-gaudi-conversation-ui-server` instead of `chatqna-gaudi-ui-server`.
 
-Once the services are up, open the following URL in a web browser: http://{host_ip}:5174. By default, the UI runs on port 80 internally. A different host port can be used to access the frontend. Simply modify the port mapping in the `compose.yaml` file as shown below:
+Once the services are up, open the following URL in a web browser: http://{host_ip}:5174. By default, the UI runs on port {NGINX_PORT} internally. A different host port can be used to access the frontend. Simply modify the port mapping in the `compose.yaml` file as shown below:
 ```yaml
   chatqna-gaudi-conversation-ui-server:
     image: opea/chatqna-conversation-ui:${TAG:-latest}
@@ -493,7 +503,7 @@ Once the services are up, open the following URL in a web browser: http://{host_
       - "80:80"
 ```
 
-## Stop the services
+## Stop the Services
 
 To stop and remove all the containers, use the command below:
 ::::{tab-set}
