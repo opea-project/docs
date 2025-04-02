@@ -49,6 +49,12 @@ cd $WORKSPACE
 # Set desired release version - number only
 export RELEASE_VERSION=<insert-release-version>
 
+# GenAIComps
+git clone https://github.com/opea-project/GenAIComps.git
+cd GenAIComps
+git checkout tags/v${RELEASE_VERSION}
+cd ..
+
 # GenAIExamples
 git clone https://github.com/opea-project/GenAIExamples.git
 cd GenAIExamples
@@ -79,9 +85,94 @@ export http_proxy=${your_http_proxy}
 export https_proxy=${your_http_proxy}
 ```
 
+## Prepare (Building / Pulling) Docker images
+
+This step will involve building/pulling relevant docker
+images with step-by-step process along with sanity check in the end. For
+CodeGen, the following docker images will be needed: LLM with TGI. 
+Additionally, you will need to build docker images for the 
+CodeGen megaservice, and UI (React UI is optional). In total,
+there are **3 required docker images** and an optional docker image.
+
+### Build/Pull Microservice image
+
+::::::{tab-set}
+
+:::::{tab-item} Pull
+:sync: Pull
+
+If you decide to pull the docker containers and not build them locally,
+you can proceed to the next step where all the necessary containers will
+be pulled in from Docker Hub.
+
+:::::
+:::::{tab-item} Build
+:sync: Build
+
+Follow the steps below to build the docker images from within the `GenAIComps` folder.
+**Note:** For RELEASE_VERSIONS older than 1.0, you will need to add a 'v' in front 
+of ${RELEASE_VERSION} to reference the correct image on Docker Hub.
+
+```bash
+cd $WORKSPACE/GenAIComps
+```
+
+#### Build LLM Image
+
+```bash
+docker build -t opea/llm-textgen:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/llms/src/text-generation/Dockerfile .
+```
+
+### Build Mega Service images
+
+The Megaservice is a pipeline that channels data through different
+microservices, each performing varied tasks. The LLM microservice and 
+flow of data are defined in the `codegen.py` file. You can also add or 
+remove microservices and customize the megaservice to suit your needs.
+
+Build the megaservice image for this use case
+
+```bash
+cd $WORKSPACE/GenAIExamples/CodeGen
+```
+
+```bash
+docker build -t opea/codegen:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f Dockerfile .
+```
+
+### Build the UI Image
+
+You can build 2 modes of UI
+
+*Basic UI*
+
+```bash
+cd $WORKSPACE/GenAIExamples/CodeGen/ui/
+docker build -t opea/codegen-ui:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f ./docker/Dockerfile .
+```
+
+*React UI (Optional)* 
+If you want a React-based frontend.
+
+```bash
+cd $WORKSPACE/GenAIExamples/CodeGen/ui/
+docker build --no-cache -t opea/codegen-react-ui:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f ./docker/Dockerfile.react .
+```
+
+### Sanity Check
+Check if you have the following set of docker images by running the command `docker images` before moving on to the next step:
+
+* `opea/llm-tgi:${RELEASE_VERSION}`
+* `opea/codegen:${RELEASE_VERSION}`
+* `opea/codegen-ui:${RELEASE_VERSION}`
+* `opea/codegen-react-ui:${RELEASE_VERSION}` (optional)
+
+:::::
+::::::
+
 ## Use Case Setup
 
-The use case will use the following combination of GenAIComps and tools:
+The use case will use the following combination of GenAIComps and tools
 
 |Use Case Components | Tools | Model     | Service Type |
 |----------------     |--------------|-----------------------------|-------|
@@ -148,12 +239,11 @@ containers are all running, i.e, all the containers  `STATUS`  are  `Up`.
 You can do this with the `docker ps -a` command.
 
 ```bash
-CONTAINER ID   IMAGE                                                           COMMAND                  CREATED         STATUS                   PORTS                                         NAMES
-2b8b191b30f7   opea/codegen-ui:${RELEASE_VERSION}                                             "docker-entrypoint.s…"   8 minutes ago   Up 6 minutes             0.0.0.0:5173->5173/tcp, [::]:5173->5173/tcp   codegen-xeon-ui-server
-01000c65d1b8   opea/codegen:${RELEASE_VERSION}                                                "python codegen.py"      8 minutes ago   Up 6 minutes             0.0.0.0:7778->7778/tcp, [::]:7778->7778/tcp   codegen-xeon-backend-server
-aa1b05a9a148   opea/llm-textgen:${RELEASE_VERSION}                                            "bash entrypoint.sh"     8 minutes ago   Up 6 minutes             0.0.0.0:9000->9000/tcp, [::]:9000->9000/tcp   llm-textgen-server
-948d45c46721   ghcr.io/huggingface/text-generation-inference:2.4.0-intel-cpu   "text-generation-lau…"   8 minutes ago   Up 8 minutes (healthy)   0.0.0.0:8028->80/tcp, [::]:8028->80/tcp       tgi-service
-
+CONTAINER ID   IMAGE                                                           COMMAND                  CREATED              STATUS              PORTS                                       NAMES
+bbd235074c3d   opea/codegen-ui:${RELEASE_VERSION}                                          "docker-entrypoint.s…"   About a minute ago   Up About a minute   0.0.0.0:5173->5173/tcp, :::5173->5173/tcp   codegen-xeon-ui-server
+8d3872ca66fa   opea/codegen:${RELEASE_VERSION}                                             "python codegen.py"      About a minute ago   Up About a minute   0.0.0.0:7778->7778/tcp, :::7778->7778/tcp   codegen-xeom-backend-server
+b9fc39f51cdb   opea/llm-tgi:${RELEASE_VERSION}                                             "bash entrypoint.sh"     About a minute ago   Up About a minute   0.0.0.0:9000->9000/tcp, :::9000->9000/tcp   llm-tgi-xeon-server
+39994e007f15   ghcr.io/huggingface/text-generation-inference:2.4.0-intel-cpu   "text-generation-lau…"   About a minute ago   Up About a minute   0.0.0.0:8028->80/tcp, :::8028->80/tcp       tgi-server
 ```
 
 ## Interacting with CodeGen for Deployment
