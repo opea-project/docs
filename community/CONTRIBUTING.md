@@ -13,32 +13,40 @@ Thanks for considering contributing to OPEA project. The contribution process is
     ```
     GenAIComps
     ├── comps
+    │   ├── __init__.py
     │   ├── agent
+    │   ├── animation
     │   ├── asr
     │   ├── chathistory
     │   ├── cores
-    │   │   ├── mega     #orchestrator, gateway, micro_service class code
-    │   │   ├── proto    #api protocol
+    |   │   ├── common
+    │   │   ├── mega     # orchestrator, gateway, micro_service class code
+    │   │   ├── proto    # api protocol
     │   │   └── telemetry
     │   ├── dataprep
     │   ├── embeddings
     │   ├── feedback_management
     │   ├── finetuning
     │   ├── guardrails
-    │   ├── intent_detection
-    │   ├── knowledgegraphs
+    │   ├── image2image
+    │   ├── image2video
     │   ├── llms
     │   ├── lvms
-    │   ├── nginx
     │   ├── prompt_registry
-    │   ├── ragas
-    │   ├── reranks
+    │   ├── rerankings
     │   ├── retrievers
+    │   ├── text2image
+    │   ├── text2sql
+    │   ├── third_parties  # open microservices (i,e tgi, vllm...)
     │   ├── tts
-    │   ├── vectorstores
+    │   ├── version.py
     │   └── web_retrievers
+    ├── pyproject.toml
+    ├── requirements.txt
+    ├── setup.py
     └── tests
         ├── agent
+        ├── animation
         ├── asr
         ├── chathistory
         ├── cores
@@ -47,15 +55,18 @@ Thanks for considering contributing to OPEA project. The contribution process is
         ├── feedback_management
         ├── finetuning
         ├── guardrails
-        ├── intent_detection
+        ├── image2image
+        ├── image2video
         ├── llms
         ├── lvms
-        ├── nginx
         ├── prompt_registry
-        ├── reranks
+        ├── rerankings
         ├── retrievers
+        ├── text2image
+        ├── text2sql
+        ├── third_parties
         ├── tts
-        ├── vectorstores
+        ├── utils
         └── web_retrievers
     ```
 
@@ -65,47 +76,74 @@ Thanks for considering contributing to OPEA project. The contribution process is
     GenAIComps
     ├── comps
     │   └── embeddings
-    │       ├── __init__.py
-    │       └── tei     #vendor name or serving framework name
-    │           ├── langchain
-    │           │   ├── Dockerfile
-    │           │   ├── Dockerfile.amd_gpu
-    │           │   ├── Dockerfile.nvidia_gpu
-    │           │   ├── embedding_tei.py    # definition and registration of microservice
-    │           │   ├── README.md
-    │           │   └── requirements.txt
-    │           └── llama_index
-    │               └── . . .
+    |   |   ├── deployment
+    |   |   │   ├── docker_compose
+    |   |   │   │   └── compose.yaml
+    |   |   │   └── kubernetes
+    |   |   │       ├── README.md
+    |   |   │       └── cpu-values.yaml
+    |   |   └── src
+    |   |       ├── Dockerfile
+    |   |       ├── README.md    # could be multiple files for different integrations
+    |   |       ├── __init__.py
+    |   |       ├── integrations
+    |   |       │   ├── __init__.py
+    |   |       │   ├── multimodal_bridgetower.py
+    |   |       │   ├── predictionguard.py
+    |   |       │   └── tei.py
+    |   |       ├── opea_embedding_microservice.py
+    |   |       ├── opea_multimodal_embedding_microservice.py
+    |   |       └── requirements.txt
+    |   ├── third_parties
+    |   │   ├── bridgetower
+    |   │   ├── clip
+    |   │   ├── elasticsearch
+    |   │   ├── gpt-sovits
+    |   │   ├── milvus
+    |   │   ├── mongodb
+    |   │   ├── nginx
+    |   │   ├── opensearch
+    |   │   ├── pathway
+    |   │   ├── pgvector
+    |   │   ├── redis
+    |   │   ├── speecht5
+    |   │   ├── tei
+    |   │   ├── teirerank
+    |   │   ├── tgi
+    |   │   ├── vdms
+    |   │   ├── vllm
+    |   │   ├── wav2lip
+    |   │   └── whisper
     ├── tests
     │   └── embeddings
-    │       ├── test_embeddings_tei_langchain.sh
-    │       ├── test_embeddings_tei_langchain_on_amd_gpu.sh
-    │       └── test_embeddings_tei_llama_index.sh
+    |       ├── test_embeddings_multimodal_bridgetower.sh
+    |       ├── test_embeddings_multimodal_bridgetower_on_intel_hpu.sh
+    |       ├── test_embeddings_predictionguard.sh
+    |       └── test_embeddings_tei.sh
     └── README.md
-
     ```
 
     - **File Descriptions**:
-      - `embedding_tei.py`: This file defines and registers the microservice. It serves as the entrypoint of the Docker container. Refer to [whisper ASR](https://github.com/opea-project/GenAIComps/tree/main/comps/asr/whisper/README.md) for a simple example or [TGI](https://github.com/opea-project/GenAIComps/blob/main/comps/llms/text-generation/tgi/llm.py) for a more complex example that required adapting to the OpenAI API.
-      - `requirements.txt`: This file is used by Docker to install the necessary dependencies.
-      - `Dockerfile`: Used to generate the service container image. Please follow naming conventions:
-        - Dockerfile: `Dockerfile.[vendor]_[hardware]`, vendor and hardware in lower case (i,e Dockerfile.amd_gpu)
-        - Docker Image: `opea/[microservice type]-[microservice sub type]-[library name]-[vendor]-[hardware]:latest` all lower case (i,e opea/llm-vllm-intel-hpu, opea/llm-faqgen-tgi-intel-hpu-svc)
-
-      - `tests/[microservices type]/` : contains end-to-end test for microservices Please refer to an example [test_asr_whisper.sh](https://github.com/opea-project/GenAIComps/blob/main/tests/asr/test_asr_whisper.sh). Please follow naming convention:`test_[microservice type]_[microservice sub type]_[library name]_on_[vendor]_[hardware].sh`
-      - `tests/cores/` : contains Unit Tests (UT) for the core python components (orchestrator, gateway...). Please follow the naming convention:`test_[core component].sh`
-
+      - `deployment/docker_compose` and `deployment/kubernetes`: These folders contain the deployments for the different integrations
+      - `src/opea_embedding_microservice.py`: This file defines and registers the microservice. It serves as the entrypoint of the Docker container.
+      - `src/integrations/tei.py`: Integrations define how OPEA integrates the third_parties services. 
+      - `src/requirements.txt`: This file is used by Docker to install the necessary dependencies for opea component and all integrations
+      - `src/Dockerfile`: Used to generate the service container image.
+      - `tests/[microservices type]/` : contains end-to-end test for microservices. Please follow naming convention:`test_[microservice type]_[integration type].sh` or `test_[microservice type]_[integration type]_on_[hardware].sh` if hardware specific. This will ensure CICD evaluates components correctly.
       - `README.md`: at minimum it should include: microservice description, build, and start commands and a curl command with expected output.
 
-4. Now you have created all the required files, and validated your service. Last step is to modify the `README.md` at the component level `GenAIComps/comps/[microservice type]` to list your new component. Now you are ready to file your PR! Once your PR is merged, in the next release the project  release maintainers will publish the Docker Image for the same to the Docker Hub.
+4. Now you have created all the required files, and validated your service. Last step is to add a `src/README_[interation_type].md` at the component level `GenAIComps/comps/[microservice type]` to list your new component. Now you are ready to file your PR! Once your PR is merged, in the next release the project release maintainers will publish the Docker Image for the same to Docker Hub.
 
 5. After your component has been merged, you are likely interested in building an application with it, and perhaps contributing it also to OPEA! Please continue on to the [Contribute a GenAI Example](#contribute-a-genai-example) guide.
 
+### Contributing A New Vector Database to OPEA
+To contribute a new Vector Database to OPEA, you would need to modify minimally the OPEA sub-project [GenAIComps](https://github.com/opea-project/GenAIComps) that covers installation, launch, usage, and tests. For  completeness, submit a PR to the OPEA sub-project [GenAIExamples](https://github.com/opea-project/GenAIExamples) to illustrate customizing the ChatQnA example application. [See the full documentation for greater detail](https://github.com/opea-project/docs/blob/main/community/add_vectorDB.md).
+
 ### Contribute a GenAI Example
 
-Each of the samples in OPEA GenAIExamples are a common oft used solution. They each have scripts to ease deployment, and have been tested for performance and scalability with Docker compose and Kubernetes. When contributing an example, a Docker Compose deployment is the minimum requirement. However, since OPEA is intended for enterprise applications, supporting Kubernetes deployment is highly encouraged. You can find [examples for Kubernetes deployment](https://github.com/opea-project/GenAIExamples/tree/main/README.md#deploy-examples) using manifests, Helms Charts, and the [GenAI Microservices Connector (GMC)](https://github.com/opea-project/GenAIInfra/tree/main/microservices-connector/README.md). GMC offers additional enterprise features, such as the ability to dynamically adjust pipelines on Kubernetes (e.g., switching to a different LLM on the fly, adding guardrails), composing pipeleines that include external services hosted in public cloud or on-premisees via URL, and supporting sequential, parallel and conditional flows in the pipelines.
+Each of the samples in OPEA GenAIExamples is a commonly used solution. They each have scripts to ease deployment, and have been tested for performance and scalability with Docker Compose and Kubernetes. When contributing an example, a Docker Compose deployment is the minimum requirement. However, since OPEA is intended for enterprise applications, supporting Kubernetes deployment is highly encouraged. You can find [examples for Kubernetes deployment](https://github.com/opea-project/GenAIExamples/tree/main/ChatQnA/kubernetes/helm#readme) using Helm Charts.
 
-- Navigate to [OPEA GenAIExamples](https://github.com/opea-project/GenAIExamples/tree/main/README.md) and check the catalog of examples. If you find one that is very similar to what you are looking for, you can contribute your variation of it to that particular example folder. If you are bringing a completly new application you will need to create a separate example folder.
+- Navigate to [OPEA GenAIExamples](https://github.com/opea-project/GenAIExamples/tree/main/README.md) and check the catalog of examples. If you find one that is very similar to what you are looking for, you can contribute your variation of it to that particular example folder. If you are bringing a completely new application you will need to create a separate example folder. We recommend submitting an RFC first in this case to the doc sub-project to discuss your new application and potentially get suggestions and collect fellow travellers.
 
 - Before stitching together all the microservices to build your application, let's make sure all the required building blocks are available!. Take a look at this **ChatQnA Flow Chart**:
 
@@ -191,64 +229,68 @@ flowchart LR
 
 ```
 
-- OPEA uses gateways to handle requests and route them to the corresponding megaservices (unless you have an agent that will otherwise handle the gateway function). If you are just making small changes to the application, like swaping one DB for another, you can reuse the existing Gateway but if you are contributing a completely new application, you will need to add a Gateway class. Navigate to [OPEA GenAIComps Gateway](https://github.com/opea-project/GenAIComps/blob/main/comps/cores/mega/gateway.py) and implement how Gateway should handle requests for your application. Note that Gateway implementation is moving to GenAIExamples in future release.
-
 - Follow the folder structure in the ChatQA example below:
 
     ```
-    ├── assets
-    ├── benchmark     # optional
-    ├── chatqna.py    # Main application definition (microservices, megaservice, gateway).
-    ├── chatqna.yaml  # starting v1.0 used to generate manifests for k8s w orchestrator_with_yaml
-    ├── docker_compose
-    │   ├── intel
-    │   │   ├── cpu
-    │   │   │   └── xeon
-    │   │   │       ├── compose.yaml
-    │   │   │       ├── README.md
-    │   │   │       └── set_env.sh  #export env variables
-    │   │   └── hpu
-    │   │       └── gaudi
-    │   │           ├── compose.yaml
-    │   │           ├── how_to_validate_service.md    #optional
-    │   │           ├── README.md
-    │   │           └── set_env.sh
-    │   └── nvidia
-    │       └── gpu
-    │           ├── compose.yaml
-    │           ├── README.md
-    │           └── set_env.sh
     ├── Dockerfile
-    ├── docker_image_build
-    │   └── build.yaml
-    ├── kubernetes
-    │   ├── intel
-    │   │   ├── cpu
-    │   │   │   └── xeon
-    │   │   │       ├── gmc
-    │   │   │       │   └── chatQnA_xeon.yaml
-    │   │   │       └── manifest
-    │   │   │           └── chatqna.yaml
-    │   │   └── hpu
-    │   │       └── gaudi
-    │   │           ├── gmc
-    │   │           │   └── chatQnA_gaudi.yaml
-    │   │           └── manifest
-    │   │               └── chatqna.yaml
-    │   ├── amd
-    │   │   ├── cpu
-    │   │   │   ├── gmc
-    │   │   │   └── manifest
-    │   │   └── gpu
-    │   │       ├── gmc
-    │   │       └── manifest
-    │   ├── README_gmc.md  # K8s quickstar
-    │   └── README.md      # quickstart
+    ├── Dockerfile.guardrails
+    ├── Dockerfile.without_rerank
     ├── README.md
+    ├── assets
+    │   └── img
+    ├── benchmark
+    │   ├── accuracy
+    │   │   ├── README.md
+    │   │   ├── eval_crud.py
+    │   │   ├── eval_multihop.py
+    │   │   ├── process_crud_dataset.py
+    │   │   └── run_acc.sh
+    │   └── performance
+    │       └── kubernetes
+    ├── chatqna.py    # Main application definition (microservices, megaservice, gateway).
+    ├── chatqna_wrapper.py
+    ├── docker_compose
+    │   ├── amd
+    │   │   └── gpu
+    │   ├── install_docker.sh
+    │   ├── intel
+    │   │   ├── cpu
+    │   │   └── hpu
+    │   └── nvidia
+    │       └── gpu
+    ├── docker_image_build
+    │   └── build.yaml
+    ├── kubernetes
+    │   ├── gmc
+    │   │   ├── README.md
+    │   │   ├── chatQnA_dataprep_gaudi.yaml
+    │   │   ├── chatQnA_dataprep_xeon.yaml
+    │   │   ├── chatQnA_gaudi.yaml
+    │   │   ├── chatQnA_switch_gaudi.yaml
+    │   │   ├── chatQnA_switch_xeon.yaml
+    │   │   └── chatQnA_xeon.yaml
+    │   └── helm
+    │       ├── README.md
+    │       ├── cpu-values.yaml
+    │       ├── gaudi-values.yaml
+    │       ├── gaudi-vllm-values.yaml
+    │       ├── guardrails-gaudi-values.yaml
+    │       ├── guardrails-values.yaml
+    │       ├── norerank-values.yaml
+    │       └── nv-values.yaml
     ├── tests
-    │   ├── test_compose_on_gaudi.sh  #could be more tests for different flavors of the app
-    │   ├── test_gmc_on_gaudi.sh
-    │   ├── test_manifest_on_gaudi.sh
+    │   ├── test_compose_guardrails_on_gaudi.sh
+    │   ├── test_compose_on_gaudi.sh
+    │   ├── test_compose_on_rocm.sh
+    │   ├── test_compose_on_xeon.sh
+    │   ├── test_compose_pinecone_on_xeon.sh
+    │   ├── test_compose_qdrant_on_xeon.sh
+    │   ├── test_compose_tgi_on_gaudi.sh
+    │   ├── test_compose_tgi_on_xeon.sh
+    │   ├── test_compose_without_rerank_on_gaudi.sh
+    │   ├── test_compose_without_rerank_on_xeon.sh
+    │   ├── test_gmc_on_gaudi.sh
+    │   ├── test_gmc_on_xeon.sh
     └── ui
 
     ```
@@ -256,13 +298,11 @@ flowchart LR
     - **File Descriptions**:
       - `chatqna.py`: application definition using microservice, megaservice and gateway. There could be multiple .py in the folder based on slight modification of the example application.
       - `docker_build_image/build.yaml`: builds necessary images pointing to the Dockerfiles in the GenAIComp repository.
-      - `docker_compose/vendor/device/compose.yaml`: defines pipeline for  Docker compose deployment. For selectng docker image name please follow the naming convention:
+      - `docker_compose/[vendor]/[device]/compose.yaml`: defines pipeline for  Docker Compose deployment. For naming the Docker Image file please follow the naming convention:
         - Docker Image: `opea/[example name]-[feature name]:latest` all lower case (i,e: opea/chatqna, opea/codegen-react-ui)
-      - `kubernetes/vendor/device/manifests/chatqna.yaml`: used for K8s deployemnt
-      - `kubernetes/vendor/device/gmc/chatqna.yaml`: (optional) used for deployment with GMC
-      - `tests/`: at minimum you need to provide an E2E test with Docker compose. If you are contritbutng K8s manifests and GMC yaml, you should also provide test for those. Please follow naming convention:
+      - `kubernetes/helm` and `kubernetes/gmc` : used for K8s deployemnt with helm or [GenAI Microservices Connector (GMC)](https://github.com/opea-project/GenAIInfra/tree/main/microservices-connector#genai-microservices-connectorgmc)
+      - `tests/`: at minimum you need to provide an E2E test with Docker Compose. If you are contributing a K8s Helm Chart or GMC yaml, you should also provide tests for those. Please follow this naming convention:
         - Docker compose test: `tests/test_compose_on_[hardware].sh`
-        - K8s test: `tests/test_manifest_on_[hardware].sh`
         - K8s with GMC test: `tests/test_gmc_on_[hardware].sh`
       - `ui`: (optional)
       - `assets`: nice to have an application flow diagram
@@ -289,7 +329,7 @@ The quality of OPEA project's documentation can have a huge impact on its succes
 
 ### Reporting Issues
 
-If OPEA user runs into some unexpected behavior, reporting the issue to the `Issues` page under the corresponding github project is the proper way to do. Please ensure there is no similar one already existing on the issue list). Please follow the Bug Report template and supply as much information as you can, and any additional insights you might have. It's helpful if the issue submitter can narrow down the problematic behavior to a minimal reproducible test case.
+If you run into unexpected behavior, please report it using the `Issues` page under the corresponding GitHub project but first check if there is already a similar existing issue. If not, please follow the Bug Report template and supply as much information as you can. It's helpful if the issue submitter can narrow down the problematic behavior to a minimal reproducible test case.
 
 ### Proposing New Features
 
@@ -315,7 +355,7 @@ It is not necessary for changes like:
   ```{literalinclude} rfcs/rfc_template.txt
   ```
 
-- Submit the proposal to the `Issues` page of the corresponding OPEA github repository.
+- Submit the proposal to the `Issues` page of the corresponding OPEA GitHub repository.
 - Reach out to your RFC's assignee if you need any help with the RFC process.
 - Amend your proposal in response to reviewer's feedback.
 
@@ -370,7 +410,7 @@ The OPEA projects use GitHub Action for CI test.
 - End to End Test, the PR must pass all end to end tests.
 
 #### Pull Request Review
-You can add reviewers from [the code owners list](./codeowner.md) to your PR.
+You can tag or add reviewers from [the code owners list](https://github.com/opea-project/docs/blob/main/community/codeowner.md) to your PR.
 
 ## Support
 
