@@ -1,6 +1,6 @@
 .. _AgentQnA_Guide:
 
-AgentQnA Sample Guide
+AgentQnA
 #####################
 
 .. note:: This guide is in its early development and is a work-in-progress with
@@ -9,7 +9,7 @@ AgentQnA Sample Guide
 Overview
 ********
 
-This example showcases a hierarchical multi-agent system for question-answering applications. 
+This example showcases a hierarchical multi-agent system for question-answering applications.
 
 Purpose
 *******
