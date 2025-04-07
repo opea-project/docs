@@ -71,6 +71,18 @@ Helm Charts
    /GenAIInfra/helm-charts/common/**/*
    /GenAIInfra/helm-charts/**/*
 
+KubeAI Operator
+***********
+
+.. rst-class:: rst-columns
+
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   /GenAIInfra/kubeai/README
+   /GenAIInfra/kubeai/*
+
 Kubernetes Addons
 *****************
 
