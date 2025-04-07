@@ -15,6 +15,7 @@ Provide following tutorials to cover common user cases:
    CodeTrans/CodeTrans_Guide
    DocSum/DocSum_Guide
    DocIndexRetriever/DocIndexRetriever_Guide
+   VideoQnA/VideoQnA_Guide
 
 -----
 
