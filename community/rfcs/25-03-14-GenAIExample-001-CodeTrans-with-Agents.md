@@ -21,8 +21,6 @@ The Auto-fix step happens in agent service, and the lint check and execution ste
 
 By introducing these agents, the system ensures that only valid code is passed to the LLM and that generated code is verified before reaching the user, thereby improving the overall efficiency and accuracy of the translation process.
 
-
-
 ## Motivation
 
 The current CodeTrans flow has three major issues:
@@ -36,7 +34,6 @@ By introducing Agent mechanisms, we can improve the process in three key ways:
 1. **Reduce error propagation**: Ensure that only valid code reaches the LLM, minimizing incorrect translations.
 2. **Enhance user experience**: Detect input issues early, providing clear feedback to avoid unnecessary debugging.
 3. **Improve code quality**: Automatically verify LLM-generated code and trigger re-generation when needed, increasing overall reliability.
-
 
 ## Use-Cases
 
@@ -300,7 +297,7 @@ Currently we only design to support code execution tool for `Python`.
   * Since the dependencies need to be installed first, the network authority will be processed in two stages:
     1. preperation: install the dependencies into a mounted path
        ```bash
-       # add memory, cpu, processed limit, and disable privilege operations
+       # add memory, cpu, process limit, and disable privilege operations
        docker run --rm -m 512m --cpus="1" --pids-limit=128 \
          --security-opt no-new-privileges -v $(pwd)/code:/code \
          sandbox-python:3.10 \
@@ -313,7 +310,6 @@ Currently we only design to support code execution tool for `Python`.
          python3 -I -E -S /code/user_code.py
        ```
 
-
 ## Expected Benefits
 
 | Feature                      | Benefits                                              |
@@ -324,7 +320,6 @@ Currently we only design to support code execution tool for `Python`.
 | Lint Static Code Check       | Catch bugs early and enforce consistent code quality. |
 | Secure Execution Environment | Protects the system from malicious code.              |
 | Error Classification         | Identifies syntax, logic errors for better debugging. |
-
 
 ## Implementation Plan
 
