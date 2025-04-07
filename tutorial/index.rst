@@ -16,6 +16,7 @@ Provide following tutorials to cover common user cases:
    DocSum/DocSum_Guide
    DocIndexRetriever/DocIndexRetriever_Guide
    VideoQnA/VideoQnA_Guide
+   OpenTelemetry/OpenTelemetry_OPEA_Guide
 
 -----
 
