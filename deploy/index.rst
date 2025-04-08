@@ -80,7 +80,6 @@ KubeAI Operator
    :maxdepth: 1
    :glob:
 
-   /GenAIInfra/kubeai/README
    /GenAIInfra/kubeai/*
 
 Kubernetes Addons
