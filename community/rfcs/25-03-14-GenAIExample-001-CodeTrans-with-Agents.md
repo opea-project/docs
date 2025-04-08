@@ -77,7 +77,7 @@ In some cases, the LLM may repeatedly generate faulty code, leading to an endles
 How the CodeTrans Helps:
 
 - Post-LLM Agent tracks retry attempts.
-- If the LLM fails to produce a correct version after three attempts (or a configurable limit), the system stops further retries.
+- If the LLM fails to produce a correct version after configurable number of attempts, the system stops further retries.
 - Instead of another faulty translation, the user receives:
   - ❌ "Code generation failed after multiple attempts. Here are possible reasons and debugging suggestions."
 - The system provides relevant error logs and hints, helping the developer troubleshoot the issue efficiently.
