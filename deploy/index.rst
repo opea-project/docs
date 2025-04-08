@@ -72,7 +72,7 @@ Helm Charts
    /GenAIInfra/helm-charts/**/*
 
 KubeAI Operator
-***********
+***************
 
 .. rst-class:: rst-columns
 
