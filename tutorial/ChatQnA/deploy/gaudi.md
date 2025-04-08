@@ -478,7 +478,7 @@ To access the frontend, open the following URL in a web browser: http://{host_ip
 
 To access the Conversational UI (react based) frontend, modify the UI service in the `compose.yaml` file. Replace `chatqna-gaudi-ui-server` service with the `chatqna-gaudi-conversation-ui-server` service as shown below:
 ```yaml
-chaqtna-gaudi-conversation-ui-server:
+chatqna-gaudi-conversation-ui-server:
   image: opea/chatqna-conversation-ui:${TAG:-latest}
   container_name: chatqna-gaudi-conversation-ui-server
   environment:
