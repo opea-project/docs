@@ -214,7 +214,7 @@ If a load balancer is used, there is noneed to include `-L 80:localhost:80`.
 ## Deploy the ChatQnA Solution
 Use the command below to install docker:
 ```bash
-wget https://raw.githubusercontent.com/opea-project/GenAIExamples/refs/heads/main/ChatQnA/docker_compose/install_docker.sh
+wget https://raw.githubusercontent.com/opea-project/docs/refs/heads/main/guide/installation/install_docker.sh
 chmod +x install_docker.sh
 ./install_docker.sh
 ```
