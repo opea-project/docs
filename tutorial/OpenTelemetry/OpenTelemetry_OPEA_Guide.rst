@@ -52,6 +52,7 @@ Below are the GenAIExamples that include support for Grafana, Prometheus, and Ja
    :maxdepth: 1
 
    ChatQnA <deploy/ChatQnA>
+   AgentQnA <deploy/AgentQnA>
 
 How to Monitor 
 ****************
@@ -108,6 +109,7 @@ These sections offer insights into how to interpret the data and utilize the das
    :maxdepth: 1
 
    ChatQnA <deploy/ChatQnA>
+   AgentQnA <deploy/AgentQnA>
 
 
 3. Jaeger
@@ -158,6 +160,7 @@ These sections offer insights into how to interpret the data and utilize the das
    :maxdepth: 1
 
    ChatQnA <deploy/ChatQnA>
+   AgentQnA <deploy/AgentQnA>
 
 
 Code Instrumentations for OPEA Tracing

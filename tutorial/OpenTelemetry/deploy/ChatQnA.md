@@ -6,24 +6,9 @@ A dashboard for monitoring CPU statistics is also available, offering comprehens
 
 # Table of contents
 
-1. [Deployment](#deployment)
-2. [Telemetry Tracing with Jaeger on Gaudi](#telemetry-tracing-with-jaeger-on-gaudi)
-3. [Telemetry Metrics with Grafana on Gaudi](#telemetry-metrics-with-grafana-on-gaudi)
+1. [Telemetry Tracing with Jaeger on Gaudi](#telemetry-tracing-with-jaeger-on-gaudi)
+2. [Telemetry Metrics with Grafana on Gaudi](#telemetry-metrics-with-grafana-on-gaudi)
 
-## Deployment
-
-### Xeon
-
-```bash
-cd GenAIExamples/ChatQnA/docker_compose/intel/cpu/xeon/
-docker compose -f compose.yaml -f compose.telemetry.yaml up -d
-```
-### Gaudi
-
-```bash
-cd GenAIExamples/ChatQnA/docker_compose/intel/hpu/gaudi/
-docker compose -f compose.yaml -f compose.telemetry.yaml up -d
-```
 
 ## Telemetry Tracing with Jaeger on Gaudi
 
