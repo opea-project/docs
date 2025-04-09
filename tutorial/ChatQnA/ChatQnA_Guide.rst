@@ -133,12 +133,14 @@ After launching the ChatQnA application, a curl command can be used to ensure th
 megaservice is working properly. The example below assumes a document containing 
 new information is uploaded to the vector database before querying.
 .. code-block:: bash
+   
    curl http://${host_ip}:8888/v1/chatqna -H "Content-Type: application/json" -d '{
       "messages": "What is the revenue of Nike in 2023?"
       }'
 
 Here is the output for reference:
 .. code-block:: bash
+   
    data: b'\n'
    data: b'An'
    data: b'swer'
