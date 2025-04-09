@@ -169,7 +169,7 @@ Post-LLM Agent:
 
 - Check code statically, executes the LLM-generated code, and verifies its correctness.
   - If execution is successful, the translated code is returned to the user.
-  - If execution fails, the error details are sent back to the LLM for regeneration (up to 3 attempts).
+  - If execution fails, the error details are sent back to the LLM for regeneration (within configurable number of attempts).
 
 Lint Check Tool:
 
