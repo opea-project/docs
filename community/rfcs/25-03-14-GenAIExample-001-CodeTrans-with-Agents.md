@@ -157,7 +157,7 @@ Pre-LLM Agent:
 - Do lint check statically.
   - If semantic errors are detected, LLM will fix it according to lint check report.
 - Runs the user-provided code to check for syntax or logical errors.
-- If errors are detected, the agent attempts to automatically fix them.
+- If errors are detected, the agent attempts to automatically fix them (within configurable number of attempts).
   - If successfully corrected, the modified code proceeds to the LLM.
   - If the errors cannot be resolved, the agent returns an error message, prompting the user to review and manually fix the code before proceeding.
 
