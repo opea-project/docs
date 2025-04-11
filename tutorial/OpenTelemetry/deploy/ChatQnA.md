@@ -52,7 +52,7 @@ The diagrams below illustrate a run with 16 user requests, resulting in a total 
 In this scenario, the larger circles, representing CPU traces, took less time than the smaller circles,  
 indicating that the requests required more processing time on Gaudi compared to the CPU. 
 
-![chatqna_gaudi_breakdown](../assets/chatqna_16reqs.png).
+![chatqna_gaudi_16reqs](../assets/chatqna_16reqs.png).
 
 ## Telemetry Metrics with Grafana on Gaudi
 
