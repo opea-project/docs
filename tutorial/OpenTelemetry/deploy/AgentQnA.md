@@ -16,7 +16,7 @@ Initially, all agents in the example are set up.
 In the scenario below, the React Agent, SQL Agent, and RAG Agent are utilized within the AgentQnA example.  
 ![jaeger_init](../assets/agent_jaeger_init.png)  
 
-By expanding the React Agent, the ReactAgentNodeLama is identified as the core function implmenting the ReactAgent.   
+By expanding the React Agent, the ReactAgentNodeLama is identified as the core function implementing the ReactAgent.   
 ![jaeger_react_init](../assets/agent_jaeger_react_init.png)  
 
 Following [AgentQnA validate services session](https://github.com/opea-project/GenAIExamples/tree/main/AgentQnA#validate-services) to test AgentQnA with pre-defined questions.
