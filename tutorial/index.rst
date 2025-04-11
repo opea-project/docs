@@ -17,6 +17,13 @@ Provide following tutorials to cover common user cases:
    DocIndexRetriever/DocIndexRetriever_Guide
    VideoQnA/VideoQnA_Guide
 
+Provide following tutorials to cover more advanced features like OPEA Open Telemetry:
+
+.. toctree::
+   :maxdepth: 1
+
+   OpenTelemetry/OpenTelemetry_OPEA_Guide
+
 -----
 
 
