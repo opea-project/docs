@@ -19,8 +19,10 @@ This trace contains two spans: one for the first token and another for all subse
 
 ![chatqna_1req](../assets/jaeger_ui_opea_chatqna_1req.png)
 
-The first trace along the timeline is opea: ServiceOrchestrator.schedule, which operates on the CPU. 
-This trace provides insights into the orchestration and scheduling of services within the ChatQnA megaservice, highlighting the execution flow during the process.
+The first trace along the timeline is opea: ServiceOrchestrator.schedule, which runs on the CPU. 
+
+It provides insights into the orchestration and scheduling of services within the ChatQnA megaservice, highlighting the execution flow during the process.
+
 
 ![chatqna_cpu_req](../assets/jaeger_ui_opea_chatqna_req_cpu.png)
 

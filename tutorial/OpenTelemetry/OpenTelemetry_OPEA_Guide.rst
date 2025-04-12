@@ -36,7 +36,7 @@ Deployment
 
 In the OpenTelemetry-enabled GenAIExamples, OpenTelemetry Metrics is activated by default, while OpenTelemetry Tracing is initially disabled.  
 Similarly, the Telemetry UI services, including Grafana, Prometheus, and Jaeger, are also disabled by default.  
-To enable OTel tracing along with Grafana, Prometheus, and Jaeger for an example, you can include an additional telemetry Docker Compose YAML file. 
+To enable OTel tracing along with Grafana, Prometheus, and Jaeger you need to include an additional telemetry Docker Compose YAML file. 
 For instance, adding compose.telemetry.yaml alongside compose.yaml will activate all telemetry features for the example.  
 
 
@@ -57,7 +57,7 @@ Below are the GenAIExamples that include support for Grafana, Prometheus, and Ja
 How to Monitor 
 ****************
 
-OpenTelemetry metrics and tracing can be visualized through three primary monitoring UI web pages.  
+OpenTelemetry metrics and tracing currently can be visualized through one of three primary monitoring UI web pages.  
 
 1. Prometheus
 +++++++++++++++
@@ -82,7 +82,7 @@ If a service is marked as "down," Grafana Dashboards will be unable to display t
 
 The Grafana UI displays telemetry metrics through pre-defined dashboards, providing a clear visualization of data. 
 For OPEA examples, Grafana is configured by default to use Prometheus as its data source, eliminating the need for manual setup. 
-The Grafana UI web page could be accessed using the following URL.
+The Grafana UI web page can be accessed using the following URL.
 
 .. code-block:: bash
 
