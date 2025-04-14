@@ -13,7 +13,7 @@ A dashboard for monitoring CPU statistics is also available, offering comprehens
 ## Telemetry Tracing with Jaeger on Gaudi
 
 After ChatQnA processes a question, two traces should appear along the timeline.  
-The trace for opea: ServiceOrchestrator.schedule runs on the CPU and includes seven spans, one of which represents the LLM host functions in general.  
+The trace for opea: ServiceOrchestrator.schedule runs on the CPU and includes seven spans, one of which represents the LLM service running on CPU.
 For LLM functions executed on Gaudi, stream requests are displayed under opea: llm_generate_stream.  
 This trace contains two spans: one for the first token and another for all subsequent tokens. 
 
@@ -44,7 +44,6 @@ highlighting the processing of stream requests and the associated spans for toke
 Clicking on the opea: llm_generate_stream trace will expand to reveal two spans along the timeline.  
 The first span represents the execution time for the first token, which took 15.12 ms in this run.  
 The second span captures the execution time for all subsequent tokens, taking 920 ms as shown in the diagram. 
-These spans provide a detailed view of the token generation process and the performance of LLM functions on Gaudi.
 
 ![chatqna_gaudi_breakdown](../assets/jaeger_ui_opea_chatqna_req_breakdown_2.png)
 
