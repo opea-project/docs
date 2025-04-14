@@ -10,7 +10,6 @@ OTel enables developers to instrument, generate, collect, and export telemetry d
 The telemetry data can come in the form of traces, metrics, and logs.  
 OPEA integrates OpenTelemetry's metrics and tracing capabilities to enhance its telemetry support, providing users with valuable insights into system performance.  
 
-
 How It Works
 ************
 OPEA Comps offers telemetry functionalities for metrics and tracing by integrating with tools such as Prometheus, Grafana, and Jaeger. Below is a brief introduction to the workflows of those tools:
@@ -18,8 +17,6 @@ OPEA Comps offers telemetry functionalities for metrics and tracing by integrati
 .. image:: assets/opea_telemetry.jpg
   :width: 800
   :alt: Alternative text
-
-
 
 The majority of OPEA's micro and mega services are equipped to support OpenTelemetry metrics, which are exported in Prometheus format via the /metrics endpoint.  
 For further guidance, please refer to the section on `Telemetry Metrics <https://github.com/opea-project/GenAIComps/tree/main/comps/cores/telemetry#metrics>`_.
@@ -29,7 +26,6 @@ OPEA also supports OpenTelemetry tracing, with several OPEA GenAIExamples instru
 Additionally, HuggingFace's Text Embedding Inference and Text Generation Inference services are enabled for select OPEA GenAIExamples.   
 The Jaeger UI monitors trace events from OPEA microservices, TEI, and TGI. Once Jaeger endpoints are configured in OPEA microservices, TEI, and TGI, 
 trace data will automatically be reported and visualized in the Jaeger UI.  
-
 
 Deployment
 **********
@@ -111,7 +107,6 @@ These sections offer insights into how to interpret the data and utilize the das
    ChatQnA <deploy/ChatQnA>
    AgentQnA <deploy/AgentQnA>
 
-
 3. Jaeger
 +++++++++++++++
 
@@ -144,7 +139,6 @@ Select "opea" as the service, then click the "Find Traces" button to view the tr
   :width: 400
   :alt: Alternative text
 
-
 All traces will be displayed on the UI. 
 The diagram in the upper right corner provides a visual representation of all requests along the timeline. Meanwhile, 
 the diagrams in the lower right corner illustrate all spans within each request, offering detailed insights into the execution flow and timing.
@@ -162,14 +156,12 @@ These sections offer insights into how to interpret the data and utilize the das
    ChatQnA <deploy/ChatQnA>
    AgentQnA <deploy/AgentQnA>
 
-
 Code Instrumentations for OPEA Tracing
 ****************************************
 
 Enabling OPEA OpenTelemetry tracing for a function is straightforward. 
 First, import opea_telemetry, and then apply the Python decorator @opea_telemetry to the function you wish to trace. 
 Below is an example of how to trace your_func using OPEA tracing:  
-
 
 .. code-block:: python
 
@@ -178,6 +170,4 @@ Below is an example of how to trace your_func using OPEA tracing:
    @opea_telemetry
    async def your_func():
       pass
-
-
 
