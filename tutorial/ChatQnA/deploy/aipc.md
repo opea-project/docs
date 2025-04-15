@@ -16,24 +16,24 @@ The solution is aimed to show how to use Redis vectorDB for RAG and the llama-3 
 
 ## Prerequisites 
 
-The first step is to clone the [GenAIExamples](https://github.com/opea-project/GenAIExamples) GitHub repo. Set a workspace path and the desired release version with the **number only** (i.e. 1.0, 1.1, etc) and checkout that version using the tag. 
-
+Set up a workspace and clone the [GenAIExamples](https://github.com/opea-project/GenAIExamples) GitHub repo.
 ```bash
-# Set workspace
-export WORKSPACE=<path>
+export WORKSPACE=<Path>
 cd $WORKSPACE
+git clone https://github.com/opea-project/GenAIExamples.git # GenAIExamples
+```
 
-# Set desired release version - number only
-export RELEASE_VERSION=<insert-release-version>
-
-# GenAIExamples
-git clone https://github.com/opea-project/GenAIExamples.git
+**Optional** It is recommended to use a stable release version by setting `RELEASE_VERSION` to a **number only** (i.e. 1.0, 1.1, etc) and checkout that version using the tag. Otherwise, by default, the main branch with the latest updates will be used.
+```bash
+export RELEASE_VERSION=<Release_Version> # Set desired release version - number only
 cd GenAIExamples
 git checkout tags/v${RELEASE_VERSION}
 cd ..
 ```
 
-Set up a [HuggingFace](https://huggingface.co/) account and generate a [user access token](https://huggingface.co/docs/transformers.js/en/guides/private#step-1-generating-a-user-access-token). Then set an environment variable with the HuggingFace token:
+Set up a [HuggingFace](https://huggingface.co/) account and generate a [user access token](https://huggingface.co/docs/transformers.js/en/guides/private#step-1-generating-a-user-access-token). Request access to the [meta-llama/Meta-Llama-3-8B-Instruct](https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct) model.
+
+Set an environment variable with the HuggingFace token:
 ```bash
 export HUGGINGFACEHUB_API_TOKEN="Your_Huggingface_API_Token"
 ```
