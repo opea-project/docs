@@ -23,24 +23,24 @@ Port forwarding can be done by appending the -L input argument to the SSH comman
 -L 5173:localhost:5173 -L 6007:localhost:6007 -L 7778:localhost:7778
 ```
 
-Clone the [GenAIExamples](https://github.com/opea-project/GenAIExamples) GitHub repo. Set a workspace path and the desired release version with the **number only** (i.e. 1.0, 1.1, etc) and checkout that version using the tag. 
-
+Set up a workspace and clone the [GenAIExamples](https://github.com/opea-project/GenAIExamples) GitHub repo.
 ```bash
-# Set workspace
 export WORKSPACE=<Path>
 cd $WORKSPACE
+git clone https://github.com/opea-project/GenAIExamples.git # GenAIExamples
+```
 
-# Set desired release version - number only
-export RELEASE_VERSION=<Release_Version>
-
-# GenAIExamples
-git clone https://github.com/opea-project/GenAIExamples.git
+**Optional** It is recommended to use a stable release version by setting `RELEASE_VERSION` to a **number only** (i.e. 1.0, 1.1, etc) and checkout that version using the tag. Otherwise, by default, the main branch with the latest updates will be used.
+```bash
+export RELEASE_VERSION=<Release_Version> # Set desired release version - number only
 cd GenAIExamples
 git checkout tags/v${RELEASE_VERSION}
 cd ..
 ```
 
-Set up [HuggingFace](https://huggingface.co/) account and generate a [user access token](https://huggingface.co/docs/transformers.js/en/guides/private#step-1-generating-a-user-access-token). Then set an environment variable with the HuggingFace token:
+Set up a [HuggingFace](https://huggingface.co/) account and generate a [user access token](https://huggingface.co/docs/transformers.js/en/guides/private#step-1-generating-a-user-access-token). The [Qwen2.5-Coder-7B-Instruct](https://huggingface.co/Qwen/Qwen2.5-Coder-7B-Instruct) model does not need special access, but the token can be used with other models requiring access.
+
+Set an environment variable with the HuggingFace token:
 ```bash
 export HUGGINGFACEHUB_API_TOKEN="Your_Huggingface_API_Token"
 ```
@@ -218,7 +218,23 @@ To access the frontend, open the following URL in a web browser: http://${host_i
 
 ## Stop the Services
 
-To stop and remove all the containers, use the command below:
+To stop and remove all the containers, use the commands below:
+
+::::{tab-set}
+:::{tab-item} vllm
+:sync: vllm
+
 ```bash
-docker compose -f compose.yaml down
+cd $WORKSPACE/GenAIExamples/CodeGen/docker_compose/intel/cpu/xeon
+docker compose --profile codegen-xeon-vllm down
 ```
+:::
+:::{tab-item} TGI
+:sync: TGI
+
+```bash
+cd $WORKSPACE/GenAIExamples/CodeGen/docker_compose/intel/cpu/xeon
+docker compose --profile codegen-xeon-tgi down
+```
+:::
+::::
