@@ -23,7 +23,7 @@ cd $WORKSPACE
 git clone https://github.com/opea-project/GenAIExamples.git # GenAIExamples
 ```
 
-**Optional** It is recommended to use a stable release version by setting `RELEASE_VERSION` to a **number only** (i.e. 1.0, 1.1, etc) and checkout that version using the tag. Otherwise, by default, the main branch with the latest updates will be used.
+**(Optional)** It is recommended to use a stable release version by setting `RELEASE_VERSION` to a **number only** (i.e. 1.0, 1.1, etc) and checkout that version using the tag. Otherwise, by default, the main branch with the latest updates will be used.
 ```bash
 export RELEASE_VERSION=<Release_Version> # Set desired release version - number only
 cd GenAIExamples
