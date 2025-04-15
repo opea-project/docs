@@ -12,7 +12,7 @@ The list of microservices from OPEA GenAIComps are used to deploy a single node 
 4. Reranking
 5. LLM with Ollama
 
-The solution is aimed to show how to use Redis vectorDB for RAG and the llama-3 model for LLM inference on Intel Client PCs. Steps will include setting up docker containers, utilizing a sample Nike dataset in PDF format, and asking a question about Nike to get a response. There are 2 modes of UI that can be deployed:
+The solution is aimed to show how to use Redis vectorDB for RAG and the llama-3 model for LLM inference on Intel Client PCs. Steps will include setting up docker containers, utilizing a sample Nike dataset in PDF format, and asking a question about Nike to get a response. There are multiple versions of the UI that can be deployed but only the default one will be covered in this tutorial.
 
 ## Prerequisites 
 
@@ -54,7 +54,7 @@ For machines behind a firewall, set up the proxy environment variables:
 export http_proxy="Your_HTTP_Proxy"
 export https_proxy="Your_HTTPs_Proxy"
 # Example: no_proxy="localhost, 127.0.0.1, 192.168.1.1"
-export no_proxy="Your_No_Proxy",chatqna-xeon-ui-server,chatqna-xeon-backend-server,dataprep-redis-service,tei-embedding-service,retriever,tei-reranking-service,tgi-service,vllm-service
+export no_proxy="Your_No_Proxy",chatqna-xeon-ui-server,chatqna-xeon-backend-server,dataprep-redis-service,tei-embedding-service,retriever,tei-reranking-service,tgi-service,vllm-service,llm-faqgen
 ```
 
 The examples utilize model weights from Ollama and langchain.
@@ -225,8 +225,7 @@ Run this command to see this info:
 docker ps -a
 ```
 
-The sample output is for OPEA release v1.2.
-
+Sample output:
 ::::{tab-set}
 
 :::{tab-item} Ollama
@@ -234,12 +233,12 @@ The sample output is for OPEA release v1.2.
 
 ```bash
 CONTAINER ID   IMAGE                                                   COMMAND                  CREATED          STATUS                      PORTS                                                                                  NAMES
-5db065a9fdf9   opea/chatqna-ui:1.2                                  "docker-entrypoint.s…"   29 seconds ago   Up 25 seconds               0.0.0.0:5173->5173/tcp, :::5173->5173/tcp                                              chatqna-aipc-ui-server
-6fa87927d00c   opea/chatqna:1.2                                     "python chatqna.py"      29 seconds ago   Up 25 seconds               0.0.0.0:8888->8888/tcp, :::8888->8888/tcp                                              chatqna-aipc-backend-server
-bdc93be9ce0c   opea/retriever-redis:1.2                             "python retriever_re…"   29 seconds ago   Up 3 seconds                0.0.0.0:7000->7000/tcp, :::7000->7000/tcp                                              retriever-redis-server
-add761b504bc   opea/reranking-tei:1.2                               "python reranking_te…"   29 seconds ago   Up 26 seconds               0.0.0.0:8000->8000/tcp, :::8000->8000/tcp                                              reranking-tei-aipc-server
-d6b540a423ac   opea/dataprep-redis:1.2                              "python prepare_doc_…"   29 seconds ago   Up 26 seconds               0.0.0.0:6007->6007/tcp, :::6007->6007/tcp                                              dataprep-redis-server
-6662d857a154   opea/embedding-tei:1.2                               "python embedding_te…"   29 seconds ago   Up 26 seconds               0.0.0.0:6000->6000/tcp, :::6000->6000/tcp                                              embedding-tei-server
+5db065a9fdf9   opea/chatqna-ui:latest                                  "docker-entrypoint.s…"   29 seconds ago   Up 25 seconds               0.0.0.0:5173->5173/tcp, :::5173->5173/tcp                                              chatqna-aipc-ui-server
+6fa87927d00c   opea/chatqna:latest                                     "python chatqna.py"      29 seconds ago   Up 25 seconds               0.0.0.0:8888->8888/tcp, :::8888->8888/tcp                                              chatqna-aipc-backend-server
+bdc93be9ce0c   opea/retriever-redis:latest                             "python retriever_re…"   29 seconds ago   Up 3 seconds                0.0.0.0:7000->7000/tcp, :::7000->7000/tcp                                              retriever-redis-server
+add761b504bc   opea/reranking-tei:latest                               "python reranking_te…"   29 seconds ago   Up 26 seconds               0.0.0.0:8000->8000/tcp, :::8000->8000/tcp                                              reranking-tei-aipc-server
+d6b540a423ac   opea/dataprep-redis:latest                              "python prepare_doc_…"   29 seconds ago   Up 26 seconds               0.0.0.0:6007->6007/tcp, :::6007->6007/tcp                                              dataprep-redis-server
+6662d857a154   opea/embedding-tei:latest                               "python embedding_te…"   29 seconds ago   Up 26 seconds               0.0.0.0:6000->6000/tcp, :::6000->6000/tcp                                              embedding-tei-server
 8b226edcd9db   ghcr.io/huggingface/text-embeddings-inference:cpu-1.5   "text-embeddings-rou…"   29 seconds ago   Up 27 seconds               0.0.0.0:8808->80/tcp, :::8808->80/tcp                                                  tei-reranking-server
 e1fc81b1d542   redis/redis-stack:7.2.0-v9                              "/entrypoint.sh"         29 seconds ago   Up 27 seconds               0.0.0.0:6379->6379/tcp, :::6379->6379/tcp, 0.0.0.0:8001->8001/tcp, :::8001->8001/tcp   redis-vector-db
 051e0d68e263   ghcr.io/huggingface/text-embeddings-inference:cpu-1.5   "text-embeddings-rou…"   29 seconds ago   Up 27 seconds               0.0.0.0:6006->80/tcp, :::6006->80/tcp                                                  tei-embedding-server
@@ -452,7 +451,7 @@ The output will be similar to that of the ChatQnA megaservice.
 
 ## Launch UI
 
-To access the frontend, open the following URL in a web browser: http://{host_ip}:{NGINX_PORT}. By default, the UI runs on port 5173 internally. A different host port can be used to access the frontend. Simply modify the port mapping in the `compose.yaml` file as shown below:
+To access the frontend, open the following URL in a web browser: http://${host_ip}:${NGINX_PORT}. By default, the UI runs on port 5173 internally. A different host port can be used to access the frontend. Simply modify the port mapping in the `compose.yaml` file as shown below:
 ```yaml
   chatqna-aipc-ui-server:
     image: opea/chatqna-ui${TAG:-latest}

@@ -12,10 +12,7 @@ The list of microservices from OPEA GenAIComps are used to deploy a single node 
 4. Reranking
 5. LLM with vLLM or TGI
 
-The solution is aimed to show how to use Redis vectorDB for RAG and Meta-Llama-3-8B-Instruct model for LLM inference on Intel® Xeon® Scalable processors. Steps will include setting up docker containers, utilizing a sample Nike dataset in PDF format, and asking a question about Nike to get a response. There are 2 modes of UI that can be deployed:
-
-1. Basic UI
-2. Conversational UI
+The solution is aimed to show how to use Redis vectorDB for RAG and Meta-Llama-3-8B-Instruct model for LLM inference on Intel® Xeon® Scalable processors. Steps will include setting up docker containers, utilizing a sample Nike dataset in PDF format, and asking a question about Nike to get a response. There are multiple versions of the UI that can be deployed but only the default one will be covered in this tutorial.
 
 ## Prerequisites
 
@@ -57,7 +54,7 @@ For machines behind a firewall, set up the proxy environment variables:
 export http_proxy="Your_HTTP_Proxy"
 export https_proxy="Your_HTTPs_Proxy"
 # Example: no_proxy="localhost, 127.0.0.1, 192.168.1.1"
-export no_proxy="Your_No_Proxy",chatqna-xeon-ui-server,chatqna-xeon-backend-server,dataprep-redis-service,tei-embedding-service,retriever,tei-reranking-service,tgi-service,vllm-service
+export no_proxy="Your_No_Proxy",chatqna-xeon-ui-server,chatqna-xeon-backend-server,dataprep-redis-service,tei-embedding-service,retriever,tei-reranking-service,tgi-service,vllm-service,llm-faqgen
 ```
 
 ## Use Case Setup
@@ -173,8 +170,7 @@ Run this command to see this info:
 docker ps -a
 ```
 
-The sample output is for OPEA release v1.2.
-
+Sample output:
 ::::{tab-set}
 
 :::{tab-item} vllm
@@ -182,19 +178,19 @@ The sample output is for OPEA release v1.2.
 ```bash
 CONTAINER ID   IMAGE                                                   COMMAND                  CREATED          STATUS                            PORTS
                                         NAMES
-eabb930edad6   opea/nginx:1.2                                          "/docker-entrypoint.…"   9 seconds ago    Up 8 seconds                      0.0.0.0:80->80/tcp, [::]:80->80/tcp
+eabb930edad6   opea/nginx:latest                                          "/docker-entrypoint.…"   9 seconds ago    Up 8 seconds                      0.0.0.0:80->80/tcp, [::]:80->80/tcp
                                         chatqna-gaudi-nginx-server
-7e3c16a791b1   opea/chatqna-ui:1.2                                     "docker-entrypoint.s…"   9 seconds ago    Up 8 seconds                      0.0.0.0:5173->5173/tcp, [::]:5173->5173/tcp
+7e3c16a791b1   opea/chatqna-ui:latest                                     "docker-entrypoint.s…"   9 seconds ago    Up 8 seconds                      0.0.0.0:5173->5173/tcp, [::]:5173->5173/tcp
                                         chatqna-gaudi-ui-server
-482365a6e945   opea/chatqna:1.2                                        "python chatqna.py"      9 seconds ago    Up 9 seconds                      0.0.0.0:8888->8888/tcp, [::]:8888->8888/tcp
+482365a6e945   opea/chatqna:latest                                        "python chatqna.py"      9 seconds ago    Up 9 seconds                      0.0.0.0:8888->8888/tcp, [::]:8888->8888/tcp
                                         chatqna-gaudi-backend-server
-1379226ad3ff   opea/dataprep:1.2                                       "sh -c 'python $( [ …"   9 seconds ago    Up 9 seconds                      0.0.0.0:6007->5000/tcp, [::]:6007->5000/tcp
+1379226ad3ff   opea/dataprep:latest                                       "sh -c 'python $( [ …"   9 seconds ago    Up 9 seconds                      0.0.0.0:6007->5000/tcp, [::]:6007->5000/tcp
                                         dataprep-redis-server
-1cebe2d70e40   opea/retriever:1.2                                      "python opea_retriev…"   9 seconds ago    Up 9 seconds                      0.0.0.0:7000->7000/tcp, [::]:7000->7000/tcp
+1cebe2d70e40   opea/retriever:latest                                      "python opea_retriev…"   9 seconds ago    Up 9 seconds                      0.0.0.0:7000->7000/tcp, [::]:7000->7000/tcp
                                         retriever-redis-server
 bfe41a5353b6   ghcr.io/huggingface/tei-gaudi:1.5.0                     "text-embeddings-rou…"   10 seconds ago   Up 9 seconds                      0.0.0.0:8808->80/tcp, [::]:8808->80/tcp
                                         tei-reranking-gaudi-server
-11a94e7ce3c9   opea/vllm-gaudi:1.2                                     "python3 -m vllm.ent…"   10 seconds ago   Up 9 seconds (health: starting)   0.0.0.0:8007->80/tcp, [::]:8007->80/tcp
+11a94e7ce3c9   opea/vllm-gaudi:latest                                     "python3 -m vllm.ent…"   10 seconds ago   Up 9 seconds (health: starting)   0.0.0.0:8007->80/tcp, [::]:8007->80/tcp
                                         vllm-gaudi-server
 4d7b9aab82b1   redis/redis-stack:7.2.0-v9                              "/entrypoint.sh"         10 seconds ago   Up 9 seconds                      0.0.0.0:6379->6379/tcp, [::]:6379->6379/tcp, 0.0.0.
 0:8001->8001/tcp, [::]:8001->8001/tcp   redis-vector-db
@@ -207,11 +203,11 @@ bfe41a5353b6   ghcr.io/huggingface/tei-gaudi:1.5.0                     "text-emb
 :sync: TGI
 ```bash
 CONTAINER ID   IMAGE                                                   COMMAND                  CREATED          STATUS          PORTS                                                                                                                                                                                 NAMES
-353775bfa0dc   opea/nginx:1.2                                          "/docker-entrypoint.…"   52 seconds ago   Up 50 seconds   0.0.0.0:8010->80/tcp, [::]:8010->80/tcp                                                                                                                                               chatqna-gaudi-nginx-server
-c4f75d75f18e   opea/chatqna-ui:1.2                                     "docker-entrypoint.s…"   52 seconds ago   Up 50 seconds   0.0.0.0:5173->5173/tcp, [::]:5173->5173/tcp                                                                                                                                           chatqna-gaudi-ui-server
-4c5dc803c8c8   opea/chatqna:1.2                                        "python chatqna.py"      52 seconds ago   Up 51 seconds   0.0.0.0:8888->8888/tcp, [::]:8888->8888/tcp                                                                                                                                           chatqna-gaudi-backend-server
-6bdfebe016c0   opea/dataprep:1.2                                       "sh -c 'python $( [ …"   52 seconds ago   Up 51 seconds   0.0.0.0:6007->5000/tcp, [::]:6007->5000/tcp                                                                                                                                           dataprep-redis-server
-6fb5264a8465   opea/retriever:1.2                                      "python opea_retriev…"   52 seconds ago   Up 51 seconds   0.0.0.0:7000->7000/tcp, [::]:7000->7000/tcp                                                                                                                                           retriever-redis-server
+353775bfa0dc   opea/nginx:latest                                          "/docker-entrypoint.…"   52 seconds ago   Up 50 seconds   0.0.0.0:8010->80/tcp, [::]:8010->80/tcp                                                                                                                                               chatqna-gaudi-nginx-server
+c4f75d75f18e   opea/chatqna-ui:latest                                     "docker-entrypoint.s…"   52 seconds ago   Up 50 seconds   0.0.0.0:5173->5173/tcp, [::]:5173->5173/tcp                                                                                                                                           chatqna-gaudi-ui-server
+4c5dc803c8c8   opea/chatqna:latest                                        "python chatqna.py"      52 seconds ago   Up 51 seconds   0.0.0.0:8888->8888/tcp, [::]:8888->8888/tcp                                                                                                                                           chatqna-gaudi-backend-server
+6bdfebe016c0   opea/dataprep:latest                                       "sh -c 'python $( [ …"   52 seconds ago   Up 51 seconds   0.0.0.0:6007->5000/tcp, [::]:6007->5000/tcp                                                                                                                                           dataprep-redis-server
+6fb5264a8465   opea/retriever:latest                                      "python opea_retriev…"   52 seconds ago   Up 51 seconds   0.0.0.0:7000->7000/tcp, [::]:7000->7000/tcp                                                                                                                                           retriever-redis-server
 1f4f4f691d36   ghcr.io/huggingface/tgi-gaudi:2.0.6                     "text-generation-lau…"   55 seconds ago   Up 51 seconds   0.0.0.0:8005->80/tcp, [::]:8005->80/tcp                                                                                                                                               tgi-gaudi-server
 9c50dfc17428   ghcr.io/huggingface/tei-gaudi:1.5.0                     "text-embeddings-rou…"   55 seconds ago   Up 51 seconds   0.0.0.0:8808->80/tcp, [::]:8808->80/tcp                                                                                                                                               tei-reranking-gaudi-server
 a8de74b4594d   ghcr.io/huggingface/text-embeddings-inference:cpu-1.5   "text-embeddings-rou…"   55 seconds ago   Up 51 seconds   0.0.0.0:8090->80/tcp, [::]:8090->80/tcp                                                                                                                                               tei-embedding-gaudi-server
@@ -453,54 +449,16 @@ curl http://${host_ip}:${NGINX_PORT}/v1/chatqna \
 
 The output will be similar to that of the ChatQnA megaservice.
 
-#### (Optional) Guardrail Microservice
-If the Guardrail microservice is enabled, test it using the command below:
-```bash
-curl http://${host_ip}:9090/v1/guardrails\
-  -X POST \
-  -d '{"text":"How do you buy a tiger in the US?","parameters":{"max_new_tokens":32}}' \
-  -H 'Content-Type: application/json'
-```
-
 ## Launch UI
 
 ### Basic UI
-To access the frontend, open the following URL in a web browser: http://{host_ip}:{NGINX_PORT}. By default, the UI runs on port 5173 internally. A different host port can be used to access the frontend. Simply modify the port mapping in the `compose.yaml` file as shown below:
+To access the frontend, open the following URL in a web browser: http://${host_ip}:${NGINX_PORT}. By default, the UI runs on port 5173 internally. A different host port can be used to access the frontend. Simply modify the port mapping in the `compose.yaml` file as shown below:
 ```yaml
   chatqna-gaudi-ui-server:
     image: opea/chatqna-ui:${TAG:-latest}
     ...
     ports:
       - "5173:5173"
-```
-
-### (Optional) Conversational UI
-
-To access the Conversational UI (react based) frontend, modify the UI service in the `compose.yaml` file. Replace `chatqna-gaudi-ui-server` service with the `chatqna-gaudi-conversation-ui-server` service as shown below:
-```yaml
-chatqna-gaudi-conversation-ui-server:
-  image: opea/chatqna-conversation-ui:${TAG:-latest}
-  container_name: chatqna-gaudi-conversation-ui-server
-  environment:
-    - APP_BACKEND_SERVICE_ENDPOINT=${BACKEND_SERVICE_ENDPOINT}
-    - APP_DATA_PREP_SERVICE_URL=${DATAPREP_SERVICE_ENDPOINT}
-  ports:
-    - "5174:80"
-  depends_on:
-    - chatqna-gaudi-backend-server
-  ipc: host
-  restart: always
-```
-
-In addition, modify the `chatqna-gaudi-nginx-server` `depends_on` field to include `chatqna-gaudi-conversation-ui-server` instead of `chatqna-gaudi-ui-server`.
-
-Once the services are up, open the following URL in a web browser: http://{host_ip}:5174. By default, the UI runs on port {NGINX_PORT} internally. A different host port can be used to access the frontend. Simply modify the port mapping in the `compose.yaml` file as shown below:
-```yaml
-  chatqna-gaudi-conversation-ui-server:
-    image: opea/chatqna-conversation-ui:${TAG:-latest}
-    ...
-    ports:
-      - "80:80"
 ```
 
 ## Stop the Services
