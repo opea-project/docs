@@ -113,7 +113,7 @@ docker compose -f compose_tgi.yaml up -d
 
 After running `docker compose`, check for warning messages for environment variables that are **NOT** set. Address them if needed. 
 
-    ubuntu@xeon-vm:~/GenAIExamples/CodeTrans/docker_compose/intel/cpu/xeon$ docker compose -f ./compose.yaml up -d
+    ubuntu@gaudi-vm:~/GenAIExamples/CodeTrans/docker_compose/intel/hpu/gaudi$ docker compose -f ./compose.yaml up -d
 
     WARN[0000] The "no_proxy" variable is not set. Defaulting to a blank string. 
     WARN[0000] The "http_proxy" variable is not set. Defaulting to a blank string. 
@@ -127,12 +127,13 @@ docker ps -a
 
 Sample output:
 ```bash
-CONTAINER ID   IMAGE                                 COMMAND                  CREATED         STATUS                   PORTS                                       NAMES
-a6d83e9fb44f   opea/nginx:latest                     "/docker-entrypoint.…"   8 minutes ago   Up 26 seconds            0.0.0.0:80->80/tcp, :::80->80/tcp           codetrans-gaudi-nginx-server
-42af29c8a8b6   opea/codetrans-ui:latest              "docker-entrypoint.s…"   8 minutes ago   Up 27 seconds            0.0.0.0:5173->5173/tcp, :::5173->5173/tcp   codetrans-gaudi-ui-server
-d995d76e7b52   opea/codetrans:latest                 "python code_transla…"   8 minutes ago   Up 27 seconds            0.0.0.0:7777->7777/tcp, :::7777->7777/tcp   codetrans-gaudi-backend-server
-f40e954b107e   opea/llm-textgen:latest               "bash entrypoint.sh"     8 minutes ago   Up 27 seconds            0.0.0.0:9000->9000/tcp, :::9000->9000/tcp   llm-textgen-gaudi-server
-0eade4fe0637   ghcr.io/huggingface/tgi-gaudi:2.0.6   "text-generation-lau…"   8 minutes ago   Up 8 minutes (healthy)   0.0.0.0:8008->80/tcp, :::8008->80/tcp       codetrans-tgi-service
+CONTAINER ID   IMAGE                      COMMAND                  CREATED         STATUS                   PORTS                                         NAMES
+00e882c68625   opea/nginx:latest          "/docker-entrypoint.…"   6 minutes ago   Up 29 seconds            0.0.0.0:80->80/tcp, [::]:80->80/tcp           codetrans-gaudi-nginx-server
+e0a394521db0   opea/codetrans-ui:latest   "docker-entrypoint.s…"   6 minutes ago   Up 29 seconds            0.0.0.0:5173->5173/tcp, [::]:5173->5173/tcp   codetrans-gaudi-ui-server
+c7e6a2621eb7   opea/codetrans:latest      "python code_transla…"   6 minutes ago   Up 31 seconds            0.0.0.0:7777->7777/tcp, [::]:7777->7777/tcp   codetrans-gaudi-backend-server
+53375fc51497   opea/llm-textgen:latest    "bash entrypoint.sh"     6 minutes ago   Up 32 seconds            0.0.0.0:9000->9000/tcp, [::]:9000->9000/tcp   codetrans-gaudi-llm-server
+71edc5a99442   opea/vllm:latest           "python3 -m vllm.ent…"   6 minutes ago   Up 3 minutes (healthy)   0.0.0.0:8008->80/tcp, [::]:8008->80/tcp       codetrans-gaudi-vllm-service
+
 ```
 
 Each docker container's log can also be checked using:
@@ -157,13 +158,23 @@ Try the command below to check whether the LLM serving is ready.
 
 ```bash
 # vLLM service
-docker logs codetrans-xeon-vllm-service 2>&1 | grep complete
+docker logs codetrans-gaudi-vllm-service 2>&1 | grep complete
 # If the service is ready, you will get the response like below.
 INFO:     Application startup complete.
 ```
 :::
 :::{tab-item} TGI
 :sync: TGI
+
+```bash
+# TGI service
+docker logs codetrans-gaudi-tgi-service | grep Connected
+# If the service is ready, you will get the response like below.
+2024-09-03T02:47:53.402023Z  INFO text_generation_router::server: router/src/server.rs:2311: Connected
+```
+
+:::
+::::
 
 Then try the `cURL` command to verify the vLLM or TGI service:
 ```bash

@@ -124,14 +124,12 @@ docker ps -a
 
 Sample output:
 ```bash
-| CONTAINER ID | IMAGE                                                             | COMMAND                   | CREATED         | STATUS                            | PORTS                                      | NAMES                           |
-|--------------|-------------------------------------------------------------------|---------------------------|----------------|------------------------------------|---------------------------------------------|---------------------------------|
-| 0744c6693a64 | opea/nginx:${latest}                                                | `/docker-entrypoint.…`    | 20 minutes ago | Up 9 minutes                       | 0.0.0.0:80->80/tcp, :::80->80/tcp           | codetrans-xeon-nginx-server     |
-| 1e9c8c900843 | opea/codetrans-ui:${latest}                                         | `docker-entrypoint.s…`    | 20 minutes ago | Up 9 minutes                       | 0.0.0.0:5173->5173/tcp, :::5173->5173/tcp   |            codetrans-xeon-ui-server        |
-| 3ed57de43648 | opea/codetrans:${latest}                                            | `python code_transla…`    | 20 minutes ago | Up 9 minutes                       | 0.0.0.0:7777->7777/tcp, :::7777->7777/tcp   | codetrans-xeon-backend-server   |
-| 29d0fe6382dd | opea/llm-textgen:${latest}                                          | `bash entrypoint.sh`      | 20 minutes ago | Up 9 minutes                       | 0.0.0.0:9000->9000/tcp, :::9000->9000/tcp   | llm-textgen-server              |
-| e1b37ad9e078 | ghcr.io/huggingface/text-generation-inference:2.4.0-intel-cpu    | `text-generation-lau…`    | 20 minutes ago | Up 13 minutes (healthy)            | 0.0.0.0:8008->80/tcp, [::]:8008->80/tcp     | codetrans-tgi-service           |
-
+CONTAINER ID   IMAGE                      COMMAND                  CREATED         STATUS                   PORTS                                         NAMES
+00e882c68625   opea/nginx:latest          "/docker-entrypoint.…"   6 minutes ago   Up 29 seconds            0.0.0.0:80->80/tcp, [::]:80->80/tcp           codetrans-xeon-nginx-server
+e0a394521db0   opea/codetrans-ui:latest   "docker-entrypoint.s…"   6 minutes ago   Up 29 seconds            0.0.0.0:5173->5173/tcp, [::]:5173->5173/tcp   codetrans-xeon-ui-server
+c7e6a2621eb7   opea/codetrans:latest      "python code_transla…"   6 minutes ago   Up 31 seconds            0.0.0.0:7777->7777/tcp, [::]:7777->7777/tcp   codetrans-xeon-backend-server
+53375fc51497   opea/llm-textgen:latest    "bash entrypoint.sh"     6 minutes ago   Up 32 seconds            0.0.0.0:9000->9000/tcp, [::]:9000->9000/tcp   codetrans-xeon-llm-server
+71edc5a99442   opea/vllm:latest           "python3 -m vllm.ent…"   6 minutes ago   Up 3 minutes (healthy)   0.0.0.0:8008->80/tcp, [::]:8008->80/tcp       codetrans-xeon-vllm-service
 ```
 
 Each docker container's log can also be checked using:
@@ -156,7 +154,7 @@ Try the command below to check whether the LLM serving is ready.
 
 ```bash
 # vLLM service
-docker logs codetrans-gaudi-vllm-service 2>&1 | grep complete
+docker logs codetrans-xeon-vllm-service 2>&1 | grep complete
 # If the service is ready, you will get the response like below.
 INFO:     Application startup complete.
 ```
@@ -166,10 +164,11 @@ INFO:     Application startup complete.
 
 ```bash
 # TGI service
-docker logs codetrans-gaudi-tgi-service | grep Connected
+docker logs codetrans-xeon-tgi-service | grep Connected
 # If the service is ready, you will get the response like below.
 2024-09-03T02:47:53.402023Z  INFO text_generation_router::server: router/src/server.rs:2311: Connected
 ```
+
 :::
 ::::
 
