@@ -71,6 +71,11 @@ source ./set_env.sh
 
 ## Deploy the Use Case
 
+Navigate to the `docker compose` directory for this hardware platform.
+```bash
+cd $WORKSPACE/GenAIExamples/CodeGen/docker_compose/intel/hpu/gaudi
+```
+
 Run `docker compose` with the provided YAML file to start all the services mentioned above as containers. The vLLM or TGI service can be used for CodeGen.
 
 ::::{tab-set}
@@ -78,7 +83,6 @@ Run `docker compose` with the provided YAML file to start all the services menti
 :sync: vllm
 
 ```bash
-cd $WORKSPACE/GenAIExamples/CodeGen/docker_compose/intel/hpu/gaudi
 docker compose --profile codegen-gaudi-vllm up -d
 ```
 :::
@@ -86,7 +90,6 @@ docker compose --profile codegen-gaudi-vllm up -d
 :sync: TGI
 
 ```bash
-cd $WORKSPACE/GenAIExamples/CodeGen/docker_compose/intel/hpu/gaudi
 docker compose --profile codegen-gaudi-tgi up -d
 ```
 :::
@@ -202,16 +205,23 @@ curl http://${host_ip}:7778/v1/codegen \
 
 ## Launch UI
 ### Gradio UI
-To access the frontend, open the following URL in a web browser: http://${host_ip}:5173. By default, the UI runs on port 5173 internally. A different host port can be used to access the frontend. Simply modify the port mapping in the `compose.yaml` file as shown below:
+To access the frontend, open the following URL in a web browser: http://${host_ip}:5173. By default, the UI runs on port 5173 internally. A different host port can be used to access the frontend by modifying the port mapping in the `compose.yaml` file as shown below:
 ```yaml
   codegen-gaudi-ui-server:
     image: ${REGISTRY:-opea}/codegen-gradio-ui:${TAG:-latest}
     ...
     ports:
-      - "5173:5173"
+      - "YOUR_HOST_PORT:5173" # Change YOUR_HOST_PORT to the desired port
 ```
 
+After making this change, rebuild and restart the containers for the change to take effect. 
+
 ## Stop the Services
+
+Navigate to the `docker compose` directory for this hardware platform.
+```bash
+cd $WORKSPACE/GenAIExamples/CodeGen/docker_compose/intel/hpu/gaudi
+```
 
 To stop and remove all the containers, use the commands below:
 
@@ -220,16 +230,14 @@ To stop and remove all the containers, use the commands below:
 :sync: vllm
 
 ```bash
-cd $WORKSPACE/GenAIExamples/CodeGen/docker_compose/intel/cpu/xeon
-docker compose --profile codegen-xeon-vllm down
+docker compose --profile codegen-gaudi-vllm down
 ```
 :::
 :::{tab-item} TGI
 :sync: TGI
 
 ```bash
-cd $WORKSPACE/GenAIExamples/CodeGen/docker_compose/intel/cpu/xeon
-docker compose --profile codegen-xeon-tgi down
+docker compose --profile codegen-gaudi-tgi down
 ```
 :::
 ::::
