@@ -11,16 +11,12 @@ The solution is aimed to show how to use the Qwen2.5-Coder-32B-Instruct model on
 
 ## Prerequisites
 
-To run the UI on a web browser external to the host machine such as a laptop, the following ports need to be port forwarded:
-- 5173: UI port
-- 6007: dataprep port
+To run the UI on a web browser external to the host machine such as a laptop, the following port(s) need to be port forwarded when using SSH to log in to the host machine:
 - 7778: CodeGen megaservice port
- 
-Port numbers may change. Refer to the CodeGen example's `set_env.sh` and `compose.yaml` files for running Docker compose. 
 
-Port forwarding can be done by appending the -L input argument to the SSH command when logging in to the host machine from a laptop:
+This port is used for `BACKEND_SERVICE_IP` defined in the `set_env.sh` for this example inside the `docker compose` folder. Specifically, for CodeGen, append the following to the ssh command: 
 ```bash
--L 5173:localhost:5173 -L 6007:localhost:6007 -L 7778:localhost:7778
+-L 7778:localhost:7778
 ```
 
 Set up a workspace and clone the [GenAIExamples](https://github.com/opea-project/GenAIExamples) GitHub repo.
@@ -64,6 +60,8 @@ CodeGen will use the following GenAIComps and corresponding tools. Tools and mod
 |UI                   |              | NA                        | Gateway Service |
 
 Set the necessary environment variables to set up the use case. To swap out models, modify `set_env.sh` before running it. For example, the environment variable `LLM_MODEL_ID` can be changed to another model by specifying the HuggingFace model card ID. 
+
+To run the UI on a web browser on a laptop, modify `BACKEND_SERVICE_IP` to use `localhost` or `127.0.0.1` instead of `host_ip` inside `set_env.sh` for the backend to properly receive data from the UI.
 
 Run the `set_env.sh` script.
 ```bash
