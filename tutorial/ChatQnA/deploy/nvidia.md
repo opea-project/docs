@@ -54,7 +54,7 @@ For machines behind a firewall, set up the proxy environment variables:
 export http_proxy="Your_HTTP_Proxy"
 export https_proxy="Your_HTTPs_Proxy"
 # Example: no_proxy="localhost, 127.0.0.1, 192.168.1.1"
-export no_proxy="Your_No_Proxy",chatqna-xeon-ui-server,chatqna-xeon-backend-server,dataprep-redis-service,tei-embedding-service,retriever,tei-reranking-service,tgi-service,vllm-service,llm-faqgen
+export no_proxy="Your_No_Proxy",chatqna-ui-server,chatqna-backend-server,dataprep-redis-service,tei-embedding-service,retriever,tei-reranking-service,tgi-service
 ```
 
 ## Use Case Setup
@@ -94,7 +94,6 @@ Run `docker compose` with the provided YAML file to start all the services menti
 :sync: TGI
 
 ```bash
-cd $WORKSPACE/GenAIExamples/ChatQnA/docker_compose/nvidia/gpu/
 docker compose -f compose.yaml up -d
 ```
 :::
@@ -302,16 +301,23 @@ The output will be similar to that of the ChatQnA megaservice.
 
 ### Basic UI
 
-To access the frontend, open the following URL in your browser: http://${host_ip}:${NGINX_PORT}. By default, the UI runs on port 5173 internally. If you prefer to use a different host port to access the frontend, you can modify the port mapping in the compose.yaml file as shown below:
+To access the frontend, open the following URL in your browser: http://${host_ip}:${NGINX_PORT}. By default, the UI runs on port 5173 internally. If you prefer to use a different to access the frontend by modifying the port mapping in the `compose.yaml` file as shown below:
 ```yaml
   chatqna-ui-server:
     image: opea/chatqna-ui:${TAG:-latest}
     ...
     ports:
-      - "5173:5173"
+      - "YOUR_HOST_PORT:5173" # Change YOUR_HOST_PORT to the desired port
 ```
 
+After making this change, rebuild and restart the containers for the change to take effect. 
+
 ### Stop the Services
+
+Navigate to the `docker compose` directory for this hardware platform.
+```bash
+cd $WORKSPACE/GenAIExamples/ChatQnA/docker_compose/nvidia/gpu
+```
 
 To stop and remove all the containers, use the command below:
 ::::{tab-set}
