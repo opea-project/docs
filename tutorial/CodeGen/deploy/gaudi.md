@@ -14,7 +14,7 @@ The solution is aimed to show how to use the Qwen2.5-Coder-32B-Instruct model on
 To run the UI on a web browser external to the host machine such as a laptop, the following port(s) need to be port forwarded when using SSH to log in to the host machine:
 - 7778: CodeGen megaservice port
 
-This port is used for `BACKEND_SERVICE_IP` defined in the `set_env.sh` for this example inside the `docker compose` folder. Specifically, for CodeGen, append the following to the ssh command: 
+This port is used for `BACKEND_SERVICE_ENDPOINT` defined in the `set_env.sh` for this example inside the `docker compose` folder. Specifically, for CodeGen, append the following to the ssh command: 
 ```bash
 -L 7778:localhost:7778
 ```
@@ -61,7 +61,7 @@ CodeGen will use the following GenAIComps and corresponding tools. Tools and mod
 
 Set the necessary environment variables to set up the use case. To swap out models, modify `set_env.sh` before running it. For example, the environment variable `LLM_MODEL_ID` can be changed to another model by specifying the HuggingFace model card ID. 
 
-To run the UI on a web browser on a laptop, modify `BACKEND_SERVICE_IP` to use `localhost` or `127.0.0.1` instead of `host_ip` inside `set_env.sh` for the backend to properly receive data from the UI.
+To run the UI on a web browser on a laptop, modify `BACKEND_SERVICE_ENDPOINT` to use `localhost` or `127.0.0.1` instead of `host_ip` inside `set_env.sh` for the backend to properly receive data from the UI.
 
 Run the `set_env.sh` script.
 ```bash
