@@ -16,10 +16,10 @@ Initially, all agents in the example are set up.
 In the scenario below, the React Agent, SQL Agent, and RAG Agent are utilized within the AgentQnA example.  
 ![jaeger_init](../assets/agent_jaeger_init.png)  
 
-By expanding the React Agent, the ReactAgentNodeLama is identified as the core function implementing the ReactAgent.   
+By expanding the React Agent, the ReactAgentNodeLlama is identified as the core function implementing the ReactAgent.   
 ![jaeger_react_init](../assets/agent_jaeger_react_init.png)  
 
-Following [AgentQnA validate services session](https://github.com/opea-project/GenAIExamples/tree/main/AgentQnA#validate-services) to test AgentQnA with pre-defined questions.
+Follow the steps in [AgentQnA validate services session](https://github.com/opea-project/GenAIExamples/tree/main/AgentQnA#validate-services) to test the AgentQnA application with some pre-defined questions.
 ![jaeger_q](../assets/agent_questions.png)  
 
 Once the agents respond to the two questions, four traces will be displayed along the timeline.  
@@ -37,17 +37,17 @@ Within each AgentNodeLlama __call__ function, the language model (LLM) is then e
 determining how to proceed based on the data obtained.  
 ![jaeger_sql](../assets/agent_jaeger_sql_spans.png)  
 
-For the second question, the ReActAgentNodeLlama is invoked first, following a similar process as with the first question.  
+For the second question, the ReActAgentNodeLlama is invoked first, following a similar process follow as in the first question.  
 The 'search_sql_database' tool is called to retrieve relevant data, and the language model (LLM) is used to reason through the subsequent steps.   
 ![jaeger_react2](../assets/agent_jaeger_react_2_spans.png)    
 
 Fewer reasoning steps are required to answer the second question compared to the first.  
-By tracing these functions, it becomes easier to understand the number of reasoning steps involved across different questions.  
+By tracing these functions, it becomes easier to understand the number of reasoning steps involved across the different questions.  
 ![jaeger_sql](../assets/agent_jaeger_sql_2_spans.png)  
 
 The OPEA Agent components allow for the integration of new tools into the React Agent when existing tools fail to provide answers.  
-To demonstrate how the React Agent utilizes different tools to obtain optimal answers, a pre-defined question is modified.  
-As a result, the React Agent is unable to find answers in both the SQL and RAG databases.  
+We demonstrate how the React Agent utilizes different tools to obtain optimal answers by modifying a pre-defined question.  
+The modification leaves the React Agent unable to find answers in both the SQL and RAG databases.  
 Consequently, the React Agent must employ the newly added web search tool to address the question regarding the most streamed albums on Spotify in 2024.   
 
 ![jaeger_q_w](../assets/agent_questions_web.png)
@@ -66,7 +66,7 @@ If the React Agent were to use other tools instead of 'search_web_base', additio
 ![jaeger_react_1_w](../assets/agent_jaeger_react_spans_1_webq.png)   
 
 For the second question, the React Agent initially utilized the 'search_sql_database' tool instead of 'search_web_base'.  
-The SQL Agent spent approximately two minutes on reasoning, as it was unable to find an answer.  
+The SQL Agent spent approximately two minutes on reasoning, but it was unable to find an answer.  
 After the 'search_sql_database' tool failed to provide an answer, the React Agent switched to the 'search_web_base' tool, quickly locating the answer.    
 ![jaeger_react_2_w](../assets/agent_jaeger_react_spans_2_webq.png)  
 
@@ -82,7 +82,7 @@ enabling users to effectively manage and optimize the application.
 ### AgentQnA MicroServices Dashboard
 
 This dashboard provides metrics for services within the AgentQnA microservices.
-By clicking the job_name, supported service names such as supervisor-react-agent, worker-rag-agent and worker-sql-agent will be showed.  
+By clicking the job_name, supported service names such as supervisor-react-agent, worker-rag-agent and worker-sql-agent will be shown.  
 Select one of the supported services from the list.  
 ![grafana_mega_list](../assets/agent_grafana_mega_list.png)
 

@@ -91,7 +91,7 @@ The Grafana UI web page can be accessed using the following URL.
 
 
 To view the pre-defined dashboards, click on the "Dashboard" tab located on the left-hand side of the Grafana UI. 
-This will allow you to explore various dashboards that have been set up to visualize telemetry metrics effectively.
+This will allow you to explore the available dashboards to visualize telemetry metrics. They also serve as examples that you can customize.
 
 
 .. image:: assets/grafana_dashboard_init.png
