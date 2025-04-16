@@ -82,6 +82,11 @@ source ./set_env.sh
 
 ## Deploy the Use Case
 
+Navigate to the `docker compose` directory for this hardware platform.
+```bash
+cd $WORKSPACE/GenAIExamples/CodeTrans/docker_compose/intel/cpu/xeon
+```
+
 Run `docker compose` with the provided YAML file to start all the services mentioned above as containers. The vLLM or TGI service can be used for CodeTrans.
 
 ::::{tab-set}
@@ -89,7 +94,6 @@ Run `docker compose` with the provided YAML file to start all the services menti
 :sync: vllm
 
 ```bash
-cd $WORKSPACE/GenAIExamples/CodeTrans/docker_compose/intel/cpu/xeon
 docker compose -f compose.yaml up -d
 ```
 :::
@@ -97,7 +101,6 @@ docker compose -f compose.yaml up -d
 :sync: TGI
 
 ```bash
-cd $WORKSPACE/GenAIExamples/CodeTrans/docker_compose/intel/cpu/xeon
 docker compose -f compose_tgi.yaml up -d
 ```
 :::
@@ -270,9 +273,7 @@ Each of these endpoints should return a successful response with the translated 
 
 To access the frontend user interface (UI), the primary method is through the Nginx reverse proxy service. Open the following URL in a web browser: http://${host_ip}:${NGINX_PORT}. This provides a stable and secure access point to the UI.
 
-Alternatively, the UI can be accessed directly using its internal port. This method bypasses the Nginx proxy and can be used for testing or troubleshooting purposes. To access the UI directly, open the following URL in a web browser: http://${host_ip}:5173. By default, the UI runs on port 5173.
-
-To change the port used to access the UI directly (not through Nginx), modify the ports section of the `compose.yaml` file by replacing `YOUR_HOST_PORT` with the desired port:
+Alternatively, the UI can be accessed directly using its internal port. This method bypasses the Nginx proxy and can be used for testing or troubleshooting purposes. To access the UI directly, open the following URL in a web browser: http://${host_ip}:5173. By default, the UI runs on port 5173. A different host port can be used to access the frontend by modifying the `FRONTEND_SERVICE_PORT` environment variable. For reference, the port mapping in the `compose.yaml` file is shown below:
 
 ```yaml
 codetrans-xeon-ui-server:
@@ -281,12 +282,17 @@ codetrans-xeon-ui-server:
   depends_on:
     - codetrans-xeon-backend-server
   ports:
-    - "YOUR_HOST_PORT:5173" # Change YOUR_HOST_PORT to the desired port
+    - "${FRONTEND_SERVICE_PORT:-5173}:5173"
 ```
 
 After making this change, rebuild and restart the containers for the change to take effect. 
 
 ### Stop the Services
+
+Navigate to the `docker compose` directory for this hardware platform.
+```bash
+cd $WORKSPACE/GenAIExamples/CodeTrans/docker_compose/intel/cpu/xeon
+```
 
 To stop and remove all the containers, use the commands below:
 
@@ -295,7 +301,6 @@ To stop and remove all the containers, use the commands below:
 :sync: vllm
 
 ```bash
-cd $WORKSPACE/GenAIExamples/CodeTrans/docker_compose/intel/cpu/xeon
 docker compose -f compose.yaml down
 ```
 :::
@@ -303,7 +308,6 @@ docker compose -f compose.yaml down
 :sync: TGI
 
 ```bash
-cd $WORKSPACE/GenAIExamples/CodeTrans/docker_compose/intel/cpu/xeon
 docker compose -f compose_tgi.yaml down
 ```
 :::
