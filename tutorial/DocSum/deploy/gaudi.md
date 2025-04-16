@@ -116,12 +116,12 @@ docker ps -a
 
 Sample output:
 ```bash
-CONTAINER ID   IMAGE                                                           COMMAND                  CREATED             STATUS                       PORTS                                       NAMES
-8ec82528bcbb   opea/docsum-gradio-ui:latest                                    "python docsum_ui_gr…"   About an hour ago   Up About an hour             0.0.0.0:5173->5173/tcp, :::5173->5173/tcp   docsum-gaudi-ui-server
-e22344ed80d5   opea/docsum:latest                                              "python docsum.py"       About an hour ago   Up About an hour             0.0.0.0:8888->8888/tcp, :::8888->8888/tcp   docsum-gaudi-backend-server
-bbb3c05a2878   opea/llm-docsum:latest                                          "bash entrypoint.sh"     About an hour ago   Up About an hour             0.0.0.0:9000->9000/tcp, :::9000->9000/tcp   llm-docsum-gaudi-server
-d20a8896d2a0   ghcr.io/huggingface/tgi-gaudi:2.3.1                             "text-generation-lau…"   About an hour ago   Up About an hour (healthy)   0.0.0.0:8008->80/tcp, :::8008->80/tcp       tgi-gaudi-server
-8213029b6b26   opea/whisper:latest                                             "python whisper_serv…"   About an hour ago   Up About an hour             0.0.0.0:7066->7066/tcp, :::7066->7066/tcp   whisper-server
+CONTAINER ID   IMAGE                          COMMAND                  CREATED         STATUS                   PORTS                                         NAMES
+d02da5001212   opea/docsum-gradio-ui:latest   "python docsum_ui_gr…"   2 minutes ago   Up 19 seconds            0.0.0.0:5173->5173/tcp, [::]:5173->5173/tcp   docsum-gaudi-ui-server
+43de0d8ee9dd   opea/docsum:latest             "python docsum.py"       2 minutes ago   Up 19 seconds            0.0.0.0:8888->8888/tcp, [::]:8888->8888/tcp   docsum-gaudi-backend-server
+81f0e8d27f1f   opea/llm-docsum:latest         "bash entrypoint.sh"     2 minutes ago   Up 20 seconds            0.0.0.0:9000->9000/tcp, [::]:9000->9000/tcp   docsum-gaudi-llm-server
+a4a9501fc4df   opea/whisper:latest            "python whisper_serv…"   3 minutes ago   Up 2 minutes             0.0.0.0:7066->7066/tcp, [::]:7066->7066/tcp   docsum-gaudi-whisper-server
+951abf0ebb5a   opea/vllm:latest               "python3 -m vllm.ent…"   3 minutes ago   Up 2 minutes (healthy)   0.0.0.0:8008->80/tcp, [::]:8008->80/tcp       docsum-gaudi-vllm-service
 ```
 
 Each docker container's log can also be checked using:
@@ -424,6 +424,8 @@ To access the frontend, open the following URL in a web browser: http://${host_i
     ports:
     - "${FRONTEND_SERVICE_PORT:-5173}:5173"
 ```
+
+After making this change, rebuild and restart the containers for the change to take effect. 
 
 ## Stop the Services
 
