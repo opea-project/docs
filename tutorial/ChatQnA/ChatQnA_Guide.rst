@@ -46,7 +46,7 @@ To facilitate sharing of individual services across multiple GenAI applications,
 use the GenAI Microservices Connector (GMC) to deploy the application. Apart 
 from service sharing , it also supports specifying sequential, parallel, and 
 alternative steps in a GenAI pipeline. In so doing, it supports dynamic switching 
-between models used in any stage of a GenAI pipeline.  For example, within the 
+between models used in any stage of a GenAI pipeline. For example, within the 
 ChatQnA pipeline, using GMC one could switch the model used in the embedder, 
 re-ranker, and/or the LLM. Upstream Vanilla Kubernetes or Red Hat OpenShift Container
 Platform (RHOCP) can be used with or without GMC, while use with GMC provides 
@@ -302,9 +302,9 @@ Troubleshooting
 
 1. Browser interface https link failed
 
-   Q:For example, started ChatQnA example in IBM Cloud and trying to access the UI interface. By default, typing the :5173 resolves to https://:5173. Chrome shows the following warning message：xx.xx.xx.xx doesn't support a secure connection
+   Q: For example, started ChatQnA example in IBM Cloud and trying to access the UI interface. By default, typing the :5173 resolves to https://:5173. Chrome shows the following warning message：xx.xx.xx.xx doesn't support a secure connection
 
-   A: That is because by default, the browser resolves xx.xx.xx.xx:5173 to https://xx.xx.xx.xx:5173. But to meet security requirements, users need to deploy a certificate to enable HTTPS support in some cloud environments. OPEA provides HTTP services by default，but also supports HTTPS. To enable HTTPS, specify the certificate file paths in the MicroService class. For more details, please refer to the `source code <https://github.com/opea-project/GenAIComps/blob/main/comps/cores/mega/micro_service.py#L33>`_.
+   A: By default, the browser resolves xx.xx.xx.xx:5173 to https://xx.xx.xx.xx:5173. But to meet security requirements, users need to deploy a certificate to enable HTTPS support in some cloud environments. OPEA provides HTTP services by default，but also supports HTTPS. To enable HTTPS, specify the certificate file paths in the MicroService class. For more details, please refer to the `source code <https://github.com/opea-project/GenAIComps/blob/main/comps/cores/mega/micro_service.py#L33>`_.
 
 2. For other troubles, please check the `doc <https://opea-project.github.io/latest/GenAIExamples/ChatQnA/docker_compose/intel/hpu/gaudi/how_to_validate_service.html>`_.
 

@@ -1,10 +1,10 @@
 # Single node on-prem deployment with Ollama on AIPC
 
-This deployment section covers single-node on-prem deployment of the ChatQnA example using the Ollama. There are several ways to enable RAG with vectordb and LLM models, but this tutorial will be covering how to build an end-to-end ChatQnA pipeline with the Redis vector database and a llama-3 model deployed on the client CPU.
+This section covers single-node on-prem deployment of the ChatQnA example using Ollama. There are several ways to enable RAG with vectordb and LLM models, but this tutorial will be covering how to build an end-to-end ChatQnA pipeline with the Redis vector database and a llama-3 model deployed on the client CPU.
 
 ## Overview
 
-The list of microservices from OPEA GenAIComps are used to deploy a single node Ollama megaservice solution for ChatQnA.
+The OPEA GenAIComps microservices used to deploy a single node vLLM or TGI magaservice solution for ChatQnA are listed below:
 
 1. Data Prep
 2. Embedding
@@ -12,7 +12,7 @@ The list of microservices from OPEA GenAIComps are used to deploy a single node 
 4. Reranking
 5. LLM with Ollama
 
-The solution is aimed to show how to use Redis vectorDB for RAG and the llama-3 model for LLM inference on Intel Client PCs. Steps will include setting up docker containers, utilizing a sample Nike dataset in PDF format, and asking a question about Nike to get a response. There are multiple versions of the UI that can be deployed but only the default one will be covered in this tutorial.
+This solution is designed to demonstrate the use of Redis vectorDB for RAG and the Meta-Llama-3-8B-Instruct model for LLM inference on Intel Client PCs. The steps will involve setting up Docker containers, using a sample Nike dataset in PDF format, and posing a question about Nike to receive a response. Although multiple versions of the UI can be deployed, this tutorial will focus solely on the default version.
 
 ## Prerequisites 
 
@@ -33,7 +33,7 @@ cd ..
 
 Set up a [HuggingFace](https://huggingface.co/) account and generate a [user access token](https://huggingface.co/docs/transformers.js/en/guides/private#step-1-generating-a-user-access-token). Request access to the [meta-llama/Meta-Llama-3-8B-Instruct](https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct) model.
 
-Set an environment variable with the HuggingFace token:
+Set the `HUGGINGFACEHUB_API_TOKEN` environment variable to the value of the Hugging Face token by executing the following command:
 ```bash
 export HUGGINGFACEHUB_API_TOKEN="Your_Huggingface_API_Token"
 ```
@@ -73,8 +73,7 @@ curl -fsSL https://ollama.com/install.sh | sh
 
 #### Set Ollama Service Configuration
 
-Ollama Service Configuration file is /etc/systemd/system/ollama.service. Edit the file to set OLLAMA_HOST environment.
-Replace **<host_ip>** with the host IPV4 (please use external public IP). For example if the host_ip is 10.132.x.y, then `Environment="OLLAMA_HOST=10.132.x.y:11434"'.
+The Ollama Service Configuration file is /etc/systemd/system/ollama.service. Edit the file to set OLLAMA_HOST environment, replacing <host_ip> with the hosts IPV4 external public IP address. For example, if the host_ip is 10.132.x.y, then `Environment="OLLAMA_HOST=10.132.x.y:11434"' should be used.
 
 ```bash
 Environment="OLLAMA_HOST=host_ip:11434"
@@ -82,7 +81,7 @@ Environment="OLLAMA_HOST=host_ip:11434"
 
 #### Set https_proxy environment for Ollama
 
-If the system access network is through a proxy, add https_proxy in the Ollama Service Configuration file:
+If the system's network is accessed through a proxy, add a https_proxy entry to the Ollama Service Configuration file:
 ```bash
 Environment="https_proxy=Your_HTTPS_Proxy"
 ```
@@ -116,7 +115,7 @@ export OLLAMA_HOST=http://${host_ip}:11434
 ollama pull llama3.2
 ```
 
-After downloading the models, list the models by `ollama list`.
+After downloading the models, list the models by executing the `ollama list` command.
 
 The output should be similar to the following:
 
@@ -154,7 +153,7 @@ The output may look like this:
 
 ## Use Case Setup
 
-ChatQnA will use the following GenAIComps and corresponding tools. Tools and models mentioned in the table are configurable either through environment variables in the `set_env.sh` or `compose.yaml` file.
+ChatQnA will utilize the following GenAIComps services and associated tools. The tools and models listed in the table can be configured via environment variables in either the `set_env.sh` script or the `compose.yaml` file.
 
 ::::{tab-set}
 
@@ -253,7 +252,7 @@ docker logs <CONTAINER_ID OR CONTAINER_NAME>
 
 ## Validate Microservices
 
-This section will walk through the different ways to interact with the microservices deployed.
+This section will guide through the various methods for interacting with the deployed microservices.
 
 ### TEI Embedding Service
 
@@ -308,7 +307,7 @@ Sample output:
 
 ### Ollama Service
 
-Run the command below to use Ollama to generate text fo the input prompt.
+Run the command below to use Ollama to generate text for the input prompt.
 ```bash
 curl http://${host_ip}:11434/api/generate -d '{"model": "llama3", "prompt":"What is Deep Learning?"}'
 ```
@@ -335,7 +334,7 @@ Ollama service generates text for the input prompt. Here is the expected result 
 
 ### Dataprep Microservice
 
-The knowledge base can be updated using the dataprep microservice, which extracts text from a variety of data sources, chunks the data, embeds each chunk using the embedding microservice. Finally, the embedded vectors are stored in the Redis vector database.
+The knowledge base can be updated using the dataprep microservice, which extracts text from a variety of data sources, chunks the data, and embeds each chunk using the embedding microservice. Finally, the embedded vectors are stored in the Redis vector database.
 
 `nke-10k-2023.pdf` is Nike's annual report on a form 10-K. Run this command to download the file:
 ```bash
@@ -438,7 +437,7 @@ data: [DONE]
 
 ### NGINX Service
 
-This will ensure the NGINX ervice is working properly.
+This will ensure the NGINX service is working properly.
 ```bash
 curl http://${host_ip}:${NGINX_PORT}/v1/chatqna \
     -H "Content-Type: application/json" \

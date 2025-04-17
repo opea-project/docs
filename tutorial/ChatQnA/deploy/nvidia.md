@@ -1,10 +1,10 @@
 # Single node on-prem deployment with TGI on Nvidia gpu
 
-This deployment section covers single-node on-prem deployment of the ChatQnA example using the TGI LLM service. There are several ways to enable RAG with vectordb and LLM models, but this tutorial will be covering how to build an end-to-end ChatQnA pipeline with the Redis vector database and meta-llama/Meta-Llama-3-8B-Instruct model deployed on NVIDIA GPUs.
+This section covers single-node on-prem deployment of the ChatQnA example using the TGI LLM service. There are several ways to enable RAG with vectordb and LLM models, but this tutorial will be covering how to build an end-to-end ChatQnA pipeline with the Redis vector database and meta-llama/Meta-Llama-3-8B-Instruct model deployed on NVIDIA GPUs.
 
 ## Overview
 
-The list of microservices from OPEA GenAIComps are used to deploy a single node vLLM or TGI megaservice solution for ChatQnA.
+The OPEA GenAIComps microservices used to deploy a single node vLLM or TGI magaservice solution for ChatQnA are listed below:
 
 1. Data Prep
 2. Embedding
@@ -12,7 +12,7 @@ The list of microservices from OPEA GenAIComps are used to deploy a single node 
 4. Reranking
 5. LLM with TGI
 
-The solution is aimed to show how to use Redis vectorDB for RAG and Meta-Llama-3-8B-Instruct model for LLM inference on NVIDIA GPUs. Steps will include setting up docker containers, utilizing a sample Nike dataset in PDF format, and asking a question about Nike to get a response. There are multiple versions of the UI that can be deployed but only the default one will be covered in this tutorial.
+This solution is designed to demonstrate the use of Redis vectorDB for RAG and the Meta-Llama-3-8B-Instruct model for LLM inference on NVIDIA GPUs. The steps will involve setting up Docker containers, using a sample Nike dataset in PDF format, and posing a question about Nike to receive a response. Although multiple versions of the UI can be deployed, this tutorial will focus solely on the default version.
 
 ## Prerequisites
 
@@ -33,7 +33,7 @@ cd ..
 
 Set up a [HuggingFace](https://huggingface.co/) account and generate a [user access token](https://huggingface.co/docs/transformers.js/en/guides/private#step-1-generating-a-user-access-token). Request access to the [meta-llama/Meta-Llama-3-8B-Instruct](https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct) model.
 
-Set an environment variable with the HuggingFace token:
+Set the `HUGGINGFACEHUB_API_TOKEN` environment variable to the value of the Hugging Face token by executing the following command:
 ```bash
 export HUGGINGFACEHUB_API_TOKEN="Your_Huggingface_API_Token"
 ```
@@ -59,7 +59,7 @@ export no_proxy="Your_No_Proxy",chatqna-ui-server,chatqna-backend-server,datapre
 
 ## Use Case Setup
 
-ChatQnA will use the following GenAIComps and corresponding tools. Tools and models mentioned in the table are configurable either through environment variables in the `set_env.sh` or `compose.yaml` file.
+ChatQnA will utilize the following GenAIComps services and associated tools. The tools and models listed in the table can be configured via environment variables in either the `set_env.sh` script or the `compose.yaml` file.
 
 ::::{tab-set}
 
@@ -157,7 +157,7 @@ docker logs <CONTAINER_ID OR CONTAINER_NAME>
 
 ## Validate Microservices
 
-This section will walk through the different ways to interact with the microservices deployed.
+This section will guide through the various methods for interacting with the deployed microservices.
 
 ### TEI Embedding Service
 
@@ -212,14 +212,14 @@ Sample output:
 
 ### TGI Service
 
-In first startup, this service will take a few minutes to download the model files and perform warm up. After it's finished, the service will be ready.
+During the initial startup, this service will take a few minutes to download the model files and complete the warm-up process. Once this is finished, the service will be ready for use.
 
 ::::{tab-set}
 
 :::{tab-item} TGI
 :sync: TGI
 
-Try the command below to check whether the LLM service is ready. The output should be "INFO text_generation_router::server: router/src/server.rs:2311: Connected"
+Run the command below to check whether the LLM service is ready. The output should be "INFO text_generation_router::server: router/src/server.rs:2311: Connected"
 ```bash
 docker logs tgi-service | grep Connected
 ```
@@ -239,6 +239,62 @@ curl http://${host_ip}:8008/generate \
 
 :::
 ::::
+
+### Dataprep Microservice
+
+The knowledge base can be updated using the dataprep microservice, which extracts text from a variety of data sources, chunks the data, and embeds each chunk using the embedding microservice. Finally, the embedded vectors are stored in the Redis vector database.
+
+`nke-10k-2023.pdf` is Nike's annual report on a form 10-K. Run this command to download the file:
+```bash
+wget https://github.com/opea-project/GenAIComps/blob/v1.1/comps/retrievers/redis/data/nke-10k-2023.pdf
+```
+
+Upload the file:
+```bash
+curl -X POST "http://${host_ip}:6007/v1/dataprep" \
+     -H "Content-Type: multipart/form-data" \
+     -F "files=@./nke-10k-2023.pdf"
+```
+
+HTTP links can also be added to the knowledge base. This command adds the opea.dev website.
+```bash
+curl -X POST "http://${host_ip}:6007/v1/dataprep" \
+     -H "Content-Type: multipart/form-data" \
+     -F 'link_list=["https://opea.dev"]'
+```
+
+The list of uploaded files can be retrieved using this command: 
+```bash
+curl -X POST "http://${host_ip}:6007/v1/dataprep/get_file" \
+     -H "Content-Type: application/json"
+```
+
+To delete the file or link, use the following commands:
+
+#### Delete link
+```bash
+# The dataprep service will add a .txt postfix for link file
+
+curl -X POST "http://${host_ip}:6007/v1/dataprep/delete_file" \
+     -d '{"file_path": "https://opea.dev.txt"}' \
+     -H "Content-Type: application/json"
+```
+
+#### Delete file
+
+```bash
+curl -X POST "http://${host_ip}:6007/v1/dataprep/delete_file" \
+     -d '{"file_path": "nke-10k-2023.pdf"}' \
+     -H "Content-Type: application/json"
+```
+
+#### Delete all uploaded files and links
+
+```bash
+curl -X POST "http://${host_ip}:6007/v1/dataprep/delete_file" \
+     -d '{"file_path": "all"}' \
+     -H "Content-Type: application/json"
+```
 
 ### ChatQnA MegaService
 
