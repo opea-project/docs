@@ -1,13 +1,12 @@
 # Single node on-prem deployment on Gaudi AI Accelerator
 
-This deployment section covers single-node on-prem deployment of the CodeGen example. It will show how to build an end-to-end CodeGen solution with the Qwen2.5-Coder-32B-Instruct model deployed on Intel® Gaudi® AI Accelerators. To quickly learn about OPEA and set up the required hardware and software, follow the instructions in the
-[Getting Started](../../../getting-started/README.md) section. 
+This deployment section covers single-node on-prem deployment of the CodeGen example. It will show how to build an end-to-end CodeGen solution with the `Qwen2.5-Coder-32B-Instruct` model deployed on Intel® Gaudi® AI Accelerators. To quickly learn about OPEA and set up the required hardware and software, follow the instructions in the [Getting Started](../../../getting-started/README.md) section. 
 
 ## Overview
 
 The CodeGen use case uses a single microservice called LLM with model serving done with vLLM or TGI.
 
-The solution is aimed to show how to use the Qwen2.5-Coder-32B-Instruct model on the Intel® Gaudi® AI Accelerators. Steps will include setting up docker containers, taking text input as the prompt, and generating code. There are multiple versions of the UI that can be deployed but only the Gradio-based one will be covered in this tutorial.
+This solution is designed to demonstrate the use the `Qwen2.5-Coder-7B-Instruct` model for code generation on Intel® Gaudi® AI Accelerators. The steps will involve setting up Docker containers, taking text input as the prompt, and generating code. Although multiple versions of the UI can be deployed, this tutorial will focus solely on the default version.
 
 ## Prerequisites
 
@@ -36,7 +35,7 @@ cd ..
 
 Set up a [HuggingFace](https://huggingface.co/) account and generate a [user access token](https://huggingface.co/docs/transformers.js/en/guides/private#step-1-generating-a-user-access-token). The [Qwen2.5-Coder-32B-Instruct](https://huggingface.co/Qwen/Qwen2.5-Coder-32B-Instruct) model does not need special access, but the token can be used with other models requiring access.
 
-Set an environment variable with the HuggingFace token:
+Set the `HUGGINGFACEHUB_API_TOKEN` environment variable to the value of the Hugging Face token by executing the following command:
 ```bash
 export HUGGINGFACEHUB_API_TOKEN="Your_Huggingface_API_Token"
 ```
@@ -52,7 +51,7 @@ export https_proxy=${your_http_proxy}
 
 ## Use Case Setup
 
-CodeGen will use the following GenAIComps and corresponding tools. Tools and models mentioned in the table are configurable either through environment variables in the `set_env.sh` or `compose.yaml` file.
+CodeGen will utilize the following GenAIComps services and associated tools. The tools and models listed in the table can be configured via environment variables in either the `set_env.sh` script or the `compose.yaml` file.
 
 |Use Case Components | Tools | Model     | Service Type |
 |----------------     |--------------|-----------------------------|-------|
@@ -139,7 +138,7 @@ docker logs <CONTAINER_ID OR CONTAINER_NAME>
 
 ## Validate Microservices
 
-This section will walk through the different ways to interact with the microservices deployed.
+This section will guide through the various methods for interacting with the deployed microservices.
 
 ### vLLM or TGI Service
 
