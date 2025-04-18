@@ -1,19 +1,19 @@
 # Single node on-prem deployment on Xeon Scalable processors
 
-This deployment section covers the single-node on-prem deployment of the CodeTrans example. It will show how to build a code translation service using the `mistralai/Mistral-7B-Instruct-v0.3` model deployed on Intel® Xeon® Scalable processors. To quickly learn about OPEA and set up the required hardware and software, follow the instructions in the [Getting Started](../../../getting-started/README.md) section.
+This deployment section covers single-node on-prem deployment of the CodeTrans example. It will show how to build an end-to-end code translation service with the `mistralai/Mistral-7B-Instruct-v0.3` model deployed on Intel® Xeon® Scalable processors. To quickly learn about OPEA and set up the required hardware and software, follow the instructions in the [Getting Started](../../../getting-started/README.md) section.
 
 ## Overview
 
-The CodeTrans use case uses a single LLM microservice for code translation.
+The CodeTrans use case uses a single LLM microservice for code translation with model serving done on vLLM or TGI.
 
-The solution is aimed to show how to use the Mistral-7B-Instruct-v0.3 model on the Intel® Xeon® Scalable processorsto translate code between different programming languages. Steps will include setting up docker containers, taking code in one programming language as input, and generating code in another programming language. The solution is deployed with a basic UI accessible through both a direct port and Nginx.
+This solution is designed to demonstrate the use of the `Mistral-7B-Instruct-v0.3` model on the Intel® Xeon® Scalable processors to translate code between different programming languages. The steps will involve setting up Docker containers, taking code in one programming language as input, and generating code in another programming language. The solution is deployed with a basic UI accessible through both a direct port and Nginx.
 
 ## Prerequisites
 
 To run the UI on a web browser external to the host machine such as a laptop, the following port(s) need to be port forwarded when using SSH to log in to the host machine:
 - 7777: CodeTrans megaservice port
 
-This port is used for `BACKEND_SERVICE_IP` defined in the `set_env.sh` for this example inside the `docker compose` folder. Specifically, for CodeTrans, append the following to the ssh command: 
+This port is used for `BACKEND_SERVICE_ENDPOINT` defined in the `set_env.sh` for this example inside the `docker compose` folder. Specifically, for CodeTrans, append the following to the ssh command: 
 ```bash
 -L 7777:localhost:7777
 ```
@@ -37,7 +37,7 @@ The example utilizes model weights from HuggingFace. Set up a [HuggingFace](http
 
 Next, generate a [user access token](https://huggingface.co/docs/transformers.js/en/guides/private#step-1-generating-a-user-access-token).
 
-Set an environment variable with the HuggingFace token:
+Set the `HUGGINGFACEHUB_API_TOKEN` environment variable to the value of the Hugging Face token by executing the following command:
 ```bash
 export HUGGINGFACEHUB_API_TOKEN="Your_Huggingface_API_Token"
 ```
@@ -62,17 +62,17 @@ export https_proxy=${your_http_proxy}
 
 ## Use Case Setup
 
-CodeTrans will use the following GenAIComps and corresponding tools. Tools and models mentioned in the table are configurable either through environment variables in the `set_env.sh` or `compose.yaml` file.
+CodeTrans will utilize the following GenAIComps services and associated tools. The tools and models listed in the table can be configured via environment variables in either the `set_env.sh` script or the `compose.yaml` file.
 
 | Use Case Components | Tools         | Model                                | Service Type         |
 |---------------------|---------------|--------------------------------------|----------------------|
-| LLM                 | TGI           | mistralai/Mistral-7B-Instruct-v0.3   | OPEA Microservice    |
+| LLM                 | vLLM or TGI   | mistralai/Mistral-7B-Instruct-v0.3   | OPEA Microservice    |
 | UI                  |               | NA                                   | Gateway Service      |
 | Ingress             | Nginx         | NA                                   | Gateway Service      |
 
 Set the necessary environment variables to set up the use case. To swap out models, modify `set_env.sh` before running it. For example, the environment variable `LLM_MODEL_ID` can be changed to another model by specifying the HuggingFace model card ID.
 
-To run the UI on a web browser on a laptop, modify `BACKEND_SERVICE_IP` to use `localhost` or `127.0.0.1` instead of `host_ip` inside `set_env.sh` for the backend to properly receive data from the UI.
+To run the UI on a web browser on a laptop, modify `BACKEND_SERVICE_ENDPOINT` to use `localhost` or `127.0.0.1` instead of `host_ip` inside `set_env.sh` for the backend to properly receive data from the UI.
 
 Run the `set_env.sh` script.
 ```bash
@@ -140,11 +140,11 @@ docker logs <CONTAINER_ID OR CONTAINER_NAME>
 
 ## Validate Microservices
 
-This section will walk through the different ways to interact with the microservices deployed.
+This section will guide through the various methods for interacting with the deployed microservices.
 
 ### vLLM or TGI Service
 
-In the first startup, this service will take more time to download, load, and warm up the model. After it is finished, the service will be ready.
+During the initial startup, this service will take a few minutes to download the model files and complete the warm-up process. Once this is finished, the service will be ready for use.
 
 Try the command below to check whether the LLM serving is ready.
 
