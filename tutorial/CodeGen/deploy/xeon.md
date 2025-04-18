@@ -6,7 +6,7 @@ This deployment section covers single-node on-prem deployment of the CodeGen exa
 
 The CodeGen use case uses a single microservice called LLM with model serving done with vLLM or TGI.
 
-This solution is designed to demonstrate the use the `Qwen2.5-Coder-7B-Instruct` model for code generation on Intel® Xeon® Scalable processors. The steps will involve setting up Docker containers, taking text input as the prompt, and generating code. Although multiple versions of the UI can be deployed, this tutorial will focus solely on the default version.
+This solution is designed to demonstrate the use of the `Qwen2.5-Coder-7B-Instruct` model for code generation on Intel® Xeon® Scalable processors. The steps will involve setting up Docker containers, taking text input as the prompt, and generating code. Although multiple versions of the UI can be deployed, this tutorial will focus solely on the default version.
 
 ## Prerequisites
 
