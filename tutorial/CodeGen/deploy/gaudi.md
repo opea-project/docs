@@ -22,12 +22,12 @@ Set up a workspace and clone the [GenAIExamples](https://github.com/opea-project
 ```bash
 export WORKSPACE=<Path>
 cd $WORKSPACE
-git clone https://github.com/opea-project/GenAIExamples.git # GenAIExamples
+git clone https://github.com/opea-project/GenAIExamples.git
 ```
 
 **Optional** It is recommended to use a stable release version by setting `RELEASE_VERSION` to a **number only** (i.e. 1.0, 1.1, etc) and checkout that version using the tag. Otherwise, by default, the main branch with the latest updates will be used.
 ```bash
-export RELEASE_VERSION=<Release_Version> # Set desired release version - number only
+export RELEASE_VERSION=<Release_Version> #  Set desired release version - number only
 cd GenAIExamples
 git checkout tags/v${RELEASE_VERSION}
 cd ..
