@@ -1,6 +1,6 @@
 # Single node on-prem deployment on Gaudi AI Accelerator
 
-This deployment section covers single-node on-prem deployment of the CodeGen example. It will show how to build an end-to-end CodeGen solution with the `Qwen2.5-Coder-32B-Instruct` model deployed on Intel® Gaudi® AI Accelerators. To quickly learn about OPEA and set up the required hardware and software, follow the instructions in the [Getting Started](../../../getting-started/README.md) section. 
+This section covers single-node on-prem deployment of the CodeGen example. It will show how to build an end-to-end CodeGen solution with the `Qwen2.5-Coder-32B-Instruct` model deployed on Intel® Gaudi® AI Accelerators. To quickly learn about OPEA and set up the required hardware and software, follow the instructions in the [Getting Started](../../../getting-started/README.md) section. 
 
 ## Overview
 
