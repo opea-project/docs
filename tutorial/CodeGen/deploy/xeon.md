@@ -60,7 +60,7 @@ CodeGen will utilize the following GenAIComps services and associated tools. The
 
 Set the necessary environment variables to set up the use case. To swap out models, modify `set_env.sh` before running it. For example, the environment variable `LLM_MODEL_ID` can be changed to another model by specifying the HuggingFace model card ID. 
 
->**Note**: On Xeon, it is recommended to use the 7B parameter model `Qwen/Qwen2.5-Coder-7B-Instruct` instead of the the 32B parameter model.
+>**Note**: On Xeon, it is recommended to use the 7B parameter model `Qwen/Qwen2.5-Coder-7B-Instruct` instead of the 32B parameter model.
 
 To run the UI on a web browser on a laptop, modify `BACKEND_SERVICE_ENDPOINT` to use `localhost` or `127.0.0.1` instead of `host_ip` inside `set_env.sh` for the backend to properly receive data from the UI.
 
