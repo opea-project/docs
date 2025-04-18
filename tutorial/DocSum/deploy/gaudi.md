@@ -1,12 +1,15 @@
 # Single node on-prem deployment on Gaudi AI Accelerator
 
-This deployment section covers the single-node on-prem deployment of the DocSum example. It will show how to build a document summarization service using the `Intel/neural-chat-7b-v3-3` model deployed on Intel® Gaudi® AI Accelerators. To quickly learn about OPEA and set up the required hardware and software, follow the instructions in the [Getting Started](../../../getting-started/README.md) section.
+This section covers the single-node on-prem deployment of the DocSum example. It will show how to build a document summarization service using the `Intel/neural-chat-7b-v3-3` model deployed on Intel® Gaudi® AI Accelerators. To quickly learn about OPEA and set up the required hardware and software, follow the instructions in the [Getting Started](../../../getting-started/README.md) section.
 
 ## Overview
 
-The DocSum use case uses the LLM and ASR microservices for document summarization.
+The OPEA GenAIComps microservices used to deploy a single node vLLM or TGI megaservice solution for DocSum are listed below:
 
-The solution is aimed to show how to use the Intel/neural-chat-7b-v3-3 model on the Intel® Gaudi® AI Accelerators to take a document(.txt,.doc,.pdf), audio or video file as the input and generate a summary. Steps will include setting up docker containers, uploading documents, and generating summaries. It can be deployed with multiple modes of UI but for this tutorial, the Gradio UI will be covered since it can handle multimedia docuemnts, .doc, and .pdf files.
+1. ASR
+2. LLM with vLLM or TGI
+
+This solution is designed to demonstrate the use of the `Intel/neural-chat-7b-v3-3` model on the Intel® Gaudi® AI Accelerators to take a document (.txt,.doc,.pdf), audio, or video file as the input and generate a summary. The steps will involve setting up Docker containers, uploading documents, and generating summaries. Although multiple versionf of the UI can be deployed, this tutorial will focus solely on the Gradio UI because it can handle multimedia docuemnts, .doc, and .pdf files.
 
 ## Prerequisites
 
@@ -35,7 +38,7 @@ cd ..
 
 Set up a [HuggingFace](https://huggingface.co/) account and generate a [user access token](https://huggingface.co/docs/transformers.js/en/guides/private#step-1-generating-a-user-access-token). The [Intel/neural-chat-7b-v3-3](https://huggingface.co/Intel/neural-chat-7b-v3-3) model does not need special access, but the token can be used with other models requiring access.
 
-Set an environment variable with the HuggingFace token:
+Set the `HUGGINGFACEHUB_API_TOKEN` environment variable to the value of the Hugging Face token by executing the following command:
 ```bash
 export HUGGINGFACEHUB_API_TOKEN="Your_Huggingface_API_Token"
 ```
@@ -47,12 +50,12 @@ export host_ip=$(hostname -I | awk '{print $1}')
 
 ## Use Case Setup
 
-DocSum will use the following GenAIComps and corresponding tools. Tools and models mentioned in the table are configurable either through environment variables in the `set_env.sh` or `compose.yaml` file.
+DocSum will utilize the following GenAIComps services and associated tools. The tools and models listed in the table can be configured via environment variables in either the `set_env.sh` script or the `compose.yaml` file.
 
 |Use Case Components  | Tools        | Model                       | Service Type      |
 |----------------     |--------------|-----------------------------|------------------ |
-|LLM                  |   vLLM or TGI        | Intel/neural-chat-7b-v3-3   | OPEA Microservice |
-|ASR                  |   Whisper    | openai/whisper-small        | OPEA Microservice |
+|LLM                  | vLLM or TGI  | Intel/neural-chat-7b-v3-3   | OPEA Microservice |
+|ASR                  | Whisper      | openai/whisper-small        | OPEA Microservice |
 |UI                   |              | NA                          | Gateway Service   |
 
 Set the necessary environment variables to set up the use case. To swap out models, modify `set_env.sh` before running it. For example, the environment variable `LLM_MODEL_ID` can be changed to another model by specifying the HuggingFace model card ID. 
@@ -131,13 +134,13 @@ docker logs <CONTAINER_ID OR CONTAINER_NAME>
 
 ## Validate Microservices
 
-This section will walk through the different ways to interact with the microservices deployed.
+This section will guide through the various methods for interacting with the deployed microservices.
 
 ### vLLM or TGI Service
 
-In the first startup, this service will take more time to download, load, and warm up the model. After it is finished, the service will be ready.
+During the initial startup, this service will take a few minutes to download the model files and complete the warm-up process. Once this is finished, the service will be ready for use.
 
-Try the command below to check whether the LLM serving is ready.
+Try the command below to check whether the LLM service is ready. It uses the name of the image to check the status.
 
 ::::{tab-set}
 :::{tab-item} vllm
@@ -155,7 +158,7 @@ INFO:     Application startup complete.
 
 ```bash
 # TGI service
-docker logs docsum-gaudi-tgi-service | grep Connected
+docker logs docsum-gaudi-tgi-server | grep Connected
 # If the service is ready, you will get the response like below.
 2024-09-03T02:47:53.402023Z  INFO text_generation_router::server: router/src/server.rs:2311: Connected
 ```
@@ -254,7 +257,7 @@ curl http://${host_ip}:8888/v1/docsum \
 :::::{tab-item} Audio
 :sync: Audio
 
-Audio uploads are not supported through *curl* commands, so use the UI to upload it. It is possible to pass base64 strings of the audio file:
+Audio uploads are not supported through *curl* commands, so use the UI to upload it. It is possible to pass base64 encoded strings of the audio file:
 
 JSON input:
 ```bash
@@ -305,7 +308,7 @@ curl http://${host_ip}:8888/v1/docsum \
 
 #### Megaservice with Long Context
 
-When dealing with longer context of the content to be summarized, different summarization strategies can be used such as *auto*, *stuff*, *truncate*, *map_reduce*, or *refine*. The best strategy is determined from various factors including model context size and input tokens.
+When performing summarization with long contexts - content longer than the model's context limit - different summarization strategies can be used such as *auto*, *stuff*, *truncate*, *map_reduce*, or *refine*. The best strategy is determined from various factors including model context size limits and number of input tokens.
 
 The following parameters can be adjusted to work with long context:
 - "summary_type": can be "auto", "stuff", "truncate", "map_reduce", "refine", default is "auto"
@@ -336,7 +339,7 @@ curl http://${host_ip}:8888/v1/docsum \
 :::::{tab-item} stuff
 :sync: stuff
 
-In this mode the LLM microservice generates a summary based on the entire input text. In this case, set `MAX_INPUT_TOKENS` and `MAX_TOTAL_TOKENS` according to the model and device memory. Otherwise, it may exceed the LLM context limit and raise errors when met with long context.
+In this mode the LLM microservice generates a summary based on the entire input text. In this case, set `MAX_INPUT_TOKENS` and `MAX_TOTAL_TOKENS` according to the model and device memory. Otherwise, it may exceed the LLM context limit and raise errors when provided a longer context.
 
 ```bash
 curl http://${host_ip}:8888/v1/docsum \
@@ -392,7 +395,7 @@ curl http://${host_ip}:8888/v1/docsum \
 :::::{tab-item} refine
 :sync: refine
 
-Refin mode will split the inputs into multiple chunks, generate a summary for the first one, combine it with the second summary, and repeats with all remaining chunks to get the final summary.
+Refine mode will split the inputs into multiple chunks, generate a summary for the first one, combine it with the second summary, and repeats with all remaining chunks to get the final summary.
 
 In this mode, default `chunk_size` is set to `min(MAX_TOTAL_TOKENS - 2 * input.max_tokens - 128, MAX_INPUT_TOKENS)`.
 
