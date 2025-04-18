@@ -1,6 +1,6 @@
-# # Single node on-prem deployment on Gaudi AI Accelerator
+# Single node on-prem deployment on Gaudi AI Accelerator
 
-This section covers single-node on-prem deployment of the CodeTrans example. It will show how to build an end-to-end code translation service with the `mistralai/Mistral-7B-Instruct-v0.3` model deployed on Intel® Gaudi® AI Accelerators. To quickly learn about OPEA and set up the required hardware and software, follow the instructions in the [Getting Started](../../../getting-started/README.md) section.
+This section covers single-node on-prem deployment of the CodeTrans example. It will show how to deploy an end-to-end code translation service with the `mistralai/Mistral-7B-Instruct-v0.3` model running on Intel® Gaudi® AI Accelerators. To quickly learn about OPEA and set up the required hardware and software, follow the instructions in the [Getting Started](../../../getting-started/README.md) section.
 
 ## Overview
 
@@ -115,7 +115,7 @@ After running `docker compose`, check for warning messages for environment varia
     WARN[0000] The "no_proxy" variable is not set. Defaulting to a blank string. 
     WARN[0000] The "http_proxy" variable is not set. Defaulting to a blank string. 
 
-Check if all the containers launched via `docker compose` are running i.e. each container's `STATUS` is `Up` and `Healthy`.
+Check if all the containers launched via `docker compose` are running i.e. each container's `STATUS` is `Up` and in some cases `Healthy`.
 
 Run this command to see this info:
 ```bash
@@ -125,12 +125,11 @@ docker ps -a
 Sample output:
 ```bash
 CONTAINER ID   IMAGE                      COMMAND                  CREATED         STATUS                   PORTS                                         NAMES
-00e882c68625   opea/nginx:latest          "/docker-entrypoint.…"   6 minutes ago   Up 29 seconds            0.0.0.0:80->80/tcp, [::]:80->80/tcp           codetrans-gaudi-nginx-server
-e0a394521db0   opea/codetrans-ui:latest   "docker-entrypoint.s…"   6 minutes ago   Up 29 seconds            0.0.0.0:5173->5173/tcp, [::]:5173->5173/tcp   codetrans-gaudi-ui-server
-c7e6a2621eb7   opea/codetrans:latest      "python code_transla…"   6 minutes ago   Up 31 seconds            0.0.0.0:7777->7777/tcp, [::]:7777->7777/tcp   codetrans-gaudi-backend-server
-53375fc51497   opea/llm-textgen:latest    "bash entrypoint.sh"     6 minutes ago   Up 32 seconds            0.0.0.0:9000->9000/tcp, [::]:9000->9000/tcp   codetrans-gaudi-llm-server
-71edc5a99442   opea/vllm:latest           "python3 -m vllm.ent…"   6 minutes ago   Up 3 minutes (healthy)   0.0.0.0:8008->80/tcp, [::]:8008->80/tcp       codetrans-gaudi-vllm-service
-
+ca0cfb3edce5   opea/nginx:latest          "/docker-entrypoint.…"   8 minutes ago   Up 6 minutes             0.0.0.0:80->80/tcp, [::]:80->80/tcp           codetrans-gaudi-nginx-server
+d7ef9da3f7db   opea/codetrans-ui:latest   "docker-entrypoint.s…"   8 minutes ago   Up 6 minutes             0.0.0.0:5173->5173/tcp, [::]:5173->5173/tcp   codetrans-gaudi-ui-server
+2cfc12e1c8f1   opea/codetrans:latest      "python code_transla…"   8 minutes ago   Up 6 minutes             0.0.0.0:7777->7777/tcp, [::]:7777->7777/tcp   codetrans-gaudi-backend-server
+c1db5a49003d   opea/llm-textgen:latest    "bash entrypoint.sh"     8 minutes ago   Up 6 minutes             0.0.0.0:9000->9000/tcp, [::]:9000->9000/tcp   codetrans-gaudi-llm-server
+450f74cb65a4   opea/vllm:latest           "python3 -m vllm.ent…"   8 minutes ago   Up 8 minutes (healthy)   0.0.0.0:8008->80/tcp, [::]:8008->80/tcp       codetrans-gaudi-vllm-service
 ```
 
 Each docker container's log can also be checked using:
@@ -285,7 +284,7 @@ codetrans-gaudi-ui-server:
     - "${FRONTEND_SERVICE_PORT:-5173}:5173"
 ```
 
-After making this change, rebuild and restart the containers for the change to take effect. 
+After making this change, restart the containers for the change to take effect. 
 
 ### Stop the Services
 
