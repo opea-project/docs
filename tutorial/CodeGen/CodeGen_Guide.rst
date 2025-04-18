@@ -3,18 +3,13 @@
 CodeGen
 #####################
 
-.. note:: This guide is in its early development and is a work-in-progress with
-   placeholder content.
-
 Overview
 ********
 
-The CodeGen example uses specialized AI models that went through training with datasets that
-encompass repositories, documentation, programming code, and web data. With an understanding
-of various programming languages, coding patterns, and software development concepts, the
-CodeGen LLMs assist developers and programmers. The LLMs can be integrated into the developers'
+The CodeGen example uses specialized AI models that went through training with datasets that encompass repositories, documentation, programming code, and web data. With an understanding
+of various programming languages, coding patterns, and software development concepts, CodeGen LLMs assist developers and programmers. The LLMs can be integrated into the developers'
 Integrated Development Environments (IDEs) to have more contextual awareness to write more
-refined and relevant code based on the suggestions.
+refined and relevant code based on suggestions.
 
 Purpose
 *******
@@ -37,7 +32,7 @@ for serving deployment. It is presented as a Code Copilot application as shown i
 
 Deployment
 **********
-Here are some deployment options, depending on your hardware and environment:
+Here are some deployment options, depending on the hardware and environment:
 
 .. toctree::
    :maxdepth: 1

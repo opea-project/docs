@@ -1,196 +1,68 @@
-# Single node on-prem deployment with TGI on Xeon
+# Single node on-prem deployment on Xeon
 
-This deployment section covers single-node on-prem deployment of the CodeGen
-example with OPEA comps to deploy using the TGI service. We will be showcasing how
-to build an e2e CodeGen solution with the Qwen2.5-Coder-7B-Instruct,
-deployed on Intel® Xeon® Scalable processors. To quickly learn about OPEA in just 5 minutes 
-and set up the required hardware and software, please follow the instructions in the
-[Getting Started](../../../getting-started/README.md) section. 
+This section covers single-node on-prem deployment of the CodeGen example. It will show how to deploy an end-to-end CodeGen solution with the `Qwen2.5-Coder-7B-Instruct` model running on Intel® Xeon® Scalable processors. To quickly learn about OPEA and set up the required hardware and software, follow the instructions in the [Getting Started](../../../getting-started/README.md) section.
 
 ## Overview
 
-The CodeGen use case uses a single microservice called LLM. In this tutorial, we 
-will walk through the steps on how on enable it from OPEA GenAIComps to deploy on 
-a single node TGI megaservice solution. 
+The CodeGen use case uses a single microservice called LLM with model serving done with vLLM or TGI.
 
-The solution is aimed to show how to use the Qwen2.5-Coder-7B-Instruct model on the Intel® 
-Xeon® Scalable processors. We will go through how to setup docker containers to start 
-the microservice and megaservice. The solution will then take text input as the 
-prompt and generate code accordingly. It is deployed with a UI with 2 modes to 
-choose from:
-
-1. Basic UI
-2. React-Based UI
-
-The React-based UI is optional, but this feature is supported in this example if you
-are interested in using it.
-
-Below is the list of content we will be covering in this tutorial:
-
-1. Prerequisites
-2. Prepare (Building / Pulling) Docker images
-3. Use case setup
-4. Deploy the use case
-5. Interacting with CodeGen deployment
+This solution is designed to demonstrate the use of the `Qwen2.5-Coder-7B-Instruct` model for code generation on Intel® Xeon® Scalable processors. The steps will involve setting up Docker containers, taking text input as the prompt, and generating code. Although multiple versions of the UI can be deployed, this tutorial will focus solely on the default version.
 
 ## Prerequisites
 
-The first step is to clone the GenAIExamples and GenAIComps projects. GenAIComps are 
-fundamental necessary components used to build the examples you find in 
-GenAIExamples and deploy them as microservices. Set an environment 
-variable for the desired release version with the **number only** 
-(i.e. 1.0, 1.1, etc) and checkout using the tag with that version. 
+To run the UI on a web browser external to the host machine such as a laptop, the following port(s) need to be forwarded when using SSH to login to the host machine:
+- 7778: CodeGen megaservice port
 
+This port is used for `BACKEND_SERVICE_ENDPOINT` defined in the `set_env.sh` for this example inside the `docker compose` folder. Specifically, for CodeGen, append the following to the ssh command: 
 ```bash
-# Set workspace
-export WORKSPACE=<path>
+-L 7778:localhost:7778
+```
+
+Set up a workspace and clone the [GenAIExamples](https://github.com/opea-project/GenAIExamples) GitHub repo.
+```bash
+export WORKSPACE=<Path>
 cd $WORKSPACE
-
-# Set desired release version - number only
-export RELEASE_VERSION=<insert-release-version>
-
-# GenAIComps
-git clone https://github.com/opea-project/GenAIComps.git
-cd GenAIComps
-git checkout tags/v${RELEASE_VERSION}
-cd ..
-
-# GenAIExamples
 git clone https://github.com/opea-project/GenAIExamples.git
+```
+
+**Optional** It is recommended to use a stable release version by setting `RELEASE_VERSION` to a **number only** (i.e. 1.0, 1.1, etc) and checkout that version using the tag. Otherwise, by default, the main branch with the latest updates will be used.
+```bash
+export RELEASE_VERSION=<Release_Version> #  Set desired release version - number only
 cd GenAIExamples
 git checkout tags/v${RELEASE_VERSION}
 cd ..
 ```
 
-The examples utilize model weights from HuggingFace and Langchain.
+Set up a [HuggingFace](https://huggingface.co/) account and generate a [user access token](https://huggingface.co/docs/transformers.js/en/guides/private#step-1-generating-a-user-access-token). The [Qwen2.5-Coder-7B-Instruct](https://huggingface.co/Qwen/Qwen2.5-Coder-7B-Instruct) model does not need special access, but the token can be used with other models requiring access.
 
-Setup your [HuggingFace](https://huggingface.co/) account and generate
-[user access token](https://huggingface.co/docs/transformers.js/en/guides/private#step-1-generating-a-user-access-token).
-
-Setup the HuggingFace token
+Set the `HUGGINGFACEHUB_API_TOKEN` environment variable to the value of the Hugging Face token by executing the following command:
 ```bash
 export HUGGINGFACEHUB_API_TOKEN="Your_Huggingface_API_Token"
 ```
 
-The example requires you to set the `host_ip` to deploy the microservices on
-endpoint enabled with ports. Set the host_ip env variable
-```bash
-export host_ip=$(hostname -I | awk '{print $1}')
-```
+`host_ip` is not required to be set manually. It will be set in the `set_env.sh` script later.
 
-Make sure to setup Proxies if you are behind a firewall
+For machines behind a firewall, set up the proxy environment variables:
 ```bash
 export no_proxy=${your_no_proxy},$host_ip
 export http_proxy=${your_http_proxy}
 export https_proxy=${your_http_proxy}
 ```
 
-## Prepare (Building / Pulling) Docker images
-
-This step will involve building/pulling relevant docker
-images with step-by-step process along with sanity check in the end. For
-CodeGen, the following docker images will be needed: LLM with TGI. 
-Additionally, you will need to build docker images for the 
-CodeGen megaservice, and UI (React UI is optional). In total,
-there are **3 required docker images** and an optional docker image.
-
-### Build/Pull Microservice image
-
-::::::{tab-set}
-
-:::::{tab-item} Pull
-:sync: Pull
-
-If you decide to pull the docker containers and not build them locally,
-you can proceed to the next step where all the necessary containers will
-be pulled in from Docker Hub.
-
-:::::
-:::::{tab-item} Build
-:sync: Build
-
-Follow the steps below to build the docker images from within the `GenAIComps` folder.
-**Note:** For RELEASE_VERSIONS older than 1.0, you will need to add a 'v' in front 
-of ${RELEASE_VERSION} to reference the correct image on Docker Hub.
-
-```bash
-cd $WORKSPACE/GenAIComps
-```
-
-#### Build LLM Image
-
-```bash
-docker build -t opea/llm-textgen:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/llms/src/text-generation/Dockerfile .
-```
-
-### Build Mega Service images
-
-The Megaservice is a pipeline that channels data through different
-microservices, each performing varied tasks. The LLM microservice and 
-flow of data are defined in the `codegen.py` file. You can also add or 
-remove microservices and customize the megaservice to suit your needs.
-
-Build the megaservice image for this use case
-
-```bash
-cd $WORKSPACE/GenAIExamples/CodeGen
-```
-
-```bash
-docker build -t opea/codegen:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f Dockerfile .
-```
-
-### Build the UI Image
-
-You can build 2 modes of UI
-
-*Basic UI*
-
-```bash
-cd $WORKSPACE/GenAIExamples/CodeGen/ui/
-docker build -t opea/codegen-ui:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f ./docker/Dockerfile .
-```
-
-*React UI (Optional)* 
-If you want a React-based frontend.
-
-```bash
-cd $WORKSPACE/GenAIExamples/CodeGen/ui/
-docker build --no-cache -t opea/codegen-react-ui:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f ./docker/Dockerfile.react .
-```
-
-### Sanity Check
-Check if you have the following set of docker images by running the command `docker images` before moving on to the next step:
-
-* `opea/llm-tgi:${RELEASE_VERSION}`
-* `opea/codegen:${RELEASE_VERSION}`
-* `opea/codegen-ui:${RELEASE_VERSION}`
-* `opea/codegen-react-ui:${RELEASE_VERSION}` (optional)
-
-:::::
-::::::
-
 ## Use Case Setup
 
-The use case will use the following combination of GenAIComps and tools
+CodeGen will utilize the following GenAIComps services and associated tools. The tools and models listed in the table can be configured via environment variables in either the `set_env.sh` script or the `compose.yaml` file.
 
 |Use Case Components | Tools | Model     | Service Type |
 |----------------     |--------------|-----------------------------|-------|
-|LLM                  |   TGI        | Qwen/Qwen2.5-Coder-7B-Instruct | OPEA Microservice |
+|LLM                  |   vLLM, TGI        | Qwen/Qwen2.5-Coder-7B-Instruct | OPEA Microservice |
 |UI                   |              | NA                        | Gateway Service |
 
-Tools and models mentioned in the table are configurable either through the
-environment variables or `compose.yaml` file.
+Set the necessary environment variables to set up the use case. To swap out models, modify `set_env.sh` before running it. For example, the environment variable `LLM_MODEL_ID` can be changed to another model by specifying the HuggingFace model card ID. 
 
-Set the necessary environment variables to setup the use case case by running the `set_env.sh` script.
-Here is where the environment variable `LLM_MODEL_ID` is set, and you can change it to another model 
-by specifying the HuggingFace model card ID.
+>**Note**: On Xeon, it is recommended to use the 7B parameter model `Qwen/Qwen2.5-Coder-7B-Instruct` instead of the 32B parameter model.
 
-**Note:** If you wish to run the UI on a web browser on your laptop, you will need to modify `BACKEND_SERVICE_ENDPOINT` to use `localhost` or `127.0.0.1` instead of `host_ip` inside `set_env.sh` for the backend to properly receive data from the UI. Additionally, you will need to port-forward the port used for `BACKEND_SERVICE_ENDPOINT`. Specifically, for CodeGen, append the following to your ssh command: 
-
-```bash
--L 7778:localhost:7778
-```
+To run the UI on a web browser on a laptop, modify `BACKEND_SERVICE_ENDPOINT` to use `localhost` or `127.0.0.1` instead of `host_ip` inside `set_env.sh` for the backend to properly receive data from the UI.
 
 Run the `set_env.sh` script.
 ```bash
@@ -200,70 +72,89 @@ source ./set_env.sh
 
 ## Deploy the Use Case
 
-In this tutorial, we will be deploying via docker compose with the provided
-YAML file.  The docker compose instructions should be starting all the
-above mentioned services as containers.
-
+Navigate to the `docker compose` directory for this hardware platform.
 ```bash
 cd $WORKSPACE/GenAIExamples/CodeGen/docker_compose/intel/cpu/xeon
-docker compose up -d
 ```
 
+Run `docker compose` with the provided YAML file to start all the services mentioned above as containers. The vLLM or TGI service can be used for CodeGen.
 
-### Checks to Ensure the Services are Running
-#### Check Startup and Env Variables
-Check the start up log by running `docker compose logs` to ensure there are no errors.
-The warning messages print out the variables if they are **NOT** set.
-
-Here are some sample messages if proxy environment variables are not set:
-
-    WARN[0000] The "no_proxy" variable is not set. Defaulting to a blank string.
-    WARN[0000] The "https_proxy" variable is not set. Defaulting to a blank string.
-    WARN[0000] The "http_proxy" variable is not set. Defaulting to a blank string.
-    WARN[0000] The "no_proxy" variable is not set. Defaulting to a blank string.
-    WARN[0000] The "https_proxy" variable is not set. Defaulting to a blank string.
-    WARN[0000] The "http_proxy" variable is not set. Defaulting to a blank string.
-    WARN[0000] The "no_proxy" variable is not set. Defaulting to a blank string.
-    WARN[0000] The "http_proxy" variable is not set. Defaulting to a blank string.
-    WARN[0000] The "https_proxy" variable is not set. Defaulting to a blank string.
-    WARN[0000] The "no_proxy" variable is not set. Defaulting to a blank string.
-    WARN[0000] The "http_proxy" variable is not set. Defaulting to a blank string.
-    WARN[0000] The "https_proxy" variable is not set. Defaulting to a blank string.
-
-#### Check the Container Status
-
-Check if all the containers launched via docker compose has started.
-
-The CodeGen example starts 4 docker containers. Check that these docker
-containers are all running, i.e, all the containers  `STATUS`  are  `Up`.
-You can do this with the `docker ps -a` command.
+::::{tab-set}
+:::{tab-item} vllm
+:sync: vllm
 
 ```bash
-CONTAINER ID   IMAGE                                                           COMMAND                  CREATED              STATUS              PORTS                                       NAMES
-bbd235074c3d   opea/codegen-ui:${RELEASE_VERSION}                                          "docker-entrypoint.s…"   About a minute ago   Up About a minute   0.0.0.0:5173->5173/tcp, :::5173->5173/tcp   codegen-xeon-ui-server
-8d3872ca66fa   opea/codegen:${RELEASE_VERSION}                                             "python codegen.py"      About a minute ago   Up About a minute   0.0.0.0:7778->7778/tcp, :::7778->7778/tcp   codegen-xeom-backend-server
-b9fc39f51cdb   opea/llm-tgi:${RELEASE_VERSION}                                             "bash entrypoint.sh"     About a minute ago   Up About a minute   0.0.0.0:9000->9000/tcp, :::9000->9000/tcp   llm-tgi-xeon-server
-39994e007f15   ghcr.io/huggingface/text-generation-inference:2.4.0-intel-cpu   "text-generation-lau…"   About a minute ago   Up About a minute   0.0.0.0:8028->80/tcp, :::8028->80/tcp       tgi-server
+docker compose --profile codegen-xeon-vllm up -d
 ```
-
-## Interacting with CodeGen for Deployment
-
-This section will walk you through the different ways to interact with
-the microservices deployed. After a couple minutes, rerun `docker ps -a` 
-to ensure all the docker containers are still up and running. Then proceed 
-to validate each microservice and megaservice. 
-
-### TGI Service
+:::
+:::{tab-item} TGI
+:sync: TGI
 
 ```bash
-curl http://${host_ip}:8028/generate \
-  -X POST \
-  -d '{"inputs":"Implement a high-level API for a TODO list application. The API takes as input an operation request and updates the TODO list in place. If the request is invalid, raise an exception.","parameters":{"max_new_tokens":256, "do_sample": true}}' \
-  -H 'Content-Type: application/json'
+docker compose --profile codegen-xeon-tgi up -d
+```
+:::
+::::
+
+### Check Env Variables
+After running `docker compose`, check for warning messages for environment variables that are **NOT** set. Address them if needed. 
+
+    WARN[0000] The "no_proxy" variable is not set. Defaulting to a blank string.
+    WARN[0000] The "https_proxy" variable is not set. Defaulting to a blank string.
+    WARN[0000] The "http_proxy" variable is not set. Defaulting to a blank string.
+    WARN[0000] The "no_proxy" variable is not set. Defaulting to a blank string.
+    WARN[0000] The "https_proxy" variable is not set. Defaulting to a blank string.
+    WARN[0000] The "http_proxy" variable is not set. Defaulting to a blank string.
+    WARN[0000] The "no_proxy" variable is not set. Defaulting to a blank string.
+    WARN[0000] The "http_proxy" variable is not set. Defaulting to a blank string.
+    WARN[0000] The "https_proxy" variable is not set. Defaulting to a blank string.
+    WARN[0000] The "no_proxy" variable is not set. Defaulting to a blank string.
+    WARN[0000] The "http_proxy" variable is not set. Defaulting to a blank string.
+    WARN[0000] The "https_proxy" variable is not set. Defaulting to a blank string.
+
+Check if all the containers launched via `docker compose` are running i.e. each container's `STATUS` is `Up` and in some cases `Healthy`.
+
+Run this command to see this info:
+```bash
+docker ps -a
 ```
 
-Here is the output:
+Sample output:
+```bash
+CONTAINER ID   IMAGE                                                   COMMAND                  CREATED         STATUS                   PORTS                                                                                      NAMES
+0040b340a392   opea/codegen-gradio-ui:latest                           "python codegen_ui_g…"   4 minutes ago   Up 3 minutes             0.0.0.0:5173->5173/tcp, [::]:5173->5173/tcp                                                codegen-xeon-ui-server
+3d2c7deacf5b   opea/codegen:latest                                     "python codegen.py"      4 minutes ago   Up 3 minutes             0.0.0.0:7778->7778/tcp, [::]:7778->7778/tcp                                                codegen-xeon-backend-server
+ad59907292fe   opea/dataprep:latest                                    "sh -c 'python $( [ …"   4 minutes ago   Up 4 minutes (healthy)   0.0.0.0:6007->5000/tcp, [::]:6007->5000/tcp                                                dataprep-redis-server
+2cb4e0a6562e   opea/retriever:latest                                   "python opea_retriev…"   4 minutes ago   Up 4 minutes             0.0.0.0:7000->7000/tcp, [::]:7000->7000/tcp                                                retriever-redis
+f787f774890b   opea/llm-textgen:latest                                 "bash entrypoint.sh"     4 minutes ago   Up About a minute        0.0.0.0:9000->9000/tcp, [::]:9000->9000/tcp                                                llm-codegen-vllm-server
+5880b86091a5   opea/embedding:latest                                   "sh -c 'python $( [ …"   4 minutes ago   Up 4 minutes             0.0.0.0:6000->6000/tcp, [::]:6000->6000/tcp                                                tei-embedding-server
+cd16e3c72f17   opea/llm-textgen:latest                                 "bash entrypoint.sh"     4 minutes ago   Up 4 minutes                                                                                                        llm-textgen-server
+cd412bca7245   redis/redis-stack:7.2.0-v9                              "/entrypoint.sh"         4 minutes ago   Up 4 minutes             0.0.0.0:6379->6379/tcp, [::]:6379->6379/tcp, 0.0.0.0:8001->8001/tcp, [::]:8001->8001/tcp   redis-vector-db
+8d4e77afc067   opea/vllm:latest                                        "python3 -m vllm.ent…"   4 minutes ago   Up 4 minutes (healthy)   0.0.0.0:8028->80/tcp, [::]:8028->80/tcp                                                    vllm-server
+f7c1cb49b96b   ghcr.io/huggingface/text-embeddings-inference:cpu-1.5   "/bin/sh -c 'apt-get…"   4 minutes ago   Up 4 minutes (healthy)   0.0.0.0:8090->80/tcp, [::]:8090->80/tcp                                                    tei-embedding-serving
+```
 
+Each docker container's log can also be checked using:
+
+```bash
+docker logs <CONTAINER_ID OR CONTAINER_NAME>
+```
+
+## Validate Microservices
+
+This section will guide through the various methods for interacting with the deployed microservices.
+
+### vLLM or TGI Service
+
+```bash
+curl http://${host_ip}:8028/v1/chat/completions \
+    -X POST \
+    -H 'Content-Type: application/json' \
+    -d '{"model": "Qwen/Qwen2.5-Coder-7B-Instruct", "messages": [{"role": "user", "content": "Implement a high-level API for a TODO list application. The API takes as input an operation request and updates the TODO list in place. If the request is invalid, raise an exception."}], "max_tokens":32}'
+
+```
+
+Here is sample output:
 ```bash
 {"generated_text":"Start with a user story. We will add story tests later. In this case, we'll choose a story about adding a TODO:\n    ```ruby\n    as a user,\n    i want to add a todo,\n    so that i can get a todo list.\n\n    conformance:\n    - a new todo is added to the list\n    - if the todo text is empty, raise an exception\n    ```\n\n1. Write the first test:\n    ```ruby\n    feature Testing the addition of a todo to the list\n\n    given a todo list empty list\n    when a user adds a todo\n    the todo should be added to the list\n\n    inputs:\n    when_values: [[\"A\"]]\n\n    output validations:\n    - todo_list contains { text:\"A\" }\n    ```\n\n1. Write the first step implementation in any programming language you like. In this case, we will choose Ruby:\n    ```ruby\n    def add_"}
 ```
@@ -273,117 +164,84 @@ Here is the output:
 ```bash
 curl http://${host_ip}:9000/v1/chat/completions\
   -X POST \
-  -d '{"query":"Implement a high-level API for a TODO list application. The API takes as input an operation request and updates the TODO list in place. If the request is invalid, raise an exception.","max_tokens":256,"top_k":10,"top_p":0.95,"typical_p":0.95,"temperature":0.01,"repetition_penalty":1.03,"streaming":true}' \
-  -H 'Content-Type: application/json'
+  -H 'Content-Type: application/json' \
+  -d '{"query":"Implement a high-level API for a TODO list application. The API takes as input an operation request and updates the TODO list in place. If the request is invalid, raise an exception.","max_tokens":256,"top_k":10,"top_p":0.95,"typical_p":0.95,"temperature":0.01,"repetition_penalty":1.03,"stream":true}'
 ```
 
-The output is given one character at a time. It is too long to show 
-here but the last item will be
+The output code is printed one character at a time. It is too long to show here but the last item will be
 ```bash
 data: [DONE]
 ```
 
-### MegaService
+### Dataprep Microservice
+The following is a template only. Replace the filename placeholders with desired files.
 
+```bash
+curl http://${host_ip}:6007/v1/dataprep/ingest \
+-X POST \
+-H "Content-Type: multipart/form-data" \
+-F "files=@./file1.pdf" \
+-F "files=@./file2.txt" \
+-F "index_name=my_API_document"
+```
+
+### CodeGen Megaservice
+
+Default:
 ```bash
 curl http://${host_ip}:7778/v1/codegen -H "Content-Type: application/json" -d '{
      "messages": "Implement a high-level API for a TODO list application. The API takes as input an operation request and updates the TODO list in place. If the request is invalid, raise an exception."
      }'
 ```
 
-The output is given one character at a time. It is too long to show 
-here but the last item will be
+The output code is printed one character at a time. It is too long to show here but the last item will be
 ```bash
 data: [DONE]
 ```
 
+The CodeGen Megaservice can also be utilized with RAG and Agents activated:
+```bash
+curl http://${host_ip}:7778/v1/codegen \
+  -H "Content-Type: application/json" \
+  -d '{"agents_flag": "True", "index_name": "my_API_document", "messages": "Implement a high-level API for a TODO list application. The API takes as input an operation request and updates the TODO list in place. If the request is invalid, raise an exception."}'
+  ```
+
 ## Launch UI
-### Svelte UI
-To access the frontend, open the following URL in your browser: http://{host_ip}:5173. By default, the UI runs on port 5173 internally. If you prefer to use a different host port to access the frontend, you can modify the port mapping in the `compose.yaml` file as shown below:
+### Gradio UI
+To access the frontend, open the following URL in a web browser: http://${host_ip}:5173. By default, the UI runs on port 5173 internally. A different host port can be used to access the frontend by modifying the port mapping in the `compose.yaml` file as shown below:
 ```yaml
   codegen-xeon-ui-server:
-    image: ${REGISTRY:-opea}/codegen-ui:${TAG:-latest}
+    image: ${REGISTRY:-opea}/codegen-gradio-ui:${TAG:-latest}
     ...
     ports:
-      - "5173:5173"
+      - "YOUR_HOST_PORT:5173" # Change YOUR_HOST_PORT to the desired port
 ```
 
-### React-Based UI (Optional)
-To access the React-based frontend, modify the UI service in the `compose.yaml` file. Replace `codegen-xeon-ui-server` service with the codegen-xeon-react-ui-server service as per the config below:
-```yaml
-codegen-xeon-react-ui-server:
-  image: ${REGISTRY:-opea}/codegen-react-ui:${TAG:-latest}
-  container_name: codegen-xeon-react-ui-server
-  environment:
-    - no_proxy=${no_proxy}
-    - https_proxy=${https_proxy}
-    - http_proxy=${http_proxy}
-    - APP_CODE_GEN_URL=${BACKEND_SERVICE_ENDPOINT}
-  depends_on:
-    - codegen-xeon-backend-server
-  ports:
-    - "5174:80"
-  ipc: host
-  restart: always
-```
-Once the services are up, open the following URL in your browser: http://{host_ip}:5174. By default, the UI runs on port 80 internally. If you prefer to use a different host port to access the frontend, you can modify the port mapping in the `compose.yaml` file as shown below:
-```yaml
-  codegen-xeon-react-ui-server:
-    image: ${REGISTRY:-opea}/codegen-react-ui:${TAG:-latest}
-    ...
-    ports:
-      - "80:80"
+After making this change, restart the containers for the change to take effect. 
+
+## Stop the Services
+
+Navigate to the `docker compose` directory for this hardware platform.
+```bash
+cd $WORKSPACE/GenAIExamples/CodeGen/docker_compose/intel/cpu/xeon
 ```
 
-## Check Docker Container Logs
+To stop and remove all the containers, use the commands below:
 
-You can check the log of a container by running this command:
+::::{tab-set}
+:::{tab-item} vllm
+:sync: vllm
 
 ```bash
-docker logs <CONTAINER ID> -t
+docker compose --profile codegen-xeon-vllm down
 ```
+:::
+:::{tab-item} TGI
+:sync: TGI
 
-You can also check the overall logs with the following command, where the
-`compose.yaml` is the megaservice docker-compose configuration file.
-
-Assumming you are still in this directory `$WORKSPACE/GenAIExamples/CodeGen/docker_compose/intel/cpu/xeon`,
-run the following command to check the logs:
 ```bash
-docker compose -f compose.yaml logs
+
+docker compose --profile codegen-xeon-tgi down
 ```
-
-View the docker input parameters in  `$WORKSPACE/GenAIExamples/CodeGen/docker_compose/intel/cpu/xeon/compose.yaml`
-
-```yaml
-  tgi-service:
-    image: ghcr.io/huggingface/text-generation-inference:2.4.0-intel-cpu
-    container_name: tgi-server
-    ports:
-      - "8028:80"
-    volumes:
-      - "./data:/data"
-    environment:
-      no_proxy: ${no_proxy}
-      http_proxy: ${http_proxy}
-      https_proxy: ${https_proxy}
-      HABANA_VISIBLE_DEVICES: all
-      OMPI_MCA_btl_vader_single_copy_mechanism: none
-      HF_TOKEN: ${HUGGINGFACEHUB_API_TOKEN}
-    runtime: habana
-    cap_add:
-      - SYS_NICE
-    ipc: host
-    command: --model-id ${LLM_MODEL_ID} --max-input-length 1024 --max-total-tokens 2048
-```
-
-The input `--model-id` is  `${LLM_MODEL_ID}`. Ensure the environment variable `LLM_MODEL_ID` 
-is set correctly. Check spelling. Whenever this is changed, restart the containers to use 
-the newly selected model.
-
-
-## Stop the services
-
-Once you are done with the entire pipeline and wish to stop and remove all the containers, use the command below:
-```bash
-docker compose down
-```
+:::
+::::
