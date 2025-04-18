@@ -238,6 +238,7 @@ docker compose --profile codegen-xeon-vllm down
 :sync: TGI
 
 ```bash
+
 docker compose --profile codegen-xeon-tgi down
 ```
 :::

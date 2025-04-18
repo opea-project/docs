@@ -3,14 +3,11 @@
 ChatQnA
 ####################
 
-.. note:: This guide is in its early development and is a work-in-progress with
-   placeholder content.
-
 Overview
 ********
 
-Chatbots are a  widely adopted use case for leveraging the powerful chat and
-reasoning capabilities of large language models (LLMs).  The ChatQnA example
+Chatbots are a widely adopted use case for leveraging the powerful chat and
+reasoning capabilities of large language models (LLMs). The ChatQnA example
 provides the starting point for developers to begin working in the GenAI space.
 Consider it the “hello world” of GenAI applications and can be leveraged for
 solutions across wide enterprise verticals, both internally and externally.
@@ -38,16 +35,22 @@ generating human-like responses. Developers can easily swap out the generative
 model or vector database with their own custom models or databases. This allows
 developers to build chatbots that are tailored to their specific use cases and
 requirements. By combining the generative model with the vector database, RAG
-can provide accurate and contextually relevant responses specific to your users'
+can provide accurate and contextually relevant responses specific to users'
 queries.
 
 The ChatQnA example is designed to be a simple, yet powerful, demonstration of
 the RAG architecture. It is a great starting point for developers looking to
 build chatbots that can provide accurate and up-to-date information to users.
 
-To facilitate sharing of individual services across multiple GenAI applications, use the GenAI Microservices Connector (GMC) to deploy your application. Apart from service sharing , it also supports specifying sequential, parallel, and alternative steps in a GenAI pipeline. In so doing, it supports dynamic switching between models used in any stage of a GenAI pipeline.  For example, within the ChatQnA pipeline, using GMC one could switch the model used in the embedder, re-ranker, and/or the LLM.
-Upstream Vanilla Kubernetes or Red Hat OpenShift Container
-Platform (RHOCP) can be used with or without GMC, while use with GMC provides additional features.
+To facilitate sharing of individual services across multiple GenAI applications, 
+use the GenAI Microservices Connector (GMC) to deploy the application. Apart 
+from service sharing , it also supports specifying sequential, parallel, and 
+alternative steps in a GenAI pipeline. In so doing, it supports dynamic switching 
+between models used in any stage of a GenAI pipeline. For example, within the 
+ChatQnA pipeline, using GMC one could switch the model used in the embedder, 
+re-ranker, and/or the LLM. Upstream Vanilla Kubernetes or Red Hat OpenShift Container
+Platform (RHOCP) can be used with or without GMC, while use with GMC provides 
+additional features.
 
 The ChatQnA provides several deployment options, including single-node
 deployments on-premise or in a cloud environment using hardware such as Xeon
@@ -126,7 +129,53 @@ For more details, please refer to the following document:
 Expected Output
 ===============
 
-TBD
+After launching the ChatQnA application, a curl command can be used to ensure the 
+megaservice is working properly. The example below assumes a document containing 
+new information is uploaded to the vector database before querying.
+.. code-block:: bash
+   
+   curl http://${host_ip}:8888/v1/chatqna -H "Content-Type: application/json" -d '{
+      "messages": "What is the revenue of Nike in 2023?"
+      }'
+
+Here is the output for reference:
+.. code-block:: bash
+   
+   data: b'\n'
+   data: b'An'
+   data: b'swer'
+   data: b':'
+   data: b' In'
+   data: b' fiscal'
+   data: b' '
+   data: b'2'
+   data: b'0'
+   data: b'2'
+   data: b'3'
+   data: b','
+   data: b' N'
+   data: b'I'
+   data: b'KE'
+   data: b','
+   data: b' Inc'
+   data: b'.'
+   data: b' achieved'
+   data: b' record'
+   data: b' Rev'
+   data: b'en'
+   data: b'ues'
+   data: b' of'
+   data: b' $'
+   data: b'5'
+   data: b'1'
+   data: b'.'
+   data: b'2'
+   data: b' billion'
+   data: b'.'
+   data: b'</s>'
+   data: [DONE]
+
+The UI will show a similar response with formatted output.
 
 Validation Matrix and Prerequisites
 ===================================
@@ -217,9 +266,9 @@ The gateway serves as the interface for users to access. The gateway routes inco
 Deployment
 **********
 
-Here are some deployment options depending on your hardware and environment.
+Here are some deployment options depending on the hardware and environment.
 It includes both single-node and orchestrated multi-node configurations.
-Choose the one that best fits your requirements.
+Choose the one that best fits requirements.
 
 Single Node
 ***********
@@ -253,9 +302,9 @@ Troubleshooting
 
 1. Browser interface https link failed
 
-   Q:For example, started ChatQnA example in IBM Cloud and trying to access the UI interface. By default, typing the :5173 resolves to https://:5173. Chrome shows the following warning message：xx.xx.xx.xx doesn't support a secure connection
+   Q: For example, started ChatQnA example in IBM Cloud and trying to access the UI interface. By default, typing the :5173 resolves to https://:5173. Chrome shows the following warning message：xx.xx.xx.xx doesn't support a secure connection
 
-   A: That is because by default, the browser resolves xx.xx.xx.xx:5173 to https://xx.xx.xx.xx:5173. But  to meet security requirements, users need to deploy a certificate to enable HTTPS support in some cloud environments. OPEA provides HTTP services by default，but also supports HTTPS. To enable HTTPS, you can specify the certificate file paths in the MicroService class. For more details, please refer to the `source code <https://github.com/opea-project/GenAIComps/blob/main/comps/cores/mega/micro_service.py#L33>`_.
+   A: By default, the browser resolves xx.xx.xx.xx:5173 to https://xx.xx.xx.xx:5173. But to meet security requirements, users need to deploy a certificate to enable HTTPS support in some cloud environments. OPEA provides HTTP services by default，but also supports HTTPS. To enable HTTPS, specify the certificate file paths in the MicroService class. For more details, please refer to the `source code <https://github.com/opea-project/GenAIComps/blob/main/comps/cores/mega/micro_service.py#L33>`_.
 
 2. For other troubles, please check the `doc <https://opea-project.github.io/latest/GenAIExamples/ChatQnA/docker_compose/intel/hpu/gaudi/how_to_validate_service.html>`_.
 
@@ -263,11 +312,9 @@ Troubleshooting
 Monitoring
 **********
 
-Now that you have deployed the ChatQnA example, let's talk about monitoring the performance of the microservices in the ChatQnA pipeline.
+Monitoring the performance of microservices is crucial for ensuring the smooth operation of the generative AI systems. Monitoring metrics such as latency and throughput can identify bottlenecks, detect anomalies, and optimize the performance of individual microservices. This helps proactively address any issues and ensure that the ChatQnA pipeline is running efficiently.
 
-Monitoring the performance of microservices is crucial for ensuring the smooth operation of the generative AI systems. By monitoring metrics such as latency and throughput, you can identify bottlenecks, detect anomalies, and optimize the performance of individual microservices. This allows us to proactively address any issues and ensure that the ChatQnA pipeline is running efficiently.
-
-This document will help you understand how to monitor in real time the latency, throughput, and other metrics of different microservices. You will use **Prometheus** and **Grafana**, both open-source toolkits, to collect metrics and visualize them in a dashboard.
+**Prometheus** and **Grafana**, both open-source toolkits, are used to collect metrics including latency and throughput of different microservices in real time, and visualize them in a dashboard.
 
 Set Up the Prometheus Server
 ============================
@@ -303,7 +350,7 @@ Edit the `prometheus.yml` file:
 
    vim prometheus.yml
 
-Change the ``job_name`` to the name of the microservice you want to monitor. Also change the ``targets`` to the job target endpoint of that microservice. Make sure the service is running and the port is open, and that it exposes the metrics that follow Prometheus convention at the ``/metrics`` endpoint.
+Change the ``job_name`` to the name of the microservice to monitor. Also change the ``targets`` to the job target endpoint of that microservice. Make sure the service is running and the port is open, and that it exposes the metrics that follow Prometheus convention at the ``/metrics`` endpoint.
 
 Here is an example of exporting metrics data from a TGI microservice to Prometheus:
 
@@ -346,7 +393,7 @@ nohup ./prometheus --config.file=./prometheus.yml &
 
 >Note: Before starting Prometheus, ensure that no other processes are running on the designated port (default is 9090). Otherwise, Prometheus will not be able to scrape the metrics.
 
-On the Prometheus UI, you can see the status of the targets and the metrics that are being scraped. You can search for a metrics variable by typing it in the search bar.
+On the Prometheus UI, look at the status of the targets and the metrics that are being scraped. To search for a metrics variable, type it in the search bar.
 
 The TGI metrics can be accessed at:
 
@@ -385,7 +432,7 @@ Run the Grafana server, without hanging-up the process:
    nohup ./bin/grafana-server &
 
 3. Access the Grafana dashboard UI:
-   On your browser, access the Grafana dashboard UI at the following URL:
+   On a web browser, access the Grafana dashboard UI at the following URL:
 
 .. code-block:: bash
 
@@ -401,23 +448,28 @@ Log in to Grafana using the default credentials:
    password: admin
 
 4. Add Prometheus as a data source:
-   You need to configure the data source for Grafana to scrape data from. Click on the "Data Source" button, select Prometheus, and specify the Prometheus URL ``http://localhost:9090``.
+   The data source for Grafana needs to be configured to scrape data. Click on the "Data Source" button, select Prometheus, and specify the Prometheus URL ``http://localhost:9090``.
 
-   Then, you need to upload a JSON file for the dashboard's configuration. You can upload it in the Grafana UI under ``Home > Dashboards > Import dashboard``. A sample JSON file is supported here: `tgi_grafana.json  <https://github.com/huggingface/text-generation-inference/blob/main/assets/tgi_grafana.json>`_
+   Then, upload a JSON file for the dashboard's configuration. Upload it in the Grafana UI under ``Home > Dashboards > Import dashboard``. A sample JSON file is supported here: `tgi_grafana.json  <https://github.com/huggingface/text-generation-inference/blob/main/assets/tgi_grafana.json>`_
 
 5. View the dashboard:
-   Finally, open the dashboard in the Grafana UI, and you will see different panels displaying the metrics data.
+   Finally, open the dashboard in the Grafana UI to see different panels displaying the metrics data.
 
-   Taking the TGI microservice as an example, you can see the following metrics:
+   Taking the TGI microservice as an example, look at the following metrics:
    * Time to first token
    * Decode per-token latency
    * Throughput (generated tokens/sec)
    * Number of tokens per prompt
    * Number of generated tokens per request
 
-   You can also monitor the incoming requests to the microservice, the response time per token, etc., in real time.
+   Incoming requests to the microservice, the response time per token, etc., can also be monitored in real time.
 
 Summary and Next Steps
 =======================
 
-TBD
+The ChatQnA application deploys a RAG architecture consisting of the following microservices - 
+embedding, vectorDB, retrieval, reranker, and LLM text generation. It is a chatbot that can 
+leverage new information from uploaded documents and websites to provide more accurate answers. 
+The microservices can be customized by modifying and building them in `GenAIComponents <https://github.com/opea-project/GenAIComps>`_. 
+Explore additional `GenAIExamples <https://github.com/opea-project/GenAIExamples>`_ and use them 
+as starting points for other use cases. 

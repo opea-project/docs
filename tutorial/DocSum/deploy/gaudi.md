@@ -1,195 +1,66 @@
-# Single node on-prem deployment with TGI on Gaudi AI Accelerator
+# Single node on-prem deployment on Gaudi AI Accelerator
 
-This deployment section covers single-node on-prem deployment of the DocSum
-example with OPEA comps to deploy using the TGI service. We will be showcasing how
-to build an e2e DocSum solution with the Intel/neural-chat-7b-v3-3 model, 
-deployed on Intel® Gaudi AI Accelerators. To quickly learn about OPEA in just 5 minutes 
-and set up the required hardware and software, please follow the instructions in the 
-[Getting Started](../../../getting-started/README.md) section. 
+This section covers the single-node on-prem deployment of the DocSum example. It will show how to build a document summarization service using the `Intel/neural-chat-7b-v3-3` model deployed on Intel® Gaudi® AI Accelerators. To quickly learn about OPEA and set up the required hardware and software, follow the instructions in the [Getting Started](../../../getting-started/README.md) section.
 
 ## Overview
 
-The DocSum example uses an LLM and an ASR microservice. In this tutorial, we  
-will walk through the steps on how to enable it from OPEA GenAIComps to deploy on 
-a single node. 
+The OPEA GenAIComps microservices used to deploy a single node vLLM or TGI megaservice solution for DocSum are listed below:
 
-The solution uses the Intel/neural-chat-7b-v3-3 model on the 
-Gaudi AI Accelerator. We will go through how to set up docker containers to start 
-the microservice and megaservice. The solution will then take a document(.txt,.doc,.pdf), audio or 
-video file as the input and generate a summary. It is deployed with a UI with 3 modes to 
-choose from:
+1. ASR
+2. LLM with vLLM or TGI
 
-1. Gradio-Based UI
-2. Svelte-Based UI
-3. React-Based UI
-
-Use the Gradio UI if you will be working with multimedia documents, .doc, or .pdf files.
-Below is the list of content we will be covering in this tutorial:
-
-1. Prerequisites
-2. Prepare (Building / Pulling) Docker images
-3. Use case setup
-4. Deploy the use case
-5. Interacting with DocSum deployment
+This solution is designed to demonstrate the use of the `Intel/neural-chat-7b-v3-3` model on the Intel® Gaudi® AI Accelerators to take a document (.txt,.doc,.pdf), audio, or video file as the input and generate a summary. The steps will involve setting up Docker containers, uploading documents, and generating summaries. Although multiple versionf of the UI can be deployed, this tutorial will focus solely on the Gradio UI because it can handle multimedia docuemnts, .doc, and .pdf files.
 
 ## Prerequisites
 
-The first step is to clone the GenAIExamples and GenAIComps projects. GenAIComps are 
-fundamental necessary components used to build the examples you find in 
-GenAIExamples and deploy them as microservices. Set an environment 
-variable for the desired release version with the **number only** 
-(i.e. 1.0, 1.1, etc) and checkout using the tag with that version. 
+To run the UI on a web browser external to the host machine such as a laptop, the following port(s) need to be port forwarded when using SSH to log in to the host machine:
+- 8888: DocSum megaservice port
 
+This port is used for `BACKEND_SERVICE_ENDPOINT` defined in the `set_env.sh` for this example inside the `docker compose` folder. Specifically, for DocSum, append the following to the ssh command: 
 ```bash
-# Set workspace and navigate into it
-export WORKSPACE=<path>
+-L 8888:localhost:8888
+```
+
+Set up a workspace and clone the [GenAIExamples](https://github.com/opea-project/GenAIExamples) GitHub repo.
+```bash
+export WORKSPACE=<Path>
 cd $WORKSPACE
+git clone https://github.com/opea-project/GenAIExamples.git # GenAIExamples
+```
 
-# Set desired release version - number only
-export RELEASE_VERSION=<insert-release-version>
-
-# GenAIComps
-git clone https://github.com/opea-project/GenAIComps.git
-cd GenAIComps
-git checkout tags/v${RELEASE_VERSION}
-cd ..
-
-# GenAIExamples
-git clone https://github.com/opea-project/GenAIExamples.git
+**Optional** It is recommended to use a stable release version by setting `RELEASE_VERSION` to a **number only** (i.e. 1.0, 1.1, etc) and checkout that version using the tag. Otherwise, by default, the main branch with the latest updates will be used.
+```bash
+export RELEASE_VERSION=<Release_Version> # Set desired release version - number only
 cd GenAIExamples
 git checkout tags/v${RELEASE_VERSION}
 cd ..
 ```
 
-The example requires you to set the `host_ip` to deploy the microservices on
-the endpoint enabled with ports. Set the host_ip env variable.
+Set up a [HuggingFace](https://huggingface.co/) account and generate a [user access token](https://huggingface.co/docs/transformers.js/en/guides/private#step-1-generating-a-user-access-token). The [Intel/neural-chat-7b-v3-3](https://huggingface.co/Intel/neural-chat-7b-v3-3) model does not need special access, but the token can be used with other models requiring access.
+
+Set the `HUGGINGFACEHUB_API_TOKEN` environment variable to the value of the Hugging Face token by executing the following command:
+```bash
+export HUGGINGFACEHUB_API_TOKEN="Your_Huggingface_API_Token"
+```
+
+Set the `host_ip` environment variable to deploy the microservices on the endpoints enabled with ports:
 ```bash
 export host_ip=$(hostname -I | awk '{print $1}')
 ```
 
-Make sure to set Proxies if you are behind a firewall.
-```bash
-export no_proxy=${your_no_proxy},$host_ip
-export http_proxy=${your_http_proxy}
-export https_proxy=${your_http_proxy}
-```
-
-## Prepare (Building / Pulling) Docker images
-
-This step will involve building/pulling relevant docker
-images with a step-by-step process along with a sanity check at the end. For
-DocSum, the following docker images will be needed: llm-docsum and whisper. 
-Additionally, you will need to build docker images for the 
-DocSum megaservice, while the UI (Svelte/React) is optional. In total,
-there are **4 required docker images** and two optional docker images.
-
-### Build/Pull Microservice image
-
-::::::{tab-set}
-
-:::::{tab-item} Pull
-:sync: Pull
-
-If you decide to pull the docker containers and not build them locally,
-you can proceed to the next step where all the necessary containers will
-be pulled in from the Docker hub.
-
-:::::
-:::::{tab-item} Build
-:sync: Build
-
-Follow the steps below to build the docker images from within the `GenAIComps` folder.
-**Note:** For RELEASE_VERSIONS older than 1.0, you will need to add a 'v' in front 
-of ${RELEASE_VERSION} to reference the correct image on Docker Hub.
-
-```bash
-cd $WORKSPACE/GenAIComps
-```
-
-#### Build Whisper Service
-
-```bash
-docker build -t opea/whisper:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f comps/asr/src/integrations/dependency/whisper/Dockerfile .
-```
-
-### Build Mega Service images
-
-The Megaservice is a pipeline that channels data through different
-microservices, each performing varied tasks. The LLM, whisper microservice, and 
-flow of data are defined in the `docsum.py` file. You can also add or 
-remove microservices and customize the megaservice to suit your needs.
-
-Build the megaservice image for this use case
-
-```bash
-cd $WORKSPACE/GenAIExamples/DocSum
-```
-
-```bash
-docker build -t opea/docsum:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f Dockerfile .
-```
-
-### Build the UI Image
-
-There are 3 UI options. Below are instructions to build each.
-
-*Gradio UI*
-
-```bash
-cd $WORKSPACE/GenAIExamples/DocSum/ui
-docker build -t opea/docsum-gradio-ui:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f docker/Dockerfile.gradio .
-```
-
-*Svelte UI (Optional)*
-
-```bash
-cd $WORKSPACE/GenAIExamples/DocSum/ui
-docker build -t opea/docsum-ui:${RELEASE_VERSION} --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy -f docker/Dockerfile .
-```
-
-*React UI (Optional)* 
-If you want a React-based frontend.
-
-```bash
-export BACKEND_SERVICE_ENDPOINT="http://${host_ip}:8888/v1/docsum"
-docker build -t opea/docsum-react-ui:${RELEASE_VERSION} --build-arg BACKEND_SERVICE_ENDPOINT=$BACKEND_SERVICE_ENDPOINT --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_proxy  -f ./docker/Dockerfile.react .
-```
-
-### Sanity Check
-Check if you have the following set of docker images by running the command `docker images` before moving on to the next step. 
-The tags are based on what you set the environment variable `RELEASE_VERSION` to. 
-
-* `opea/whisper:${RELEASE_VERSION}`
-* `opea/docsum:${RELEASE_VERSION}`
-* `opea/docsum-gradio-ui:${RELEASE_VERSION}`
-* `opea/docsum-ui:${RELEASE_VERSION}` (optional)
-* `opea/docsum-react-ui:${RELEASE_VERSION}` (optional)
-
-:::::
-::::::
-
 ## Use Case Setup
 
-The use case will use the following combination of GenAIComps and tools.
+DocSum will utilize the following GenAIComps services and associated tools. The tools and models listed in the table can be configured via environment variables in either the `set_env.sh` script or the `compose.yaml` file.
 
 |Use Case Components  | Tools        | Model                       | Service Type      |
 |----------------     |--------------|-----------------------------|------------------ |
-|LLM                  |   TGI        | Intel/neural-chat-7b-v3-3   | OPEA Microservice |
-|ASR                  |   Whisper    | openai/whisper-small        | OPEA Microservice |
+|LLM                  | vLLM or TGI  | Intel/neural-chat-7b-v3-3   | OPEA Microservice |
+|ASR                  | Whisper      | openai/whisper-small        | OPEA Microservice |
 |UI                   |              | NA                          | Gateway Service   |
 
-Tools and models mentioned in the table are configurable either through the
-environment variables or `compose.yaml` file.
+Set the necessary environment variables to set up the use case. To swap out models, modify `set_env.sh` before running it. For example, the environment variable `LLM_MODEL_ID` can be changed to another model by specifying the HuggingFace model card ID. 
 
-Set the necessary environment variables to setup the use case by running the `set_env.sh` script.
-Here is where the environment variable `LLM_MODEL_ID` is set, and you can change it to another model 
-by specifying the HuggingFace model card ID.
-
-**Note:** If you wish to run the UI on a web browser on your laptop, you will need to modify `BACKEND_SERVICE_ENDPOINT` to use `localhost` or `127.0.0.1` instead of `host_ip` inside `set_env.sh` for the backend to properly receive data from the UI. Additionally, you will need to port-forward the port used for `BACKEND_SERVICE_ENDPOINT`. Specifically, for DocSum, append the following to your ssh command: 
-
-```bash
--L 8888:localhost:8888
-```
+To run the UI on a web browser on a laptop, modify `BACKEND_SERVICE_ENDPOINT` to use `localhost` or `127.0.0.1` instead of `host_ip` inside `set_env.sh` for the backend to properly receive data from the UI.
 
 Run the `set_env.sh` script.
 ```bash
@@ -199,70 +70,110 @@ source ./set_env.sh
 
 ## Deploy the Use Case
 
-In this tutorial, we will be deploying via docker compose with the provided
-YAML file.  The docker compose instructions should start all the
-above-mentioned services as containers.
-
+Navigate to the `docker compose` directory for this hardware platform.
 ```bash
 cd $WORKSPACE/GenAIExamples/DocSum/docker_compose/intel/hpu/gaudi
+```
+
+Run `docker compose` with the provided YAML file to start all the services mentioned above as containers. The vLLM or TGI service can be used for DocSum.
+
+::::{tab-set}
+:::{tab-item} vllm
+:sync: vllm
+
+```bash
 docker compose -f compose.yaml up -d
 ```
-
-
-### Checks to Ensure the Services are Running
-#### Check Startup and Env Variables
-Check the startup log by running `docker compose logs` to ensure there are no errors.
-The warning messages print out the variables if they are **NOT** set.
-
-Here are some sample messages if proxy environment variables are not set:
-
-    WARN[0000] The "no_proxy" variable is not set. Defaulting to a blank string.
-    WARN[0000] The "https_proxy" variable is not set. Defaulting to a blank string.
-    WARN[0000] The "http_proxy" variable is not set. Defaulting to a blank string.
-    WARN[0000] The "no_proxy" variable is not set. Defaulting to a blank string.
-    WARN[0000] The "https_proxy" variable is not set. Defaulting to a blank string.
-    WARN[0000] The "http_proxy" variable is not set. Defaulting to a blank string.
-    WARN[0000] The "no_proxy" variable is not set. Defaulting to a blank string.
-    WARN[0000] The "http_proxy" variable is not set. Defaulting to a blank string.
-    WARN[0000] The "https_proxy" variable is not set. Defaulting to a blank string.
-    WARN[0000] The "no_proxy" variable is not set. Defaulting to a blank string.
-    WARN[0000] The "http_proxy" variable is not set. Defaulting to a blank string.
-    WARN[0000] The "https_proxy" variable is not set. Defaulting to a blank string.
-
-#### Check the Container Status
-Check if all the containers launched via docker compose have started.
-
-The DocSum example starts 4 docker containers. Check that these docker
-containers are all running, i.e., all the containers  `STATUS` are  `Up`.
-You can do this with the `docker ps -a` command.
+:::
+:::{tab-item} TGI
+:sync: TGI
 
 ```bash
-CONTAINER ID   IMAGE                                                           COMMAND                  CREATED             STATUS                       PORTS                                       NAMES
-8ec82528bcbb   opea/docsum-gradio-ui:${RELEASE_VERSION}                                    "python docsum_ui_gr…"   About an hour ago   Up About an hour             0.0.0.0:5173->5173/tcp, :::5173->5173/tcp   docsum-gaudi-ui-server
-e22344ed80d5   opea/docsum:${RELEASE_VERSION}                                              "python docsum.py"       About an hour ago   Up About an hour             0.0.0.0:8888->8888/tcp, :::8888->8888/tcp   docsum-gaudi-backend-server
-bbb3c05a2878   opea/llm-docsum:${RELEASE_VERSION}                                          "bash entrypoint.sh"     About an hour ago   Up About an hour             0.0.0.0:9000->9000/tcp, :::9000->9000/tcp   llm-docsum-gaudi-server
-d20a8896d2a0   ghcr.io/huggingface/tgi-gaudi:2.3.1                             "text-generation-lau…"   About an hour ago   Up About an hour (healthy)   0.0.0.0:8008->80/tcp, :::8008->80/tcp       tgi-gaudi-server
-8213029b6b26   opea/whisper:${RELEASE_VERSION}                                             "python whisper_serv…"   About an hour ago   Up About an hour             0.0.0.0:7066->7066/tcp, :::7066->7066/tcp   whisper-server
+docker compose -f compose_tgi.yaml up -d
+```
+:::
+::::
+
+### Check Env Variables
+After running `docker compose`, check for warning messages for environment variables that are **NOT** set. Address them if needed. 
+
+    WARN[0000] The "no_proxy" variable is not set. Defaulting to a blank string.
+    WARN[0000] The "https_proxy" variable is not set. Defaulting to a blank string.
+    WARN[0000] The "http_proxy" variable is not set. Defaulting to a blank string.
+    WARN[0000] The "no_proxy" variable is not set. Defaulting to a blank string.
+    WARN[0000] The "https_proxy" variable is not set. Defaulting to a blank string.
+    WARN[0000] The "http_proxy" variable is not set. Defaulting to a blank string.
+    WARN[0000] The "no_proxy" variable is not set. Defaulting to a blank string.
+    WARN[0000] The "http_proxy" variable is not set. Defaulting to a blank string.
+    WARN[0000] The "https_proxy" variable is not set. Defaulting to a blank string.
+    WARN[0000] The "no_proxy" variable is not set. Defaulting to a blank string.
+    WARN[0000] The "http_proxy" variable is not set. Defaulting to a blank string.
+    WARN[0000] The "https_proxy" variable is not set. Defaulting to a blank string.
+
+Check if all the containers launched via `docker compose` are running i.e. each container's `STATUS` is `Up` and `Healthy`.
+
+Run this command to see this info:
+```bash
+docker ps -a
 ```
 
-## Interacting with DocSum for Deployment
+Sample output:
+```bash
+CONTAINER ID   IMAGE                          COMMAND                  CREATED         STATUS                   PORTS                                         NAMES
+d02da5001212   opea/docsum-gradio-ui:latest   "python docsum_ui_gr…"   2 minutes ago   Up 19 seconds            0.0.0.0:5173->5173/tcp, [::]:5173->5173/tcp   docsum-gaudi-ui-server
+43de0d8ee9dd   opea/docsum:latest             "python docsum.py"       2 minutes ago   Up 19 seconds            0.0.0.0:8888->8888/tcp, [::]:8888->8888/tcp   docsum-gaudi-backend-server
+81f0e8d27f1f   opea/llm-docsum:latest         "bash entrypoint.sh"     2 minutes ago   Up 20 seconds            0.0.0.0:9000->9000/tcp, [::]:9000->9000/tcp   docsum-gaudi-llm-server
+a4a9501fc4df   opea/whisper:latest            "python whisper_serv…"   3 minutes ago   Up 2 minutes             0.0.0.0:7066->7066/tcp, [::]:7066->7066/tcp   docsum-gaudi-whisper-server
+951abf0ebb5a   opea/vllm:latest               "python3 -m vllm.ent…"   3 minutes ago   Up 2 minutes (healthy)   0.0.0.0:8008->80/tcp, [::]:8008->80/tcp       docsum-gaudi-vllm-service
+```
 
-This section will walk you through the different ways to interact with
-the microservices deployed. After a couple of minutes, rerun `docker ps -a` 
-to ensure all the docker containers are still up and running. Then proceed 
-to validate each microservice and megaservice. 
+Each docker container's log can also be checked using:
+```bash
+docker logs <CONTAINER_ID OR CONTAINER_NAME>
+```
 
-### TGI Service
+## Validate Microservices
+
+This section will guide through the various methods for interacting with the deployed microservices.
+
+### vLLM or TGI Service
+
+During the initial startup, this service will take a few minutes to download the model files and complete the warm-up process. Once this is finished, the service will be ready for use.
+
+Try the command below to check whether the LLM service is ready. It uses the name of the image to check the status.
+
+::::{tab-set}
+:::{tab-item} vllm
+:sync: vllm
 
 ```bash
-curl http://${host_ip}:8008/generate \
- -X POST \
-  -d '{"inputs":"What is Deep Learning?","parameters":{"max_new_tokens":17, "do_sample": true}}' \
- -H 'Content-Type: application/json'
+# vLLM service
+docker logs docsum-gaudi-vllm-service 2>&1 | grep complete
+# If the service is ready, you will get the response like below.
+INFO:     Application startup complete.
+```
+:::
+:::{tab-item} TGI
+:sync: TGI
+
+```bash
+# TGI service
+docker logs docsum-gaudi-tgi-server | grep Connected
+# If the service is ready, you will get the response like below.
+2024-09-03T02:47:53.402023Z  INFO text_generation_router::server: router/src/server.rs:2311: Connected
+```
+:::
+::::
+
+Then try the `cURL` command to verify the vLLM or TGI service: 
+```bash
+curl http://${host_ip}:8008/v1/chat/completions \
+  -X POST \
+  -d '{"inputs":"What is Deep Learning?","parameters":{"max_new_tokens":17, "do_sample": true}}' \
+  -H 'Content-Type: application/json'
 ```
 
-Here is the output:
-
+Sample output:
 ```bash
 {"generated_text":"\nDeep learning is a sub-discipline of machine learning. Machine learning is"}
 
@@ -271,9 +182,9 @@ Here is the output:
 
 ```bash
 curl http://${host_ip}:9000/v1/docsum \
- -X POST \
-  -d '{"query":"Text Embeddings Inference (TEI) is a toolkit for deploying and serving open source text embeddings and sequence classification models. TEI enables high-performance extraction for the most popular models, including FlagEmbedding, Ember, GTE, and E5."}' \
- -H 'Content-Type: application/json'
+  -X POST \
+  -d '{"query":"Text Embeddings Inference (TEI) is a toolkit for deploying and serving open source text embeddings and sequence classification models. TEI enables high-performance extraction for the most popular models, including FlagEmbedding, Ember, GTE and E5."}' \
+  -H 'Content-Type: application/json'
 ```
 
 The output is the summary of the input given to this microservice.
@@ -281,230 +192,266 @@ The output is the summary of the input given to this microservice.
 ### Whisper Microservice
 
 ```bash
- curl http://${host_ip}:7066/v1/asr \
- -X POST \
-     -d '{"audio":"UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA"}' \
- -H 'Content-Type: application/json'
+ curl http://${host_ip}:7066/v1/asr \
+     -X POST \
+     -d '{"audio":"UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA"}' \
+     -H 'Content-Type: application/json'
 ```
 
-Here is the output:
+Expected output:
 ```bash
  {"asr_result":"you"}
 ```
 
-### MegaService
+### DocSum Megaservice
 
-You can upload documents (.txt, .doc, .pdf), audio, and video to get a summary of the content.
+Documents (.txt, .doc, .pdf), audio, and video can be uploaded to get a summary of the content. For each type of document, there are different input formats.
 
 ::::::{tab-set}
 :::::{tab-item} Text
 :sync: Text
 
-The megaservice accepts input files in txt, pdf, doc format, or plain text in the message parameter.
+JSON input:
 ```bash
-curl http://${host_ip}:8888/v1/docsum \
- -H "Content-Type: multipart/form-data" \
-    -F "type=text" \
- -F "messages=Text Embeddings Inference (TEI) is a toolkit for deploying and serving open-source text embeddings and sequence classification models. TEI enables high-performance extraction for the most popular models, including FlagEmbedding, Ember, GTE, and E5." \
-    -F "max_tokens=32" \
- -F "language=en" \
-    -F "stream=true"
+curl -X POST http://${host_ip}:8888/v1/docsum \
+     -H "Content-Type: application/json" \
+     -d '{"type": "text", "messages": "Text Embeddings Inference (TEI) is a toolkit for deploying and serving open source text embeddings and sequence classification models. TEI enables high-performance extraction for the most popular models, including FlagEmbedding, Ember, GTE and E5."}'
 ```
 
-The output will be the summarization of the text content. We can also upload files and modify the other parameters such as the streaming mode and language.
-
+Form input with English mode (default):
 ```bash
 curl http://${host_ip}:8888/v1/docsum \
- -H "Content-Type: multipart/form-data" \
-   -F "type=text" \
- -F "messages=" \
-   -F "files=@/path to your file (.txt, .docx, .pdf)" \
- -F "max_tokens=32" \
-   -F "language=en" \
- -F "stream=true"
+    -H "Content-Type: multipart/form-data" \
+    -F "type=text" \
+    -F "messages=Text Embeddings Inference (TEI) is a toolkit for deploying and serving open source text embeddings and sequence classification models. TEI enables high-performance extraction for the most popular models, including FlagEmbedding, Ember, GTE and E5." \
+    -F "max_tokens=32" \
+    -F "language=en" \
+    -F "stream=true"
 ```
+
+Form input with Chinese mode:
+```bash
+curl http://${host_ip}:8888/v1/docsum \
+    -H "Content-Type: multipart/form-data" \
+    -F "type=text" \
+    -F "messages=2024年9月26日，北京——今日，英特尔正式发布英特尔® 至强® 6性能核处理器（代号Granite Rapids），为AI、数据分析、科学计算等计算密集型业务提供卓越性能。" \
+    -F "max_tokens=32" \
+    -F "language=zh" \
+    -F "stream=true"
+```
+
+Uploading a file:
+```bash
+curl http://${host_ip}:8888/v1/docsum \
+   -H "Content-Type: multipart/form-data" \
+   -F "type=text" \
+   -F "messages=" \
+   -F "files=@/path to your file (.txt, .docx, .pdf)" \
+   -F "max_tokens=32" \
+   -F "language=en" \
+   -F "stream=true"
+```
+
 :::::
 
 :::::{tab-item} Audio
 :sync: Audio
 
-Audio uploads are not supported through curl command, use the UI to upload it. You can pass base64 string of the audio file as follows :
+Audio uploads are not supported through *curl* commands, so use the UI to upload it. It is possible to pass base64 encoded strings of the audio file:
 
+JSON input:
+```bash
+curl -X POST http://${host_ip}:8888/v1/docsum \
+   -H "Content-Type: application/json" \
+   -d '{"type": "audio", "messages": "UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA"}'
+```
+
+Form input:
 ```bash
 curl http://${host_ip}:8888/v1/docsum \
- -H "Content-Type: multipart/form-data" \
-   -F "type=audio" \
- -F "messages=UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA" \
-   -F "max_tokens=32" \
- -F "language=en" \
-   -F "stream=true"
+   -H "Content-Type: multipart/form-data" \
+   -F "type=audio" \
+   -F "messages=UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA" \
+   -F "max_tokens=32" \
+   -F "language=en" \
+   -F "stream=true"
 ```
+
 :::::
 
 :::::{tab-item} Video
 :sync: Video
 
-Video uploads are not supported through curl command, use the UI to upload it. You can pass base64 string of the video file as the value for message parameter as shown here :
+Video uploads are not supported through *curl* commands, so use the UI to upload it. It is possible to pass base64 strings of the video file as the value for the message parameter:
 
+JSON input:
+```bash
+curl -X POST http://${host_ip}:8888/v1/docsum \
+   -H "Content-Type: application/json" \
+   -d '{"type": "video", "messages": "convert your video to base64 data type"}'
+```
+
+Form input:
 ```bash
 curl http://${host_ip}:8888/v1/docsum \
- -H "Content-Type: multipart/form-data" \
-   -F "type=video" \
- -F "messages=convert your video to base64 data type" \
-   -F "max_tokens=32" \
- -F "language=en" \
-   -F "stream=true"
-
+   -H "Content-Type: multipart/form-data" \
+   -F "type=video" \
+   -F "messages=convert your video to base64 data type" \
+   -F "max_tokens=32" \
+   -F "language=en" \
+   -F "stream=true"
 ```
+
 :::::
 
 ::::::
 
-When dealing with content longer than the maximum input context of the model being used, we can use different summarization strategies such as auto, stuff, truncate, map_reduce, or refine. Depending on various factors like the model's context size and number of input tokens we can select the strategy that best fits.
+#### Megaservice with Long Context
 
-1. Auto : In this mode, we will check input token length, if it exceeds MAX_INPUT_TOKENS, the summary_type will automatically be set to refine mode, otherwise will be set to stuff mode.
+When performing summarization with long contexts - content longer than the model's context limit - different summarization strategies can be used such as *auto*, *stuff*, *truncate*, *map_reduce*, or *refine*. The best strategy is determined from various factors including model context size limits and number of input tokens.
 
-2. Stuff : In this mode, the LLM generates a summary based on the complete input text. In this case please carefully set MAX_INPUT_TOKENS and MAX_TOTAL_TOKENS according to your model and device memory, otherwise, it may exceed the LLM context limit and raise an error.
+The following parameters can be adjusted to work with long context:
+- "summary_type": can be "auto", "stuff", "truncate", "map_reduce", "refine", default is "auto"
+- "chunk_size": max token length for each chunk. Set to be different default value according to "summary_type".
+- "chunk_overlap": overlap token length between each chunk, default is 0.1*chunk_size
 
-3. Truncate : Truncate mode will truncate the input text and keep only the first chunk, whose length is equal to min(MAX_TOTAL_TOKENS - input.max_tokens - 50, MAX_INPUT_TOKENS).
+Select the "summary_type" of interest to see how to run with it.
 
-4. Map_reduce : Map_reduce mode will split the inputs into multiple chunks, map each document to an individual summary, then consolidate those summaries into a single global summary. stream=True is not allowed here. In this mode, default chunk_size is set to be min(MAX_TOTAL_TOKENS - input.max_tokens - 50, MAX_INPUT_TOKENS).
+::::::{tab-set}
+:::::{tab-item} auto
+:sync: auto
 
-5. Refine : Refine mode will split the inputs into multiple chunks, generate a summary for the first one, then combine it with the second, and loop over every remaining chunk to get the final summary. In this mode, default chunk_size is set to be min(MAX_TOTAL_TOKENS - 2 * input.max_tokens - 128, MAX_INPUT_TOKENS).
+"summary_type" is set to be "auto" by default, in this mode the input token length is checked. If it exceeds `MAX_INPUT_TOKENS`, `summary_type` will automatically be set to `refine` mode. Otherwise, it will be set to `stuff` mode.
 
-We can define the summary_type by providing one of the 5 values discussed above as the value for the summary_type variable as shown below:
 ```bash
 curl http://${host_ip}:8888/v1/docsum \
- -H "Content-Type: multipart/form-data" \
-   -F "type=text" \
- -F "messages=" \
-   -F "max_tokens=32" \
- -F "files=@/path to your file (.txt, .docx, .pdf)" \
-   -F "language=en" \
- -F "summary_type=One of the above 5 types"
+  -H "Content-Type: multipart/form-data" \
+  -F "type=text" \
+  -F "messages=" \
+  -F "max_tokens=32" \
+  -F "files=@/path to your file (.txt, .docx, .pdf)" \
+  -F "language=en" \
+  -F "summary_type=auto"
 ```
+
+:::::
+
+:::::{tab-item} stuff
+:sync: stuff
+
+In this mode the LLM microservice generates a summary based on the entire input text. In this case, set `MAX_INPUT_TOKENS` and `MAX_TOTAL_TOKENS` according to the model and device memory. Otherwise, it may exceed the LLM context limit and raise errors when provided a longer context.
+
+```bash
+curl http://${host_ip}:8888/v1/docsum \
+  -H "Content-Type: multipart/form-data" \
+  -F "type=text" \
+  -F "messages=" \
+  -F "max_tokens=32" \
+  -F "files=@/path to your file (.txt, .docx, .pdf)" \
+  -F "language=en" \
+  -F "summary_type=stuff"
+```
+
+:::::
+
+:::::{tab-item} truncate
+:sync: truncate
+
+Truncate mode will truncate the input text and keep only the first chunk, whose length is equal to `min(MAX_TOTAL_TOKENS - input.max_tokens - 50, MAX_INPUT_TOKENS)`.
+
+```bash
+curl http://${host_ip}:8888/v1/docsum \
+  -H "Content-Type: multipart/form-data" \
+  -F "type=text" \
+  -F "messages=" \
+  -F "max_tokens=32" \
+  -F "files=@/path to your file (.txt, .docx, .pdf)" \
+  -F "language=en" \
+  -F "summary_type=truncate"
+```
+
+:::::
+
+:::::{tab-item} map_reduce
+:sync: map_reduce
+
+Map_reduce mode will split the inputs into multiple chunks, map each document to an individual summary, and consolidate all summaries into a single global summary. `stream=True` is not allowed here.
+
+In this mode, `chunk_size` is set to `min(MAX_TOTAL_TOKENS - input.max_tokens - 50, MAX_INPUT_TOKENS)`.
+
+```bash
+curl http://${host_ip}:8888/v1/docsum \
+  -H "Content-Type: multipart/form-data" \
+  -F "type=text" \
+  -F "messages=" \
+  -F "max_tokens=32" \
+  -F "files=@/path to your file (.txt, .docx, .pdf)" \
+  -F "language=en" \
+  -F "summary_type=map_reduce"
+```
+
+:::::
+
+:::::{tab-item} refine
+:sync: refine
+
+Refine mode will split the inputs into multiple chunks, generate a summary for the first one, combine it with the second summary, and repeats with all remaining chunks to get the final summary.
+
+In this mode, default `chunk_size` is set to `min(MAX_TOTAL_TOKENS - 2 * input.max_tokens - 128, MAX_INPUT_TOKENS)`.
+
+```bash
+curl http://${host_ip}:8888/v1/docsum \
+  -H "Content-Type: multipart/form-data" \
+  -F "type=text" \
+  -F "messages=" \
+  -F "max_tokens=32" \
+  -F "files=@/path to your file (.txt, .docx, .pdf)" \
+  -F "language=en" \
+  -F "summary_type=refine"
+```
+
+:::::
+
+::::::
 
 ## Launch UI
+
+The Gradio UI is recommended because it can work with multimedia documents, .doc, and .pdf files.
+
 ### Gradio UI
-To access the frontend, open the following URL in your browser: http://{host_ip}:5173. By default, the UI runs on port 5173 internally. If you prefer to use a different host port to access the frontend, you can modify the port mapping in the `compose.yaml` file as shown below:
+To access the frontend, open the following URL in a web browser: http://${host_ip}:5173. By default, the UI runs on port 5173 internally. A different host port can be used to access the frontend by modifying the `FRONTEND_SERVICE_PORT` environment variable. For reference, the port mapping in the `compose.yaml` file is shown below:
 ```yaml
-  docsum-gaudi-ui-server:
-  image: ${REGISTRY:-opea}/docsum-ui:${TAG:-latest}
-  ...
-  ports:
-  - "5173:5173"
-```
-### Svelte UI (Optional)
-To access the Svelte-based frontend, modify the UI service in the `compose.yaml` file. Replace `docsum-gradio-ui` service with the `docsum-ui` service as per the config below: 
-```yaml
-docsum-ui:
- image: ${REGISTRY:-opea}/docsum-ui:${TAG:-latest}
- container_name: docsum-gaudi-ui-server
- depends_on:
- - docsum-gaudi-backend-server
- ports:
- - "5173:5173"
- environment:
- - no_proxy=${no_proxy}
- - https_proxy=${https_proxy}
- - http_proxy=${http_proxy}
- - BACKEND_SERVICE_ENDPOINT=${BACKEND_SERVICE_ENDPOINT}
- - DOC_BASE_URL=${BACKEND_SERVICE_ENDPOINT}
- ipc: host
- restart: always
-```
-Open the following URL in your browser: http://{host_ip}:5173 to access the UI.
-
-### React-Based UI (Optional)
-To access the React-based frontend, modify the UI service in the `compose.yaml` file. Replace `docsum-gradio-ui` service with the `docsum-react-ui` service as per the config below:
-```yaml
-docsum-gaudi-react-ui-server:
-  image: ${REGISTRY:-opea}/docsum-react-ui:${TAG:-latest}
-  container_name: docsum-gaudi-react-ui-server
-  depends_on:
-  - docsum-gaudi-backend-server
-  ports:
-  - "5174:80"
-  environment:
-  - no_proxy=${no_proxy}
-  - https_proxy=${https_proxy}
-   - http_proxy=${http_proxy}
- ipc: host
- restart: always
-```
-
-
-Once the services are up, open the following URL in your browser: http://{host_ip}:5174. By default, the UI runs on port 80 internally. If you prefer to use a different host port to access the frontend, you can modify the port mapping in the `compose.yaml` file as shown below:
-```yaml
-  docsum-gaudi-react-ui-server:
-    image: ${REGISTRY:-opea}/docsum-react-ui:${TAG:-latest}
+  docsum-gradio-ui:
+    image: ${REGISTRY:-opea}/docsum-gradio-ui:${TAG:-latest}
     ...
     ports:
-    - "80:80"
+    - "${FRONTEND_SERVICE_PORT:-5173}:5173"
 ```
 
-## Check Docker Container Logs
+After making this change, rebuild and restart the containers for the change to take effect. 
 
-You can check the log of a container by running this command:
+## Stop the Services
+
+Navigate to the `docker compose` directory for this hardware platform.
+```bash
+cd $WORKSPACE/GenAIExamples/DocSum/docker_compose/intel/hpu/gaudi
+```
+
+To stop and remove all the containers, use the command below:
+
+::::{tab-set}
+:::{tab-item} vllm
+:sync: vllm
 
 ```bash
-docker logs <CONTAINER ID> -t
+docker compose -f compose.yaml down
 ```
+:::
+:::{tab-item} TGI
+:sync: TGI
 
-You can also check the overall logs with the following command, where the
-`compose.yaml` is the megaservice docker-compose configuration file.
-
-Assumming you are still in this directory `$WORKSPACE/GenAIExamples/DocSum/docker_compose/intel/hpu/gaudi`,
-run the following command to check the logs:
 ```bash
-docker compose -f compose.yaml logs
+docker compose -f compose_tgi.yaml down
 ```
-
-View the docker input parameters in  `$WORKSPACE/GenAIExamples/DocSum/docker_compose/intel/hpu/gaudi/compose.yaml`
-
-```yaml
-tgi-gaudi-server:
-    image: ghcr.io/huggingface/tgi-gaudi:2.3.1
-    container_name: tgi-gaudi-server
-    ports:
-      - ${LLM_ENDPOINT_PORT:-8008}:80
-    volumes:
-      - "${DATA_PATH:-data}:/data"
-    environment:
-      no_proxy: ${no_proxy}
-      http_proxy: ${http_proxy}
-      https_proxy: ${https_proxy}
-      HUGGING_FACE_HUB_TOKEN: ${HUGGINGFACEHUB_API_TOKEN}
-      HF_HUB_DISABLE_PROGRESS_BARS: 1
-      HF_HUB_ENABLE_HF_TRANSFER: 0
-      HABANA_VISIBLE_DEVICES: all
-      OMPI_MCA_btl_vader_single_copy_mechanism: none
-      ENABLE_HPU_GRAPH: true
-      LIMIT_HPU_GRAPH: true
-      USE_FLASH_ATTENTION: true
-      FLASH_ATTENTION_RECOMPUTE: true
-      host_ip: ${host_ip}
-      LLM_ENDPOINT_PORT: ${LLM_ENDPOINT_PORT}
-    runtime: habana
-    cap_add:
-      - SYS_NICE
-    ipc: host
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://${host_ip}:${LLM_ENDPOINT_PORT}/health || exit 1"]
-      interval: 10s
-      timeout: 10s
-      retries: 100
-    command: --model-id ${LLM_MODEL_ID} --max-input-length ${MAX_INPUT_TOKENS} --max-total-tokens ${MAX_TOTAL_TOKENS}
-```
-
-The input `--model-id` is  `${LLM_MODEL_ID}`. Ensure the environment variable `LLM_MODEL_ID` 
-is set and spelled correctly. Check spelling. Whenever this is changed, restart the containers to use 
-the newly selected model.
-
-
-## Stop the services
-
-Once you are done with the entire pipeline and wish to stop and remove all the containers, use the command below:
-```bash
-docker compose down
-```
+:::
+::::
