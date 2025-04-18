@@ -4,7 +4,7 @@ This section covers single-node on-prem deployment of the ChatQnA example using 
 
 ## Overview
 
-The OPEA GenAIComps microservices used to deploy a single node vLLM or TGI magaservice solution for ChatQnA are listed below:
+The OPEA GenAIComps microservices used to deploy a single node vLLM or TGI megaservice solution for ChatQnA are listed below:
 
 1. Data Prep
 2. Embedding
