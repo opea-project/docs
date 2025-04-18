@@ -10,7 +10,7 @@ This solution is designed to demonstrate the use of the `Qwen2.5-Coder-7B-Instru
 
 ## Prerequisites
 
-To run the UI on a web browser external to the host machine such as a laptop, the following port(s) need to be forwarded when using SSH to log in to the host machine:
+To run the UI on a web browser external to the host machine such as a laptop, the following port(s) need to be forwarded when using SSH to login to the host machine:
 - 7778: CodeGen megaservice port
 
 This port is used for `BACKEND_SERVICE_ENDPOINT` defined in the `set_env.sh` for this example inside the `docker compose` folder. Specifically, for CodeGen, append the following to the ssh command: 
@@ -217,7 +217,7 @@ To access the frontend, open the following URL in a web browser: http://${host_i
       - "YOUR_HOST_PORT:5173" # Change YOUR_HOST_PORT to the desired port
 ```
 
-After making this change, rebuild and restart the containers for the change to take effect. 
+After making this change, restart the containers for the change to take effect. 
 
 ## Stop the Services
 

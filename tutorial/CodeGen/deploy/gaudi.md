@@ -216,7 +216,7 @@ To access the frontend, open the following URL in a web browser: http://${host_i
       - "YOUR_HOST_PORT:5173" # Change YOUR_HOST_PORT to the desired port
 ```
 
-After making this change, rebuild and restart the containers for the change to take effect. 
+After making this change, restart the containers for the change to take effect. 
 
 ## Stop the Services
 
