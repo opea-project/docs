@@ -1,16 +1,16 @@
 # Single node on-prem deployment on Gaudi AI Accelerator
 
-This section covers single-node on-prem deployment of the CodeGen example. It will show how to build an end-to-end CodeGen solution with the `Qwen2.5-Coder-32B-Instruct` model deployed on Intel® Gaudi® AI Accelerators. To quickly learn about OPEA and set up the required hardware and software, follow the instructions in the [Getting Started](../../../getting-started/README.md) section. 
+This section covers single-node on-prem deployment of the CodeGen example. It will show how to deploy an end-to-end CodeGen solution with the `Qwen2.5-Coder-32B-Instruct` model running on Intel® Gaudi® AI Accelerators. To quickly learn about OPEA and set up the required hardware and software, follow the instructions in the [Getting Started](../../../getting-started/README.md) section. 
 
 ## Overview
 
 The CodeGen use case uses a single microservice called LLM with model serving done with vLLM or TGI.
 
-This solution is designed to demonstrate the use of the `Qwen2.5-Coder-7B-Instruct` model for code generation on Intel® Gaudi® AI Accelerators. The steps will involve setting up Docker containers, taking text input as the prompt, and generating code. Although multiple versions of the UI can be deployed, this tutorial will focus solely on the default version.
+This solution is designed to demonstrate the use of the `Qwen2.5-Coder-32B-Instruct` model for code generation on Intel® Gaudi® AI Accelerators. The steps will involve setting up Docker containers, taking text input as the prompt, and generating code. Although multiple versions of the UI can be deployed, this tutorial will focus solely on the default version.
 
 ## Prerequisites
 
-To run the UI on a web browser external to the host machine such as a laptop, the following port(s) need to be port forwarded when using SSH to log in to the host machine:
+To run the UI on a web browser external to the host machine such as a laptop, the following port(s) need to be forwarded when using SSH to log in to the host machine:
 - 7778: CodeGen megaservice port
 
 This port is used for `BACKEND_SERVICE_ENDPOINT` defined in the `set_env.sh` for this example inside the `docker compose` folder. Specifically, for CodeGen, append the following to the ssh command: 
@@ -110,7 +110,7 @@ After running `docker compose`, check for warning messages for environment varia
     WARN[0000] The "http_proxy" variable is not set. Defaulting to a blank string.
     WARN[0000] The "https_proxy" variable is not set. Defaulting to a blank string.
 
-Check if all the containers launched via `docker compose` are running i.e. each container's `STATUS` is `Up` and `Healthy`.
+Check if all the containers launched via `docker compose` are running i.e. each container's `STATUS` is `Up` and in some cases `Healthy`.
 
 Run this command to see this info:
 ```bash
@@ -119,15 +119,18 @@ docker ps -a
 
 Sample output: 
 ```bash
-CONTAINER ID   IMAGE                                                   COMMAND                  CREATED              STATUS                        PORTS                                                                                      NAMES
-c6fed95320ee   opea/codegen-gradio-ui:latest                           "python codegen_ui_g…"   About a minute ago   Up About a minute             0.0.0.0:5173->5173/tcp, [::]:5173->5173/tcp                                                codegen-gaudi-ui-server
-092d76d64623   opea/embedding:latest                                   "sh -c 'python $( [ …"   About a minute ago   Up About a minute             0.0.0.0:6000->6000/tcp, [::]:6000->6000/tcp                                                tei-embedding-server
-fdce54b2c46f   opea/dataprep:latest                                    "sh -c 'python $( [ …"   About a minute ago   Up About a minute             0.0.0.0:6007->5000/tcp, [::]:6007->5000/tcp                                                dataprep-redis-server
-b55224fdcf9d   opea/codegen:latest                                     "python codegen.py"      About a minute ago   Up About a minute             0.0.0.0:7778->7778/tcp, [::]:7778->7778/tcp                                                codegen-gaudi-backend-server
-c9846f8592fd   opea/retriever:latest                                   "python opea_retriev…"   About a minute ago   Up About a minute             0.0.0.0:7000->7000/tcp, [::]:7000->7000/tcp                                                retriever-redis
-0afb0b6a455b   opea/llm-textgen:latest                                 "bash entrypoint.sh"     About a minute ago   Up About a minute                                                                                                        llm-textgen-server
-4550094ef0d7   redis/redis-stack:7.2.0-v9                              "/entrypoint.sh"         About a minute ago   Up About a minute             0.0.0.0:6379->6379/tcp, [::]:6379->6379/tcp, 0.0.0.0:8001->8001/tcp, [::]:8001->8001/tcp   redis-vector-db
-fbda23354529   ghcr.io/huggingface/text-embeddings-inference:cpu-1.5   "/bin/sh -c 'apt-get…"   About a minute ago   Up About a minute (healthy)   0.0.0.0:8090->80/tcp, [::]:8090->80/tcp                                                    tei-embedding-serving
+CONTAINER ID   IMAGE                                                   COMMAND                  CREATED         STATUS                   PORTS                                                                                      NAMES
+0040b340a392   opea/codegen-gradio-ui:latest                           "python codegen_ui_g…"   4 minutes ago   Up 3 minutes             0.0.0.0:5173->5173/tcp, [::]:5173->5173/tcp                                                codegen-gaudi-ui-server
+3d2c7deacf5b   opea/codegen:latest                                     "python codegen.py"      4 minutes ago   Up 3 minutes             0.0.0.0:7778->7778/tcp, [::]:7778->7778/tcp                                                codegen-gaudi-backend-server
+ad59907292fe   opea/dataprep:latest                                    "sh -c 'python $( [ …"   4 minutes ago   Up 4 minutes (healthy)   0.0.0.0:6007->5000/tcp, [::]:6007->5000/tcp                                                dataprep-redis-server
+2cb4e0a6562e   opea/retriever:latest                                   "python opea_retriev…"   4 minutes ago   Up 4 minutes             0.0.0.0:7000->7000/tcp, [::]:7000->7000/tcp                                                retriever-redis
+f787f774890b   opea/llm-textgen:latest                                 "bash entrypoint.sh"     4 minutes ago   Up About a minute        0.0.0.0:9000->9000/tcp, [::]:9000->9000/tcp                                                llm-codegen-vllm-server
+5880b86091a5   opea/embedding:latest                                   "sh -c 'python $( [ …"   4 minutes ago   Up 4 minutes             0.0.0.0:6000->6000/tcp, [::]:6000->6000/tcp                                                tei-embedding-server
+cd16e3c72f17   opea/llm-textgen:latest                                 "bash entrypoint.sh"     4 minutes ago   Up 4 minutes                                                                                                        llm-textgen-server
+cd412bca7245   redis/redis-stack:7.2.0-v9                              "/entrypoint.sh"         4 minutes ago   Up 4 minutes             0.0.0.0:6379->6379/tcp, [::]:6379->6379/tcp, 0.0.0.0:8001->8001/tcp, [::]:8001->8001/tcp   redis-vector-db
+8d4e77afc067   opea/vllm:latest                                        "python3 -m vllm.ent…"   4 minutes ago   Up 4 minutes (healthy)   0.0.0.0:8028->80/tcp, [::]:8028->80/tcp                                                    vllm-server
+f7c1cb49b96b   ghcr.io/huggingface/text-embeddings-inference:cpu-1.5   "/bin/sh -c 'apt-get…"   4 minutes ago   Up 4 minutes (healthy)   0.0.0.0:8090->80/tcp, [::]:8090->80/tcp                                                    tei-embedding-serving
+
 ```
 
 Each docker container's log can also be checked using:
