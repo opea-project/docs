@@ -1,6 +1,6 @@
 # Single node on-prem deployment on Xeon Scalable processors
 
-This deployment section covers single-node on-prem deployment of the CodeTrans example. It will show how to build an end-to-end code translation service with the `mistralai/Mistral-7B-Instruct-v0.3` model deployed on Intel® Xeon® Scalable processors. To quickly learn about OPEA and set up the required hardware and software, follow the instructions in the [Getting Started](../../../getting-started/README.md) section.
+This section covers single-node on-prem deployment of the CodeTrans example. It will show how to build an end-to-end code translation service with the `mistralai/Mistral-7B-Instruct-v0.3` model deployed on Intel® Xeon® Scalable processors. To quickly learn about OPEA and set up the required hardware and software, follow the instructions in the [Getting Started](../../../getting-started/README.md) section.
 
 ## Overview
 
