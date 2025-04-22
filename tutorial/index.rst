@@ -14,6 +14,15 @@ Provide following tutorials to cover common user cases:
    CodeGen/CodeGen_Guide
    CodeTrans/CodeTrans_Guide
    DocSum/DocSum_Guide
+   DocIndexRetriever/DocIndexRetriever_Guide
+   VideoQnA/VideoQnA_Guide
+
+Provide following tutorials to cover more advanced features like OPEA Open Telemetry:
+
+.. toctree::
+   :maxdepth: 1
+
+   OpenTelemetry/OpenTelemetry_OPEA_Guide
 
 -----
 
