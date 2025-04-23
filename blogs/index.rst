@@ -21,6 +21,9 @@ Come learn, try, develop, and share your stories! Please submit PRs, organizing 
    * - 03/12/2025
      - `AMD Advances Enterprise AI Through OPEA Integration <https://rocm.blogs.amd.com/artificial-intelligence/-opea-blog/README.html>`_
      - Yu Wang, Alex He
+   * - 02/28/2025
+     - `极速启航：利用OPEA一键完成DeepSeek探索 Rapid Launch: Explore DeepSeek with One-Click Deployment via OPEA <https://mp.weixin.qq.com/s?__biz=MjM5NTUyMzU3OQ==&mid=2650961030&idx=2&sn=1aaec321f3cda7256a7b8084b88ea7e7&chksm=bc9b3ab35e8a541dd6da84f495e7ae12e9754b3e0e34f37ec166bc53d1fb05c273cb8a180623&mpshare=1&scene=1&srcid=0423i5NbZhitmuoo4obrWTH8&sharer_shareinfo=f816089abc6b5ce8d4832316a7ac8dcb&sharer_shareinfo_first=f816089abc6b5ce8d4832316a7ac8dcb&exportkey=n_ChQIAhIQKhzs%2F2qRqvYv5ewlp0EfYhKfAgIE97dBBAEAAAAAACxyLqgtybUAAAAOpnltbLcz9gKNyK89dVj06MSWPsICq2gNyEvnwK912cuUTPuqmmtOAvXFgZbh2ZhTQMSN9ABxGSbk42DEEsYxqRGchIi7NcmBwBjaEU5dfQn4Mlb5grTp6KjQ%2FO%2Fk5r8tmVINMNext%2FAVaHpb%2BtIiUiycZ2ewmRr5f8aKeKrWPLavJ0yv5VVTzZYaies6vKXlQhlZWjNG%2FIDomR0rwb1VdVL%2BkE6y7QLzhZ7E0rIJcJ4iy%2Fwn9NMty4uMMgvc4Lwlf4XmjR2TL9OKjKAQr8J18yX7x%2Bkpo%2B7P1j0HjbbeXfWBhH9rENlRGWHmkH2bCH7vPUu9uqXFoiVtU0lx2KDFKbDx5B7kIgDw&acctmode=0&pass_ticket=9jE6rY31xprmfEQiRWnDcgrIhQ%2FXoVOlHs7uNIrh6MhXfe%2B7mX%2FiPEkBE33tk%2FhP&wx_header=0#rd>`_
+     - Ying Ruoyu
    * - 02/26/2025
      - `Multimodal Q&A: A Step-by-Step Guide <https://www.intel.com/content/www/us/en/developer/articles/technical/multimodal-q-and-a-step-by-step-guide.html>`_
      - Melanie Hart Buehler, Mustafa Cetin, Dina Suehiro Jones
