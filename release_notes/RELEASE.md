@@ -14,11 +14,11 @@ The following release cadence is for year 2024/2025. Please note that the dates 
 | 1.0     | Sep 2024     |
 | 1.1     | Nov 2024     |
 | 1.2     | Jan 2025     |
-| 1.3     | Mar 2025     |
-| 1.4     | May 2025     |
-| 1.5     | Jul 2025     |
-| 1.6     | Sep 2025     |
-| 1.7     | Nov 2025     |
+| 1.3     | Apr 2025     |
+| 1.4     | Jul 2025     |
+| 1.5     | Oct 2025     |
+| 1.6     | Jan 2026     |
+| 1.7     | Apr 2026     |
 
 ## General Overview
 
