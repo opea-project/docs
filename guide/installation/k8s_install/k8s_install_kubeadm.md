@@ -1,6 +1,6 @@
 # Kubernetes installation demo using kubeadm
 
-In this demo, we'll install Kubernetes v1.29 using official [kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/) on a 2 node cluster.
+In this demo, we'll install Kubernetes v1.32 using official [kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/) on a 2 node cluster.
 
 ## Node configuration
 
@@ -70,11 +70,11 @@ sudo sysctl --system
 
 ```bash
 # You may change the component version if necessary
-CONTAINERD_VER="1.7.18"
-RUNC_VER="1.1.12"
-CNI_VER="1.5.0"
-NERDCTL_VER="1.7.6"
-BUILDKIT_VER="0.13.2"
+CONTAINERD_VER="1.7.27"
+RUNC_VER="1.2.5"
+CNI_VER="1.6.2"
+NERDCTL_VER="2.0.4"
+BUILDKIT_VER="0.20.0"
 
 #Install Runc
 wget https://github.com/opencontainers/runc/releases/download/v${RUNC_VER}/runc.amd64
@@ -136,7 +136,7 @@ sudo systemctl restart buildkit
 
 ```bash
 # You may change the component version if necessary
-K8S_VER="1.29"
+K8S_VER="1.32"
 
 #Install kubeadm/kubectl/kubelet
 sudo apt-get update
@@ -163,7 +163,7 @@ sudo apt-get install -y helm
 2. Initialize the Kubernetes control-plane node: on node k8s-master, run the following commands:
 
 ```bash
-POD_CIDR="10.244.0.0/16"
+export POD_CIDR="10.244.0.0/16"
 sudo -E kubeadm init --pod-network-cidr "${POD_CIDR}"
 ```
 
@@ -211,7 +211,7 @@ kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl
 # we set NODE_CIDR accordingly.
 NODE_CIDR="192.168.121.0/24"
 # You may change the component version if necessary
-CALICO_VER="3.28.0"
+CALICO_VER="3.29.3"
 kubectl create -f "https://raw.githubusercontent.com/projectcalico/calico/v${CALICO_VER}/manifests/tigera-operator.yaml"
 sleep 10
 cat <<EOF | kubectl create -f -
@@ -282,10 +282,10 @@ tigera-operator    tigera-operator-76c4974c85-lx79h           1/1     Running   
 Run command `kubectl get node` to make sure all node are in 'Ready' status. Possible output should be something like:
 
 ```
-vagrant@k8s-master:~$ kubectl get node
-NAME          STATUS   ROLES           AGE     VERSION
-k8s-master    Ready    control-plane   31m     v1.29.6
-k8s-worker1   Ready    <none>          7m31s   v1.29.6
+vagrant@k8s-master:~$ kubectl get node -owide
+NAME          STATUS   ROLES           AGE     VERSION   INTERNAL-IP       EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION      CONTAINER-RUNTIME
+k8s-master    Ready    control-plane   16m     v1.32.3   192.168.121.35    <none>        Ubuntu 22.04.1 LTS   5.15.0-46-generic   containerd://1.7.27
+k8s-worker1   Ready    <none>          5m39s   v1.32.3   192.168.121.133   <none>        Ubuntu 22.04.1 LTS   5.15.0-46-generic   containerd://1.7.27
 ```
 
 ## Step 3 (optional) Reset Kubernetes cluster
