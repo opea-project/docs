@@ -162,7 +162,7 @@ Before moving forward, it's important to get familiar with two key elements of O
     - Source CIDR: **0.0.0.0/0**
     - Source Port Range: **All**
     - Destination Port Range: **80**
-    - Click on "Save"
+    - Click on "Add Ingress Rule"
 
 11. Connect using ssh (`ssh -i <private_key>  ubuntu@<public_ip_address>`).
 
