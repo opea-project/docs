@@ -33,7 +33,7 @@ We seek to offer a similar ease of use experience in OPEA for the inference serv
 
 With regard to profiles we shall start with supporting vLLM as the model framework and build profiles for a few popular models. Profiles may also contain more accurate resource usage information for Kubernetes deployments (allowing better Kubernetes scheduling decisions and preventing failures on resource contention). We do anticipate constant enhancements and new offerings in the model serving space and a steady influx of new models.
 
-The following diagram shows the OIM operator main use cases including model caching, inference service creation and usage.
+The following diagram shows example of the operator main use case interactions; model caching, inference service creation and usage.
 
 ![OIM operator interactions](assets/oim-operator-flow.png)
 
