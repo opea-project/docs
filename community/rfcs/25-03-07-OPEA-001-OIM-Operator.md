@@ -13,7 +13,7 @@ This RFC talks about creating OPEA inference microservices (OIM) similar to NVID
 
 ## Status
 
-`Under Review`
+`Accepted`
 
 ## Objective
 
@@ -29,11 +29,11 @@ The profiles are established through offline experimentation using tools like ML
 
 ## Design Proposal
 
-We seek to offer a similar ease of use experience in OPEA for the inference services. Nvidia’s open source NIM Operator is a tool that eases launching inference services. OPEA plans to extend it to deliver an Operator that provides similar functionality but also supports multi-vendor hardware and shall endeavor to work with Kubernetes and its flavors such as Red Hat OpenShift and SUSE Rancher, and their AI variants by working with our partners and potentially integrating with platforms such as KServe and RayAI.  The first release will provide minimal functionality and over time with community contributions grow richer.  We anticipate providers of AI platforms that operate on a multitude of hardware platforms will find the HW optimized profiles valuable in providing cost-effective performant inference services.
+We seek to offer a similar ease of use experience in OPEA for the inference services. Nvidia’s open source NIM Operator is a tool that eases launching inference services. OPEA plans to extend NIM operator, or similar, to deliver an Operator that provides similar functionality but also supports multi-vendor hardware and shall endeavor to work with Kubernetes and its flavors such as Red Hat OpenShift and SUSE Rancher, and their AI variants by working with our partners and potentially integrating with platforms such as KServe and RayAI.  The first release will provide minimal functionality and over time with community contributions grow richer.  We anticipate providers of AI platforms that operate on a multitude of hardware platforms will find the HW optimized profiles valuable in providing cost-effective performant inference services.
 
 With regard to profiles we shall start with supporting vLLM as the model framework and build profiles for a few popular models. Profiles may also contain more accurate resource usage information for Kubernetes deployments (allowing better Kubernetes scheduling decisions and preventing failures on resource contention). We do anticipate constant enhancements and new offerings in the model serving space and a steady influx of new models.
 
-The following diagram shows the OIM operator main use cases including model caching, inference service creation and usage.
+The following diagram shows example of the operator main use case interactions; model caching, inference service creation and usage.
 
 ![OIM operator interactions](assets/oim-operator-flow.png)
 
