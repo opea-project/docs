@@ -162,7 +162,7 @@ Before moving forward, it's important to get familiar with two key elements of O
     - Source CIDR: **0.0.0.0/0**
     - Source Port Range: **All**
     - Destination Port Range: **80**
-    - Click on "Save"
+    - Click on "Add Ingress Rule"
 
 11. Connect using ssh (`ssh -i <private_key>  ubuntu@<public_ip_address>`).
 
@@ -176,7 +176,7 @@ Before moving forward, it's important to get familiar with two key elements of O
 
 >**Note**: It is recommended to use the `VM-SPR-LRG` powered by 4th Generation Intel® Xeon® Scalable processors with 64GB of memory and 64GB of disk or more to use a CPU to run an 8B-parameter model. Intel® Gaudi® AI Accelerators can also be used after requesting access. Click [here](https://console.cloud.intel.com/compute/reserve?backTo=catalog) to request the recommended VM instance. Users can request a single VM to do a single node docker deploy or obtain a kubernetes cluster of one or more nodes.
 
-3. Fill out the rest of the form such as giving the instance a name and answering any additional quesitons.
+3. Fill out the rest of the form such as giving the instance a name and answering any additional questions.
 
 4. Add the public key for SSH. Select a previously uploaded key or upload a key. The "Upload Key" button also provides instructions on how to create a new SSH key.
 
@@ -205,7 +205,7 @@ Click "Launch".
 
 `ssh -i <private_key> -J guest@<proxy_jump_ip_address> -L 80:localhost:80 ubuntu@<private_ip_address_of_vm`
 
-If a load balancer is used, there is noneed to include `-L 80:localhost:80`.
+If a load balancer is used, there is no need to include `-L 80:localhost:80`.
 
 :::
 ::::
