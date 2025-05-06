@@ -15,6 +15,9 @@ Come learn, try, develop, and share your stories! Please submit PRs, organizing 
    * - 04/15/2025
      - `Build Your First Chatbot with OPEA In Minutes <https://www.intel.com/content/www/us/en/developer/articles/guide/build-your-first-chatbot-with-opea-in-minutes.html>`_
      - Wang Xigui, Bhandaru Malini, Sin Alex, Du dolpher, Yao Yi, Hu Ying
+   * - 04/11/2025
+     - `OPEA驱动的Deepseek解决方案：助力企业智能化转型 <https://mp.weixin.qq.com/s/fQFXm6yUUSOWuHtNYUm2qA>`_
+     - Theresa Shan
    * - 04/03/2025
      - `打造接地气的DeepSeek一体机，Xeon+Arc显卡+OPEA平台重塑大模型落地新范式 <https://mp.weixin.qq.com/s?__biz=MjM5NTUyMzU3OQ==&mid=2650961463&idx=4&sn=9b704579cea127198c795c71e723b5ac&chksm=bc83d8ef6618e5429b14953e96c2158ab4ef52169a5a3aa17db1e5fe04b4a0be5db4932fa00d&mpshare=1&scene=1&srcid=0423ZYJKgXcqktEomcOpudvs&sharer_shareinfo=bd6b86b444cdf48c640c1bf7ea34917b&sharer_shareinfo_first=bd6b86b444cdf48c640c1bf7ea34917b&exportkey=n_ChQIAhIQiCWCri5tAjF1XRZOmwAOahKfAgIE97dBBAEAAAAAABxUI%2FuPPXoAAAAOpnltbLcz9gKNyK89dVj0QCErp19OjOuer1UbAkA61LFM7C16jCL9S9Fa9hs3B2YrJqdkbW%2BBj0GZThFK75%2FghEuAxji2D0qYlyGxR%2Bq2Ow2b%2FO3TUI80vBLRzOG66fS8bISO%2FyjEuCFPouR5qQjY8fIDNF30easQ0DUvl2v3DtPVYhZiy6wTZyJDAH5ZFq953RIMTGKMIyABV0BqHgmSFrWN07prnuic04ItBMrOM69P0NgM8bDMusov4ER0Z7hlSBiMHxHQyp7xZ0GHUFuxPsg%2BH3N%2FLRfpw0epKr8wsp57ePBNaBqR9Mh12dTuGdmDejmiLCjYmZUVv52mkOFm6Ylxqb7tHYfg&acctmode=0&pass_ticket=7NZ%2FLh9KkM%2BNXadq9mHEQ6mYEEXuxCrVCn3cGtpsR3jBL6gp77h3sMW8IrXLXdvH&wx_header=0#rd>`_
      - Ren Qiaowei
