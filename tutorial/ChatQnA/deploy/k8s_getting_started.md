@@ -66,8 +66,8 @@ Some commonly used kubectl commands and their functions, assuming that you have 
 
 **Update Dependencies:**
 
-- A script called **./update_dependency.sh** is provided which is used to update chart dependencies, ensuring all nested charts are at their latest versions.
-- The command helm dependency update <chart-directory> updates the dependencies for the chart located in the specified directory (e.g., chatqna) based on the versions specified in its Chart.yaml file.
+- `scripts/update_dependency.sh` script can be used to ensure that dependencies for `common/` charts are up to date.
+- `helm dependency update <chart-directory>` command updates the dependencies for the specified chart directory (e.g., `chatqna`) based on the versions specified in its `Chart.yaml` file.
 
 **Helm Install Command:**
 
