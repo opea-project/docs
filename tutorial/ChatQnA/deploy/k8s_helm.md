@@ -100,7 +100,7 @@ Next, we will update the dependencies for all Helm charts in the specified direc
 ```bash
 # All Helm charts in the specified directory have their 
 # dependencies up-to-date, facilitating consistent deployments.
-./update_dependency.sh
+scripts/update_dependency.sh
 
 # "chatqna" here refers to the directory name that contains the Helm 
 # chart for the ChatQnA application 
