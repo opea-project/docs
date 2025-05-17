@@ -1,23 +1,23 @@
-#Template for Primary README File
+# Template for Primary README File
 
 **<sample name> Application**
 
-##Contents
+## Contents
 - Overview
 - Architecture
 - Deployment
 
-##Overview 
+## Overview 
 <What does this sample do?>  
 <Where can developers use this sample?>  
 <What tasks or problems can this sample solve?>  
 
-##Architecture 
+## Architecture 
 <How does the sample work?>  
 <What is the flow of information? Include a flow diagram, if available.>  
 <What OPEA microservices does this sample use? Include an architecture diagram, if available.>  
 
-##Deployment
+## Deployment
 This table describes options to deploy the <sample name> application. See relevant secondary README files to learn more about these options.
 You can also find information about implementing this sample on specific hardware.
 
