@@ -20,6 +20,7 @@ Documentation Guides
    :maxdepth: 1
 
    doc_guidelines
+   readme_guidelines_genai_examples
    graphviz
    docbuild
 
