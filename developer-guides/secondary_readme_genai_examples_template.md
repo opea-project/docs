@@ -2,7 +2,7 @@
 
 **Deploy <sample name> Application on <hardware>**
 
-##Contents
+## Contents
 - Overview
 - Deployment
 - Additional Options for Deployment
@@ -12,7 +12,7 @@
 - Troubleshooting
 
 
-##Overview
+## Overview
 <What is the purpose of this README file?> 
 
 ##Deployment
@@ -34,7 +34,7 @@
 | ------------------------------------| ---------------------------------------------------------------------|
 |                                     |                                                                      |                                                                                                                                                                                                                                 
 
-##Validation
+## Validation
 <How do you validate the health of the microservices that are used in this sample?>
 
 <For each microservice, your validation should display:>
@@ -51,17 +51,17 @@
 - <What should the sample input and output look like? Include screenshots.>
 
 
-##Profiling
+## Profiling
 <If supported, how do you profile the microservices that are used in this sample?>
 <How do you prepare dashboards in Prometheus or Grafana for this purpose?>
 
-##Termination
+## Termination
 <How do you stop the microservices?>
 
-##Troubleshooting
+## Troubleshooting
 <Describe common problems encountered when deploying this specific use case. Include general troubleshooting information in the primary README.>
 
-##Related Information
+## Related Information
 <Include links to:>
 - <Relevant GenAI Examples>
 - <Relevant microservices in GenAI Components>

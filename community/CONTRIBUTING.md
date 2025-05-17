@@ -229,7 +229,7 @@ flowchart LR
 
 ```
 
-- Follow the folder structure in the ChatQA example below:
+- Follow the folder structure in the ChatQnA example below:
 
     ```
     ├── Dockerfile
@@ -296,6 +296,7 @@ flowchart LR
     ```
 
     - **File Descriptions**:
+      - `README.md`: provides the purpose of the example, architecture on how it works, and deployment options. See the [README guidelines](../developer-guides/readme_guidelines_genai_examples.rst).
       - `chatqna.py`: application definition using microservice, megaservice and gateway. There could be multiple .py in the folder based on slight modification of the example application.
       - `docker_build_image/build.yaml`: builds necessary images pointing to the Dockerfiles in the GenAIComp repository.
       - `docker_compose/[vendor]/[device]/compose.yaml`: defines pipeline for  Docker Compose deployment. For naming the Docker Image file please follow the naming convention:
@@ -309,7 +310,7 @@ flowchart LR
 
 #### Additional steps if your contribution is Hardware Specific
 
-You will need additional steps to configure the CI/CD for first testing and then deploying your merged  GenAIComp or GenAIExample.
+You will need additional steps to configure the CI/CD for first testing and then deploying your merged GenAIComp or GenAIExample.
 
 - Connect hardware into OPEA GitHub Actions ([GHA](https://docs.github.com/en/actions)) as a self-hosted runner
 - Contribute test scripts for the new hardware
