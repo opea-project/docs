@@ -15,7 +15,7 @@
 ## Overview
 <What is the purpose of this README file?> 
 
-##Deployment
+## Deployment
 <What are the prerequisites before you deploy the sample on the target hardware?> 
 <What environment variables should be set before running Docker Compose?>
 
