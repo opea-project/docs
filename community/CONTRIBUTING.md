@@ -310,7 +310,7 @@ flowchart LR
 
 #### Additional steps if your contribution is Hardware Specific
 
-You will need additional steps to configure the CI/CD for first testing and then deploying your merged GenAIComp or GenAIExample.
+You will need additional steps to configure the CI/CD to first test and then deploy the GenAIComp or GenAIExample you merged.
 
 - Connect hardware into OPEA GitHub Actions ([GHA](https://docs.github.com/en/actions)) as a self-hosted runner
 - Contribute test scripts for the new hardware
