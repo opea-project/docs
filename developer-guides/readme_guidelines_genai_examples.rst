@@ -49,6 +49,7 @@ Template
    :maxdepth: 1
 
    Primary README Guidelines for GenAI Examples <primary_readme_genai_examples_template>
+
 ----
 
 
@@ -88,6 +89,7 @@ Template
    :maxdepth: 1
 
    Secondary README Guidelines for GenAI Examples <secondary_readme_genai_examples_template>
+   
 ----
 
 Validate a Secondary README File
