@@ -306,7 +306,7 @@ The knowledge base can be updated using the dataprep microservice, which extract
 
 `nke-10k-2023.pdf` is Nike's annual report on a form 10-K. Run this command to download the file:
 ```bash
-wget https://github.com/opea-project/GenAIComps/blob/v1.1/comps/retrievers/redis/data/nke-10k-2023.pdf
+wget https://github.com/opea-project/GenAIComps/blob/main/comps/third_parties/pathway/src/data/nke-10k-2023.pdf
 ```
 
 Upload the file:
