@@ -370,11 +370,11 @@ Follow the instructions to validate MicroServices.
 
 #### Dataprep Microservice（Optional）
 If you want to update the default knowledge base, you can use the following commands:
-Update Knowledge Base via Local File [nke-10k-2023.pdf](https://github.com/opea-project/GenAIComps/blob/v1.1/comps/retrievers/redis/data/nke-10k-2023.pdf). Or
-click [here](https://raw.githubusercontent.com/opea-project/GenAIComps/v1.1/comps/retrievers/redis/data/nke-10k-2023.pdf) to download the file via any web browser Or run this command to get the file on a terminal.
+Update Knowledge Base via Local File [nke-10k-2023.pdf](https://github.com/opea-project/GenAIComps/blob/main/comps/third_parties/pathway/src/data/nke-10k-2023.pdf). Or
+click [here](https://github.com/opea-project/GenAIComps/blob/main/comps/third_parties/pathway/src/data/nke-10k-2023.pdf) to download the file via any web browser Or run this command to get the file on a terminal.
 
 ```bash
-wget https://raw.githubusercontent.com/opea-project/GenAIComps/v1.1/comps/retrievers/redis/data/nke-10k-2023.pdf
+wget https://github.com/opea-project/GenAIComps/blob/main/comps/third_parties/pathway/src/data/nke-10k-2023.pdf
 ```
 
 Upload:
