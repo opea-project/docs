@@ -8,7 +8,7 @@ Please check the [Contributing guidelines](https://github.com/opea-project/docs/
 
 Thank you for being a part of this journey. We can't wait to see what we can achieve together!
 
-# Additional Content
+## Additional Content
 
 - [Code of Conduct](https://github.com/opea-project/docs/tree/main/community/CODE_OF_CONDUCT.md)
 - [Security Policy](https://github.com/opea-project/docs/tree/main/community/SECURITY.md)
