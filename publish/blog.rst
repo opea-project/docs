@@ -1,8 +1,3 @@
-.. _opea_blogs:
-
-OPEA Blogs
-##########
-
 Come learn, try, develop, and share your stories! Please submit PRs, organizing content in reverse chronological order.
 
 .. list-table:: Trending Blogs
@@ -14,7 +9,7 @@ Come learn, try, develop, and share your stories! Please submit PRs, organizing 
      - Authors
    * - 04/18/2025
      - `省钱还高效！OPEA+Dify在Intel® Arc™ GPU上构建基于DeepSeek的RAG工作流 <https://mp.weixin.qq.com/s/g71trKXM-yohse-FcfeZ6A>`_
-     - Qiang Ren 
+     - Qiang Ren
    * - 04/15/2025
      - `Build Your First Chatbot with OPEA In Minutes <https://www.intel.com/content/www/us/en/developer/articles/guide/build-your-first-chatbot-with-opea-in-minutes.html>`_
      - Wang Xigui, Bhandaru Malini, Sin Alex, Du dolpher, Yao Yi, Hu Ying
@@ -48,6 +43,9 @@ Come learn, try, develop, and share your stories! Please submit PRs, organizing 
    * - 02/12/2025
      - `Deploy a DeepSeek-R1 Distill Chatbot on AWS Xeon <https://www.intel.com/content/www/us/en/developer/articles/guide/deploy-a-deepseek-r1-distill-chatbot-on-aws-xeon.html>`_
      - Alex Sin
+   * - 01/24/2025
+     - `OPEA Blogs <https://opea.dev/news>`_
+     - OPEA Team
    * - 10/14/2024
      - `Harness Enterprise GenAI Using OPEA <https://vmblog.com/archive/2024/10/14/harness-enterprise-genai-using-opea.aspx>`_
      - Iris Ding, Malini Bhandaru
