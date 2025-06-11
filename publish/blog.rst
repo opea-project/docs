@@ -7,6 +7,9 @@ Come learn, try, develop, and share your stories! Please submit PRs, organizing 
    * - Date
      - URL
      - Authors
+   * - 06/09/2025
+     - `Deploy a RAG-Based Chatbot in Minutes on Intel Tiber AI Cloud <https://www.intel.com/content/www/us/en/developer/articles/technical/deploy-a-rag-based-chatbot-on-tiber-ai-cloud.html>`_
+     - Alex Sin, Edward Lee, Kelli Belcher
    * - 04/18/2025
      - `省钱还高效！OPEA+Dify在Intel® Arc™ GPU上构建基于DeepSeek的RAG工作流 <https://mp.weixin.qq.com/s/g71trKXM-yohse-FcfeZ6A>`_
      - Qiang Ren
