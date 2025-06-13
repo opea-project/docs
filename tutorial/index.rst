@@ -22,7 +22,7 @@ These tutorials cover more advanced features:
 .. toctree::
    :maxdepth: 1
 
-   EnterpriseInference/EnterpriseInference_OPEA_Guide
+   EnterpriseInference/EnterpriseInference_Guide
    OpenTelemetry/OpenTelemetry_OPEA_Guide
 
 -----
