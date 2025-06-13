@@ -1,4 +1,4 @@
-.. _EnterpriseInference_OPEA_Guide:
+.. _EnterpriseInference_Guide:
 
 Enterprise Inference Guide
 ##########################
