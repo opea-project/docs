@@ -313,9 +313,8 @@ flowchart LR
 You will need additional steps to configure the CI/CD to first test and then deploy the GenAIComp or GenAIExample you merged.
 
 - Connect hardware into OPEA GitHub Actions ([GHA](https://docs.github.com/en/actions)) as a self-hosted runner
-- [Optional] Full [steps](/guide/cicd/setup_cicd_env.md) to set up test ENV
 - Contribute test scripts for the new hardware
-- Dockerfile for the Component (i,e `GenAIComp/comps/llm/text-generation/tgi/Dockerfile.[vendor]_[hardware]`)
+- Dockerfile for the Component (i,e `GenAIComp/comps/llm/text-generation/tgi/Dockerfile.[vendor]_[hardware]` )
 - Update the image build yaml for new images
 - Update the CI/CD workflow to identify and deploy new test
 
