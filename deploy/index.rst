@@ -31,6 +31,18 @@ Installation Guides
    ../guide/installation/*
    ../guide/installation/**/*
 
+CI/CD ENV Setup
+***************
+
+.. rst-class:: rst-columns
+
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   ../guide/cicd/*
+   ../guide/cicd/**/*
+
 Cloud Service Provider
 **********************
 
