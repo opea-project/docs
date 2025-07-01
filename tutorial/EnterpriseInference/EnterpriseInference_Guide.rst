@@ -51,7 +51,7 @@ The first step is to get access to the hardware platform of choice:
     - Intel® Gaudi® AI Accelerators
     - Intel® Xeon® Scalable processors
 
-This can be an on-premises machine or from a cloud service provider. All options for deployment can be found [here](https://www.intel.com/content/www/us/en/products/docs/accelerator-engines/enterprise-ai.html).
+This can be an on-premises machine or from a cloud service provider. All options for deployment can be found `here <https://www.intel.com/content/www/us/en/products/docs/accelerator-engines/enterprise-ai.html>`_.
 
 Note down the HTTPS endpoint and generate an access token or API key. 
 The HTTPS endpoint may look something like this: https://api.inference.denvrdata.com.
@@ -85,7 +85,7 @@ This section applies to the following GenAIExamples:
     - Productivity Suite
 
 Set additional environment variable(s):
-- `LLM_MODEL_ID` is the model card which may need to be overwritten depending on what it is set to `set_env.sh`.
+    - `LLM_MODEL_ID` is the model card which may need to be overwritten depending on what it is set to `set_env.sh`.
 
 .. code-block:: bash
 
