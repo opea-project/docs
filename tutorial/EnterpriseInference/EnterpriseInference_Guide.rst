@@ -6,7 +6,7 @@ Enterprise Inference Guide
 
 Overview
 ********
-`Intel® AI for Enterprise Inference <https://github.com/opea-project/Enterprise-Inference>`_ is aimed to streamline and enhance the deployment and management of AI inference services on Intel hardware. 
+`Intel® AI for Enterprise Inference <https://www.intel.com/content/www/us/en/products/docs/accelerator-engines/enterprise-ai.html>`_ is aimed to streamline and enhance the deployment and management of AI inference services on Intel hardware. 
 Utilizing the power of Kubernetes Orchestration, this solution automates the deployment of LLM models to run faster inference, provision compute resources, and configure the optimal settings to minimize the complexities and reduce manual efforts.
 
 It supports a broad range of Intel hardware platforms, including Intel® Xeon® Scalable processors and Intel® Gaudi® AI Accelerators, ensuring flexibility and scalability to meet diverse enterprise needs.
@@ -49,15 +49,13 @@ Setting Up a Remote Server or Cluster
 *************************************
 The first step is to get access to the hardware platform of choice:
 - Intel® Gaudi® AI Accelerators
-- ntel® Xeon® Scalable processors
+- Intel® Xeon® Scalable processors
 
-This can be an on-premises machine or from a cloud service provider.
+This can be an on-premises machine or from a cloud service provider. All options for deployment can be found [here](https://www.intel.com/content/www/us/en/products/docs/accelerator-engines/enterprise-ai.html).
 
-Next, deploy `Intel® AI for Enterprise Inference <https://github.com/opea-project/Enterprise-Inference>`_ with the desired models. 
-Note down the HTTPS endpoint and generate an access token. 
-The HTTPS endpoint may look something like this: https://api.inference.example.com.
+Note down the HTTPS endpoint and generate an access token or API key. 
+The HTTPS endpoint may look something like this: https://api.inference.denvrdata.com.
 This access token will be used as the API key to securely access the deployed models.
-If the inference stack is already deployed, then just note down the HTTPS endpoint and access token.
 
 
 Using Remote Endpoints on OPEA GenAIExamples
@@ -66,40 +64,46 @@ OPEA GenAIExamples by default will download and deploy the models on the hardwar
 To use remote endpoints on OPEA GenAIExamples, configure the application to instead interact with models deployed on a remote server or cluster by specifying the HTTPS endpoint and providing the API key.
 
 For all GenAIExamples, set the following environment variables:
+- `REMOTE_ENDPOINT` is the HTTPS endpoint of the remote server with the model of choice (i.e. https://api.inference.denvrdata.com). **Note:** If not using LiteLLM, the second part of the model card needs to be appended to the URL i.e. `/Llama-3.3-70B-Instruct` from `meta-llama/Llama-3.3-70B-Instruct`.
+- `API_KEY` is the access token or key to access the model(s) on the server.
 
 .. code-block:: bash
 
-    export OPENAI_API_KEY=<your-api-key>
     export REMOTE_ENDPOINT=<your-http-endpoint>
+    export API_KEY=<your-api-key>
 
 Depending on the GenAIExample, the next steps may be different. For each section, see the list for the GenAIExample of interest.
 
 1. Endpoints with Megaservices
 ++++++++++++++++++++++++++++++
 This section applies to the following GenAIExamples:
+    - AudioQnA
     - ChatQnA
+    - CodeGen
+    - CodeTrans
+    - DocSum
+    - Productivity Suite
 
 Set additional environment variable(s):
+- `LLM_MODEL_ID` is the model card which may need to be overwritten depending on what it is set to `set_env.sh`.
 
 .. code-block:: bash
 
     export LLM_MODEL_ID=<model-id-deployed-on-remote-server>
 
-Run *docker compose* for the example using *compose_remote.yaml* **instead** of the default *compose.yaml*. 
+Run *docker compose* for the example using *compose_remote.yaml* **instead** of the default *compose.yaml*:
 
-For example,
 .. code-block:: bash
 
     docker compose -f compose_remote.yaml up -d
-
-This will pass in the additional environment variables to the **megaservice** to access models on the remote server. 
-The deployment will also be quicker because the LLM microservice is not deployed.
 
 
 2. Endpoints with Microservices
 +++++++++++++++++++++++++++++++
 This section applies to the following GenAIExamples:
     - AgentQnA
+    - FinanceAgent
+    - WorkflowExecAgent
 
 Set additional environment variable(s) depending on the example:
 
@@ -109,21 +113,19 @@ Set additional environment variable(s) depending on the example:
     * - GenAIExample
       - Environment Variable(s)
     * - AgentQnA
-      - export model=<model-id-deployed-on-remote-server>
+      - export model=<model-card>
+    * - FinanceAgent
+      - export OPENAI_LLM_MODEL_ID=<model-card>
 
-Run *docker compose* for the example by **appending** the *compose_remote.yaml* file to the original command.
+Run *docker compose* for the example by **appending** the *compose_remote.yaml* file to the original command:
 
-For example,
 .. code-block:: bash
 
-    docker compose -f compose.yaml -f compose_remote.yaml up -d
-
-This will pass in the additional environment variables to the **microservices** to access models on the remote server. 
-The deployment will also be quicker because the LLM microservice is not deployed.
+    docker compose -f compose_openai.yaml -f compose_remote.yaml up -d
 
 
 Next Steps
 **********
 Go back to the GenAIExample's tutorial or README to access the UI and interact with it. 
-The LLM text generation is now handled on a remote server. 
-Consider trying other models and using these remote endpoints to power multiple GenAI applications simultaneously.
+The LLM text generation is now handled on a remote server, reducing the burden and resources used on the hardware platform hosting the application. 
+Consider trying other models and using these remote endpoints to power other and multiple GenAI applications simultaneously.
