@@ -93,6 +93,7 @@ KubeAI Operator
    :glob:
 
    /GenAIInfra/kubeai/*
+   /GenAIInfra/kubeai/**/*
 
 Kubernetes Addons
 *****************
