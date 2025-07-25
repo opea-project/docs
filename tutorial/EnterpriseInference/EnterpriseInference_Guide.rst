@@ -54,7 +54,7 @@ The first step is to get access to the hardware platform of choice:
 This can be an on-premises machine or from a cloud service provider. All options for deployment can be found `here <https://www.intel.com/content/www/us/en/products/docs/accelerator-engines/enterprise-ai.html>`_.
 
 Note down the HTTPS endpoint and generate an access token or API key. 
-The HTTPS endpoint may look something like this: https://api.inference.denvrdata.com.
+The HTTPS endpoint may look something like this: https://api.example.com.
 This access token will be used as the API key to securely access the deployed models.
 
 
@@ -64,7 +64,7 @@ OPEA GenAIExamples by default will download and deploy the models on the hardwar
 To use remote endpoints on OPEA GenAIExamples, configure the application to instead interact with models deployed on a remote server or cluster by specifying the HTTPS endpoint and providing the API key.
 
 For all GenAIExamples, set the following environment variables:
-    - `REMOTE_ENDPOINT` is the HTTPS endpoint of the remote server with the model of choice (i.e. https://api.inference.denvrdata.com). **Note:** If not using LiteLLM, the second part of the model card needs to be appended to the URL i.e. `/Llama-3.3-70B-Instruct` from `meta-llama/Llama-3.3-70B-Instruct`.
+    - `REMOTE_ENDPOINT` is the HTTPS endpoint of the remote server with the model of choice (i.e. https://api.example.com/<your-deployed-model>). The name of the deployed model can be found by finding the APISIX route with `kubectl get apisixroutes`. **Note:** If using LiteLLM, the model does not need to be specified. LiteLLM is not used by default.
     - `API_KEY` is the access token or key to access the model(s) on the server.
 
 .. code-block:: bash
