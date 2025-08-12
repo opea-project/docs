@@ -1,9 +1,9 @@
-OPEA Tutorial
+OPEA Tutorials
 ##########################
 
-This tutorial will help user learn to deploy and use OPEA quickly.
+Tutorials are created to help users learn how to deploy and use OPEA resources quickly.
 
-Provide following tutorials to cover common user cases:
+The following tutorials are provided to cover common use cases:
 
 .. toctree::
    :maxdepth: 1
@@ -17,14 +17,15 @@ Provide following tutorials to cover common user cases:
    DocIndexRetriever/DocIndexRetriever_Guide
    VideoQnA/VideoQnA_Guide
 
-Provide following tutorials to cover more advanced features like OPEA Open Telemetry:
+These tutorials cover more advanced features:
 
 .. toctree::
    :maxdepth: 1
 
+   EnterpriseInference/EnterpriseInference_Guide
    OpenTelemetry/OpenTelemetry_OPEA_Guide
 
 -----
 
 
-If you want to learn more, please refer to :doc:`/GenAIExamples/README`.
+To learn more, refer to :doc:`/GenAIExamples/README`.
