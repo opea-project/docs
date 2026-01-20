@@ -248,7 +248,6 @@ flowchart LR
     │   └── performance
     │       └── kubernetes
     ├── chatqna.py    # Main application definition (microservices, megaservice, gateway).
-    ├── chatqna_wrapper.py
     ├── docker_compose
     │   ├── amd
     │   │   └── gpu
